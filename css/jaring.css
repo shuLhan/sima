@@ -1,0 +1,57 @@
+/*
+	Global stylesheet for application.
+ */
+/*
+	Jaring message
+*/
+.jx-msg .x-box-mc {
+	font-size			:14px;
+}
+
+#jx-msg {
+	position			:absolute;
+	left				:35%;
+	top					:10px;
+	width				:400px;
+	z-index				:20000;
+}
+
+#jx-msg .info {
+	border-radius		: 8px;
+	-moz-border-radius	: 8px;
+	border				: 2px solid #ccc;
+	background			: #F6F6F6;
+	margin-top			: 2px;
+	padding				: 10px 15px;
+	color				: #555;
+}
+
+#jx-msg .info h3 {
+	margin				: 0 0 8px;
+	font-weight			: bold;
+	font-size			: 15px;
+}
+
+#jx-msg .info p {
+	margin				: 0;
+}
+
+#jx-msg .error {
+	border-radius		: 8px;
+	-moz-border-radius	: 8px;
+	border				: 2px solid #FFC1C1;
+	background			: #FFE9E9;
+	margin-top			: 2px;
+	padding				: 10px 15px;
+	color				: #555;
+}
+
+#jx-msg .error h3 {
+	margin				: 0 0 8px;
+	font-weight			: bold;
+	font-size			: 15px;
+}
+
+#jx-msg .error p {
+	margin				: 0;
+}

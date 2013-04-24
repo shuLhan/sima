@@ -1,0 +1,9 @@
+/*
+	Menu icons
+*/
+.home	{ background-image: url("../../images/home.png") !important; }
+.logout	{ background-image: url("../../images/logout.png") !important; }
+.sys	{ background-image: url("../../images/sys.png") !important; }
+.user	{ background-image: url("../../images/user.png") !important; }
+.group	{ background-image: url("../../images/group.png") !important; }
+.menu	{ background-image: url("../../images/menu.png") !important; }
