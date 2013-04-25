@@ -4,7 +4,7 @@ Ext.onReady (function ()
 			xtype			:"form"
 		,	standardSubmit	:true
 		,	url				:_g_module_path +"login.jsp"
-		,	title			:"Login"
+		,	title			:_g_title +" :: Login"
 		,	id				:"login_form"
 		,	bodyPadding		:10
 		,	border			:false

@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 public class Jaring {
+	public static String	_title			= "x10c Lab - Jaring Framework";
 	public static String	_name			= "jaring";
 	public static String	_path			= "/jaring";
 	public static String	_path_mod		= "/module";
@@ -161,6 +162,7 @@ public class Jaring {
 			props.load (fis);
 
 			Jaring._path		= application.getContextPath ();
+			Jaring._title		= props.getProperty ("app.title");
 			Jaring._name		= props.getProperty ("app.name");
 			Jaring._path_mod	= props.getProperty ("app.module.dir");
 			Jaring._db_class	= props.getProperty ("db.class");
@@ -171,6 +173,7 @@ public class Jaring {
 			Jaring._db_pool_max	= Integer.parseInt (props.getProperty ("db.pool.max"));
 
 			/* Always replace global config variables, in case user change it on the fly */
+			application.setAttribute ("app.title"		, Jaring._title);
 			application.setAttribute ("app.name"		, Jaring._name);
 			application.setAttribute ("app.path"		, Jaring._path);
 			application.setAttribute ("app.module.dir"	, Jaring._path_mod);

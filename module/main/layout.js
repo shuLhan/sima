@@ -84,7 +84,7 @@ Ext.onReady (function ()
 
 		/* Create new tab */
 		Ext.Ajax.request ({
-			url		:_g_root + _g_module_dir +"/"+ b.module +"/layout.js"
+			url		:_g_module_dir +"/"+ b.module +"/layout.js"
 		,	failure	:function (response, opts)
 			{
 				Jx.msg.error ("Fail to load module!");
