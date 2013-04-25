@@ -72,7 +72,42 @@ Ext.onReady (function ()
 
 	function jx_menu_button_onClick (b)
 	{
-		console.log (b);
+		var modname = "Jx"+ b.module;
+
+		/* Find menu module on all tab in content area. */
+		var c = jx_content.getComponent (modname);
+
+		if (c != undefined) {
+			jx_content.setActiveTab (c);
+			return;
+		}
+
+		/* Create new tab */
+		Ext.Ajax.request ({
+			url		:_g_root + _g_module_dir +"/"+ b.module +"/layout.js"
+		,	failure	:function (response, opts)
+			{
+				Jx.msg.error ("Fail to load module!");
+			}
+		,	success	:function (response, opts)
+			{
+				try {
+					window.execScript
+						? window.execScript (response.responseText)
+						: window.eval (response.responseText);
+
+					var module = eval (modname);
+
+					jx_content.add (module);
+					jx_content.setActiveTab (module);
+					jx_content.doLayout ();
+
+					module.do_refresh ();
+				} catch (e) {
+					Jx.msg.error (e.message);
+				}
+			}
+		});
 	}
 
 	function jx_load_menus ()

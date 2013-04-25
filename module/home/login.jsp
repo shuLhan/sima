@@ -26,6 +26,7 @@ try {
 		+"	where	name		= ?"
 		+"	and		password	= ?";
 
+	_cn	= Jaring.getConnection (request);
 	_ps = _cn.prepareStatement (_q);
 	_i	= 1;
 	_ps.setString (_i++, username);
@@ -55,7 +56,7 @@ try {
 
 	out.print (_r);
 
-	response.sendRedirect (Jaring._path + Jaring._path_mod +"/main/");
+	response.sendRedirect (Jaring._path);
 
 } catch (Exception e) {
 	_r.put ("success"	,false);

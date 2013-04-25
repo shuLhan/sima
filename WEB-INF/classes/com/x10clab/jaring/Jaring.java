@@ -5,14 +5,19 @@ import java.io.FileInputStream;
 import java.util.Properties;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.SQLException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.ServletContext;
 
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 public class Jaring {
 	public static String	_name			= "jaring";
@@ -24,8 +29,13 @@ public class Jaring {
 	public static String	_db_pass		= "";
 	public static int		_db_pool_min	= 10;
 	public static int		_db_pool_max	= 100;
-
 	private static BoneCP	_db_pool		= null;
+
+	/*
+		Cookies values.
+		Variables that will be instatited when calling getCookiesValue.
+	*/
+	public static long		_c_uid			= 0;
 
 	/*
 		Initialize database connection pooling
@@ -70,6 +80,70 @@ public class Jaring {
 		} catch (Exception e) {
 			e.printStackTrace ();
 			return null;
+		}
+	}
+
+	/*
+		Get cookies values.
+	*/
+	public static void getCookiesValue (HttpServletRequest request)
+	{
+		Cookie[]	_cookies	= request.getCookies ();
+
+		if (null != _cookies) {
+			for (int i = 0; i < _cookies.length; i++) {
+				String	c_name = _cookies[i].getName ();
+				if (c_name.equalsIgnoreCase (Jaring._name +".user.id")) {
+					Jaring._c_uid = Integer.parseInt (_cookies[i].getValue ());
+				}
+			}
+		}
+	}
+
+	/*
+		Get module permission.
+	*/
+	public static int getModulePermission (HttpServletRequest request, int menu_id)
+	{
+		Connection			con = null;
+		PreparedStatement	ps	= null;
+		ResultSet			rs	= null;
+		String				q	= "";
+		int					i	= 0;
+		int					perm= 0;
+
+		try {
+			con = Jaring.getConnection (request);
+
+			/* get cookie value for user ID */
+			Jaring.getCookiesValue (request);
+
+			q	="	select	A.permission"
+				+"	from	_group_menu	A"
+				+"	,		_user_group	B"
+				+"	where	A._menu_id	= ?"
+				+"	and		A._group_id	= B._group_id"
+				+"	and		B._user_id	= ?"
+				+"	order by A.permission desc";
+
+			ps	= con.prepareStatement (q);
+			i	= 1;
+			ps.setLong (i++	, menu_id);
+			ps.setLong (i++	, Jaring._c_uid);
+
+			rs	= ps.executeQuery ();
+
+			if (rs.next ()) {
+				perm = rs.getInt ("permission");
+			}
+
+			rs.close ();
+			ps.close ();
+			con.close ();
+		} catch (Exception e) {
+			/**/
+		} finally {
+			return perm;
 		}
 	}
 

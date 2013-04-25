@@ -1,16 +1,17 @@
 <%@ include file="../init.jsp" %>
 <%
 try {
-	String c_name = "";
+	String		c_name	= "";
+	Cookie[]	cookies	= request.getCookies ();
 
 	/* Remove application cookies */
-	if (null != _cookies) {
-		for (int i = 0; i < _cookies.length; i++) {
-			c_name = _cookies[i].getName ();
+	if (null != cookies) {
+		for (int i = 0; i < cookies.length; i++) {
+			c_name = cookies[i].getName ();
 			if (c_name.equalsIgnoreCase (Jaring._name +".user.id")) {
-				_cookies[i].setMaxAge (0);
-				_cookies[i].setPath (Jaring._path);
-				response.addCookie (_cookies[i]);
+				cookies[i].setMaxAge (0);
+				cookies[i].setPath (Jaring._path);
+				response.addCookie (cookies[i]);
 			}
 		}
 	}

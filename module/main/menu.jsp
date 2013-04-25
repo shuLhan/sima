@@ -5,40 +5,45 @@
 		JSONArray			tbar	= new JSONArray ();
 		JSONObject			menu	= null;
 		JSONArray			submenu	= null;
-		String				_q		= "";
-		PreparedStatement	_ps		= null;
-		ResultSet			_rs		= null;
-		int					_i		= 0;
+		String				q		= "";
+		PreparedStatement	ps		= null;
+		ResultSet			rs		= null;
+		int					i		= 0;
 
-		_q	="	select	A.id"
+		q	="	select	A.id"
 			+"	,		A.pid"
 			+"	,		A.label"
 			+"	,		A.icon"
 			+"	,		A.module"
-			+"	from	_menu		A"
-			+"	,		_group_menu	B"
-			+"	,		_user_group	C"
-			+"	where	A.pid		= ?"
-			+"	and		A.id		= B._menu_id"
-			+"	and		B._group_id	= C._group_id"
-			+"	and		C._user_id	= ?";
+			+"	,		B.permission"
+			+"	from	_menu			A"
+			+"	,		_group_menu		B"
+			+"	,		_user_group		C"
+			+"	where	A.pid			= ?"
+			+"	and		A.id			= B._menu_id"
+			+"	and		B._group_id		= C._group_id"
+			+"	and		C._user_id		= ?"
+			+"	and		B.permission	> 0";
 
 		try {
-			_ps	= db_con.prepareStatement (_q);
-			_i	= 1;
-			_ps.setInt (_i++	, pid);
-			_ps.setLong (_i++	,_uid);
+			ps	= db_con.prepareStatement (q);
+			i	= 1;
+			ps.setInt (i++	, pid);
+			ps.setLong (i++	,_uid);
 
-			_rs	= _ps.executeQuery ();
+			rs	= ps.executeQuery ();
 
-			while (_rs.next ()) {
+			while (rs.next ()) {
 				menu	= new JSONObject ();
 
-				menu.put ("text"	, _rs.getString ("label"));
-				menu.put ("iconCls"	, _rs.getString ("icon"));
-				menu.put ("module"	, _rs.getString ("module"));
+				menu.put ("menu_id"		, rs.getInt ("id"));
+				menu.put ("menu_pid"	, rs.getInt ("pid"));
+				menu.put ("text"		, rs.getString ("label"));
+				menu.put ("iconCls"		, rs.getString ("icon"));
+				menu.put ("module"		, rs.getString ("module"));
+				menu.put ("permission"	, rs.getString ("permission"));
 
-				submenu = getMenu (db_con, _uid, _rs.getInt ("id"));
+				submenu = getMenu (db_con, _uid, rs.getInt ("id"));
 
 				if (submenu.size () > 0) {
 					menu.put ("arrowAlign"	, "bottom");
@@ -48,8 +53,8 @@
 				tbar.add (menu);
 			}
 
-			_rs.close ();
-			_ps.close ();
+			rs.close ();
+			ps.close ();
 		} catch (Exception e) {
 			throw e;
 		} finally {
@@ -59,6 +64,8 @@
 %>
 <%
 try {
+	Jaring.getCookiesValue (request);
+
 	JSONArray	tbar	= null;
 
 	_q	="	select	A.id"
@@ -66,17 +73,19 @@ try {
 		+"	,		A.label"
 		+"	,		A.icon"
 		+"	,		A.module"
-		+"	from	_menu		A"
-		+"	,		_group_menu	B"
-		+"	,		_user_group	C"
-		+"	where	A.pid		= 0"
-		+"	and		A.id		= B._menu_id"
-		+"	and		B._group_id	= C._group_id"
-		+"	and		C._user_id	= ?";
+		+"	from	_menu			A"
+		+"	,		_group_menu		B"
+		+"	,		_user_group		C"
+		+"	where	A.pid			= 0"
+		+"	and		A.id			= B._menu_id"
+		+"	and		B._group_id		= C._group_id"
+		+"	and		C._user_id		= ?"
+		+"	and		B.permission	> 0";
 
+	_cn	= Jaring.getConnection (request);
 	_ps	= _cn.prepareStatement (_q);
 	_i	= 1;
-	_ps.setLong (_i++	, _uid);
+	_ps.setLong (_i++	, Jaring._c_uid);
 
 	_rs	= _ps.executeQuery ();
 	_a	= new JSONArray ();
@@ -84,8 +93,10 @@ try {
 	while (_rs.next ()) {
 		_o	= new JSONObject ();
 
-		tbar = getMenu (_cn, _uid, _rs.getInt ("id"));
+		tbar = getMenu (_cn, Jaring._c_uid, _rs.getInt ("id"));
 
+		_o.put ("menu_id"	, _rs.getLong ("id"));
+		_o.put ("menu_pid"	, _rs.getLong ("pid"));
 		_o.put ("title"		, _rs.getString ("label"));
 		_o.put ("iconCls"	, _rs.getString ("icon"));
 		_o.put ("tbar"		, tbar);
