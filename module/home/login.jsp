@@ -54,12 +54,9 @@ try {
 	_r.put ("success"	,true);
 	_r.put ("data"		,"Logging in ...");
 
-	out.print (_r);
-
-	response.sendRedirect (Jaring._path);
-
 } catch (Exception e) {
 	_r.put ("success"	,false);
-	_r.put ("data"		,e);
+	_r.put ("data"		,e.getMessage ());
 }
+out.print (_r);
 %>

@@ -2,7 +2,6 @@ Ext.onReady (function ()
 {
 	var jx_login_form = Ext.create ("Ext.form.Panel", {
 			xtype			:"form"
-		,	standardSubmit	:true
 		,	url				:_g_module_path +"login.jsp"
 		,	title			:_g_title +" :: Login"
 		,	id				:"login_form"
@@ -52,9 +51,13 @@ Ext.onReady (function ()
 		,	do_login		:function ()
 			{
 				this.getForm ().submit ({
-					success: function (form, action)
+					success	:function (form, action)
 					{
-						Jx.msg.info (action.result.data);
+						location.href = _g_root;
+					}
+				,	failure	:function (form, action)
+					{
+						Jx.msg.error (action.result.data);
 					}
 				});
 			}
