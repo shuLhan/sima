@@ -1,8 +1,9 @@
 /*
 	User
+	Password: hash of sha256
 */
 
-insert into _user (name, password) values ('root', '689bb2cdcb547ec1ad1cb3d2b5371a60786089814adf6bc9cf80c573d0dabe1d');	-- 1
+insert into _user (name, password) values ('root', '3f38a07b0dc3ee666018ffb423e2e7d117b40cf51a7ae97cc9f68b3940fe01fb');	-- 1
 
 /*
 	Group
