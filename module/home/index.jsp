@@ -4,6 +4,8 @@
 <head>
 	<title><%= Jaring._title %></title>
 
+	<link rel="shortcut icon" href="<%= Jaring._path %>/images/fav_icon.ico"/>
+	
 	<script>
 		var _g_root			= "<%= Jaring._path %>";
 		var _g_module_dir	= "<%= Jaring._path + Jaring._path_mod %>"

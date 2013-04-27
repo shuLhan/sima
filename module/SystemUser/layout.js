@@ -23,11 +23,13 @@ function JxSystemUser ()
 ,	this.panel	= Ext.create ("Jx.GridPaging", {
 		id			:this.id
 	,	title		:"System User"
-	,	closable	:true
 	,	autoDestroy	:true
 	,	store		:this.store
-	,	columns		:
-		[{
+	,	columns		:[{
+			header		:"User name"
+		,	dataIndex	:"name"
+		,	flex		:1
+		},{
 			header		:"User name"
 		,	dataIndex	:"name"
 		,	flex		:1

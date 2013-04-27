@@ -85,37 +85,16 @@ Ext.define ("Jx.StorePaging", {
 */
 Ext.define ("Jx.GridPaging", {
 	extend		:"Ext.grid.Panel"
+,	layout		:"fit"
 ,	alias		:"jx.gridpaging"
+,	titleAlign	:"center"
+,	viewConfig	:{
+        enableTextSelection	:true
+    }
+,	enableLocking	:true
 ,	config		:
 	{
 		perm			:0
-	,	buttonAdd		:Ext.create ("Ext.button.Button", {
-				text		:"Add"
-			,	itemId		:"add"
-			,	iconCls		:"add"
-			,	disabled	:true
-			})
-
-	,	buttonEdit		:Ext.create ("Ext.button.Button", {
-				text		:"Edit"
-			,	itemId		:"edit"
-			,	iconCls		:"edit"
-			,	disabled	:true
-			})
-
-	,	buttonDelete	:Ext.create ("Ext.button.Button", {
-				text		:"Delete"
-			,	itemId		:"delete"
-			,	iconCls		:"delete"
-			,	disabled	:true
-			})
-
-	,	buttonRefresh	:Ext.create ("Ext.button.Button", {
-				text		:"Refresh"
-			,	itemId		:"refresh"
-			,	iconCls		:"refresh"
-			,	disabled	:false
-			})
 
 	,	doAdd		:function ()
 		{
@@ -142,7 +121,7 @@ Ext.define ("Jx.GridPaging", {
 		{
 			this.perm = perm;
 
-			this.down ("#add").setDisabled (perm < 2);
+			this.buttonAdd.setDisabled (perm < 2);
 
 			this.getStore ().load ();
 		}
@@ -163,14 +142,44 @@ Ext.define ("Jx.GridPaging", {
 ,	constructor	:function (config)
 	{
 		var barName;
+		
+		config.columns.splice(0, 1, { xtype : "rownumberer" });
 
 		this.callParent (arguments);
 		this.initConfig (config);
+		
+		this.buttonAdd		= Ext.create ("Ext.button.Button", {
+				text		:"Add"
+			,	itemId		:"add"
+			,	iconCls		:"add"
+			,	disabled	:true
+			});
 
-		this.buttonAdd.setHandler (this.doAdd);
-		this.buttonEdit.setHandler (this.doEdit);
-		this.buttonDelete.setHandler (this.doDelete);
-		this.buttonRefresh.setHandler (this.doRefresh);
+		this.buttonEdit		= Ext.create ("Ext.button.Button", {
+				text		:"Edit"
+			,	itemId		:"edit"
+			,	iconCls		:"edit"
+			,	disabled	:true
+			});
+
+		this.buttonDelete	= Ext.create ("Ext.button.Button", {
+				text		:"Delete"
+			,	itemId		:"delete"
+			,	iconCls		:"delete"
+			,	disabled	:true
+			});
+
+		this.buttonRefresh	= Ext.create ("Ext.button.Button", {
+				text		:"Refresh"
+			,	itemId		:"refresh"
+			,	iconCls		:"refresh"
+			,	disabled	:false
+			});
+			
+		this.buttonAdd.setHandler (this.doAdd, this);
+		this.buttonEdit.setHandler (this.doEdit, this);
+		this.buttonDelete.setHandler (this.doDelete, this);
+		this.buttonRefresh.setHandler (this.doRefresh, this);
 
 		/* Add buttons bar to the top of grid panel. */
 		barName			= "ButtonBar";
@@ -186,9 +195,11 @@ Ext.define ("Jx.GridPaging", {
 			,	items		:
 				[
 					this.buttonDelete
-				,	this.buttonRefresh
-				,	this.buttonEdit
+				,	'-'
 				,	this.buttonAdd
+				,	this.buttonEdit
+				,	' '
+				,	this.buttonRefresh
 				]
 			});
 
@@ -207,6 +218,8 @@ Ext.define ("Jx.GridPaging", {
 			,	store		:config.store
 			,	displayInfo	:true
 			,	dock		:"bottom"
+			,	pageSize	:_g_paging_size
+			,	plugins		:new Ext.ux.ProgressBarPager()
 			});
 
 		this.addDocked (this.pagingBar);

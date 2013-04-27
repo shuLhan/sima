@@ -1,12 +1,15 @@
 /*
 	Menu's icons
 */
-.home	{ background-image: url("../../images/home.png") !important; }
-.logout	{ background-image: url("../../images/logout.png") !important; }
-.sys	{ background-image: url("../../images/sys.png") !important; }
-.user	{ background-image: url("../../images/user.png") !important; }
-.group	{ background-image: url("../../images/group.png") !important; }
-.menu	{ background-image: url("../../images/menu.png") !important; }
+.home				{ background-image: url("../../images/home.png") !important; }
+.account			{ background-image: url("../../images/account.png") !important; }
+.profile			{ background-image: url("../../images/profile.png") !important; }
+.change-password	{ background-image: url("../../images/change-password.png") !important; }
+.logout				{ background-image: url("../../images/logout.png") !important; }
+.sys				{ background-image: url("../../images/sys.png") !important; }
+.user				{ background-image: url("../../images/user.png") !important; }
+.group				{ background-image: url("../../images/group.png") !important; }
+.menu				{ background-image: url("../../images/menu.png") !important; }
 /*
 	Button's icons
 */
@@ -14,3 +17,20 @@
 .edit	{ background-image: url("../../images/edit.png") !important; }
 .delete	{ background-image: url("../../images/delete.png") !important; }
 .refresh{ background-image: url("../../images/refresh.png") !important; }
+
+/* header and footer */
+#app-header{
+	padding:10px 10px 10px 35px;
+	background:url(../../images/logo.png) no-repeat 10px 11px;
+	color:white;
+	font-size:24px;
+	font-weight:bold;
+	text-shadow:0 1px 0 #4e691f
+}
+
+#app-footer{
+	text-align:center;
+	color:white;
+	font-size:12px;
+	text-shadow:0 1px 0 #4e691f
+}

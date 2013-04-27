@@ -6,6 +6,8 @@
 /* stores */
 var jx_menu_store;
 /* views */
+var jx_header;
+var jx_footer;
 var jx_menu;
 var jx_content;
 var jx_main;
@@ -29,30 +31,34 @@ Ext.onReady (function ()
 			}
 		});
 
-	jx_menu				= Ext.create ("Ext.tab.Panel", {
+	jx_header			= Ext.create ("Ext.container.Container", {
 			region		:"north"
-		,	shadow		:true
-		,	tabBar		:
-			{
-				height		:28
-			,	defaults	:
-				{
-					height		:28
-				,	padding		:4
-				}
+		,	layout		:{
+				type	:"hbox"
+			,	align	:"middle"
 			}
-		,	activeTab	:0
-		,	items		:
-			[{
-				title		:"Home"
-			,	iconCls		:"home"
-			,	tbar		:
-				[
-					"->"
-				,	"-"
-				,{
-					text		:"Logout"
-				,	iconCls		:"logout"
+		,	height		:48
+		,	items		: [{
+				id		:"app-header"
+			,	xtype	:"box"
+			,	html	:_g_title
+			,	flex	:1
+			},{
+				xtype	:"button"
+			,	scale	:"medium"
+			,	text	:""
+			,	iconCls	:"account"
+			,	menu	:[{
+					text	:"Profile"
+				,	iconCls	:"profile"
+				},{
+					text	:"Change password"
+				,	iconCls	:"change-password"
+				},{
+					xtype	:"menuseparator"
+				},{
+					text	:"Logout"
+				,	iconCls	:"logout"
 				,	handler		:function (b)
 					{
 						jx_do_logout ();
@@ -60,31 +66,73 @@ Ext.onReady (function ()
 				}]
 			}]
 		});
+	
+	jx_footer			= Ext.create ("Ext.container.Container", {
+			region		:"south"
+		,	layout		:{
+				type	:"hbox"
+			,	align	:"middle"
+			,	pack	:"center"
+			}
+		,	height		:20
+		,	items		:[{
+				id		:"app-footer"
+			,	xtype	:"box"
+			,	html	:_g_title +"&nbsp;&nbsp;&copy;&nbsp;&nbsp;2013 x10c-lab.com"
+			,	flex	:1
+			}]
+		});
 
+	jx_menu				= Ext.create ("Ext.tab.Panel", {
+			region		:"north"
+		,	shadow		:true
+		,	activeTab	:0
+		,	items		:
+			[{
+				id			:"content_home"
+			,	iconCls		:"home"
+			}]
+		});
+
+	jx_content_home		= Ext.create ("Ext.panel.Panel", {
+			region		:"center"
+		,	margin		:"5 0 0 0"
+		,	bodyPadding	:5
+		,	html		:"<h1>Welcome!</h1>"
+		});
+		
 	switch (_g_content_type) {
 	case 0:
 		jx_content		= Ext.create ("Ext.container.Container", {
-				region	:"center"
-			,	plain	:true
-			,	layout	:"fit"
+				region		:"center"
+			,	margin		:"5 0 0 0"
+			,	plain		:true
+			,	layout		:"fit"
 			});
 		break;
 	case 1:
 		jx_content		= Ext.create ("Ext.tab.Panel", {
 				region		:"center"
+			,	margin		:"5 0 0 0"
 			,	plain		:true
 			,	items		:[]
 			});
 		break;
 	}
 
+	jx_menu.on ("tabchange", jx_onTabChange);
+	
 	jx_main				= Ext.create ("Ext.container.Viewport", {
 			layout		:"border"
+		,	padding		:"0 5 5 5"
 		,	renderTo	:Ext.getBody ()
 		,	items		:
 			[
-				jx_menu
+				jx_header
+			,	jx_menu
 			,	jx_content
+			,	jx_content_home
+			,	jx_footer
 			]
 		});
 
@@ -93,6 +141,17 @@ Ext.onReady (function ()
 		location.href = _g_module_path +"logout.jsp";
 	}
 
+	function jx_onTabChange (tabp, newc, oldc, e)
+	{
+		if (newc.id == "content_home") {
+			jx_content.hide ();
+			jx_content_home.show ();
+		} else {
+			jx_content.show ();
+			jx_content_home.hide ();
+		}
+	}
+	
 	function jx_menu_button_onClick (b)
 	{
 		/* Find menu module in content area. */
@@ -132,7 +191,7 @@ Ext.onReady (function ()
 
 					switch (_g_content_type) {
 					case 0:
-						jx_content.removeAll ();
+						jx_content.removeAll (true);
 						jx_content.add (module.panel);
 						break;
 					case 1:
