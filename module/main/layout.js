@@ -142,7 +142,7 @@ Ext.onReady (function ()
 						break;
 					}
 
-					module.do_refresh (b.permission);
+					module.doRefresh (b.permission);
 				} catch (e) {
 					if (console) {
 						console.log (e);

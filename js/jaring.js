@@ -88,53 +88,57 @@ Ext.define ("Jx.GridPaging", {
 ,	alias		:"jx.gridpaging"
 ,	config		:
 	{
-		perm		:0
-	,	tbar		:
-		[{
-			text		:"Delete"
-		,	itemId		:"delete"
-		,	iconCls		:"delete"
-		,	disabled	:true
-		,	handler		:function (b)
-			{
-				b.up ("grid").do_delete ();
+		perm			:0
+	,	buttonAdd		:Ext.create ("Ext.button.Button", {
+				text		:"Add"
+			,	itemId		:"add"
+			,	iconCls		:"add"
+			,	disabled	:true
+			})
+
+	,	buttonEdit		:Ext.create ("Ext.button.Button", {
+				text		:"Edit"
+			,	itemId		:"edit"
+			,	iconCls		:"edit"
+			,	disabled	:true
+			})
+
+	,	buttonDelete	:Ext.create ("Ext.button.Button", {
+				text		:"Delete"
+			,	itemId		:"delete"
+			,	iconCls		:"delete"
+			,	disabled	:true
+			})
+
+	,	buttonRefresh	:Ext.create ("Ext.button.Button", {
+				text		:"Refresh"
+			,	itemId		:"refresh"
+			,	iconCls		:"refresh"
+			,	disabled	:false
+			})
+
+	,	doAdd		:function ()
+		{
+			if (this.perm < 2) {
+				return;
 			}
-		},"-",{
-			text		:"Refresh"
-		,	itemId		:"refresh"
-		,	iconCls		:"refresh"
-		,	disabled	:false
-		,	handler		:function (b)
-			{
-				b.up ("grid").do_refresh ();
+		}
+
+	,	doEdit		:function ()
+		{
+			if (this.perm < 3) {
+				return;
 			}
-		},"-",{
-			text		:"Edit"
-		,	itemId		:"edit"
-		,	iconCls		:"edit"
-		,	disabled	:true
-		,	handler		:function (b)
-			{
-				b.up ("grid").do_edit ();
-			}
-		},"-",{
-			text		:"Add"
-		,	itemId		:"add"
-		,	iconCls		:"add"
-		,	disabled	:true
-		,	handler		:function (b)
-			{
-				b.up ("grid").do_add ();
-			}
-		}]
-	,	do_delete	:function ()
+		}
+
+	,	doDelete	:function ()
 		{
 			if (this.perm < 4) {
 				return;
 			}
 		}
 
-	,	do_refresh	:function (perm)
+	,	doRefresh	:function (perm)
 		{
 			this.perm = perm;
 
@@ -143,32 +147,61 @@ Ext.define ("Jx.GridPaging", {
 			this.getStore ().load ();
 		}
 
-	,	do_edit		:function ()
+	,	onSelectionChange	:function (model, data, e)
 		{
-			if (this.perm < 3) {
-				return;
-			}
-		}
+			var s = (data.length <= 0);
 
-	,	do_add		:function ()
-		{
-			if (this.perm < 2) {
-				return;
+			if (this.perm >= 4) {
+				this.buttonDelete.setDisabled (s);
+			}
+			if (this.perm >= 3) {
+				this.buttonEdit.setDisabled (s);
 			}
 		}
 	}
 
 ,	constructor	:function (config)
 	{
+		var barName;
+
 		this.callParent (arguments);
 		this.initConfig (config);
 
+		this.buttonAdd.setHandler (this.doAdd);
+		this.buttonEdit.setHandler (this.doEdit);
+		this.buttonDelete.setHandler (this.doDelete);
+		this.buttonRefresh.setHandler (this.doRefresh);
+
+		/* Add buttons bar to the top of grid panel. */
+		barName			= "ButtonBar";
+		this.buttonBar	= Ext.create ("Ext.toolbar.Toolbar", {
+				id			:(config.id
+								? config.id + barName
+								: (config.itemId
+									? config.itemId + barName
+									: "JxGridPaging"+ barName
+								)
+							)
+			,	dock		:"top"
+			,	items		:
+				[
+					this.buttonDelete
+				,	this.buttonRefresh
+				,	this.buttonEdit
+				,	this.buttonAdd
+				]
+			});
+
+		this.addDocked (this.buttonBar);
+
+		/* Add paging toolbar to the bottom of grid panel. */
+		barName			= "PagingBar";
 		this.pagingBar	= Ext.create ("Ext.toolbar.Paging", {
 				id			:(config.id
-								? config.id +"Paging"
+								? config.id + barName
 								: (config.itemId
-									? config.itemId +"Paging"
-									: "JxGridPagingBar"
+									? config.itemId + barName
+									: "JxGridPaging" + barName
 								)
 							)
 			,	store		:config.store
@@ -177,5 +210,8 @@ Ext.define ("Jx.GridPaging", {
 			});
 
 		this.addDocked (this.pagingBar);
+
+		/* Listen to user selection on grid row */
+		this.on ("selectionchange", this.onSelectionChange, this);
 	}
 });

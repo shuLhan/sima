@@ -34,9 +34,9 @@ function JxSystemUser ()
 		}]
 	})
 
-,	this.do_refresh	= function (perm)
+,	this.doRefresh	= function (perm)
 	{
-		this.panel.do_refresh (perm);
+		this.panel.doRefresh (perm);
 	}
 };
 
