@@ -1,34 +1,44 @@
 /*
 	Copyright 2013 x10c-lab.com
-
 	Authors:
 		- mhd.sulhan (sulhan@x10c-lab.com)
 */
-var JxSystemUserStore	= Ext.create ("Jx.StorePaging", {
-	storeId	:"JxSystemUserStore"
-,	fields	:
-	[
-		"id"
-	,	"name"
-	,	"password"
-	]
-,	url		:"/module/SystemUser/data.jsp"
-});
 
-var JxSystemUser	= Ext.create ("Jx.GridPaging", {
-	id			:"JxSystemUser"
-,	title		:"System User"
-,	closable	:true
-,	autoDestroy	:true
-,	store		:JxSystemUserStore
-,	columns		:
-	[{
-		header		:"User name"
-	,	dataIndex	:"name"
-	}]
+function JxSystemUser ()
+{
+	this.id		= "SystemUser";
+	this.dir	= _g_module_dir +"/"+ this.id;
 
-,	do_refresh	:function ()
+	this.store	= Ext.create ("Jx.StorePaging", {
+		storeId		:this.id +"Store"
+	,	url			:this.dir +"/data.jsp"
+	,	fields		:
+		[
+			"id"
+		,	"name"
+		,	"password"
+		]
+	})
+
+,	this.panel	= Ext.create ("Jx.GridPaging", {
+		id			:this.id
+	,	title		:"System User"
+	,	closable	:true
+	,	autoDestroy	:true
+	,	store		:this.store
+	,	columns		:
+		[{
+			header		:"User name"
+		,	dataIndex	:"name"
+		,	flex		:1
+		}]
+	})
+
+,	this.do_refresh	= function (perm)
 	{
-		console.log ("instance");
+		this.panel.do_refresh (perm);
 	}
-});
+};
+
+/* moduleName = className */
+var SystemUser = new JxSystemUser ();
