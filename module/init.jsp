@@ -14,6 +14,7 @@
 	ResultSet			_rs			= null;
 	String				_q			= "";
 	int					_i			= 0;
+	long				_t			= 0;
 
 	JSONObject			_r			= new JSONObject ();
 	JSONArray			_a			= null;

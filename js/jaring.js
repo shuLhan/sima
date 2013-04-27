@@ -7,7 +7,7 @@
 	Global javascript for application.
  */
 Jx = {
-	pageSize:50
+	pageSize:_g_paging_size
 ,	msg		: {
 		el		:''
 	,	display :function (title, format, cls, delay)
@@ -66,6 +66,17 @@ Ext.define ("Jx.StorePaging", {
 	{
 		this.callParent (arguments);
 		this.initConfig (config);
+
+		if (config.url) {
+			this.getProxy ().api = {
+					read	:config.url +"?action=read"
+				,	create	:config.url +"?action=create"
+				,	update	:config.url +"?action=update"
+				,	destroy	:config.url +"?action=destroy"
+				}
+		} else if (config.api) {
+			this.getProxy ().api = config.api;
+		}
 	}
 });
 
@@ -116,11 +127,6 @@ Ext.define ("Jx.GridPaging", {
 				b.up ("grid").do_add ();
 			}
 		}]
-	,	bbar		:[{
-			xtype		:"pagingtoolbar"
-		,	displayInfo	:true
-		}]
-
 	,	do_delete	:function ()
 		{
 			if (this.perm < 4) {
@@ -135,8 +141,6 @@ Ext.define ("Jx.GridPaging", {
 			this.down ("#add").setDisabled (perm < 2);
 
 			this.getStore ().load ();
-
-			console.log ("parent");
 		}
 
 	,	do_edit		:function ()
@@ -158,5 +162,20 @@ Ext.define ("Jx.GridPaging", {
 	{
 		this.callParent (arguments);
 		this.initConfig (config);
+
+		this.pagingBar	= Ext.create ("Ext.toolbar.Paging", {
+				id			:(config.id
+								? config.id +"Paging"
+								: (config.itemId
+									? config.itemId +"Paging"
+									: "JxGridPagingBar"
+								)
+							)
+			,	store		:config.store
+			,	displayInfo	:true
+			,	dock		:"bottom"
+			});
+
+		this.addDocked (this.pagingBar);
 	}
 });

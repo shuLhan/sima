@@ -1,6 +1,18 @@
+/*
+	Copyright 2013 x10c-lab.com
+	Authors:
+		- mhd.sulhan (sulhan@x10c-lab.com)
+*/
+/* stores */
+var jx_menu_store;
+/* views */
+var jx_menu;
+var jx_content;
+var jx_main;
+
 Ext.onReady (function ()
 {
-	var jx_menu_store	= new Ext.data.JsonStore ({
+	jx_menu_store		= new Ext.data.JsonStore ({
 			storeId		:"jx_menu_store"
 		,	fields		:
 			[
@@ -17,7 +29,7 @@ Ext.onReady (function ()
 			}
 		});
 
-	var jx_menu			= Ext.create ("Ext.tab.Panel", {
+	jx_menu				= Ext.create ("Ext.tab.Panel", {
 			region		:"north"
 		,	shadow		:true
 		,	tabBar		:
@@ -49,13 +61,24 @@ Ext.onReady (function ()
 			}]
 		});
 
-	var jx_content		= Ext.create ("Ext.tab.Panel", {
-			region		:"center"
-		,	plain		:true
-		,	items		:[]
-		});
+	switch (_g_content_type) {
+	case 0:
+		jx_content		= Ext.create ("Ext.container.Container", {
+				region	:"center"
+			,	plain	:true
+			,	layout	:"fit"
+			});
+		break;
+	case 1:
+		jx_content		= Ext.create ("Ext.tab.Panel", {
+				region		:"center"
+			,	plain		:true
+			,	items		:[]
+			});
+		break;
+	}
 
-	var jx_main			= Ext.create ("Ext.container.Viewport", {
+	jx_main				= Ext.create ("Ext.container.Viewport", {
 			layout		:"border"
 		,	renderTo	:Ext.getBody ()
 		,	items		:
@@ -72,17 +95,26 @@ Ext.onReady (function ()
 
 	function jx_menu_button_onClick (b)
 	{
-		var modname = "Jx"+ b.module;
+		/* Find menu module in content area. */
+		switch (_g_content_type) {
+		case 0:
+			var c = jx_content.getComponent (b.module);
 
-		/* Find menu module on all tab in content area. */
-		var c = jx_content.getComponent (modname);
+			if (c && c.getId () == b.module) {
+				return;
+			}
+			break;
+		case 1:
+			var c = jx_content.getComponent (b.module);
 
-		if (c != undefined) {
-			jx_content.setActiveTab (c);
-			return;
+			if (c != undefined) {
+				jx_content.setActiveTab (c);
+				return;
+			}
+			break;
 		}
 
-		/* Create new tab */
+		/* If not exist, add module to content area */
 		Ext.Ajax.request ({
 			url		:_g_module_dir +"/"+ b.module +"/layout.js"
 		,	failure	:function (response, opts)
@@ -96,14 +128,25 @@ Ext.onReady (function ()
 						? window.execScript (response.responseText)
 						: window.eval (response.responseText);
 
-					var module = eval (modname);
+					var module = eval (b.module);
 
-					jx_content.add (module);
-					jx_content.setActiveTab (module);
-					jx_content.doLayout ();
+					switch (_g_content_type) {
+					case 0:
+						jx_content.removeAll ();
+						jx_content.add (module.panel);
+						break;
+					case 1:
+						jx_content.add (module.panel);
+						jx_content.setActiveTab (module.panel);
+						jx_content.doLayout ();
+						break;
+					}
 
-					module.do_refresh ();
+					module.do_refresh (b.permission);
 				} catch (e) {
+					if (console) {
+						console.log (e);
+					}
 					Jx.msg.error (e.message);
 				}
 			}

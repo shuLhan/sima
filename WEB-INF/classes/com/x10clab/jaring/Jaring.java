@@ -24,6 +24,8 @@ public class Jaring {
 	public static String	_name			= "jaring";
 	public static String	_path			= "/jaring";
 	public static String	_path_mod		= "/module";
+	public static int		_content_type	= 0;
+	public static int		_paging_size	= 50;
 	public static String	_db_class		= "";
 	public static String	_db_url			= "";
 	public static String	_db_user		= "";
@@ -149,6 +151,22 @@ public class Jaring {
 	}
 
 	/*
+		Get parameter in number format.
+	*/
+	public static int getIntParameter (HttpServletRequest request
+										, String paramName
+										, int defaultValue) {
+		String	paramString = request.getParameter (paramName);
+		int		paramValue	= defaultValue;
+		try {
+			paramValue = Integer.parseInt (paramString);
+		} catch (NumberFormatException nfe) { // Handles null and bad format
+			paramValue = defaultValue;
+		}
+		return (paramValue);
+	}
+
+	/*
 		Initialize application
 	*/
 	public static void init (ServletContext application, HttpServletRequest request)
@@ -165,6 +183,8 @@ public class Jaring {
 			Jaring._title		= props.getProperty ("app.title");
 			Jaring._name		= props.getProperty ("app.name");
 			Jaring._path_mod	= props.getProperty ("app.module.dir");
+			Jaring._content_type= Integer.parseInt (props.getProperty ("app.content.type"));
+			Jaring._paging_size	= Integer.parseInt (props.getProperty ("app.paging.size"));
 			Jaring._db_class	= props.getProperty ("db.class");
 			Jaring._db_url		= props.getProperty ("db.url");
 			Jaring._db_user		= props.getProperty ("db.username");
@@ -177,6 +197,8 @@ public class Jaring {
 			application.setAttribute ("app.name"		, Jaring._name);
 			application.setAttribute ("app.path"		, Jaring._path);
 			application.setAttribute ("app.module.dir"	, Jaring._path_mod);
+			application.setAttribute ("app.content.type", Jaring._content_type);
+			application.setAttribute ("app.paging.size"	, Jaring._paging_size);
 			application.setAttribute ("db.class"		, Jaring._db_class);
 			application.setAttribute ("db.url"			, Jaring._db_url);
 			application.setAttribute ("db.username"		, Jaring._db_user);

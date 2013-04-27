@@ -1,5 +1,5 @@
 /*
-	Menu icons
+	Menu's icons
 */
 .home	{ background-image: url("../../images/home.png") !important; }
 .logout	{ background-image: url("../../images/logout.png") !important; }
@@ -7,3 +7,10 @@
 .user	{ background-image: url("../../images/user.png") !important; }
 .group	{ background-image: url("../../images/group.png") !important; }
 .menu	{ background-image: url("../../images/menu.png") !important; }
+/*
+	Button's icons
+*/
+.add	{ background-image: url("../../images/add.png") !important; }
+.edit	{ background-image: url("../../images/edit.png") !important; }
+.delete	{ background-image: url("../../images/delete.png") !important; }
+.refresh{ background-image: url("../../images/refresh.png") !important; }
