@@ -16,15 +16,6 @@ try {
 		throw new Exception ("Invalid user ID or password!");
 	}
 
-	/* Get SHA256 value of password */
-	MessageDigest	md		= MessageDigest.getInstance("SHA-256");
-	byte[]			hash	= md.digest (password.getBytes ());
-	StringBuffer	sb		= new StringBuffer ();
-
-	for (int i = 0; i < hash.length; i++) {
-		sb.append (String.format ("%02x", hash[i]));
-	}
-
 	/* Check if username and password is valid */
 	_q	="	select	id"
 		+"	,		realname"
@@ -36,7 +27,7 @@ try {
 	_ps = _cn.prepareStatement (_q);
 	_i	= 1;
 	_ps.setString (_i++, username);
-	_ps.setString (_i++, sb.toString ());
+	_ps.setString (_i++, Jaring.encrypt (password));
 	_rs	= _ps.executeQuery ();
 
 	if (! _rs.next ()) {

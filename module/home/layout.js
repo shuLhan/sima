@@ -1,8 +1,7 @@
 Ext.onReady (function ()
 {
 	var jx_login_form = Ext.create ("Ext.form.Panel", {
-			xtype			:"form"
-		,	url				:_g_module_path +"login.jsp"
+			url				:_g_module_path +"login.jsp"
 		,	title			:_g_title +" :: Login"
 		,	id				:"login_form"
 		,	bodyPadding		:10

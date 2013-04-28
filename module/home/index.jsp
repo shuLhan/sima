@@ -10,6 +10,7 @@
 		var _g_root			= "<%= Jaring._path %>";
 		var _g_module_dir	= "<%= Jaring._path + Jaring._path_mod %>"
 		var _g_module_path	= "${pageContext.request.requestURI}";
+		var _g_paging_size	= <%= Jaring._paging_size %>;
 		var _g_title		= "<%= Jaring._title %>";
 	</script>
 

@@ -16,6 +16,7 @@ function JxSystemUser ()
 		[
 			"id"
 		,	"name"
+		,	"realname"
 		,	"password"
 		]
 	})
@@ -23,12 +24,46 @@ function JxSystemUser ()
 ,	this.panel	= Ext.create ("Jx.GridPaging", {
 		id			:this.id
 	,	title		:"System User"
-	,	autoDestroy	:true
 	,	store		:this.store
-	,	columns		:[{
-			header		:"User name"
+	,	columns		:
+		[{
+			header		:"ID"
+		,	dataIndex	:"id"
+		,	hidden		:true
+		,	editor		:
+			{
+				xtype		:"textfield"
+			,	hidden		:true
+			}
+		},{
+			header		:"User ID"
 		,	dataIndex	:"name"
 		,	flex		:1
+		,	editor		:
+			{
+				xtype		:"textfield"
+			,	vtype		:"alphanum"
+			,	allowBlank	:false
+			}
+		},{
+			header		:"User name"
+		,	dataIndex	:"realname"
+		,	flex		:1
+		,	editor		:
+			{
+				xtype		:"textfield"
+			,	allowBlank	:false
+			}
+		},{
+			header		:"Password"
+		,	dataIndex	:"password"
+		,	hidden		:true
+		,	editor		:
+			{
+				xtype		:"textfield"
+			,	vtype		:"alphanum"
+			,	inputType	:"password"
+			}
 		}]
 	})
 
