@@ -29,10 +29,6 @@ function JxSystemUser ()
 			header		:"User name"
 		,	dataIndex	:"name"
 		,	flex		:1
-		},{
-			header		:"User name"
-		,	dataIndex	:"name"
-		,	flex		:1
 		}]
 	})
 

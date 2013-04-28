@@ -32,12 +32,13 @@ Ext.onReady (function ()
 		});
 
 	jx_header			= Ext.create ("Ext.container.Container", {
-			region		:"north"
+			id			:"app-background"
+		,	region		:"north"
 		,	layout		:{
 				type	:"hbox"
 			,	align	:"middle"
 			}
-		,	height		:48
+		,	height		:45
 		,	items		: [{
 				id		:"app-header"
 			,	xtype	:"box"
@@ -45,6 +46,7 @@ Ext.onReady (function ()
 			,	flex	:1
 			},{
 				xtype	:"button"
+			,	margin	:"0 5 0 0"
 			,	scale	:"medium"
 			,	text	:""
 			,	iconCls	:"account"
@@ -85,6 +87,7 @@ Ext.onReady (function ()
 
 	jx_menu				= Ext.create ("Ext.tab.Panel", {
 			region		:"north"
+		,	padding		:"5 5 0 5"
 		,	shadow		:true
 		,	activeTab	:0
 		,	items		:
@@ -97,6 +100,7 @@ Ext.onReady (function ()
 	jx_content_home		= Ext.create ("Ext.panel.Panel", {
 			region		:"center"
 		,	margin		:"5 0 0 0"
+		,	padding		:"0 5 0 5"
 		,	bodyPadding	:5
 		,	html		:"<h1>Welcome!</h1>"
 		});
@@ -106,6 +110,7 @@ Ext.onReady (function ()
 		jx_content		= Ext.create ("Ext.container.Container", {
 				region		:"center"
 			,	margin		:"5 0 0 0"
+			,	padding		:"0 5 0 5"
 			,	plain		:true
 			,	layout		:"fit"
 			});
@@ -114,6 +119,7 @@ Ext.onReady (function ()
 		jx_content		= Ext.create ("Ext.tab.Panel", {
 				region		:"center"
 			,	margin		:"5 0 0 0"
+			,	padding		:"0 5 0 5"
 			,	plain		:true
 			,	items		:[]
 			});
@@ -124,7 +130,7 @@ Ext.onReady (function ()
 	
 	jx_main				= Ext.create ("Ext.container.Viewport", {
 			layout		:"border"
-		,	padding		:"0 5 5 5"
+		// ,	padding		:"0 5 5 5"
 		,	renderTo	:Ext.getBody ()
 		,	items		:
 			[
