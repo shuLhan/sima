@@ -7,6 +7,7 @@ package com.x10clab.jaring;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.security.MessageDigest;
 import java.util.Properties;
 
 import java.sql.Connection;
@@ -172,6 +173,26 @@ public class Jaring {
 			paramValue = defaultValue;
 		}
 		return (paramValue);
+	}
+
+	/*
+		Encrypt data using SHA256
+	*/
+	public static String encrypt (String data)
+	{
+		try {
+			MessageDigest	md		= MessageDigest.getInstance ("SHA-256");
+			byte[]			hash	= md.digest (data.getBytes ());
+			StringBuffer	sb		= new StringBuffer ();
+
+			for (int i = 0; i < hash.length; i++) {
+				sb.append (String.format ("%02x", hash[i]));
+			}
+
+			return sb.toString ();
+		} catch (Exception e) {
+			return "";
+		}
 	}
 
 	/*
