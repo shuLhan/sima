@@ -17,6 +17,8 @@
 .edit	{ background-image: url("../../images/edit.png") !important; }
 .delete	{ background-image: url("../../images/delete.png") !important; }
 .refresh{ background-image: url("../../images/refresh.png") !important; }
+.save	{ background-image: url("../../images/save.png") !important; }
+.cancel	{ background-image: url("../../images/cancel.png") !important; }
 
 /* header and footer */
 #app-header{
