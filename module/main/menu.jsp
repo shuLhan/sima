@@ -1,4 +1,5 @@
 <%@ include file="../init.jsp" %>
+<%@ page contentType="application/json" %>
 <%!
 	private JSONArray getMenu (Connection db_con, long _uid, int pid)
 	{

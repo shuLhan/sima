@@ -1,3 +1,8 @@
+/*
+	Copyright 2013 x10c-lab.com
+	Authors:
+		- mhd.sulhan (sulhan@x10c-lab.com)
+*/
 package com.x10clab.jaring;
 
 import java.io.File;
@@ -39,6 +44,7 @@ public class Jaring {
 		Variables that will be instatited when calling getCookiesValue.
 	*/
 	public static long		_c_uid			= 0;
+	public static String	_c_username		= "Anonymous";
 
 	/*
 		Initialize database connection pooling
@@ -98,6 +104,8 @@ public class Jaring {
 				String	c_name = _cookies[i].getName ();
 				if (c_name.equalsIgnoreCase (Jaring._name +".user.id")) {
 					Jaring._c_uid = Integer.parseInt (_cookies[i].getValue ());
+				} else if (c_name.equalsIgnoreCase (Jaring._name +".user.name")) {
+					Jaring._c_username = _cookies[i].getValue ();
 				}
 			}
 		}

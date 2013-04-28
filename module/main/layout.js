@@ -35,20 +35,20 @@ Ext.onReady (function ()
 			id			:"app-background"
 		,	region		:"north"
 		,	layout		:{
-				type	:"hbox"
-			,	align	:"middle"
+				type		:"hbox"
+			,	align		:"middle"
 			}
 		,	height		:45
-		,	items		: [{
-				id		:"app-header"
-			,	xtype	:"box"
-			,	html	:_g_title
-			,	flex	:1
+		,	items		:[{
+				id			:"app-header"
+			,	xtype		:"box"
+			,	html		:_g_title
+			,	flex		:1
 			},{
 				xtype	:"button"
 			,	margin	:"0 5 0 0"
 			,	scale	:"medium"
-			,	text	:""
+			,	text	:_g_c_username
 			,	iconCls	:"account"
 			,	menu	:[{
 					text	:"Profile"
@@ -61,7 +61,7 @@ Ext.onReady (function ()
 				},{
 					text	:"Logout"
 				,	iconCls	:"logout"
-				,	handler		:function (b)
+				,	handler	:function (b)
 					{
 						jx_do_logout ();
 					}
@@ -72,16 +72,16 @@ Ext.onReady (function ()
 	jx_footer			= Ext.create ("Ext.container.Container", {
 			region		:"south"
 		,	layout		:{
-				type	:"hbox"
-			,	align	:"middle"
-			,	pack	:"center"
+				type		:"hbox"
+			,	align		:"middle"
+			,	pack		:"center"
 			}
 		,	height		:20
 		,	items		:[{
-				id		:"app-footer"
-			,	xtype	:"box"
-			,	html	:_g_title +"&nbsp;&nbsp;&copy;&nbsp;&nbsp;2013 x10c-lab.com"
-			,	flex	:1
+				id			:"app-footer"
+			,	xtype		:"box"
+			,	html		:_g_title +"&nbsp;&nbsp;&copy;&nbsp;&nbsp;2013 x10c-lab.com"
+			,	flex		:1
 			}]
 		});
 
@@ -107,7 +107,7 @@ Ext.onReady (function ()
 		
 	switch (_g_content_type) {
 	case 0:
-		jx_content		= Ext.create ("Ext.container.Container", {
+		jx_content			= Ext.create ("Ext.container.Container", {
 				region		:"center"
 			,	margin		:"5 0 0 0"
 			,	padding		:"0 5 0 5"
@@ -116,7 +116,7 @@ Ext.onReady (function ()
 			});
 		break;
 	case 1:
-		jx_content		= Ext.create ("Ext.tab.Panel", {
+		jx_content			= Ext.create ("Ext.tab.Panel", {
 				region		:"center"
 			,	margin		:"5 0 0 0"
 			,	padding		:"0 5 0 5"
@@ -130,7 +130,6 @@ Ext.onReady (function ()
 	
 	jx_main				= Ext.create ("Ext.container.Viewport", {
 			layout		:"border"
-		// ,	padding		:"0 5 5 5"
 		,	renderTo	:Ext.getBody ()
 		,	items		:
 			[

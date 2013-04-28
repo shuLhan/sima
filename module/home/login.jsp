@@ -1,11 +1,16 @@
+<%--
+	Copyright 2013 x10c-lab.com
+	Authors:
+		- mhd.sulhan (sulhan@x10c-lab.com)
+--%>
 <%@ page import="java.security.MessageDigest" %>
-
 <%@ include file="../init.jsp" %>
 <%
 try {
 	String	username	= request.getParameter ("username");
 	String	password	= request.getParameter ("password");
 	String	id			= "";
+	String	realname	= "";
 
 	if (null == username || null == password) {
 		throw new Exception ("Invalid user ID or password!");
@@ -22,6 +27,7 @@ try {
 
 	/* Check if username and password is valid */
 	_q	="	select	id"
+		+"	,		realname"
 		+"	from	_user"
 		+"	where	name		= ?"
 		+"	and		password	= ?";
@@ -37,18 +43,23 @@ try {
 		throw new Exception ("Invalid user ID or password!");
 	}
 
-	id = _rs.getString ("id");
+	id			= _rs.getString ("id");
+	realname	= _rs.getString ("realname");
 
 	_rs.close ();
 	_ps.close ();
 	_cn.close ();
 
 	/* Save user id to cookie */
-	Cookie	c_uid		= new Cookie ((Jaring._name +".user.id"), id);
+	Cookie	c;
 
-	c_uid.setPath (Jaring._path);
+	c = new Cookie ((Jaring._name +".user.id"), id);
+	c.setPath (Jaring._path);
+	response.addCookie (c);
 
-	response.addCookie (c_uid);
+	c = new Cookie ((Jaring._name +".user.name"), realname);
+	c.setPath (Jaring._path);
+	response.addCookie (c);
 
 	/* Forward user to main page */
 	_r.put ("success"	,true);

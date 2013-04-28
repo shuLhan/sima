@@ -13,6 +13,7 @@ create table _user
 (
 	id			integer			not null default nextval ('_user_seq')
 ,	name		varchar (32)	not null
+,	realname	varchar (128)	not null
 ,	password	varchar (256)	not null
 ,	constraint	_user_pk		primary key (id)
 );
