@@ -9,7 +9,7 @@ insert into _user (name, password) values ('root', '3f38a07b0dc3ee666018ffb423e2
 	Group
 */
 
-insert into _group (name) values ('Administrator');	-- 1
+insert into _group (name, type) values ('Administrator', 0);	-- 1
 
 /*
 	User -> Group

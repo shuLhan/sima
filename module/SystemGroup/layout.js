@@ -16,7 +16,6 @@ function JxSystemGroup ()
 		[
 			"id"
 		,	"name"
-		,	"password"
 		]
 	})
 
@@ -27,9 +26,23 @@ function JxSystemGroup ()
 	,	store		:this.store
 	,	columns		:
 		[{
+			header		:"ID"
+		,	dataIndex	:"id"
+		,	hidden		:true
+		,	editor		:
+			{
+				xtype		:"textfield"
+			,	hidden		:true
+			}
+		},{
 			header		:"Group name"
 		,	dataIndex	:"name"
 		,	flex		:1
+		,	editor		:
+			{
+				xtype		:"textfield"
+			,	allowBlank	:false
+			}
 		}]
 	})
 

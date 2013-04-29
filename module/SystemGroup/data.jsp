@@ -5,27 +5,18 @@ try {
 	String	action	= request.getParameter ("action");
 	int		limit	= Jaring.getIntParameter (request, "limit", Jaring._paging_size);
 	int		start	= Jaring.getIntParameter (request, "start", 0);
+	long	id		= 0;
 
 	_cn	= Jaring.getConnection (request);
 
 	if ("create".equalsIgnoreCase (action)) {
-		String enc = Jaring.encrypt (request.getParameter ("password"));
-
-		if (enc.equals ("")) {
-			throw new Exception ("Failed to encrypt data!");
-		}
-
-		_q	="	insert into _user ("
+		_q	="	insert into _group ("
 			+"		name"
-			+"	,	realname"
-			+"	,	password"
-			+"	) values ( ? , ? , ? )";
+			+"	) values ( ? )";
 
 		_ps	= _cn.prepareStatement (_q);
 		_i	= 1;
 		_ps.setString (_i++	, request.getParameter ("name"));
-		_ps.setString (_i++	, request.getParameter ("realname"));
-		_ps.setString (_i++	, enc);
 		_ps.executeUpdate ();
 		_ps.close ();
 
@@ -33,27 +24,19 @@ try {
 		_r.put ("data"		,"New data has been created.");
 
 	} else if ("update".equalsIgnoreCase (action)) {
-		long	id	= Jaring.getIntParameter (request, "id", -1);
-		String	enc	= Jaring.encrypt (request.getParameter ("password"));
+		id	= Jaring.getIntParameter (request, "id", -1);
 
 		if (id < 0) {
 			throw new Exception ("Invalid data ID!");
 		}
-		if (enc.equals ("")) {
-			throw new Exception ("Failed to encrypt data!");
-		}
 
-		_q	="	update	_user"
+		_q	="	update	_group"
 			+"	set		name		= ?"
-			+"	,		realname	= ?"
-			+"	,		password	= ?"
 			+"	where	id			= ?";
 
 		_ps	= _cn.prepareStatement (_q);
 		_i	= 1;
 		_ps.setString	(_i++	, request.getParameter ("name"));
-		_ps.setString	(_i++	, request.getParameter ("realname"));
-		_ps.setString	(_i++	, Jaring.encrypt (request.getParameter ("password")));
 		_ps.setLong		(_i++	, id);
 		_ps.executeUpdate ();
 		_ps.close ();
@@ -62,16 +45,41 @@ try {
 		_r.put ("data"		,"Data has been updated.");
 
 	} else if ("destroy".equalsIgnoreCase (action)) {
-		long id = Jaring.getIntParameter (request, "id", -1);
+		id = Jaring.getIntParameter (request, "id", -1);
 
 		if (id < 0) {
 			throw new Exception ("Invalid data ID!");
 		}
 
-		_q	="	delete from _user where id = ?";
+		/* Check group type, if it's 0 then return */
+		_q	="	select	type"
+			+"	from	_group"
+			+"	where	id = ?";
+
 		_ps	= _cn.prepareStatement (_q);
 		_i	= 1;
-		_ps.setLong		(_i++	, id);
+		_ps.setLong (_i++	, id);
+		_rs = _ps.executeQuery ();
+
+		if (_rs.next ()) {
+			id = _rs.getInt ("type");
+
+			if (id == 0) {
+				throw new Exception ("This group is system group and can't be deleted.");
+			}
+		}
+
+		_rs.close ();
+		_ps.close ();
+
+		/* Delete group from table */
+		_q	="	delete from		_group"
+			+"	where	id		= ?"
+			+"	and		type	!= 0";
+
+		_ps	= _cn.prepareStatement (_q);
+		_i	= 1;
+		_ps.setLong (_i++	, id);
 		_ps.executeUpdate ();
 		_ps.close ();
 
@@ -82,7 +90,7 @@ try {
 	} else {
 		/* Get total row */
 		_q	="	select		count (id) as total"
-			+"	from		_user";
+			+"	from		_group";
 
 		_ps	= _cn.prepareStatement (_q);
 		_rs	= _ps.executeQuery ();
@@ -97,9 +105,7 @@ try {
 		/* Get data */
 		_q	="	select		id"
 			+"	,			name"
-			+"	,			realname"
-			+"	,			password"
-			+"	from		_user"
+			+"	from		_group"
 			+"	order by	name"
 			+"	limit		?"
 			+"	offset		?";
@@ -116,8 +122,6 @@ try {
 
 			_o.put ("id"		, _rs.getInt ("id"));
 			_o.put ("name"		, _rs.getString ("name"));
-			_o.put ("realname"	, _rs.getString ("realname"));
-			_o.put ("password"	, _rs.getString ("password"));
 
 			_a.add (_o);
 		}
