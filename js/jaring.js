@@ -62,6 +62,7 @@ Ext.define ("Jx.StorePaging", {
 		autoLoad	:false
 	,	autoSync	:false
 	,	pageSize	:Jx.pageSize
+	,	fieldId		:"id"		// used later by GridPaging.compDetails.
 	,	proxy		:
 		{
 			type		:"ajax"
@@ -94,6 +95,11 @@ Ext.define ("Jx.StorePaging", {
 			this.getProxy ().api = config.api;
 		}
 	}
+
+,	getFieldId	:function ()
+	{
+		return this.fieldId
+	}
 });
 
 /*
@@ -107,26 +113,36 @@ Ext.define ("Jx.GridPaging", {
 ,	enableLocking	:true
 ,	viewConfig		:
 	{
-        enableTextSelection	:true
-    }
+		enableTextSelection	:true
+	}
+	/*
+		Custom properties.
+	*/
 ,	config			:
 	{
 		perm			:0		// user permission on this module.
 	,	autoCreateForm	:true	// automatically create form for add/edit data in grid.
 	,	action			:"read"	// grid current action (read, create, update, delete).
+	,	compDetails		:[]		// list of data details, for master-detail grid.
 	}
 
-,	constructor	:function (config)
+,	initComponent	:function ()
 	{
-		var barName;
-		var i;
-		var column;
-
-		config.columns.splice (0, 0, { xtype : "rownumberer" });
-
 		this.callParent (arguments);
-		this.initConfig (config);
 
+		/* Add row number to grid */
+		this.columns.splice (0, 0, { xtype : "rownumberer" });
+
+		this.createButtonBar ();
+		this.createPagingBar ();
+		this.createForm ();
+
+		/* Listen to user selection on grid row */
+		this.on ("selectionchange", this.onSelectionChange, this);
+	}
+
+,	createButtonBar	:function ()
+	{
 		this.buttonAdd		= Ext.create ("Ext.button.Button", {
 				text		:"Add"
 			,	itemId		:"add"
@@ -161,15 +177,17 @@ Ext.define ("Jx.GridPaging", {
 		this.buttonRefresh.setHandler (this.doRefresh, this);
 
 		/* Add buttons bar to the top of grid panel. */
-		barName			= "ButtonBar";
-		this.buttonBar	= Ext.create ("Ext.toolbar.Toolbar", {
-				id			:(config.id
-								? config.id + barName
-								: (config.itemId
-									? config.itemId + barName
+		var barName		= "ButtonBar";
+		var id			= (this.id
+								? this.id + barName
+								: (this.itemId
+									? this.itemId + barName
 									: "JxGridPaging"+ barName
 								)
-							)
+						);
+
+		this.buttonBar	= Ext.create ("Ext.toolbar.Toolbar", {
+				id			:id
 			,	dock		:"top"
 			,	items		:
 				[
@@ -183,18 +201,25 @@ Ext.define ("Jx.GridPaging", {
 			});
 
 		this.addDocked (this.buttonBar);
+	}
 
-		/* Add paging toolbar to the bottom of grid panel. */
-		barName			= "PagingBar";
-		this.pagingBar	= Ext.create ("Ext.toolbar.Paging", {
-				id			:(config.id
-								? config.id + barName
-								: (config.itemId
-									? config.itemId + barName
+	/*
+		Add paging toolbar to the bottom of grid panel.
+	*/
+,	createPagingBar	:function ()
+	{
+		var barName		= "PagingBar";
+		var id			= (this.id
+								? this.id + barName
+								: (this.itemId
+									? this.itemId + barName
 									: "JxGridPaging" + barName
 								)
-							)
-			,	store		:config.store
+						);
+
+		this.pagingBar	= Ext.create ("Ext.toolbar.Paging", {
+				id			:id
+			,	store		:this.store
 			,	displayInfo	:true
 			,	dock		:"bottom"
 			,	pageSize	:_g_paging_size
@@ -202,23 +227,26 @@ Ext.define ("Jx.GridPaging", {
 			});
 
 		this.addDocked (this.pagingBar);
+	}
 
-		/* Listen to user selection on grid row */
-		this.on ("selectionchange", this.onSelectionChange, this);
-
+,	createForm	:function ()
+	{
 		/* Create form only if user enable it */
-		if (undefined != config.autoCreateForm && false == config.autoCreateForm) {
+		if (undefined != this.autoCreateForm && false == this.autoCreateForm) {
 			return;
 		}
 
-		this.form			= Ext.create ("Ext.form.Panel", {
-				id			:(config.id
-								? config.id + barName
-								: (config.itemId
-									? config.itemId + barName
+		var barName			= "Form";
+		var id				= (this.id
+								? this.id + barName
+								: (this.itemId
+									? this.itemId + barName
 									: "JxGridPaging" + barName
 								)
-							)
+							);
+
+		this.form			= Ext.create ("Ext.form.Panel", {
+				id			:id
 			,	dock		:"right"
 			,	titleAlign	:"center"
 			,	bodyPadding	:10
@@ -234,8 +262,8 @@ Ext.define ("Jx.GridPaging", {
 			});
 
 		/* Add each column's editor to form */
-		for (var i = 0; i < config.columns.length; i++) {
-			c = config.columns[i];
+		for (var i = 0, c = null; i < this.columns.length; i++) {
+			c = this.columns[i];
 			if (undefined != c.editor) {
 				c.editor.fieldLabel	= c.header;
 				c.editor.name		= c.dataIndex;
@@ -244,7 +272,15 @@ Ext.define ("Jx.GridPaging", {
 			}
 		}
 
-		/* Add button bar to form */
+		this.createFormButtonBar ();
+		this.addDocked (this.form);
+	}
+
+	/*
+		Add button bar to form.
+	*/
+,	createFormButtonBar	:function ()
+	{
 		this.form.buttonSave	= Ext.create ("Ext.button.Button", {
 				text		:"Save"
 			,	itemId		:"save"
@@ -261,15 +297,17 @@ Ext.define ("Jx.GridPaging", {
 		this.form.buttonSave.setHandler (this.doFormSave, this);
 		this.form.buttonCancel.setHandler (this.doFormCancel, this);
 
-		barName				= "FormButtonBar";
-		this.form.buttonBar	= Ext.create ("Ext.toolbar.Toolbar", {
-				id			:(config.id
-								? config.id + barName
-								: (config.itemId
-									? config.itemId + barName
+		var	barName			= "FormButtonBar";
+		var id				= (this.id
+								? this.id + barName
+								: (this.itemId
+									? this.itemId + barName
 									: "JxGridPaging"+ barName
 								)
-							)
+							);
+
+		this.form.buttonBar	= Ext.create ("Ext.toolbar.Toolbar", {
+				id			:id
 			,	dock		:"bottom"
 			,	border		:true
 			,	shadow		:true
@@ -284,32 +322,72 @@ Ext.define ("Jx.GridPaging", {
 			});
 
 		this.form.addDocked (this.form.buttonBar);
-
-		this.addDocked (this.form);
 	}
 
+,	clearData	:function ()
+	{
+		this.store.loadData ([], false);
+	}
+
+/*
+	beforeAdd	:function, overridden by instance, return false to cancel.
+	afterAdd	:function, overridden by instance.
+*/
 ,	doAdd		:function ()
 	{
+		if (this.beforeAdd && typeof (this.beforeAdd) === "function") {
+			if (this.beforeAdd () == false) {
+				return;
+			}
+		}
 		if (this.perm < 2) {
 			return;
 		}
+
 		this.action	= "create";
 		this.form.setTitle ("Create new data");
 		this.form.show ();
+
+		if (this.afterAdd && typeof (this.afterAdd) === "function") {
+			this.afterAdd ();
+		}
 	}
 
+/*
+	beforeEdit	:function, overridden by instance, return false to cancel.
+	afterEdit	:function, overridden by instance.
+*/
 ,	doEdit		:function ()
 	{
+		if (this.beforeEdit && typeof (this.beforeEdit) === "function") {
+			if (this.beforeEdit () == false) {
+				return;
+			}
+		}
 		if (this.perm < 3) {
 			return;
 		}
+
 		this.action	= "update";
 		this.form.setTitle ("Updating data");
 		this.form.show ();
+
+		if (this.afterEdit && typeof (this.afterEdit) === "function") {
+			this.afterEdit ();
+		}
 	}
 
+/*
+	beforeDelete	:function (), overridden by instance, return false to cancel.
+	afterDelete		:function (), overridden by instance.
+*/
 ,	doDelete	:function ()
 	{
+		if (this.beforeDelete && typeof (this.beforeDelete) === "function") {
+			if (this.beforeDelete () == false) {
+				return;
+			}
+		}
 		if (this.perm < 4) {
 			return;
 		}
@@ -318,22 +396,48 @@ Ext.define ("Jx.GridPaging", {
 			{
 				this.action	= "destroy";
 				this.doFormSave ();
+
+				if (this.afterDelete && typeof (this.afterDelete) === "function") {
+					this.afterDelete ();
+				}
 			}
 		,	this
 		);
 	}
 
-,	doRefresh	:function (perm)
+/*
+	beforeRefresh	:function, overridden by instance, return false to cancel.
+	afterRefresh	:function, overridden by instance.
+*/
+,	doRefresh		:function (perm)
 	{
+		if (this.beforeRefresh && typeof (this.beforeRefresh) === "function") {
+			if (this.beforeRefresh () == false) {
+				return;
+			}
+		}
+
 		this.perm = perm;
-
 		this.buttonAdd.setDisabled (perm < 2);
-
 		this.store.load ();
+
+		if (this.afterRefresh && typeof (this.afterRefresh) === "function") {
+			this.afterRefresh ();
+		}
 	}
 
-,	onSelectionChange	:function (model, data, e)
+/*
+	beforeSelectionChange	:function, overridden by instance, return false to cancel.
+	afterSelectionChange	:function, overridden by instance.
+*/
+,	onSelectionChange		:function (model, data, e)
 	{
+		if (this.beforeSelectionChange && typeof (this.beforeSelectionChange) === "function") {
+			if (this.beforeSelectionChange (model, data, e) == false) {
+				return;
+			}
+		}
+
 		var s = (data.length <= 0);
 
 		if (this.perm >= 4) {
@@ -342,14 +446,31 @@ Ext.define ("Jx.GridPaging", {
 		if (this.perm >= 3) {
 			this.buttonEdit.setDisabled (s);
 		}
-		if (s) {
-			return;
+		if (!s) {
+			if (true == this.autoCreateForm) {
+				this.form.loadRecord (data[0]);
+			}
 		}
-		if (true == this.autoCreateForm) {
-			this.form.loadRecord (data[0]);
+
+		/* Refresh grid details */
+		var id = 0;
+
+		if (data.length > 0) {
+			id	= data[0].get (this.getStore ().getFieldId ());
+		}
+		for (var i = 0, c = null; i < this.compDetails.length; i++) {
+			this.compDetails[i].doRefresh (this.perm, id);
+		}
+
+		if (this.afterSelectionChange && typeof (this.afterSelectionChange) === "function") {
+			this.afterSelectionChange (model, data, e);
 		}
 	}
 
+/*
+	beforeFormSave	:function, overridden by instance, return false to cancel.
+	afterFormSave	:function, overridden by instance.
+*/
 ,	doFormSave		:function ()
 	{
 		var f = this.form.getForm ();
@@ -357,6 +478,12 @@ Ext.define ("Jx.GridPaging", {
 		if (!f.isValid ()) {
 			Jx.msg.error ("Invalid form values!<br/>Please corret/fill form's field with red mark.");
 			return;
+		}
+
+		if (this.beforeFormSave && typeof (this.beforeFormSave) === "function") {
+			if (this.beforeFormSave () == false) {
+				return;
+			}
 		}
 
 		/* Generate url based on user action */
@@ -368,6 +495,12 @@ Ext.define ("Jx.GridPaging", {
 				Jx.msg.info (action.result.data);
 				this.getStore ().reload ();
 				this.form.hide ();
+
+				if (this.afterFormSave && typeof (this.afterFormSave) === "function") {
+					if (this.afterFormSave () == false) {
+						return;
+					}
+				}
 			}
 		,	failure	:function (form, action)
 			{
@@ -385,8 +518,22 @@ Ext.define ("Jx.GridPaging", {
 		});
 	}
 
-,	doFormCancel	:function ()
+/*
+	beforeFormCancel	:function, overridden by instance, return false to cancel.
+	afterFormCancel		:function, overridden by instance.
+*/
+,	doFormCancel		:function ()
 	{
+		if (this.beforeFormCancel && typeof (this.beforeFormCancel) === "function") {
+			if (this.beforeFormCancel () == false) {
+				return;
+			}
+		}
+
 		this.form.hide ();
+
+		if (this.afterFormCancel && typeof (this.afterFormCancel) === "function") {
+			this.afterFormCancel ();
+		}
 	}
 });

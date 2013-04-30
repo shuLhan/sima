@@ -7,7 +7,7 @@
 function JxSystemUser ()
 {
 	this.id		= "SystemUser";
-	this.dir	= _g_module_dir +"/"+ this.id;
+	this.dir	= _g_module_dir + this.id;
 
 	this.store	= Ext.create ("Jx.StorePaging", {
 		storeId		:this.id +"Store"

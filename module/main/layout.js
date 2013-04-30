@@ -208,7 +208,7 @@ Ext.onReady (function ()
 
 					module.doRefresh (b.permission);
 				} catch (e) {
-					if (console) {
+					if (undefined != console) {
 						console.log (e);
 					}
 					Jx.msg.error (e.message);
