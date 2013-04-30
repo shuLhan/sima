@@ -36,6 +36,7 @@ function JxSystemGroup_User ()
 	this.panel			= Ext.create ("Jx.GridPaging", {
 			id			:this.id
 		,	region		:"east"
+		,	split		:true
 		,	title		:"Users of Group"
 		,	width		:"50%"
 		,	store		:this.store
@@ -137,7 +138,7 @@ function JxSystemGroup ()
 	SystemGroupUser		= new JxSystemGroup_User ();
 	SystemGroupGroup	= new JxSystemGroup_Group ();
 
-	this.panel		= Ext.create ("Ext.panel.Panel", {
+	this.panel		= Ext.create ("Ext.container.Container", {
 			id		:this.id
 		,	layout	:"border"
 		,	items	:

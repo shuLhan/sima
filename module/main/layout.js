@@ -88,8 +88,17 @@ Ext.onReady (function ()
 	jx_menu				= Ext.create ("Ext.tab.Panel", {
 			region		:"north"
 		,	padding		:"5 5 0 5"
-		,	shadow		:true
 		,	activeTab	:0
+		,	plain		:true
+		,	centered	:true
+		,	tabBar		:
+			{
+				plain		:true
+			,	layout		:
+				{
+					pack		:"center"
+				}
+			}
 		,	items		:
 			[{
 				id			:"content_home"
