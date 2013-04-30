@@ -2,9 +2,26 @@
 	Common tables for system application.
 	Please keep DDL in this script vendor agnostic.
 */
-/*
-	User of application
 
+/*
+	Group of user.
+
+	Group.type:
+	- 0 : system group, can't be deleted
+	- 1 : user group.
+ */
+create sequence	_group_seq;
+
+create table _group
+(
+	id			integer			not null default nextval ('_group_seq')
+,	name		varchar (128)	not null
+,	type		integer			default 1
+,	constraint	_group_pk		primary key (id)
+);
+
+/*
+	User of application.
 	_user.password encrypted with function sha256 (salt + real-password).
 */
 create sequence _user_seq;
@@ -18,23 +35,6 @@ create table _user
 ,	constraint	_user_pk		primary key (id)
 );
 
-/*
-	Group of user
-*/
-create sequence	_group_seq;
-
-/*
-	Group.type:
-	- 0 : system group, can't be deleted
-	- 1 : user group.
- */
-create table _group
-(
-	id			integer			not null default nextval ('_group_seq')
-,	name		varchar (128)	not null
-,	type		integer			default 1
-,	constraint	_group_pk		primary key (id)
-);
 
 /*
 	User -> Group

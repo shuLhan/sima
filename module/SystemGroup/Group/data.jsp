@@ -1,4 +1,4 @@
-<%@ include file="../init.jsp" %>
+<%@ include file="../../init.jsp" %>
 <%@ page contentType="application/json" %>
 <%
 try {
@@ -52,6 +52,8 @@ try {
 		}
 
 		/* Check group type, if it's 0 then return */
+		int type = 0;
+
 		_q	="	select	type"
 			+"	from	_group"
 			+"	where	id = ?";
@@ -62,9 +64,9 @@ try {
 		_rs = _ps.executeQuery ();
 
 		if (_rs.next ()) {
-			id = _rs.getInt ("type");
+			type = _rs.getInt ("type");
 
-			if (id == 0) {
+			if (type == 0) {
 				throw new Exception ("This group is system group and can't be deleted.");
 			}
 		}
