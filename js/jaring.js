@@ -94,6 +94,11 @@ Ext.define ("Jx.StorePaging", {
 		} else if (config.api) {
 			this.getProxy ().api = config.api;
 		}
+
+		/* Check and merge for extra parameters */
+		if (config.extraParams && typeof (config.extraParams) === "object") {
+			this.proxy.extraParams = Ext.merge (this.proxy.extraParams, config.extraParams);
+		}
 	}
 
 ,	getFieldId	:function ()
@@ -124,6 +129,7 @@ Ext.define ("Jx.GridPaging", {
 	,	autoCreateForm	:true	// automatically create form for add/edit data in grid.
 	,	action			:"read"	// grid current action (read, create, update, delete).
 	,	compDetails		:[]		// list of data details, for master-detail grid.
+	,	formDock		:"right"	// position of form in grid.
 	}
 
 ,	initComponent	:function ()
@@ -247,7 +253,7 @@ Ext.define ("Jx.GridPaging", {
 
 		this.form			= Ext.create ("Ext.form.Panel", {
 				id			:id
-			,	dock		:"right"
+			,	dock		:this.formDock
 			,	titleAlign	:"center"
 			,	bodyPadding	:10
 			,	border		:false
@@ -345,8 +351,12 @@ Ext.define ("Jx.GridPaging", {
 		}
 
 		this.action	= "create";
-		this.form.setTitle ("Create new data");
-		this.form.show ();
+
+		if (true == this.autoCreateForm) {
+			this.form.setTitle ("Create new data");
+			this.form.getForm ().reset ();
+			this.form.show ();
+		}
 
 		if (this.afterAdd && typeof (this.afterAdd) === "function") {
 			this.afterAdd ();
@@ -369,8 +379,11 @@ Ext.define ("Jx.GridPaging", {
 		}
 
 		this.action	= "update";
-		this.form.setTitle ("Updating data");
-		this.form.show ();
+
+		if (true == this.autoCreateForm) {
+			this.form.setTitle ("Updating data");
+			this.form.show ();
+		}
 
 		if (this.afterEdit && typeof (this.afterEdit) === "function") {
 			this.afterEdit ();
@@ -395,8 +408,10 @@ Ext.define ("Jx.GridPaging", {
 			function ()
 			{
 				this.action	= "destroy";
-				this.doFormSave ();
 
+				if (true == this.autoCreateForm) {
+					this.doFormSave ();
+				}
 				if (this.afterDelete && typeof (this.afterDelete) === "function") {
 					this.afterDelete ();
 				}
@@ -432,14 +447,14 @@ Ext.define ("Jx.GridPaging", {
 */
 ,	onSelectionChange		:function (model, data, e)
 	{
+		var s	= (data.length <= 0);
+		var id	= 0;
+
 		if (this.beforeSelectionChange && typeof (this.beforeSelectionChange) === "function") {
 			if (this.beforeSelectionChange (model, data, e) == false) {
 				return;
 			}
 		}
-
-		var s = (data.length <= 0);
-
 		if (this.perm >= 4) {
 			this.buttonDelete.setDisabled (s);
 		}
@@ -453,15 +468,12 @@ Ext.define ("Jx.GridPaging", {
 		}
 
 		/* Refresh grid details */
-		var id = 0;
-
 		if (data.length > 0) {
 			id	= data[0].get (this.getStore ().getFieldId ());
 		}
 		for (var i = 0, c = null; i < this.compDetails.length; i++) {
 			this.compDetails[i].doRefresh (this.perm, id);
 		}
-
 		if (this.afterSelectionChange && typeof (this.afterSelectionChange) === "function") {
 			this.afterSelectionChange (model, data, e);
 		}
@@ -485,6 +497,8 @@ Ext.define ("Jx.GridPaging", {
 				return;
 			}
 		}
+
+		f.setValues (this.store.proxy.extraParams);
 
 		/* Generate url based on user action */
 		f.submit ({
