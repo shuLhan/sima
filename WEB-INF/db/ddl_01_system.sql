@@ -39,11 +39,14 @@ create table _user
 /*
 	User -> Group
 */
+create sequence _user_group_seq;
+
 create table _user_group
 (
-	_user_id	integer			not null
+	id			integer			not null default nextval ('_user_group_seq')
+,	_user_id	integer			not null
 ,	_group_id	integer			not null
-,	constraint	_user_group_pk		primary key (_user_id, _group_id)
+,	constraint	_user_group_pk		primary key (id)
 ,	constraint	_user_group_fk_01	foreign key (_user_id)	references _user (id)
 ,	constraint	_user_group_fk_02	foreign key (_group_id)	references _group (id)
 );
