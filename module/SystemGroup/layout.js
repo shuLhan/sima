@@ -14,19 +14,28 @@ function JxSystemGroup_User ()
 	this.store			= Ext.create ("Jx.StorePaging", {
 			storeId		:this.id
 		,	url			:this.dir +"/data.jsp"
+		,	extraParams	:
+			{
+				_group_id	:0
+			}
 		,	fields		:
 			[
-				"_user_id"
+				"id"
+			,	"_user_id"
 			,	"_user_name"
 			,	"_user_realname"
 			,	"_group_id"
 			]
 		});
 
-	this.storeNon	= Ext.create ("Jx.StorePaging", {
-			storeId	:this.id +"Non"
-		,	url		:this.dir +"/data_non.jsp"
-		,	fields	:
+	this.storeNon		= Ext.create ("Jx.StorePaging", {
+			storeId		:this.id +"Non"
+		,	url			:this.dir +"/data_non.jsp"
+		,	extraParams	:
+			{
+				_group_id	:0
+			}
+		,	fields		:
 			[
 				"_user_id"
 			,	"_user_realname"
@@ -40,31 +49,50 @@ function JxSystemGroup_User ()
 		,	title		:"Users of Group"
 		,	width		:"50%"
 		,	store		:this.store
+		,	__class__	:this
+		,	formDock	:"bottom"
 		,	columns		:
 			[{
+				header		:"ID"
+			,	dataIndex	:"id"
+			,	hidden		:true
+			,	editor		:
+				{
+					xtype		:"textfield"
+				,	hidden		:true
+				}
+			},{
 				header		:"User"
 			,	dataIndex	:"_user_id"
 			,	hidden		:true
 			,	editor		:
-				[{
+				{
 					xtype			:"combobox"
 				,	store			:this.storeNon
 				,	valueField		:"_user_id"
 				,	displayField	:"_user_realname"
-				}]
+				,	pageSize		:_g_paging_size
+				,	shrinkWrap		:3
+				}
 			},{
 				header		:"Group"
 			,	dataIndex	:"_group_id"
 			,	hidden		:true
 			,	editor		:
-				[{
+				{
 					xtype		:"textfield"
 				,	hidden		:true
-				}]
+				}
 			},{
 				header		:"User"
 			,	dataIndex	:"_user_realname"
+			,	flex		:1
 			}]
+
+		,	afterFormSave	:function ()
+			{
+				this.__class__.storeNon.load ();
+			}
 		});
 
 	this.doRefresh	= function (perm, gid)
@@ -73,6 +101,10 @@ function JxSystemGroup_User ()
 			this.panel.clearData ();
 			return;
 		}
+
+		this.store.proxy.extraParams._group_id		= gid;
+		this.storeNon.proxy.extraParams._group_id	= gid;
+		this.storeNon.load ();
 		this.panel.doRefresh (perm);
 	}
 }
@@ -98,6 +130,7 @@ function JxSystemGroup_Group ()
 		,	region		:"center"
 		,	title		:"System Group"
 		,	store		:this.store
+		,	formDock	:"bottom"
 		,	columns		:
 			[{
 				header		:"ID"

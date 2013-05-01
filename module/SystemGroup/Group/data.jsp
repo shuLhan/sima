@@ -9,6 +9,8 @@ try {
 
 	_cn	= Jaring.getConnection (request);
 
+	_r.put ("success", true);
+
 	if ("create".equalsIgnoreCase (action)) {
 		_q	="	insert into _group ("
 			+"		name"
@@ -20,16 +22,9 @@ try {
 		_ps.executeUpdate ();
 		_ps.close ();
 
-		_r.put ("success"	,true);
-		_r.put ("data"		,"New data has been created.");
+		_r.put ("data", Jaring.MSG_SUCCESS_CREATE);
 
 	} else if ("update".equalsIgnoreCase (action)) {
-		id	= Jaring.getIntParameter (request, "id", -1);
-
-		if (id < 0) {
-			throw new Exception ("Invalid data ID!");
-		}
-
 		_q	="	update	_group"
 			+"	set		name		= ?"
 			+"	where	id			= ?";
@@ -41,8 +36,7 @@ try {
 		_ps.executeUpdate ();
 		_ps.close ();
 
-		_r.put ("success"	,true);
-		_r.put ("data"		,"Data has been updated.");
+		_r.put ("data", Jaring.MSG_SUCCESS_UPDATE);
 
 	} else if ("destroy".equalsIgnoreCase (action)) {
 		id = Jaring.getIntParameter (request, "id", -1);
@@ -85,8 +79,7 @@ try {
 		_ps.executeUpdate ();
 		_ps.close ();
 
-		_r.put ("success"	,true);
-		_r.put ("data"		,"Data has been deleted.");
+		_r.put ("data", Jaring.MSG_SUCCESS_DELETE);
 
 	/* default action: read */
 	} else {
