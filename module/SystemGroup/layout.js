@@ -42,30 +42,31 @@ function JxSystemGroup_User ()
 			]
 		});
 
-	this.panel			= Ext.create ("Jx.GridPaging", {
-			id			:this.id
-		,	region		:"east"
-		,	split		:true
-		,	title		:"Users of Group"
-		,	width		:"50%"
-		,	store		:this.store
-		,	__class__	:this
-		,	formDock	:"bottom"
-		,	columns		:
+	this.panel				= Ext.create ("Jx.GridPaging", {
+			id				:this.id
+		,	region			:"east"
+		,	split			:true
+		,	title			:"Users of Group"
+		,	width			:"50%"
+		,	store			:this.store
+		,	__class__		:this
+		,	formDock		:"bottom"
+		,	showButtonText	:false
+		,	columns			:
 			[{
-				header		:"ID"
-			,	dataIndex	:"id"
-			,	hidden		:true
-			,	editor		:
+				header			:"ID"
+			,	dataIndex		:"id"
+			,	hidden			:true
+			,	editor			:
 				{
-					xtype		:"textfield"
-				,	hidden		:true
+					xtype			:"textfield"
+				,	hidden			:true
 				}
 			},{
-				header		:"User"
-			,	dataIndex	:"_user_id"
-			,	hidden		:true
-			,	editor		:Ext.create ("Jx.ComboPaging",
+				header			:"User"
+			,	dataIndex		:"_user_id"
+			,	hidden			:true
+			,	editor			:Ext.create ("Jx.ComboPaging",
 				{
 					id				:"_user_id"
 				,	store			:this.storeNon
@@ -74,18 +75,18 @@ function JxSystemGroup_User ()
 				,	allowBlank		:false
 				})
 			},{
-				header		:"Group"
-			,	dataIndex	:"_group_id"
-			,	hidden		:true
-			,	editor		:
+				header			:"Group"
+			,	dataIndex		:"_group_id"
+			,	hidden			:true
+			,	editor			:
 				{
-					xtype		:"textfield"
-				,	hidden		:true
+					xtype			:"textfield"
+				,	hidden			:true
 				}
 			},{
-				header		:"User"
-			,	dataIndex	:"_user_realname"
-			,	flex		:1
+				header			:"User"
+			,	dataIndex		:"_user_realname"
+			,	flex			:1
 			}]
 
 		,	afterFormSave	:function ()
@@ -124,27 +125,28 @@ function JxSystemGroup_Group ()
 			]
 		});
 
-	this.panel		= Ext.create ("Jx.GridPaging", {
-			id			:this.id
-		,	region		:"center"
-		,	title		:"System Group"
-		,	store		:this.store
-		,	formDock	:"bottom"
-		,	columns		:
+	this.panel				= Ext.create ("Jx.GridPaging", {
+			id				:this.id
+		,	region			:"center"
+		,	title			:"System Group"
+		,	store			:this.store
+		,	formDock		:"bottom"
+		,	showButtonText	:true
+		,	columns			:
 			[{
-				header		:"ID"
-			,	dataIndex	:"id"
-			,	hidden		:true
-			,	editor		:
+				header			:"ID"
+			,	dataIndex		:"id"
+			,	hidden			:true
+			,	editor			:
 				{
 					xtype			:"textfield"
 				,	hidden			:true
 				}
 			},{
-				header		:"Group name"
-			,	dataIndex	:"name"
-			,	flex		:1
-			,	editor		:
+				header			:"Group name"
+			,	dataIndex		:"name"
+			,	flex			:1
+			,	editor			:
 				{
 					xtype			:"textfield"
 				,	allowBlank		:false

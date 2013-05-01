@@ -146,11 +146,12 @@ Ext.define ("Jx.GridPaging", {
 	*/
 ,	config			:
 	{
-		perm			:0		// user permission on this module.
-	,	autoCreateForm	:true	// automatically create form for add/edit data in grid.
-	,	action			:"read"	// grid current action (read, create, update, delete).
-	,	compDetails		:[]		// list of data details, for master-detail grid.
+		perm			:0			// user permission on this module.
+	,	autoCreateForm	:true		// automatically create form for add/edit data in grid.
+	,	action			:"read"		// grid current action (read, create, update, delete).
+	,	compDetails		:[]			// list of data details, for master-detail grid.
 	,	formDock		:"right"	// position of form in grid.
+	,	showButtonText	:true		// false, to show only icon on buttons.
 	}
 
 ,	initComponent	:function ()
@@ -171,28 +172,28 @@ Ext.define ("Jx.GridPaging", {
 ,	createButtonBar	:function ()
 	{
 		this.buttonAdd		= Ext.create ("Ext.button.Button", {
-				text		:"Add"
+				text		:this.showButtonText ? "Add" : ""
 			,	itemId		:"add"
 			,	iconCls		:"add"
 			,	disabled	:true
 			});
 
 		this.buttonEdit		= Ext.create ("Ext.button.Button", {
-				text		:"Edit"
+				text		:this.showButtonText ? "Edit" : ""
 			,	itemId		:"edit"
 			,	iconCls		:"edit"
 			,	disabled	:true
 			});
 
 		this.buttonDelete	= Ext.create ("Ext.button.Button", {
-				text		:"Delete"
+				text		:this.showButtonText ? "Delete" : ""
 			,	itemId		:"delete"
 			,	iconCls		:"delete"
 			,	disabled	:true
 			});
 
 		this.buttonRefresh	= Ext.create ("Ext.button.Button", {
-				text		:"Refresh"
+				text		:this.showButtonText ? "Refresh" : ""
 			,	itemId		:"refresh"
 			,	iconCls		:"refresh"
 			,	disabled	:false
