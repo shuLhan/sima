@@ -11,6 +11,7 @@ var jx_footer;
 var jx_menu;
 var jx_content;
 var jx_main;
+var jx_menu_button_last_click;
 
 Ext.onReady (function ()
 {
@@ -39,29 +40,29 @@ Ext.onReady (function ()
 			,	align		:"middle"
 			}
 		,	height		:45
-		,	items		:[{
+		,	items		:
+			[{
 				id			:"app-header"
 			,	xtype		:"box"
 			,	html		:_g_title
 			,	flex		:1
 			},{
-				xtype	:"button"
-			,	margin	:"0 5 0 0"
-			,	scale	:"medium"
-			,	text	:_g_c_username
-			,	iconCls	:"account"
-			,	menu	:[{
-					text	:"Profile"
-				,	iconCls	:"profile"
+				xtype		:"button"
+			,	margin		:"0 5 0 0"
+			,	scale		:"medium"
+			,	text		:_g_c_username
+			,	iconCls		:"account"
+			,	menu		:
+				[{
+					text		:"Profile"
+				,	iconCls		:"profile"
 				},{
-					text	:"Change password"
-				,	iconCls	:"change-password"
-				},{
-					xtype	:"menuseparator"
-				},{
-					text	:"Logout"
-				,	iconCls	:"logout"
-				,	handler	:function (b)
+					text		:"Change password"
+				,	iconCls		:"change-password"
+				},"-",{
+					text		:"Logout"
+				,	iconCls		:"logout"
+				,	handler		:function (b)
 					{
 						jx_do_logout ();
 					}
@@ -166,17 +167,10 @@ Ext.onReady (function ()
 		}
 	}
 	
-	function jx_menu_button_onClick (b)
+	function jx_menu_button_onClick (b, force)
 	{
 		/* Find menu module in content area. */
 		switch (_g_content_type) {
-		case 0:
-			var c = jx_content.getComponent (b.module);
-
-			if (c && c.getId () == b.module) {
-				return;
-			}
-			break;
 		case 1:
 			var c = jx_content.getComponent (b.module);
 
@@ -216,6 +210,8 @@ Ext.onReady (function ()
 					}
 
 					module.doRefresh (b.permission);
+
+					jx_menu_button_last_click = b;
 				} catch (e) {
 					if (undefined != console) {
 						console.log (e);

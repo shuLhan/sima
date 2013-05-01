@@ -131,7 +131,7 @@ function JxSystemGroup_Group ()
 		,	title			:"System Group"
 		,	store			:this.store
 		,	formDock		:"bottom"
-		,	showButtonText	:true
+		,	showButtonText	:false
 		,	columns			:
 			[{
 				header			:"ID"
