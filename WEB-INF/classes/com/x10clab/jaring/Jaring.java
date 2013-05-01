@@ -26,6 +26,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 public class Jaring {
+	public static final String		MSG_SUCCESS_CREATE	= "New data has been created.";
+	public static final String		MSG_SUCCESS_UPDATE	= "Data has been updated.";
+	public static final String		MSG_SUCCESS_DELETE	= "Data has been deleted.";
+
 	public static String	_title			= "x10c Lab - Jaring Framework";
 	public static String	_name			= "jaring";
 	public static String	_path			= "/jaring";
