@@ -65,15 +65,14 @@ function JxSystemGroup_User ()
 				header		:"User"
 			,	dataIndex	:"_user_id"
 			,	hidden		:true
-			,	editor		:
+			,	editor		:Ext.create ("Jx.ComboPaging",
 				{
-					xtype			:"combobox"
+					id				:"_user_id"
 				,	store			:this.storeNon
 				,	valueField		:"_user_id"
 				,	displayField	:"_user_realname"
-				,	pageSize		:_g_paging_size
-				,	shrinkWrap		:3
-				}
+				,	allowBlank		:false
+				})
 			},{
 				header		:"Group"
 			,	dataIndex	:"_group_id"

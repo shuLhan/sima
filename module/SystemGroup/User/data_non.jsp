@@ -3,6 +3,7 @@
 <%
 try {
 	String	action		= request.getParameter ("action");
+	String	query		= request.getParameter ("query");
 	int		limit		= Jaring.getIntParameter (request, "limit", Jaring._paging_size);
 	int		start		= Jaring.getIntParameter (request, "start", 0);
 	int		_group_id	= Jaring.getIntParameter (request, "_group_id", 0);
@@ -23,11 +24,17 @@ try {
 		+"		 select	_user_id"
 		+"		 from	_user_group"
 		+"		 where	_group_id = ?"
+		+"	)"
+		+"	and			("
+		+"			name		like ?"
+		+"		or	realname	like ?"
 		+"	)";
 
 	_ps	= _cn.prepareStatement (_q);
 	_i	= 1;
-	_ps.setInt (_i++, _group_id);
+	_ps.setInt		(_i++	, _group_id);
+	_ps.setString	(_i++	, "%"+ query +"%");
+	_ps.setString	(_i++	, "%"+ query +"%");
 	_rs	= _ps.executeQuery ();
 
 	if (_rs.next ()) {
@@ -46,15 +53,21 @@ try {
 		+"		 from	_user_group"
 		+"		 where	_group_id = ?"
 		+"	)"
+		+"	and			("
+		+"			name		like ?"
+		+"		or	realname	like ?"
+		+"	)"
 		+"	order by	realname"
 		+"	limit		?"
 		+"	offset		?";
 
 	_ps	= _cn.prepareStatement (_q);
 	_i	= 1;
-	_ps.setInt	(_i++	, _group_id);
-	_ps.setInt	(_i++	, limit);
-	_ps.setInt	(_i++	, start);
+	_ps.setInt		(_i++	, _group_id);
+	_ps.setString	(_i++	, "%"+ query +"%");
+	_ps.setString	(_i++	, "%"+ query +"%");
+	_ps.setInt		(_i++	, limit);
+	_ps.setInt		(_i++	, start);
 	_rs	= _ps.executeQuery ();
 	_a	= new JSONArray ();
 

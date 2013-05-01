@@ -108,6 +108,27 @@ Ext.define ("Jx.StorePaging", {
 });
 
 /*
+	Custom combobox with paging and searching.
+*/
+Ext.define ("Jx.ComboPaging", {
+	extend			:"Ext.form.field.ComboBox"
+,	alias			:"jx.combopaging"
+,	forceSelection	:true
+,	pageSize		:_g_paging_size
+,	shrinkWrap		:3
+,	typeAhead		:true
+,	typeAheadDelay	:500
+,	config			:
+	{
+	}
+
+,	initComponent	:function ()
+	{
+		this.callParent (arguments);
+	}
+});
+
+/*
 	Custom grid panel with default buttons (add, edit, refresh, delete) and paging.
 */
 Ext.define ("Jx.GridPaging", {
