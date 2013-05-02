@@ -3,6 +3,21 @@
 	Authors:
 		- mhd.sulhan (sulhan@x10c-lab.com)
 */
+
+/*
+	Fixes for ExtJS bug.
+*/
+
+/* Row editor is not sending "edit" event when column locked is true */
+Ext.override (Ext.grid.locking.View, {
+	focus: function() {
+		var p = this.getSelectionModel().getCurrentPosition(),
+			v = p && p.view ? p.view : this.normalView;
+
+		v.focus();
+    }
+});
+
 /*
 	Global javascript for application.
  */
@@ -52,6 +67,24 @@ Jx = {
 };
 
 /*
+	Add function renderData to store, to render column using store
+*/
+Ext.override (Ext.data.Store, {
+	renderData	:function (valueField, displayField)
+	{
+		var store = this;
+		return function (v) {
+			var i = store.find (valueField, v);
+			if (i < 0) {
+				return v;
+			}
+			var r = store.getAt (i);
+			return r ? r.get (displayField) : "[no data found]";
+		}
+	}
+});
+
+/*
 	Custom store for Jx.GridPaging with AJAX and JSON capability.
 */
 Ext.define ("Jx.StorePaging", {
@@ -61,6 +94,7 @@ Ext.define ("Jx.StorePaging", {
 	{
 		autoLoad	:false
 	,	autoSync	:false
+	,	autoDestroy	:true
 	,	remoteFilter:true
 	,	pageSize	:Jx.pageSize
 	,	fieldId		:"id"		// used later by GridPaging.compDetails.
@@ -78,6 +112,11 @@ Ext.define ("Jx.StorePaging", {
 				type			:"json"
 			,	root			:"data"
 			,	totalProperty	:"total"
+			}
+		,	writer		:
+			{
+				type			:"json"
+			,	allowSingle		:false
 			}
 		}
 	}
@@ -149,13 +188,28 @@ Ext.define ("Jx.GridPaging", {
 	*/
 ,	config			:
 	{
-		perm			:0			// user permission on this module.
-	,	autoCreateForm	:true		// automatically create form for add/edit data in grid.
-	,	action			:"read"		// grid current action (read, create, update, delete).
-	,	compDetails		:[]			// list of data details, for master-detail grid.
-	,	formDock		:"right"	// position of form in grid.
-	,	showButtonText	:false		// true, to show icon and text on buttons.
-	,	lastSearchStr	:""
+		perm				:0			// user permission on this module.
+	,	buttonAdd			:undefined
+	,	buttonEdit			:undefined
+	,	buttonDelete		:undefined
+	,	buttonRefresh		:undefined
+	,	searchField			:undefined
+	,	buttonBar			:undefined
+	,	pagingBar			:undefined
+	,	autoCreateForm		:true		// automatically create form for add/edit data in grid.
+	,	form				:
+		{
+			buttonSave			:undefined
+		,	buttonCancel		:undefined
+		,	buttonBar			:undefined
+		}
+	,	autoCreateRowEditor	:false		// automatically create row editor if true
+	,	rowEditor			:undefined
+	,	action				:"read"		// grid current action (read, create, update, delete).
+	,	compDetails			:[]			// list of data details, for master-detail grid.
+	,	formDock			:"right"	// position of form in grid.
+	,	showButtonText		:false		// true, to show icon and text on buttons.
+	,	lastSearchStr		:""
 	}
 
 ,	initComponent	:function ()
@@ -168,6 +222,7 @@ Ext.define ("Jx.GridPaging", {
 		this.createButtonBar ();
 		this.createPagingBar ();
 		this.createForm ();
+		this.createRowEditor ();
 
 		/* Listen to user selection on grid row */
 		this.on ("selectionchange", this.onSelectionChange, this);
@@ -235,7 +290,8 @@ Ext.define ("Jx.GridPaging", {
 				,	this.buttonEdit
 				,	" "
 				,	this.buttonRefresh
-				,	"->","-"
+				,	"-"
+				,	"->"
 				,	this.searchField
 				]
 			});
@@ -274,7 +330,7 @@ Ext.define ("Jx.GridPaging", {
 ,	createForm	:function ()
 	{
 		/* Create form only if user enable it */
-		if (undefined != this.autoCreateForm && false == this.autoCreateForm) {
+		if (false == this.autoCreateForm) {
 			return;
 		}
 
@@ -366,6 +422,23 @@ Ext.define ("Jx.GridPaging", {
 		this.form.addDocked (this.form.buttonBar);
 	}
 
+,	createRowEditor	:function ()
+	{
+		if (true == this.autoCreateRowEditor)
+		{
+			this.rowEditor		= Ext.create ("Ext.grid.plugin.RowEditing", {
+					pluginId	:this.id +"RowEditor"
+				});
+
+			/* Add listener for grid row editor */
+			this.rowEditor.on ("beforeedit"	, this.doEdit		, this);
+			this.rowEditor.on ("edit"		, this.doRowSave	, this);
+			this.rowEditor.on ("canceledit"	, this.doRowCancel	, this);
+
+			this.rowEditor.init (this);
+		}
+	}
+
 ,	clearData	:function ()
 	{
 		this.store.loadData ([], false);
@@ -389,7 +462,8 @@ Ext.define ("Jx.GridPaging", {
 			}
 		}
 
-		this.store.proxy.extraParams.query = v;
+		this.lastSearchStr					= v;
+		this.store.proxy.extraParams.query	= v;
 		this.store.load ();
 
 		if (this.afterSearch && typeof (this.afterSearch) === "function") {
@@ -418,6 +492,13 @@ Ext.define ("Jx.GridPaging", {
 			this.form.setTitle ("Create new data");
 			this.form.getForm ().reset ();
 			this.form.show ();
+		} else if (true == this.autoCreateRowEditor) {
+			this.rowEditor.cancelEdit ();
+
+			var r = this.store.create ();
+
+			this.store.insert (0, r);
+			this.rowEditor.startEdit (0, 0);
 		}
 
 		if (this.afterAdd && typeof (this.afterAdd) === "function") {
@@ -433,11 +514,11 @@ Ext.define ("Jx.GridPaging", {
 	{
 		if (this.beforeEdit && typeof (this.beforeEdit) === "function") {
 			if (this.beforeEdit () == false) {
-				return;
+				return false;
 			}
 		}
 		if (this.perm < 3) {
-			return;
+			return false;
 		}
 
 		this.action	= "update";
@@ -446,10 +527,11 @@ Ext.define ("Jx.GridPaging", {
 			this.form.setTitle ("Updating data");
 			this.form.show ();
 		}
-
 		if (this.afterEdit && typeof (this.afterEdit) === "function") {
 			this.afterEdit ();
 		}
+
+		return true;	// return true to allow row editor
 	}
 
 /*
@@ -610,6 +692,65 @@ Ext.define ("Jx.GridPaging", {
 
 		if (this.afterFormCancel && typeof (this.afterFormCancel) === "function") {
 			this.afterFormCancel ();
+		}
+	}
+
+/*
+	beforeRowSave	:function, overridden by instance, return false to cancel.
+	afterRowSave	:function, overridden by instance.
+*/
+,	doRowSave	:function ()
+	{
+		if (this.beforeRowSave && typeof (this.beforeRowSave) === "function") {
+			if (this.beforeRowSave () == false) {
+				return false;
+			}
+		}
+
+		this.action = 'read';
+
+		this.store.sync ({
+				params		:this.store.proxy.extraParams
+			,	scope		:this
+			,	success		:function (batch, op)
+				{
+					Jx.msg.info ("Data has been saved.");
+
+					// reload store to retrieve ID of data (for table that depend on ID)
+					this.store.reload ();
+
+					if (this.afterRowSave && typeof (this.afterRowSave) === "function") {
+						this.afterRowSave ();
+					}
+				}
+			,	failure		:function (batch, op)
+				{
+					Jx.msg.error ("Ajax communication failed!");
+				}
+			});
+	}
+
+/*
+	beforeRowCancel	:function, overridden by instance, return false to cancel.
+	afterRowCancel	:function, overridden by instance.
+*/
+,	doRowCancel	:function ()
+	{
+		if (this.beforeRowCancel && typeof (this.beforeRowCancel) === "function") {
+			if (this.beforeRowCancel () == false) {
+				return false;
+			}
+		}
+
+		if ("create" == this.action) {
+			this.store.removeAt (0);
+			if (this.store.count () > 0) {
+				this.getSelectionModel ().select (0);
+			}
+		}
+
+		if (this.afterRowCancel && typeof (this.afterRowCancel) === "function") {
+			this.afterRowCancel ();
 		}
 	}
 });
