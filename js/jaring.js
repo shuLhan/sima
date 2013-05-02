@@ -61,14 +61,17 @@ Ext.define ("Jx.StorePaging", {
 	{
 		autoLoad	:false
 	,	autoSync	:false
+	,	remoteFilter:true
 	,	pageSize	:Jx.pageSize
 	,	fieldId		:"id"		// used later by GridPaging.compDetails.
 	,	proxy		:
 		{
 			type		:"ajax"
+		,	filterParam	:undefined
 		,	extraParams	:
 			{
 				action			:"read"
+			,	query			:""
 			}
 		,	reader		:
 			{
@@ -151,7 +154,8 @@ Ext.define ("Jx.GridPaging", {
 	,	action			:"read"		// grid current action (read, create, update, delete).
 	,	compDetails		:[]			// list of data details, for master-detail grid.
 	,	formDock		:"right"	// position of form in grid.
-	,	showButtonText	:true		// false, to show only icon on buttons.
+	,	showButtonText	:false		// true, to show icon and text on buttons.
+	,	lastSearchStr	:""
 	}
 
 ,	initComponent	:function ()
@@ -198,7 +202,13 @@ Ext.define ("Jx.GridPaging", {
 			,	iconCls		:"refresh"
 			,	disabled	:false
 			});
-			
+
+		this.searchField	= Ext.create ("Ext.form.field.Text", {
+				itemId		:"searchfield"
+			,	fieldLabel	:"Search"
+			,	labelAlign	:"right"
+			});
+
 		this.buttonAdd.setHandler (this.doAdd, this);
 		this.buttonEdit.setHandler (this.doEdit, this);
 		this.buttonDelete.setHandler (this.doDelete, this);
@@ -220,15 +230,19 @@ Ext.define ("Jx.GridPaging", {
 			,	items		:
 				[
 					this.buttonDelete
-				,	'-'
+				,	"-"
 				,	this.buttonAdd
 				,	this.buttonEdit
-				,	' '
+				,	" "
 				,	this.buttonRefresh
+				,	"->","-"
+				,	this.searchField
 				]
 			});
 
 		this.addDocked (this.buttonBar);
+
+		this.searchField.on ("specialkey", this.doSearch, this);
 	}
 
 	/*
@@ -355,6 +369,32 @@ Ext.define ("Jx.GridPaging", {
 ,	clearData	:function ()
 	{
 		this.store.loadData ([], false);
+	}
+
+/*
+	beforeSearch	:function, overridden by instance, return false to cancel.
+	afterSearch		:function, overridden by instance.
+*/
+,	doSearch	:function (f, e)
+	{
+		var v = f.getValue ();
+
+		if (e.getKey ()	!= e.ENTER
+		||	v			== this.lastSearchStr) {
+			return;
+		}
+		if (this.beforeSearch && typeof (this.beforeSearch) === "function") {
+			if (this.beforeSearch () == false) {
+				return;
+			}
+		}
+
+		this.store.proxy.extraParams.query = v;
+		this.store.load ();
+
+		if (this.afterSearch && typeof (this.afterSearch) === "function") {
+			this.afterSearch ();
+		}
 	}
 
 /*

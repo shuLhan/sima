@@ -3,8 +3,13 @@
 <%
 try {
 	String	action	= request.getParameter ("action");
+	String	query	= request.getParameter ("query");
 	int		limit	= Jaring.getIntParameter (request, "limit", Jaring._paging_size);
 	int		start	= Jaring.getIntParameter (request, "start", 0);
+
+	if (null == query) {
+		query = "";
+	}
 
 	_cn	= Jaring.getConnection (request);
 
@@ -82,9 +87,14 @@ try {
 	} else {
 		/* Get total row */
 		_q	="	select		count (id) as total"
-			+"	from		_user";
+			+"	from		_user"
+			+"	where		(name		like ?"
+			+"	or			realname	like ?)";
 
 		_ps	= _cn.prepareStatement (_q);
+		_i	= 1;
+		_ps.setString (_i++	, "%"+ query +"%");
+		_ps.setString (_i++	, "%"+ query +"%");
 		_rs	= _ps.executeQuery ();
 
 		if (_rs.next ()) {
@@ -100,12 +110,16 @@ try {
 			+"	,			realname"
 			+"	,			password"
 			+"	from		_user"
+			+"	where		(name		like ?"
+			+"	or			realname	like ?)"
 			+"	order by	name"
 			+"	limit		?"
 			+"	offset		?";
 
 		_ps	= _cn.prepareStatement (_q);
 		_i	= 1;
+		_ps.setString (_i++	, "%"+ query +"%");
+		_ps.setString (_i++	, "%"+ query +"%");
 		_ps.setInt (_i++	, limit);
 		_ps.setInt (_i++	, start);
 		_rs	= _ps.executeQuery ();

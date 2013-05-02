@@ -3,12 +3,16 @@
 <%
 try {
 	String	action		= request.getParameter ("action");
+	String	query	= request.getParameter ("query");
 	int		limit		= Jaring.getIntParameter (request, "limit", Jaring._paging_size);
 	int		start		= Jaring.getIntParameter (request, "start", 0);
 	int		_group_id	= Jaring.getIntParameter (request, "_group_id", 0);
 	int		_user_id	= 0;
 	int		id			= 0;
 
+	if (null == query) {
+		query = "";
+	}
 	if (_group_id <= 0) {
 		throw new Exception ("Invalid group ID!");
 	}
@@ -81,13 +85,19 @@ try {
 	/* default action: read */
 	} else {
 		/* Get total row */
-		_q	="	select		count (id) as total"
-			+"	from		_user_group"
-			+"	where		_group_id = ?";
+		_q	="	select		count (A.id) as total"
+			+"	from		_user_group	A"
+			+"	,			_user		B"
+			+"	where		_group_id	= ?"
+			+"	and			A._user_id	= B.id"
+			+"	and			(B.name		like ?"
+			+"	or			B.realname	like ?)";
 
 		_ps	= _cn.prepareStatement (_q);
 		_i	= 1;
-		_ps.setInt (_i++, _group_id);
+		_ps.setInt		(_i++, _group_id);
+		_ps.setString	(_i++,	"%"+ query +"%");
+		_ps.setString	(_i++,	"%"+ query +"%");
 		_rs	= _ps.executeQuery ();
 
 		if (_rs.next ()) {
@@ -107,6 +117,8 @@ try {
 			+"	,			_user		B"
 			+"	where		A._group_id	= ?"
 			+"	and			A._user_id	= B.id"
+			+"	and			(B.name		like ?"
+			+"	or			B.realname	like ?)"
 			+"	order by	B.name"
 			+"	limit		?"
 			+"	offset		?";
@@ -114,6 +126,8 @@ try {
 		_ps	= _cn.prepareStatement (_q);
 		_i	= 1;
 		_ps.setInt	(_i++	, _group_id);
+		_ps.setString	(_i++,	"%"+ query +"%");
+		_ps.setString	(_i++,	"%"+ query +"%");
 		_ps.setInt	(_i++	, limit);
 		_ps.setInt	(_i++	, start);
 		_rs	= _ps.executeQuery ();
