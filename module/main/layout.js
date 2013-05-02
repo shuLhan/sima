@@ -22,10 +22,12 @@ Ext.onReady (function ()
 				"title"
 			,	"tbar"
 			]
-		,	proxy		:{
+		,	proxy		:
+			{
 				type		:"ajax"
 			,	url			:_g_module_path +"menu.jsp"
-			,	reader		:{
+			,	reader		:
+				{
 					type		:"json"
 				,	root		:"data"
 				}
@@ -35,7 +37,8 @@ Ext.onReady (function ()
 	jx_header			= Ext.create ("Ext.container.Container", {
 			id			:"app-background"
 		,	region		:"north"
-		,	layout		:{
+		,	layout		:
+			{
 				type		:"hbox"
 			,	align		:"middle"
 			}
@@ -72,13 +75,15 @@ Ext.onReady (function ()
 	
 	jx_footer			= Ext.create ("Ext.container.Container", {
 			region		:"south"
-		,	layout		:{
+		,	layout		:
+			{
 				type		:"hbox"
 			,	align		:"middle"
 			,	pack		:"center"
 			}
 		,	height		:20
-		,	items		:[{
+		,	items		:
+			[{
 				id			:"app-footer"
 			,	xtype		:"box"
 			,	html		:_g_title +"&nbsp;&nbsp;&copy;&nbsp;&nbsp;2013 x10c-lab.com"
