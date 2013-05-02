@@ -37,17 +37,28 @@ try {
 			if (menu_id <= 0) {
 				throw new Exception ("Invalid menu ID!");
 			}
-
-			_q	="	update	_group_menu"
-				+"	set		permission	= ?"
+			_q	="	delete	from _group_menu"
 				+"	where	_menu_id	= ?"
 				+"	and		_group_id	= ?";
 
 			_ps	= _cn.prepareStatement (_q);
 			_i	= 1;
-			_ps.setInt	(_i++	, perm);
 			_ps.setInt	(_i++	, menu_id);
 			_ps.setInt	(_i++	, gid);
+			_ps.executeUpdate ();
+			_ps.close ();
+
+			_q	="	insert	into _group_menu ("
+				+"		_menu_id"
+				+"	,	_group_id"
+				+"	,	permission"
+				+"	) values ( ? , ? , ? )";
+
+			_ps	= _cn.prepareStatement (_q);
+			_i	= 1;
+			_ps.setInt	(_i++	, menu_id);
+			_ps.setInt	(_i++	, gid);
+			_ps.setInt	(_i++	, perm);
 			_ps.executeUpdate ();
 			_ps.close ();
 		}
@@ -67,13 +78,13 @@ try {
 			+"	from		_menu		A"
 			+"	left join	_group_menu	B"
 			+"		on		A.id		= B._menu_id"
-			+"	where		A.label		like ?"
-			+"	and			B._group_id	= ?";
+			+"		and		B._group_id	= ?"
+			+"	where		A.label		like ?";
 
 		_ps	= _cn.prepareStatement (_q);
 		_i	= 1;
-		_ps.setString (_i++, "%"+ query +"%");
 		_ps.setInt		(_i++	, gid);
+		_ps.setString	(_i++, "%"+ query +"%");
 		_rs	= _ps.executeQuery ();
 
 		if (_rs.next ()) {
@@ -89,21 +100,32 @@ try {
 			+"	,			A.label"
 			+"	,			A.icon"
 			+"	,			A.module"
-			+"	,			B._group_id"
+			+"	,			coalesce (B._group_id, ?)	_group_id"
 			+"	,			B.permission"
 			+"	from		_menu		A"
 			+"	left join	_group_menu	B"
 			+"		on		A.id		= B._menu_id"
+			+"		and		B._group_id	= ?"
+			+"	left join	("
+			+"			select 	id"
+			+"			,		pid"
+			+"			,		label"
+			+"			,		icon"
+			+"			,		module"
+			+"			from	_menu	M2"
+			+"			where	pid		= 0"
+			+"		) M2"
+			+"		on M2.id = A.pid"
 			+"	where		A.label		like ?"
-			+"	and			B._group_id	= ?"
-			+"	order by	id, pid"
+			+"	order by	id"
 			+"	limit		?"
 			+"	offset		?";
 
 		_ps	= _cn.prepareStatement (_q);
 		_i	= 1;
-		_ps.setString	(_i++	, "%"+ query +"%");
 		_ps.setInt		(_i++	, gid);
+		_ps.setInt		(_i++	, gid);
+		_ps.setString	(_i++	, "%"+ query +"%");
 		_ps.setInt		(_i++	, limit);
 		_ps.setInt		(_i++	, start);
 		_rs	= _ps.executeQuery ();
