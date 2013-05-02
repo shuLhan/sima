@@ -5,6 +5,7 @@
 */
 package com.x10clab.jaring;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.security.MessageDigest;
@@ -22,6 +23,7 @@ import javax.servlet.ServletContext;
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
@@ -197,6 +199,25 @@ public class Jaring {
 		} catch (Exception e) {
 			return "";
 		}
+	}
+
+	/*
+		Get request body as array in JSON format.
+	*/
+	public static JSONArray getRequestBodyJson (HttpServletRequest request) throws Exception
+	{
+		StringBuilder	req_body	= new StringBuilder();
+		BufferedReader	req_reader	= request.getReader ();
+		String			ret;
+
+		String req_line	= req_reader.readLine ();
+		while (req_line != null) {
+			req_body.append (req_line).append ("\n");
+			req_line = req_reader.readLine();
+		}
+		req_reader.close ();
+
+		return JSON.parseArray (req_body.toString ().trim ());
 	}
 
 	/*
