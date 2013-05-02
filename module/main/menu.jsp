@@ -11,12 +11,12 @@
 		ResultSet			rs		= null;
 		int					i		= 0;
 
-		q	="	select	A.id"
+		q	="	select 	A.id"
 			+"	,		A.pid"
 			+"	,		A.label"
 			+"	,		A.icon"
 			+"	,		A.module"
-			+"	,		B.permission"
+			+"	,		max (B.permission) permission"
 			+"	from	_menu			A"
 			+"	,		_group_menu		B"
 			+"	,		_user_group		C"
@@ -24,7 +24,9 @@
 			+"	and		A.id			= B._menu_id"
 			+"	and		B._group_id		= C._group_id"
 			+"	and		C._user_id		= ?"
-			+"	and		B.permission	> 0";
+			+"	and		B.permission	> 0"
+			+"	group by A.id"
+			+"	order by A.id";
 
 		try {
 			ps	= db_con.prepareStatement (q);
