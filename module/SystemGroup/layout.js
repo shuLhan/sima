@@ -94,15 +94,15 @@ function JxSystemGroup_User ()
 			}
 		});
 
-	this.doRefresh	= function (perm, gid)
+	this.doRefresh	= function (perm, id)
 	{
-		if (gid <= 0) {
+		if (id <= 0) {
 			this.panel.clearData ();
 			return;
 		}
 
-		this.store.proxy.extraParams._group_id		= gid;
-		this.storeNon.proxy.extraParams._group_id	= gid;
+		this.store.proxy.extraParams._group_id		= id;
+		this.storeNon.proxy.extraParams._group_id	= id;
 		this.storeNon.load ();
 		this.panel.doRefresh (perm);
 	}
