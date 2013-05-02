@@ -4,9 +4,14 @@
 		- mhd.sulhan (sulhan@x10c-lab.com)
 */
 
+Ext.QuickTips.init();
+
 /*
-	Fixes for ExtJS bug.
+	Various fixes for ExtJS bug.
 */
+
+/* Tooltip windows too small */
+delete Ext.tip.Tip.prototype.minWidth;
 
 /* Row editor is not sending "edit" event when column locked is true */
 Ext.override (Ext.grid.locking.View, {
@@ -203,6 +208,8 @@ Ext.define ("Jx.GridPaging", {
 		,	buttonCancel		:undefined
 		,	buttonBar			:undefined
 		}
+		// list of buttons that will be showed at the top of the bar.
+	,	buttonBarList		:["add", "edit", "delete", "refresh"]
 	,	autoCreateRowEditor	:false		// automatically create row editor if true
 	,	rowEditor			:undefined
 	,	action				:"read"		// grid current action (read, create, update, delete).
@@ -235,6 +242,8 @@ Ext.define ("Jx.GridPaging", {
 			,	itemId		:"add"
 			,	iconCls		:"add"
 			,	disabled	:true
+			,	hidden		:true
+			,	tooltip		:"Add new record"
 			});
 
 		this.buttonEdit		= Ext.create ("Ext.button.Button", {
@@ -242,6 +251,8 @@ Ext.define ("Jx.GridPaging", {
 			,	itemId		:"edit"
 			,	iconCls		:"edit"
 			,	disabled	:true
+			,	hidden		:true
+			,	tooltip		:"Edit selected record"
 			});
 
 		this.buttonDelete	= Ext.create ("Ext.button.Button", {
@@ -249,6 +260,8 @@ Ext.define ("Jx.GridPaging", {
 			,	itemId		:"delete"
 			,	iconCls		:"delete"
 			,	disabled	:true
+			,	hidden		:true
+			,	tooltip		:"Delete selected record"
 			});
 
 		this.buttonRefresh	= Ext.create ("Ext.button.Button", {
@@ -256,12 +269,15 @@ Ext.define ("Jx.GridPaging", {
 			,	itemId		:"refresh"
 			,	iconCls		:"refresh"
 			,	disabled	:false
+			,	hidden		:true
+			,	tooltip		:"Refresh data"
 			});
 
 		this.searchField	= Ext.create ("Ext.form.field.Text", {
 				itemId		:"searchfield"
 			,	fieldLabel	:"Search"
 			,	labelAlign	:"right"
+			,	tooltip		:"Type any string and enter to filter data"
 			});
 
 		this.buttonAdd.setHandler (this.doAdd, this);
@@ -285,18 +301,33 @@ Ext.define ("Jx.GridPaging", {
 			,	items		:
 				[
 					this.buttonDelete
-				,	"-"
 				,	this.buttonAdd
 				,	this.buttonEdit
-				,	" "
 				,	this.buttonRefresh
-				,	"-"
 				,	"->"
 				,	this.searchField
 				]
 			});
 
 		this.addDocked (this.buttonBar);
+
+		/* Show/hide button based on user configuration */
+		for (var i = 0; i < this.buttonBarList.length; i++) {
+			switch (this.buttonBarList[i]) {
+			case "add":
+				this.buttonAdd.show ();
+				break;
+			case "edit":
+				this.buttonEdit.show ();
+				break;
+			case "delete":
+				this.buttonDelete.show ();
+				break;
+			case "refresh":
+				this.buttonRefresh.show ();
+				break;
+			}
+		}
 
 		this.searchField.on ("specialkey", this.doSearch, this);
 	}
@@ -384,12 +415,14 @@ Ext.define ("Jx.GridPaging", {
 			,	itemId		:"save"
 			,	iconCls		:"save"
 			,	formBind	:true
+			,	tooltip		:"Save record"
 			});
 
 		this.form.buttonCancel	= Ext.create ("Ext.button.Button", {
 				text			:"Cancel"
 			,	itemId			:"cancel"
 			,	iconCls			:"cancel"
+			,	tooltip			:"Cancel record operation"
 			});
 
 		this.form.buttonSave.setHandler (this.doFormSave, this);
