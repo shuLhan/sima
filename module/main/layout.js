@@ -248,12 +248,12 @@ Ext.onReady (function ()
 						var b = tbar.items.items[m];
 
 						if (undefined == b.menu) {
-							b.on ("click", jx_menu_button_onClick, this);
+							b.setHandler (jx_menu_button_onClick, this);
 						} else {
 							var submenu = b.menu.items.items;
 
 							for (var sm = 0; sm < submenu.length; sm++) {
-								submenu [sm].on ("click", jx_menu_button_onClick, this);
+								submenu [sm].setHandler (jx_menu_button_onClick, this);
 							}
 						}
 					}
