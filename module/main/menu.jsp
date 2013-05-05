@@ -70,7 +70,7 @@ try {
 	Jaring.getCookiesValue (request);
 
 	JSONObject	tbar		= null;
-	JSONObject	tbar_layout	= new JSONObject ();
+	JSONObject	tbar_layout	= null;
 	JSONArray	tbar_items	= null;
 
 	tbar_layout.put ("overflowHandler", "Menu");
@@ -101,6 +101,10 @@ try {
 		_o	= new JSONObject ();
 
 		tbar		= new JSONObject ();
+		tbar_layout	= new JSONObject ();
+		
+		tbar_layout.put ("overflowHandler", "Menu");
+
 		tbar_items	= getMenu (_cn, Jaring._c_uid, _rs.getInt ("id"));
 
 		tbar.put ("layout"	, tbar_layout);
