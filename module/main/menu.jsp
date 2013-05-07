@@ -73,8 +73,6 @@ try {
 	JSONObject	tbar_layout	= null;
 	JSONArray	tbar_items	= null;
 
-	tbar_layout.put ("overflowHandler", "Menu");
-
 	_q	="	select	A.id"
 		+"	,		A.pid"
 		+"	,		A.label"

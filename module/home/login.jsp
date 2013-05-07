@@ -24,6 +24,9 @@ try {
 		+"	and		password	= ?";
 
 	_cn	= Jaring.getConnection (request);
+	if (_cn == null) {
+		throw new Exception ("Cannot get database connection!");
+	}
 	_ps = _cn.prepareStatement (_q);
 	_i	= 1;
 	_ps.setString (_i++, username);
