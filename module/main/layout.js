@@ -12,6 +12,112 @@ var jx_menu;
 var jx_content;
 var jx_main;
 var jx_menu_button_last_click;
+var jx_UserProfile;
+
+function JxUserProfile ()
+{
+	this.id		= "UserProfile";
+	this.dir	= _g_module_path;
+
+	this.store			= Ext.create ("Jx.Store", {
+			storeId		:this.id
+		,	url			:this.dir +"UserProfile.jsp"
+		,	fields		:
+			[
+				"id"
+			,	"name"
+			,	"realname"
+			,	"group_name"
+			]
+		});
+
+	this.buttonUpdate	= Ext.create ("Ext.button.Button", {
+			text		:"Update"
+		,	itemId		:"update"
+		,	iconCls		:"save"
+		,	formBind	:true
+		,	tooltip		:"Update user's profile"
+		});
+
+	this.doFormUpdate	= function ()
+	{
+		this.panel.getForm ().updateRecord ();
+		this.store.sync ({
+			scope	:this
+		,	success	:function (batch, op)
+			{
+				Jx.msg.info (Jx.msg.AJAX_SUCCESS);
+				this.win.close ();
+			}
+		,	failure	:function (batch, op)
+			{
+				Jx.msg.error (Jx.msg.AJAX_FAILURE);
+			}
+		});
+	}
+
+	this.buttonUpdate.setHandler (this.doFormUpdate, this);
+
+	this.panel			= Ext.create ("Ext.form.Panel", {
+			id			:this.id +"Form"
+		,	items		:
+			[{
+				name		:"id"
+			,	hidden		:true
+			},{
+				fieldLabel	:"User name"
+			,	name		:"realname"
+			,	allowBlank	:false
+			},{
+				fieldLabel	:"User ID"
+			,	name		:"name"
+			,	disabled	:true
+			},{
+				fieldLabel	:"Group"
+			,	name		:"group_name"
+			,	disabled	:true
+			}]
+		,	buttons		:
+			[
+				this.buttonUpdate
+			]
+		});
+
+	this.win			= Ext.create ("Ext.window.Window", {
+			id			:this.id
+		,	title		:"User Profile"
+		,	modal		:true
+		,	draggable	:false
+		,	autoResize	:false
+		,	layout		:"fit"
+		,	items		:
+			[
+				this.panel
+			]
+		});
+
+	this.doShow	= function ()
+	{
+		this.store.load ({
+			scope		:this
+		,	callback	:function (r, op, success)
+			{
+				if (! success) {
+					Jx.msg.error ("Failed to load user's profile!");
+					return false;
+				}
+				if (r.length <= 0) {
+					Jx.msg.error ("Can't load user's profile!");
+					return false;
+				}
+				this.panel.loadRecord (r[0]);
+				this.win.show ();
+				return true;
+			}
+		});
+		return true;
+	}
+}
 
 Ext.onReady (function ()
 {
@@ -59,6 +165,10 @@ Ext.onReady (function ()
 				[{
 					text		:"Profile"
 				,	iconCls		:"profile"
+				,	handler		:function (b)
+					{
+						jx_show_UserProfile ();
+					}
 				},{
 					text		:"Change password"
 				,	iconCls		:"change-password"
@@ -155,6 +265,19 @@ Ext.onReady (function ()
 			,	jx_footer
 			]
 		});
+
+	function jx_show_UserProfile ()
+	{
+		if (jx_UserProfile == undefined) {
+			jx_UserProfile = new JxUserProfile ();
+		} else {
+			if (jx_UserProfile.win != undefined) {
+				delete jx_UserProfile;
+				jx_UserProfile = new JxUserProfile ();
+			}
+		}
+		jx_UserProfile.doShow ();
+	}
 
 	function jx_do_logout ()
 	{
