@@ -24,12 +24,63 @@ Ext.override (Ext.grid.locking.View, {
 });
 
 /*
+	Default properties for Ext components.
+*/
+
+/*
+	Ext.data.Store.
+	- Set "autoLoad" and "autoSync" default to false.
+	- Set "autoDestroy" to true.
+	- Add function renderData to store, to render column using store.
+*/
+Ext.override (Ext.data.Store, {
+		autoLoad	:false
+	,	autoSync	:false
+	,	autoDestroy	:true
+	,	renderData	:function (valueField, displayField)
+		{
+			var store = this;
+			return function (v) {
+				var i = store.find (valueField, v);
+				if (i < 0) {
+					return v;
+				}
+				var r = store.getAt (i);
+				return r ? r.get (displayField) : "[no data found]";
+			}
+		}
+	});
+
+/*
+	Ext.form.Panel
+	- Set default label align to "right".
+	- Set default layout to "anchor".
+	- Set default item type to "textfield".
+	- Set default form item anchor to "100%".
+*/
+Ext.override (Ext.form.Panel, {
+		autoScroll	:true
+	,	bodyPadding	:10
+	,	border		:false
+	,	layout		:"anchor"
+	,	titleAlign	:"center"
+	,	defaults	:
+		{
+			xtype		:"textfield"
+		,	anchor		:"100%"
+		,	labelAlign	:"right"
+		}
+});
+
+/*
 	Global javascript for application.
  */
 Jx = {
 	pageSize:_g_paging_size
 ,	msg		: {
-		el		:''
+		el				:""
+	,	AJAX_FAILURE	:"AJAX communication failed!"
+	,	AJAX_SUCCESS	:"Data has been saved!"
 	,	display :function (title, format, cls, delay)
 		{
 			if (! this.el) {
@@ -72,35 +123,61 @@ Jx = {
 };
 
 /*
-	Add function renderData to store, to render column using store
+	Custom store with AJAX and JSON.
 */
-Ext.override (Ext.data.Store, {
-	renderData	:function (valueField, displayField)
+Ext.define ("Jx.Store", {
+	extend		:"Ext.data.Store"
+,	alias		:"jx.store"
+,	config		:
 	{
-		var store = this;
-		return function (v) {
-			var i = store.find (valueField, v);
-			if (i < 0) {
-				return v;
+		proxy		:
+		{
+			type		:"ajax"
+		,	reader		:
+			{
+				type		:"json"
+			,	root		:"data"
 			}
-			var r = store.getAt (i);
-			return r ? r.get (displayField) : "[no data found]";
+		,	writer		:
+			{
+				type		:"json"
+			,	allowSingle	:false
+			}
+		}
+	}
+
+,	constructor	:function (config)
+	{
+		this.callParent (arguments);
+		this.initConfig (config);
+
+		if (config.url) {
+			this.getProxy ().api = {
+					read	:config.url +"?action=read"
+				,	create	:config.url +"?action=create"
+				,	update	:config.url +"?action=update"
+				,	destroy	:config.url +"?action=destroy"
+				}
+		} else if (config.api) {
+			this.getProxy ().api = config.api;
+		}
+
+		/* Check and merge for extra parameters */
+		if (config.extraParams && typeof (config.extraParams) === "object") {
+			this.proxy.extraParams = Ext.merge (this.proxy.extraParams, config.extraParams);
 		}
 	}
 });
 
 /*
-	Custom store for Jx.GridPaging with AJAX and JSON capability.
+	Custom store for Jx.GridPaging with AJAX, JSON, paging, and searching capability.
 */
 Ext.define ("Jx.StorePaging", {
-	extend		:"Ext.data.Store"
+	extend		:"Jx.Store"
 ,	alias		:"jx.storepaging"
 ,	config		:
 	{
-		autoLoad	:false
-	,	autoSync	:false
-	,	autoDestroy	:true
-	,	remoteFilter:true
+		remoteFilter:true
 	,	pageSize	:Jx.pageSize
 	,	fieldId		:"id"		// used later by GridPaging.compDetails.
 	,	proxy		:
@@ -130,22 +207,6 @@ Ext.define ("Jx.StorePaging", {
 	{
 		this.callParent (arguments);
 		this.initConfig (config);
-
-		if (config.url) {
-			this.getProxy ().api = {
-					read	:config.url +"?action=read"
-				,	create	:config.url +"?action=create"
-				,	update	:config.url +"?action=update"
-				,	destroy	:config.url +"?action=destroy"
-				}
-		} else if (config.api) {
-			this.getProxy ().api = config.api;
-		}
-
-		/* Check and merge for extra parameters */
-		if (config.extraParams && typeof (config.extraParams) === "object") {
-			this.proxy.extraParams = Ext.merge (this.proxy.extraParams, config.extraParams);
-		}
 	}
 
 ,	getFieldId	:function ()
