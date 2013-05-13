@@ -6,6 +6,8 @@ try {
 	String	query	= request.getParameter ("query");
 	int		limit	= Jaring.getIntParameter (request, "limit", Jaring._paging_size);
 	int		start	= Jaring.getIntParameter (request, "start", 0);
+	long	id		= 0;
+	String	enc		= "";
 
 	if (null == query) {
 		query = "";
@@ -14,11 +16,7 @@ try {
 	_cn	= Jaring.getConnection (request);
 
 	if ("create".equalsIgnoreCase (action)) {
-		String enc = Jaring.encrypt (request.getParameter ("password"));
-
-		if (enc.equals ("")) {
-			throw new Exception ("Failed to encrypt data!");
-		}
+		_a	= Jaring.getRequestBodyJson (request);
 
 		_q	="	insert into _user ("
 			+"		name"
@@ -27,26 +25,28 @@ try {
 			+"	) values ( ? , ? , ? )";
 
 		_ps	= _cn.prepareStatement (_q);
-		_i	= 1;
-		_ps.setString (_i++	, request.getParameter ("name"));
-		_ps.setString (_i++	, request.getParameter ("realname"));
-		_ps.setString (_i++	, enc);
-		_ps.executeUpdate ();
-		_ps.close ();
 
+		for (int i = 0; i < _a.size (); i++) {
+			_o	= _a.getJSONObject (i);
+			enc = Jaring.encrypt (_o.getString ("password"));
+
+			if (enc.equals ("")) {
+				throw new Exception ("Failed to encrypt data!");
+			}
+
+			_i	= 1;
+			_ps.setString (_i++	, _o.getString ("name"));
+			_ps.setString (_i++	, _o.getString ("realname"));
+			_ps.setString (_i++	, enc);
+			_ps.executeUpdate ();
+		}
+
+		_ps.close ();
 		_r.put ("success"	,true);
 		_r.put ("data"		,"New data has been created.");
 
 	} else if ("update".equalsIgnoreCase (action)) {
-		long	id	= Jaring.getIntParameter (request, "id", -1);
-		String	enc	= Jaring.encrypt (request.getParameter ("password"));
-
-		if (id < 0) {
-			throw new Exception ("Invalid data ID!");
-		}
-		if (enc.equals ("")) {
-			throw new Exception ("Failed to encrypt data!");
-		}
+		_a	= Jaring.getRequestBodyJson (request);
 
 		_q	="	update	_user"
 			+"	set		name		= ?"
@@ -55,31 +55,52 @@ try {
 			+"	where	id			= ?";
 
 		_ps	= _cn.prepareStatement (_q);
-		_i	= 1;
-		_ps.setString	(_i++	, request.getParameter ("name"));
-		_ps.setString	(_i++	, request.getParameter ("realname"));
-		_ps.setString	(_i++	, Jaring.encrypt (request.getParameter ("password")));
-		_ps.setLong		(_i++	, id);
-		_ps.executeUpdate ();
-		_ps.close ();
 
+		for (int i = 0; i < _a.size (); i++) {
+			_o	= _a.getJSONObject (i);
+			id	= _o.getIntValue ("id");
+			enc	= Jaring.encrypt (_o.getString ("password"));
+
+			if (id < 0) {
+				throw new Exception ("Invalid data ID!");
+			}
+			if (enc.equals ("")) {
+				throw new Exception ("Failed to encrypt data!");
+			}
+
+			_i	= 1;
+			_ps.setString	(_i++	, _o.getString ("name"));
+			_ps.setString	(_i++	, _o.getString ("realname"));
+			_ps.setString	(_i++	, enc);
+			_ps.setLong		(_i++	, id);
+			_ps.executeUpdate ();
+		}
+
+		_ps.close ();
 		_r.put ("success"	,true);
 		_r.put ("data"		,"Data has been updated.");
 
 	} else if ("destroy".equalsIgnoreCase (action)) {
-		long id = Jaring.getIntParameter (request, "id", -1);
-
-		if (id < 0) {
-			throw new Exception ("Invalid data ID!");
-		}
+		_a	= Jaring.getRequestBodyJson (request);
 
 		_q	="	delete from _user where id = ?";
 		_ps	= _cn.prepareStatement (_q);
-		_i	= 1;
-		_ps.setLong		(_i++	, id);
-		_ps.executeUpdate ();
-		_ps.close ();
+		
+		for (int i = 0; i < _a.size (); i++) {
+			_o	= _a.getJSONObject (i);
+			id	= _o.getIntValue ("id");
 
+			if (id < 0) {
+				throw new Exception ("Invalid data ID!");
+			}
+
+
+			_i	= 1;
+			_ps.setLong		(_i++	, id);
+			_ps.executeUpdate ();
+		}
+
+		_ps.close ();
 		_r.put ("success"	,true);
 		_r.put ("data"		,"Data has been deleted.");
 
