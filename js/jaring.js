@@ -81,6 +81,7 @@ Jx = {
 		el				:""
 	,	AJAX_FAILURE	:"AJAX communication failed!"
 	,	AJAX_SUCCESS	:"Data has been saved!"
+	,	ACTION_UNKNOWN	:"Unknown action "
 	,	display :function (title, format, cls, delay)
 		{
 			if (! this.el) {
@@ -153,10 +154,10 @@ Ext.define ("Jx.Store", {
 
 		if (config.url) {
 			this.getProxy ().api = {
-					read	:config.url +"?action=read"
-				,	create	:config.url +"?action=create"
-				,	update	:config.url +"?action=update"
-				,	destroy	:config.url +"?action=destroy"
+					read	:config.url
+				,	create	:config.url
+				,	update	:config.url
+				,	destroy	:config.url
 				}
 		} else if (config.api) {
 			this.getProxy ().api = config.api;
@@ -263,6 +264,7 @@ Ext.define ("Jx.GridPaging", {
 	,	buttonBar			:undefined
 	,	pagingBar			:undefined
 	,	autoCreateForm		:true		// automatically create form for add/edit data in grid.
+	,	syncUseStore		:true		// default insert, update, delete using store (page body)
 	,	form				:
 		{
 			buttonSave			:undefined
@@ -738,36 +740,105 @@ Ext.define ("Jx.GridPaging", {
 
 		f.setValues (this.store.proxy.extraParams);
 
-		/* Generate url based on user action */
-		f.submit ({
-			url		:this.getStore ().url +"?action="+ this.action
-		,	scope	:this
-		,	success	:function (form, action)
-			{
-				Jx.msg.info (action.result.data);
-				this.getStore ().reload ();
-				this.form.hide ();
+		/* If syncUseStore is true, use store.api to sync data */
+		if (true == this.syncUseStore) {
+			switch (this.action) {
+			case "create":
+				this.store.add (f.getValues ());
+				break;
+			case "update":
+				f.updateRecord ();
+				break;
+			case "destroy":
+				this.store.remove (f.getRecord ());
+				break;
+			default:
+				Jx.msg.error (Jx.msg.ACTION_UNKNOWN +"'"+ this.action +"'");
+				return;
+			}
 
-				if (this.afterFormSave && typeof (this.afterFormSave) === "function") {
-					if (this.afterFormSave () == false) {
-						return;
+			this.store.proxy.extraParams.action = this.action;
+
+			this.store.sync ({
+				scope	:this
+			,	success	:function (batch, action)
+				{
+					Jx.msg.info (Jx.msg.AJAX_SUCCESS);
+					this.form.hide ();
+
+					if (this.afterFormSave && typeof (this.afterFormSave) === "function") {
+						if (this.afterFormSave () == false) {
+							return;
+						}
 					}
 				}
-			}
-		,	failure	:function (form, action)
-			{
-				switch (action.failureType) {
-				case Ext.form.action.Action.CLIENT_INVALID:
-					Jx.msg.error ("Form fields may not be submitted with invalid values");
-					break;
-				case Ext.form.action.Action.CONNECT_FAILURE:
-					Jx.msg.error ("Ajax communication failed");
-					break;
-				case Ext.form.action.Action.SERVER_INVALID:
-					Jx.msg.error (action.result.data);
+			,	failure	:function (batch, action)
+				{
+					switch (action.failureType) {
+					case Ext.form.action.Action.CLIENT_INVALID:
+						Jx.msg.error ("Form fields may not be submitted with invalid values");
+						break;
+					case Ext.form.action.Action.CONNECT_FAILURE:
+						Jx.msg.error (Jx.msg.AJAX_FAILURE);
+						break;
+					case Ext.form.action.Action.SERVER_INVALID:
+						Jx.msg.error (action.result.data);
+					}
 				}
+			});
+
+		} else { /* Otherwise use basic form submit */
+			var url;
+
+			switch (this.action) {
+			case "read":
+				url = this.store.proxy.api.read;
+				break;
+			case "create":
+				url = this.store.proxy.api.create;
+				break;
+			case "update":
+				url = this.store.proxy.api.update;
+				break;
+			case "destroy":
+				url = this.store.proxy.api.destroy;
+				break;
+			default:
+				Jx.msg.error (Jx.msg.ACTION_UNKNOWN +"'"+ this.action +"'");
+				return;
 			}
-		});
+
+			/* Generate url based on user action */
+			f.submit ({
+				url		:url
+			,	scope	:this
+			,	success	:function (form, action)
+				{
+					Jx.msg.info (action.result.data);
+					this.getStore ().reload ();
+					this.form.hide ();
+
+					if (this.afterFormSave && typeof (this.afterFormSave) === "function") {
+						if (this.afterFormSave () == false) {
+							return;
+						}
+					}
+				}
+			,	failure	:function (form, action)
+				{
+					switch (action.failureType) {
+					case Ext.form.action.Action.CLIENT_INVALID:
+						Jx.msg.error ("Form fields may not be submitted with invalid values");
+						break;
+					case Ext.form.action.Action.CONNECT_FAILURE:
+						Jx.msg.error (Jx.msg.AJAX_FAILURE);
+						break;
+					case Ext.form.action.Action.SERVER_INVALID:
+						Jx.msg.error (action.result.data);
+					}
+				}
+			});
+		}
 	}
 
 /*
