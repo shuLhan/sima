@@ -51,6 +51,7 @@ function JxSystemGroup_User ()
 		,	store			:this.store
 		,	__class__		:this
 		,	formDock		:"bottom"
+		,	syncUseStore	:false
 		,	columns			:
 			[{
 				header			:"ID"
@@ -130,6 +131,7 @@ function JxSystemGroup_Group ()
 		,	title			:"System Group"
 		,	store			:this.store
 		,	formDock		:"bottom"
+		,	syncUseStore	:false
 		,	columns			:
 			[{
 				header			:"ID"

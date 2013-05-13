@@ -66,6 +66,7 @@ function JxSystemMenuMenu ()
 		,	autoCreateForm		:false
 		,	autoCreateRowEditor	:true
 		,	buttonBarList		:["edit", "refresh"]
+		,	syncUseStore		:false
 		,	columns				:
 			[{
 				header				:"ID"
@@ -142,6 +143,7 @@ function JxSystemMenuGroup ()
 		,	store			:this.store
 		,	autoCreateForm	:false
 		,	buttonBarList	:["refresh"]
+		,	syncUseStore	:false
 		,	columns			:
 			[{
 				header			:"ID"

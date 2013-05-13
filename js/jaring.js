@@ -764,6 +764,7 @@ Ext.define ("Jx.GridPaging", {
 			,	success	:function (batch, action)
 				{
 					Jx.msg.info (Jx.msg.AJAX_SUCCESS);
+					this.store.reload ();
 					this.form.hide ();
 
 					if (this.afterFormSave && typeof (this.afterFormSave) === "function") {
@@ -811,11 +812,15 @@ Ext.define ("Jx.GridPaging", {
 			/* Generate url based on user action */
 			f.submit ({
 				url		:url
+			,	params	:
+				{
+					action	:this.action
+				}
 			,	scope	:this
 			,	success	:function (form, action)
 				{
 					Jx.msg.info (action.result.data);
-					this.getStore ().reload ();
+					this.store.reload ();
 					this.form.hide ();
 
 					if (this.afterFormSave && typeof (this.afterFormSave) === "function") {
@@ -872,7 +877,7 @@ Ext.define ("Jx.GridPaging", {
 			}
 		}
 
-		this.action = 'read';
+		this.store.proxy.extraParams.action = this.action;
 
 		this.store.sync ({
 				params		:this.store.proxy.extraParams
@@ -880,7 +885,7 @@ Ext.define ("Jx.GridPaging", {
 			,	success		:function (batch, op)
 				{
 					Jx.msg.info ("Data has been saved.");
-
+					this.action = 'read';
 					// reload store to retrieve ID of data (for table that depend on ID)
 					this.store.reload ();
 

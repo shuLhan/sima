@@ -30,6 +30,12 @@ try {
 		_r.put ("data", Jaring.MSG_SUCCESS_CREATE);
 
 	} else if ("update".equalsIgnoreCase (action)) {
+		id = Jaring.getIntParameter (request, "id", -1);
+
+		if (id < 0) {
+			throw new Exception ("Invalid data ID!");
+		}
+
 		_q	="	update	_group"
 			+"	set		name		= ?"
 			+"	where	id			= ?";
