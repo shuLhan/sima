@@ -14,6 +14,87 @@ var jx_main;
 var jx_menu_button_last_click;
 var jx_UserProfile;
 
+function JxUserChangePassword ()
+{
+	this.id		= "ChangePassword"
+	this.dir	= _g_module_path;
+
+	this.model		= Ext.create ("Ext.data.Model", {
+			fields	:
+			[
+				"id"
+			,	"password_current"
+			,	"password_new"
+			,	"password_confirm"
+			]
+		});
+
+	this.store		= Ext.create ("Jx.Store", {
+			storeId	:this.id
+		,	url		:this.dir +"ChangePassword.jsp"
+		});
+
+	this.buttonSave	= Ext.create ("Ext.button.Button", {
+			text		:"Save"
+		,	itemId		:"save"
+		,	iconCls		:"save"
+		,	formBind	:true
+		});
+
+	this.panel			= Ext.create ("Ext.form.Panel", {
+			id			:this.id +"Form"
+		,	items		:
+			[{
+				name		:"id"
+			,	hidden		:true
+			},{
+				fieldLabel	:"Current password"
+			,	name		:"password_current"
+			,	allowBlank	:false
+			},{
+				fieldLabel	:"New password"
+			,	name		:"password_new"
+			,	allowBlank	:false
+			},{
+				fieldLabel	:"Confirm new password"
+			,	name		:"group_name"
+			,	allowBlank	:false
+			}]
+		,	buttons		:
+			[
+				this.buttonSave
+			]
+		});
+
+	this.win	= Ext.create ("Ext.window.Window", {
+			id			:this.id
+		,	title		:"Change Password"
+		,	modal		:true
+		,	draggable	:false
+		,	autoResize	:false
+		,	layout		:"fit"
+		,	items		:
+			[
+				this.panel
+			]
+		});
+
+	this.doShow	= function (id)
+	{
+		var r = this.store.create ();
+
+		r.id = 
+		this.panel.loadRecord (r);
+		this.win.show ();
+	}
+
+	this.doSave	= function ()
+	{
+	}
+
+	this.buttonSave.setHandler (this.doSave, this);
+}
+
 function JxUserProfile ()
 {
 	this.id		= "UserProfile";
@@ -31,6 +112,13 @@ function JxUserProfile ()
 			]
 		});
 
+	this.buttonChangePassword	= Ext.create ("Ext.button.Button", {
+			text		:"Change password"
+		,	itemId		:"changePassword"
+		,	iconCls		:"change-password"
+		,	tooltip		:"Click this button to change your password"
+		});
+
 	this.buttonUpdate	= Ext.create ("Ext.button.Button", {
 			text		:"Update"
 		,	itemId		:"update"
@@ -38,6 +126,11 @@ function JxUserProfile ()
 		,	formBind	:true
 		,	tooltip		:"Update user's profile"
 		});
+
+	this.doChangePassword	= function ()
+	{
+		var winChangePassword = new JxUserChangePassword ();
+	}
 
 	this.doFormUpdate	= function ()
 	{
@@ -56,6 +149,7 @@ function JxUserProfile ()
 		});
 	}
 
+	this.buttonChangePassword.setHandler (this.doChangePassword, this);
 	this.buttonUpdate.setHandler (this.doFormUpdate, this);
 
 	this.panel			= Ext.create ("Ext.form.Panel", {
@@ -79,7 +173,9 @@ function JxUserProfile ()
 			}]
 		,	buttons		:
 			[
-				this.buttonUpdate
+				this.buttonChangePassword
+			,	"-","->","-"
+			,	this.buttonUpdate
 			]
 		});
 
