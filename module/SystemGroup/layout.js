@@ -50,7 +50,7 @@ function JxSystemGroup_User ()
 		,	width			:"50%"
 		,	store			:this.store
 		,	__class__		:this
-		,	formDock		:"bottom"
+		,	dockPosition	:"bottom"
 		,	syncUseStore	:false
 		,	columns			:
 			[{
@@ -89,9 +89,16 @@ function JxSystemGroup_User ()
 			,	flex			:1
 			}]
 
-		,	afterFormSave	:function ()
+		,	afterFormSave	:function (success)
 			{
-				this.__class__.storeNon.load ();
+				if (success) {
+					this.__class__.storeNon.load ();
+					this.form.hide ();
+				}
+			}
+		,	afterFormCancel : function ()
+			{
+				this.form.hide ();
 			}
 		});
 
@@ -130,7 +137,7 @@ function JxSystemGroup_Group ()
 		,	region			:"center"
 		,	title			:"System Group"
 		,	store			:this.store
-		,	formDock		:"bottom"
+		,	dockPosition	:"bottom"
 		,	syncUseStore	:false
 		,	columns			:
 			[{
@@ -156,6 +163,18 @@ function JxSystemGroup_Group ()
 			[
 				SystemGroupUser
 			]
+
+		,	afterFormSave : function (success)
+			{
+				if (success) {
+					this.form.hide ();
+				}
+			}
+
+		,	afterFormCancel : function ()
+			{
+				this.form.hide ();
+			}
 		});
 
 	this.doRefresh			= function (perm)

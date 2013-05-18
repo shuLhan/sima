@@ -37,6 +37,7 @@ Ext.override (Ext.data.Store, {
 		autoLoad	:false
 	,	autoSync	:false
 	,	autoDestroy	:true
+	,	action		:"read"		// store current action (read, create, update, destroy).
 	,	renderData	:function (valueField, displayField)
 		{
 			var store = this;
@@ -223,6 +224,234 @@ Ext.define ("Jx.ComboPaging", {
 });
 
 /*
+	Custom form panel with capabilities to use store to sync data.
+
+	Additional configuration:
+	- owner			:parent component.
+
+	- createButtonBar
+		+ true		:create buttom bar with addition button, save and cancel (default).
+		+ false		:no buttom bar created.
+
+	- syncUseStore
+		+ true		:sync data using store from owner.
+		+ false		:sync data using form submit.
+*/
+Ext.define ("Jx.Form", {
+	extend			:"Ext.form.Panel"
+,	alias			:"jx.form"
+,	config			:
+	{
+		owner			:undefined	// owner of this component
+	,	createButtonBar	:true
+	,	syncUseStore	:true
+	}
+
+,	initComponent	:function ()
+	{
+		this.callParent (arguments);
+
+		this.createButtonBar ();
+	}
+
+	/*
+		Add button bar to form.
+	*/
+,	createButtonBar	:function ()
+	{
+		if (false == this.createButtonBar) {
+			return;
+		}
+
+		this.buttonSave		= Ext.create ("Ext.button.Button", {
+				text		:"Save"
+			,	itemId		:"save"
+			,	iconCls		:"save"
+			,	formBind	:true
+			,	tooltip		:"Save record"
+			});
+
+		this.buttonCancel	= Ext.create ("Ext.button.Button", {
+				text		:"Cancel"
+			,	itemId		:"cancel"
+			,	iconCls		:"cancel"
+			,	tooltip		:"Cancel record operation"
+			});
+
+		this.buttonSave.setHandler (this.doSave, this);
+		this.buttonCancel.setHandler (this.doCancel, this);
+
+		var	barName			= "ButtonBar";
+		var id				= (this.id
+								? this.id + barName
+								: (this.itemId
+									? this.itemId + barName
+									: "JxForm"+ barName
+								)
+							);
+
+		this.buttonBar	= Ext.create ("Ext.toolbar.Toolbar", {
+				id			:id
+			,	dock		:"bottom"
+			,	border		:true
+			,	shadow		:true
+			,	items		:
+				[
+					this.buttonCancel
+				,	"-"
+				,	"->"
+				,	"-"
+				,	this.buttonSave
+				]
+			});
+
+		this.addDocked (this.buttonBar);
+	}
+
+,	doSave		:function ()
+	{
+		var f = this.getForm ();
+
+		if (!f.isValid ()) {
+			Jx.msg.error ("Invalid form values!<br/>Please corret/fill form's field with red mark.");
+			return;
+		}
+
+		if (this.owner.beforeFormSave
+		&& typeof (this.owner.beforeFormSave) === "function") {
+			if (this.owner.beforeFormSave () == false) {
+				return;
+			}
+		}
+
+		f.setValues (this.store.proxy.extraParams);
+
+		/* If syncUseStore is true, use store.api to sync data */
+		if (true == this.syncUseStore) {
+			switch (this.store.action) {
+			case "create":
+				this.store.add (f.getValues ());
+				break;
+			case "update":
+				f.updateRecord ();
+				break;
+			case "destroy":
+				this.store.remove (f.getRecord ());
+				break;
+			default:
+				Jx.msg.error (Jx.msg.ACTION_UNKNOWN +"'"+ this.store.action +"'");
+				return;
+			}
+
+			this.store.proxy.extraParams.action = this.store.action;
+
+			this.store.sync ({
+				scope	:this
+			,	success	:function (batch, action)
+				{
+					Jx.msg.info (Jx.msg.AJAX_SUCCESS);
+					this.afterSaveSuccess ();
+				}
+			,	failure	:function (batch, action)
+				{
+					this.afterSaveFailure ();
+				}
+			});
+
+		} else { /* Otherwise use basic form submit */
+			var url;
+
+			switch (this.store.action) {
+			case "read":
+				url = this.store.proxy.api.read;
+				break;
+			case "create":
+				url = this.store.proxy.api.create;
+				break;
+			case "update":
+				url = this.store.proxy.api.update;
+				break;
+			case "destroy":
+				url = this.store.proxy.api.destroy;
+				break;
+			default:
+				Jx.msg.error (Jx.msg.ACTION_UNKNOWN +"'"+ this.store.action +"'");
+				return;
+			}
+
+			/* Generate url based on user action */
+			f.submit ({
+				url		:url
+			,	params	:
+				{
+					action	:this.store.action
+				}
+			,	scope	:this
+			,	success	:function (form, action)
+				{
+					Jx.msg.info (action.result.data);
+					this.afterSaveSuccess ();
+				}
+			,	failure	:function (form, action)
+				{
+					this.afterSaveFailure (action);
+				}
+			});
+		}
+	}
+
+,	afterSaveSuccess	:function ()
+	{
+		this.store.proxy.extraParams.action = this.store.action = "read";
+		this.store.reload ();
+
+		if (this.owner.afterFormSave
+		&& typeof (this.owner.afterFormSave) === "function") {
+			if (this.owner.afterFormSave (true) == false) {
+				return;
+			}
+		}
+	}
+
+,	afterSaveFailure	:function (action)
+	{
+		switch (action.failureType) {
+		case Ext.form.action.Action.CLIENT_INVALID:
+			Jx.msg.error ("Form fields may not be submitted with invalid values");
+			break;
+		case Ext.form.action.Action.CONNECT_FAILURE:
+			Jx.msg.error (Jx.msg.AJAX_FAILURE);
+			break;
+		case Ext.form.action.Action.SERVER_INVALID:
+			Jx.msg.error (this.store.proxy.reader.rawData.data);
+			break;
+		}
+
+		if (this.owner.afterFormSave
+		&& typeof (this.owner.afterFormSave) === "function") {
+			if (this.owner.afterFormSave (false) == false) {
+				return;
+			}
+		}
+	}
+
+,	doCancel	:function ()
+	{
+		if (this.owner.beforeFormCancel
+		&& typeof (this.owner.beforeFormCancel) === "function") {
+			if (this.owner.beforeFormCancel () == false) {
+				return;
+			}
+		}
+
+		if (this.owner.afterFormCancel
+		&& typeof (this.owner.afterFormCancel) === "function") {
+			this.owner.afterFormCancel ();
+		}
+	}
+});
+
+/*
 	Custom grid panel with default buttons (add, edit, refresh, delete) and paging.
 */
 Ext.define ("Jx.GridPaging", {
@@ -260,9 +489,8 @@ Ext.define ("Jx.GridPaging", {
 	,	buttonBarList		:["add", "edit", "delete", "refresh"]
 	,	autoCreateRowEditor	:false		// automatically create row editor if true
 	,	rowEditor			:undefined
-	,	action				:"read"		// grid current action (read, create, update, delete).
 	,	compDetails			:[]			// list of data details, for master-detail grid.
-	,	formDock			:"right"	// position of form in grid.
+	,	dockPosition		:"right"	// position of form in grid.
 	,	showButtonText		:false		// true, to show icon and text on buttons.
 	,	lastSearchStr		:""
 	}
@@ -422,20 +650,13 @@ Ext.define ("Jx.GridPaging", {
 								)
 							);
 
-		this.form			= Ext.create ("Ext.form.Panel", {
+		this.form			= Ext.create ("Jx.Form", {
 				id			:id
-			,	dock		:this.formDock
-			,	titleAlign	:"center"
-			,	bodyPadding	:10
-			,	border		:false
-			,	layout		:"anchor"
-			,	autoScroll	:true
+			,	dock		:this.dockPosition
 			,	hidden		:true
-			,	defaults	:
-				{
-					anchor		:"100%"
-				,	labelAlign	:"right"
-				}
+			,	owner		:this
+			,	store		:this.store
+			,	syncUseStore:this.syncUseStore
 			});
 
 		/* Add each column's editor to form */
@@ -449,58 +670,7 @@ Ext.define ("Jx.GridPaging", {
 			}
 		}
 
-		this.createFormButtonBar ();
 		this.addDocked (this.form);
-	}
-
-	/*
-		Add button bar to form.
-	*/
-,	createFormButtonBar	:function ()
-	{
-		this.form.buttonSave	= Ext.create ("Ext.button.Button", {
-				text		:"Save"
-			,	itemId		:"save"
-			,	iconCls		:"save"
-			,	formBind	:true
-			,	tooltip		:"Save record"
-			});
-
-		this.form.buttonCancel	= Ext.create ("Ext.button.Button", {
-				text			:"Cancel"
-			,	itemId			:"cancel"
-			,	iconCls			:"cancel"
-			,	tooltip			:"Cancel record operation"
-			});
-
-		this.form.buttonSave.setHandler (this.doFormSave, this);
-		this.form.buttonCancel.setHandler (this.doFormCancel, this);
-
-		var	barName			= "FormButtonBar";
-		var id				= (this.id
-								? this.id + barName
-								: (this.itemId
-									? this.itemId + barName
-									: "JxGridPaging"+ barName
-								)
-							);
-
-		this.form.buttonBar	= Ext.create ("Ext.toolbar.Toolbar", {
-				id			:id
-			,	dock		:"bottom"
-			,	border		:true
-			,	shadow		:true
-			,	items		:
-				[
-					this.form.buttonCancel
-				,	"-"
-				,	"->"
-				,	"-"
-				,	this.form.buttonSave
-				]
-			});
-
-		this.form.addDocked (this.form.buttonBar);
 	}
 
 ,	createRowEditor	:function ()
@@ -567,7 +737,7 @@ Ext.define ("Jx.GridPaging", {
 			return;
 		}
 
-		this.action	= "create";
+		this.store.action	= "create";
 
 		if (true == this.autoCreateForm) {
 			this.form.setTitle ("Create new data");
@@ -602,7 +772,7 @@ Ext.define ("Jx.GridPaging", {
 			return false;
 		}
 
-		this.action	= "update";
+		this.store.action	= "update";
 
 		if (true == this.autoCreateForm) {
 			this.form.setTitle ("Updating data");
@@ -632,10 +802,10 @@ Ext.define ("Jx.GridPaging", {
 		Jx.msg.confirm (
 			function ()
 			{
-				this.action	= "destroy";
+				this.store.action	= "destroy";
 
 				if (true == this.autoCreateForm) {
-					this.doFormSave ();
+					this.form.doSave (this);
 				}
 				if (this.afterDelete && typeof (this.afterDelete) === "function") {
 					this.afterDelete ();
@@ -657,9 +827,9 @@ Ext.define ("Jx.GridPaging", {
 			}
 		}
 
-		this.perm = perm;
+		this.perm			= perm;
 		this.buttonAdd.setDisabled (perm < 2);
-		this.action	= "read";
+		this.store.action	= "read";
 		this.store.load ();
 
 		if (this.afterRefresh && typeof (this.afterRefresh) === "function") {
@@ -709,147 +879,11 @@ Ext.define ("Jx.GridPaging", {
 	beforeFormSave	:function, overridden by instance, return false to cancel.
 	afterFormSave	:function, overridden by instance.
 */
-,	doFormSave		:function ()
-	{
-		var f = this.form.getForm ();
-
-		if (!f.isValid ()) {
-			Jx.msg.error ("Invalid form values!<br/>Please corret/fill form's field with red mark.");
-			return;
-		}
-
-		if (this.beforeFormSave && typeof (this.beforeFormSave) === "function") {
-			if (this.beforeFormSave () == false) {
-				return;
-			}
-		}
-
-		f.setValues (this.store.proxy.extraParams);
-
-		/* If syncUseStore is true, use store.api to sync data */
-		if (true == this.syncUseStore) {
-			switch (this.action) {
-			case "create":
-				this.store.add (f.getValues ());
-				break;
-			case "update":
-				f.updateRecord ();
-				break;
-			case "destroy":
-				this.store.remove (f.getRecord ());
-				break;
-			default:
-				Jx.msg.error (Jx.msg.ACTION_UNKNOWN +"'"+ this.action +"'");
-				return;
-			}
-
-			this.store.proxy.extraParams.action = this.action;
-
-			this.store.sync ({
-				scope	:this
-			,	success	:function (batch, action)
-				{
-					Jx.msg.info (Jx.msg.AJAX_SUCCESS);
-					this.store.reload ();
-					this.form.hide ();
-
-					if (this.afterFormSave && typeof (this.afterFormSave) === "function") {
-						if (this.afterFormSave () == false) {
-							return;
-						}
-					}
-				}
-			,	failure	:function (batch, action)
-				{
-					switch (action.failureType) {
-					case Ext.form.action.Action.CLIENT_INVALID:
-						Jx.msg.error ("Form fields may not be submitted with invalid values");
-						break;
-					case Ext.form.action.Action.CONNECT_FAILURE:
-						Jx.msg.error (Jx.msg.AJAX_FAILURE);
-						break;
-					case Ext.form.action.Action.SERVER_INVALID:
-						Jx.msg.error (action.result.data);
-					}
-				}
-			});
-
-		} else { /* Otherwise use basic form submit */
-			var url;
-
-			switch (this.action) {
-			case "read":
-				url = this.store.proxy.api.read;
-				break;
-			case "create":
-				url = this.store.proxy.api.create;
-				break;
-			case "update":
-				url = this.store.proxy.api.update;
-				break;
-			case "destroy":
-				url = this.store.proxy.api.destroy;
-				break;
-			default:
-				Jx.msg.error (Jx.msg.ACTION_UNKNOWN +"'"+ this.action +"'");
-				return;
-			}
-
-			/* Generate url based on user action */
-			f.submit ({
-				url		:url
-			,	params	:
-				{
-					action	:this.action
-				}
-			,	scope	:this
-			,	success	:function (form, action)
-				{
-					Jx.msg.info (action.result.data);
-					this.store.reload ();
-					this.form.hide ();
-
-					if (this.afterFormSave && typeof (this.afterFormSave) === "function") {
-						if (this.afterFormSave () == false) {
-							return;
-						}
-					}
-				}
-			,	failure	:function (form, action)
-				{
-					switch (action.failureType) {
-					case Ext.form.action.Action.CLIENT_INVALID:
-						Jx.msg.error ("Form fields may not be submitted with invalid values");
-						break;
-					case Ext.form.action.Action.CONNECT_FAILURE:
-						Jx.msg.error (Jx.msg.AJAX_FAILURE);
-						break;
-					case Ext.form.action.Action.SERVER_INVALID:
-						Jx.msg.error (action.result.data);
-					}
-				}
-			});
-		}
-	}
 
 /*
 	beforeFormCancel	:function, overridden by instance, return false to cancel.
 	afterFormCancel		:function, overridden by instance.
 */
-,	doFormCancel		:function ()
-	{
-		if (this.beforeFormCancel && typeof (this.beforeFormCancel) === "function") {
-			if (this.beforeFormCancel () == false) {
-				return;
-			}
-		}
-
-		this.form.hide ();
-
-		if (this.afterFormCancel && typeof (this.afterFormCancel) === "function") {
-			this.afterFormCancel ();
-		}
-	}
 
 /*
 	beforeRowSave	:function, overridden by instance, return false to cancel.
@@ -863,7 +897,7 @@ Ext.define ("Jx.GridPaging", {
 			}
 		}
 
-		this.store.proxy.extraParams.action = this.action;
+		this.store.proxy.extraParams.action = this.store.action;
 
 		this.store.sync ({
 				params		:this.store.proxy.extraParams
@@ -871,7 +905,9 @@ Ext.define ("Jx.GridPaging", {
 			,	success		:function (batch, op)
 				{
 					Jx.msg.info ("Data has been saved.");
-					this.action = 'read';
+
+					this.store.proxy.extraParams.action = this.store.action = "read";
+
 					// reload store to retrieve ID of data (for table that depend on ID)
 					this.store.reload ();
 
@@ -898,7 +934,7 @@ Ext.define ("Jx.GridPaging", {
 			}
 		}
 
-		if ("create" == this.action) {
+		if ("create" == this.store.action) {
 			this.store.removeAt (0);
 			if (this.store.count () > 0) {
 				this.getSelectionModel ().select (0);

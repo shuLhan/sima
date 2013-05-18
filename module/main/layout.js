@@ -31,44 +31,10 @@ function JxUserChangePassword ()
 			]
 		});
 
-	this.buttonSave	= Ext.create ("Ext.button.Button", {
-			text		:"Save"
-		,	itemId		:"save"
-		,	iconCls		:"save"
-		,	formBind	:true
-		});
-
-	this.doSave	= function ()
-	{
-		/* Check if new-password and password-confirmation is equal. */
-		var pass_1 = this.panel.getComponent ("password_new").getValue ();
-		var pass_2 = this.panel.getComponent ("password_confirm").getValue ();
-
-		if (pass_1 != pass_2) {
-			Jx.msg.error ("New password doesn't match!");
-			return;
-		}
-
-		this.panel.getForm ().updateRecord ();
-		this.store.proxy.extraParams.action = "update";
-		this.store.sync ({
-			scope	:this
-		,	success	:function (batch, op)
-			{
-				Jx.msg.info (Jx.msg.AJAX_SUCCESS);
-				this.win.close ();
-			}
-		,	failure	:function (batch, op)
-			{
-				Jx.msg.error (this.store.proxy.reader.rawData.data);
-			}
-		});
-	}
-
-	this.buttonSave.setHandler (this.doSave, this);
-
-	this.panel				= Ext.create ("Ext.form.Panel", {
+	this.panel				= Ext.create ("Jx.Form", {
 			id				:this.id +"Form"
+		,	owner			:this
+		,	store			:this.store
 		,	fieldDefaults	:
 			{
 				labelWidth		:160
@@ -91,10 +57,6 @@ function JxUserChangePassword ()
 			,	name			:"password_confirm"
 			,	itemId			:"password_confirm"
 			}]
-		,	buttons		:
-			[
-				this.buttonSave
-			]
 		});
 
 	this.win	= Ext.create ("Ext.window.Window", {
@@ -118,6 +80,34 @@ function JxUserChangePassword ()
 
 		this.panel.loadRecord (this.store.getAt (0));
 		this.win.show ();
+	}
+
+	this.beforeFormSave	= function ()
+	{
+		/* Check if new-password and password-confirmation is equal. */
+		var pass_1 = this.panel.getComponent ("password_new").getValue ();
+		var pass_2 = this.panel.getComponent ("password_confirm").getValue ();
+
+		if (pass_1 != pass_2) {
+			Jx.msg.error ("New password doesn't match!");
+			return false;
+		}
+
+		this.store.action = "update";
+
+		return true;
+	}
+
+	this.afterFormSave = function (success)
+	{
+		if (success) {
+			this.win.close ();
+		}
+	}
+
+	this.afterFormCancel = function ()
+	{
+		this.win.close ();
 	}
 }
 
@@ -145,14 +135,6 @@ function JxUserProfile ()
 		,	tooltip		:"Click this button to change your password"
 		});
 
-	this.buttonUpdate	= Ext.create ("Ext.button.Button", {
-			text		:"Update"
-		,	itemId		:"update"
-		,	iconCls		:"save"
-		,	formBind	:true
-		,	tooltip		:"Update user's profile"
-		});
-
 	this.doChangePassword	= function ()
 	{
 		var winChangePassword = new JxUserChangePassword ();
@@ -160,28 +142,12 @@ function JxUserProfile ()
 		winChangePassword.doShow (this.store.getAt (0).get ("id"));
 	}
 
-	this.doFormUpdate	= function ()
-	{
-		this.panel.getForm ().updateRecord ();
-		this.store.sync ({
-			scope	:this
-		,	success	:function (batch, op)
-			{
-				Jx.msg.info (Jx.msg.AJAX_SUCCESS);
-				this.win.close ();
-			}
-		,	failure	:function (batch, op)
-			{
-				Jx.msg.error (Jx.msg.AJAX_FAILURE);
-			}
-		});
-	}
-
 	this.buttonChangePassword.setHandler (this.doChangePassword, this);
-	this.buttonUpdate.setHandler (this.doFormUpdate, this);
 
-	this.panel			= Ext.create ("Ext.form.Panel", {
+	this.panel			= Ext.create ("Jx.Form", {
 			id			:this.id +"Form"
+		,	owner		:this
+		,	store		:this.store
 		,	items		:
 			[{
 				name		:"id"
@@ -198,13 +164,22 @@ function JxUserProfile ()
 				fieldLabel	:"Group"
 			,	name		:"group_name"
 			,	disabled	:true
+			},{
+				xtype		:"fieldset"
+			,	shrinkWrap	:true
+			,	cls			:"center-align"
+			,	layout		:
+				{
+					type		:"hbox"
+				,	pack		:"center"
+				,	align		:"middle"
+				,	padding		:10
+				}
+			,	items		:
+				[
+					this.buttonChangePassword
+				]
 			}]
-		,	buttons		:
-			[
-				this.buttonChangePassword
-			,	"-","->","-"
-			,	this.buttonUpdate
-			]
 		});
 
 	this.win			= Ext.create ("Ext.window.Window", {
@@ -240,6 +215,23 @@ function JxUserProfile ()
 			}
 		});
 		return true;
+	}
+
+	this.beforeFormSave	= function ()
+	{
+		this.store.action = "update";
+	}
+
+	this.afterFormSave = function (success)
+	{
+		if (success) {
+			this.win.close ();
+		}
+	}
+
+	this.afterFormCancel = function ()
+	{
+		this.win.close ();
 	}
 }
 

@@ -19,9 +19,9 @@ function JxSystemUser ()
 		,	"realname"
 		,	"password"
 		]
-	})
+	});
 
-,	this.panel	= Ext.create ("Jx.GridPaging", {
+	this.panel	= Ext.create ("Jx.GridPaging", {
 		id			:this.id
 	,	title		:"System User"
 	,	store		:this.store
@@ -65,12 +65,25 @@ function JxSystemUser ()
 			,	inputType	:"password"
 			}
 		}]
-	})
 
-,	this.doRefresh	= function (perm)
+	,	afterFormSave : function (success)
+		{
+			if (success) {
+				this.form.hide ();
+			}
+		}
+
+	,	afterFormCancel : function ()
+		{
+			this.form.hide ();
+		}
+	});
+
+	this.doRefresh	= function (perm)
 	{
 		this.panel.doRefresh (perm);
 	}
+
 };
 
 /* moduleName = className */
