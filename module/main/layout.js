@@ -166,8 +166,10 @@ function JxUserProfile ()
 			,	disabled	:true
 			},{
 				xtype		:"fieldset"
-			,	shrinkWrap	:true
-			,	cls			:"center-align"
+			,	autoEl		:
+				{
+					tag			:"center"
+				}
 			,	layout		:
 				{
 					type		:"hbox"
