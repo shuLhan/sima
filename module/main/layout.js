@@ -16,22 +16,19 @@ var jx_UserProfile;
 
 function JxUserChangePassword ()
 {
-	this.id		= "ChangePassword"
+	this.id		= "ChangePassword";
 	this.dir	= _g_module_path;
 
-	this.model		= Ext.create ("Ext.data.Model", {
-			fields	:
+	this.store		= Ext.create ("Jx.Store", {
+			storeId	:this.id
+		,	url		:this.dir +"ChangePassword.jsp"
+		,	fields	:
 			[
 				"id"
 			,	"password_current"
 			,	"password_new"
 			,	"password_confirm"
 			]
-		});
-
-	this.store		= Ext.create ("Jx.Store", {
-			storeId	:this.id
-		,	url		:this.dir +"ChangePassword.jsp"
 		});
 
 	this.buttonSave	= Ext.create ("Ext.button.Button", {
@@ -41,24 +38,58 @@ function JxUserChangePassword ()
 		,	formBind	:true
 		});
 
-	this.panel			= Ext.create ("Ext.form.Panel", {
-			id			:this.id +"Form"
-		,	items		:
+	this.doSave	= function ()
+	{
+		/* Check if new-password and password-confirmation is equal. */
+		var pass_1 = this.panel.getComponent ("password_new").getValue ();
+		var pass_2 = this.panel.getComponent ("password_confirm").getValue ();
+
+		if (pass_1 != pass_2) {
+			Jx.msg.error ("New password doesn't match!");
+			return;
+		}
+
+		this.panel.getForm ().updateRecord ();
+		this.store.proxy.extraParams.action = "update";
+		this.store.sync ({
+			scope	:this
+		,	success	:function (batch, op)
+			{
+				Jx.msg.info (Jx.msg.AJAX_SUCCESS);
+				this.win.close ();
+			}
+		,	failure	:function (batch, op)
+			{
+				Jx.msg.error (this.store.proxy.reader.rawData.data);
+			}
+		});
+	}
+
+	this.buttonSave.setHandler (this.doSave, this);
+
+	this.panel				= Ext.create ("Ext.form.Panel", {
+			id				:this.id +"Form"
+		,	fieldDefaults	:
+			{
+				labelWidth		:160
+			,	vtype			:"alphanum"
+			,	allowBlank		:false
+			}
+		,	items			:
 			[{
-				name		:"id"
-			,	hidden		:true
+				name			:"id"
+			,	hidden			:true
 			},{
-				fieldLabel	:"Current password"
-			,	name		:"password_current"
-			,	allowBlank	:false
+				fieldLabel		:"Current password"
+			,	name			:"password_current"
 			},{
-				fieldLabel	:"New password"
-			,	name		:"password_new"
-			,	allowBlank	:false
+				fieldLabel		:"New password"
+			,	name			:"password_new"
+			,	itemId			:"password_new"
 			},{
-				fieldLabel	:"Confirm new password"
-			,	name		:"group_name"
-			,	allowBlank	:false
+				fieldLabel		:"Confirm new password"
+			,	name			:"password_confirm"
+			,	itemId			:"password_confirm"
 			}]
 		,	buttons		:
 			[
@@ -81,18 +112,13 @@ function JxUserChangePassword ()
 
 	this.doShow	= function (id)
 	{
-		var r = this.store.create ();
+		var r = [{ id : id }]
 
-		r.id = 
-		this.panel.loadRecord (r);
+		this.store.loadData (r, false);
+
+		this.panel.loadRecord (this.store.getAt (0));
 		this.win.show ();
 	}
-
-	this.doSave	= function ()
-	{
-	}
-
-	this.buttonSave.setHandler (this.doSave, this);
 }
 
 function JxUserProfile ()
@@ -130,6 +156,8 @@ function JxUserProfile ()
 	this.doChangePassword	= function ()
 	{
 		var winChangePassword = new JxUserChangePassword ();
+
+		winChangePassword.doShow (this.store.getAt (0).get ("id"));
 	}
 
 	this.doFormUpdate	= function ()
@@ -265,9 +293,6 @@ Ext.onReady (function ()
 					{
 						jx_show_UserProfile ();
 					}
-				},{
-					text		:"Change password"
-				,	iconCls		:"change-password"
 				},"-",{
 					text		:"Logout"
 				,	iconCls		:"logout"
