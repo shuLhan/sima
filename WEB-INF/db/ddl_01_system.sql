@@ -35,7 +35,6 @@ create table _user
 ,	constraint	_user_pk		primary key (id)
 );
 
-
 /*
 	User -> Group
 */
