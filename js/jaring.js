@@ -7,7 +7,7 @@
 Ext.QuickTips.init();
 
 /*
-	Various fixes for ExtJS bug.
+	Various fixes for ExtJS bugs.
 */
 
 /* Tooltip windows too small */
@@ -64,10 +64,10 @@ Ext.override (Ext.form.Panel, {
 	,	border		:false
 	,	layout		:"anchor"
 	,	titleAlign	:"center"
+	,	defaultType	:"textfield"
 	,	defaults	:
 		{
-			xtype		:"textfield"
-		,	anchor		:"100%"
+			anchor		:"100%"
 		,	labelAlign	:"right"
 		}
 });
@@ -134,6 +134,12 @@ Ext.define ("Jx.Store", {
 		proxy		:
 		{
 			type		:"ajax"
+		,	filterParam	:undefined
+		,	extraParams	:
+			{
+				action		:"read"
+			,	query		:""
+			}
 		,	reader		:
 			{
 				type		:"json"
@@ -181,27 +187,6 @@ Ext.define ("Jx.StorePaging", {
 		remoteFilter:true
 	,	pageSize	:Jx.pageSize
 	,	fieldId		:"id"		// used later by GridPaging.compDetails.
-	,	proxy		:
-		{
-			type		:"ajax"
-		,	filterParam	:undefined
-		,	extraParams	:
-			{
-				action			:"read"
-			,	query			:""
-			}
-		,	reader		:
-			{
-				type			:"json"
-			,	root			:"data"
-			,	totalProperty	:"total"
-			}
-		,	writer		:
-			{
-				type			:"json"
-			,	allowSingle		:false
-			}
-		}
 	}
 
 ,	constructor	:function (config)
@@ -674,6 +659,7 @@ Ext.define ("Jx.GridPaging", {
 
 		this.perm = perm;
 		this.buttonAdd.setDisabled (perm < 2);
+		this.action	= "read";
 		this.store.load ();
 
 		if (this.afterRefresh && typeof (this.afterRefresh) === "function") {
