@@ -310,13 +310,6 @@ Ext.define ("Jx.Form", {
 
 ,	doSave		:function ()
 	{
-		var f = this.getForm ();
-
-		if (!f.isValid ()) {
-			Jx.msg.error ("Invalid form values!<br/>Please corret/fill form's field with red mark.");
-			return;
-		}
-
 		if (this.owner.beforeFormSave
 		&& typeof (this.owner.beforeFormSave) === "function") {
 			if (this.owner.beforeFormSave () == false) {
@@ -324,7 +317,14 @@ Ext.define ("Jx.Form", {
 			}
 		}
 
+		var f = this.getForm ();
+
 		f.setValues (this.store.proxy.extraParams);
+
+		if (!f.isValid ()) {
+			Jx.msg.error ("Invalid form values!<br/>Please correct or fill form's field with red mark.");
+			return;
+		}
 
 		/* If syncUseStore is true, use store.api to sync data */
 		if (true == this.syncUseStore) {
@@ -361,6 +361,7 @@ Ext.define ("Jx.Form", {
 		} else { /* Otherwise use basic form submit */
 			var url;
 
+			/* Generate url based on user action */
 			switch (this.store.action) {
 			case "read":
 				url = this.store.proxy.api.read;
@@ -379,7 +380,6 @@ Ext.define ("Jx.Form", {
 				return;
 			}
 
-			/* Generate url based on user action */
 			f.submit ({
 				url		:url
 			,	params	:
@@ -396,6 +396,7 @@ Ext.define ("Jx.Form", {
 				{
 					this.afterSaveFailure (action);
 				}
+			,	clientValidation	:false
 			});
 		}
 	}
@@ -805,7 +806,7 @@ Ext.define ("Jx.GridPaging", {
 				this.store.action	= "destroy";
 
 				if (true == this.autoCreateForm) {
-					this.form.doSave (this);
+					this.form.doSave ();
 				}
 				if (this.afterDelete && typeof (this.afterDelete) === "function") {
 					this.afterDelete ();

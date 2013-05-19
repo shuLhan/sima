@@ -79,6 +79,16 @@ try {
 		_rs.close ();
 		_ps.close ();
 
+		/* Delete group menu access */
+		_q	="	delete from	_group_menu"
+			+"	where		_group_id = ?";
+
+		_ps	= _cn.prepareStatement (_q);
+		_i	= 1;
+		_ps.setLong (_i++	, id);
+		_ps.executeUpdate ();
+		_ps.close ();
+
 		/* Delete group from table */
 		_q	="	delete from		_group"
 			+"	where	id		= ?"

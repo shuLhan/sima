@@ -3,7 +3,7 @@
 <%
 try {
 	String	action		= request.getParameter ("action");
-	String	query	= request.getParameter ("query");
+	String	query		= request.getParameter ("query");
 	int		limit		= Jaring.getIntParameter (request, "limit", Jaring._paging_size);
 	int		start		= Jaring.getIntParameter (request, "start", 0);
 	int		_group_id	= Jaring.getIntParameter (request, "_group_id", 0);

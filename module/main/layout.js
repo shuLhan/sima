@@ -279,6 +279,7 @@ Ext.onReady (function ()
 			,	scale		:"medium"
 			,	text		:_g_c_username
 			,	iconCls		:"account"
+			,	menuAlign	:"tr-br"
 			,	menu		:
 				[{
 					text		:"Profile"

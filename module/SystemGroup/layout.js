@@ -42,6 +42,14 @@ function JxSystemGroup_User ()
 			]
 		});
 
+	this.fUserId			= Ext.create ("Jx.ComboPaging", {
+			id				:"_user_id"
+		,	store			:this.storeNon
+		,	valueField		:"_user_id"
+		,	displayField	:"_user_realname"
+		,	allowBlank		:false
+		});
+
 	this.panel				= Ext.create ("Jx.GridPaging", {
 			id				:this.id
 		,	region			:"east"
@@ -66,14 +74,7 @@ function JxSystemGroup_User ()
 				header			:"User"
 			,	dataIndex		:"_user_id"
 			,	hidden			:true
-			,	editor			:Ext.create ("Jx.ComboPaging",
-				{
-					id				:"_user_id"
-				,	store			:this.storeNon
-				,	valueField		:"_user_id"
-				,	displayField	:"_user_realname"
-				,	allowBlank		:false
-				})
+			,	editor			:this.fUserId
 			},{
 				header			:"Group"
 			,	dataIndex		:"_group_id"
@@ -100,6 +101,21 @@ function JxSystemGroup_User ()
 			{
 				this.form.hide ();
 			}
+
+			/* Disable combo _user_id before deletion */
+		,	beforeDelete : function ()
+			{
+				this.__class__.fUserId.allowBlank		= true;
+				this.__class__.fUserId.forceSelection	= false;
+				this.__class__.fUserId.submitValue		= false;
+				return true;
+			}
+		,	afterDelete : function ()
+			{
+				this.__class__.fUserId.allowBlank		= false;
+				this.__class__.fUserId.forceSelection	= true;
+				this.__class__.fUserId.submitValue		= true;
+			}
 		});
 
 	this.doRefresh	= function (perm, id)
@@ -114,6 +130,7 @@ function JxSystemGroup_User ()
 		this.storeNon.load ();
 		this.panel.doRefresh (perm);
 	}
+
 }
 
 function JxSystemGroup_Group ()
