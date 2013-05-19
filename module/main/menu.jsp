@@ -45,6 +45,7 @@
 				menu.put ("iconCls"		, rs.getString ("icon"));
 				menu.put ("module"		, rs.getString ("module"));
 				menu.put ("permission"	, rs.getString ("permission"));
+				menu.put ("enableToggle", true);
 
 				submenu = getMenu (db_con, _uid, rs.getInt ("id"));
 

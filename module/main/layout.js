@@ -413,6 +413,26 @@ Ext.onReady (function ()
 	
 	function jx_menu_button_onClick (b, force)
 	{
+		var tab		= jx_menu.getActiveTab ();
+		var tbar	= tab.dockedItems.getAt (0);
+
+		/* Remove toggle from menu button */
+		for (var m = 0; m < tbar.items.items.length; m++) {
+			var mb = tbar.items.items[m];
+
+			if (undefined == mb.menu) {
+				mb.toggle (false, true);
+			} else {
+				var submenu = mb.menu.items.items;
+
+				for (var sm = 0; sm < submenu.length; sm++) {
+					submenu [sm].toggle (false, true);
+				}
+			}
+		}
+
+		b.toggle (true, true);
+
 		/* Find menu module in content area. */
 		switch (_g_content_type) {
 		case 1:
