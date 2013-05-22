@@ -233,7 +233,7 @@ public class Jaring {
 
 			props.load (fis);
 
-			Jaring._path		= application.getContextPath ();
+			Jaring._path		= request.getContextPath ();
 			Jaring._title		= props.getProperty ("app.title");
 			Jaring._name		= props.getProperty ("app.name");
 			Jaring._path_mod	= props.getProperty ("app.module.dir");
