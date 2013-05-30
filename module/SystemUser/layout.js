@@ -24,6 +24,7 @@ function JxSystemUser ()
 	this.panel	= Ext.create ("Jx.GridPaging", {
 		id			:this.id
 	,	title		:"System User"
+	,	closable	:true
 	,	store		:this.store
 	,	columns		:
 		[{

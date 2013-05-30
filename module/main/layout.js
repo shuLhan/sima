@@ -308,27 +308,6 @@ function JxMain ()
 			}]
 		});
 
-	this.menu			= Ext.create ("Ext.tab.Panel", {
-			region		:"north"
-		,	padding		:"5 5 0 5"
-		,	activeTab	:0
-		,	plain		:true
-		,	centered	:true
-		,	tabBar		:
-			{
-				plain		:true
-			,	layout		:
-				{
-					pack		:"center"
-				}
-			}
-		,	items		:
-			[{
-				id			:this.contentHomeId
-			,	iconCls		:"home"
-			}]
-		});
-
 	this.contentHome	= Ext.create ("Ext.panel.Panel", {
 			region		:"center"
 		,	margin		:"5 0 0 0"
@@ -344,7 +323,6 @@ function JxMain ()
 		,	items		:
 			[
 				this.header
-			,	this.menu
 			,	this.contentHome
 			,	this.footer
 			]
@@ -385,28 +363,50 @@ function JxMain ()
 	this.onMenuClick = function (b, force)
 	{
 		var me		= this;
-		var tab		= me.menu.getActiveTab ();
-		var tbar	= tab.dockedItems.getAt (0);
+		var tab, tbar;
 
-		/* Remove toggle from menu button */
-		for (var m = 0; m < tbar.items.items.length; m++) {
-			var mb = tbar.items.items[m];
-
-			if (undefined == mb.menu) {
-				mb.toggle (false, true);
-			} else {
-				var submenu = mb.menu.items.items;
-
-				for (var sm = 0; sm < submenu.length; sm++) {
-					submenu [sm].toggle (false, true);
-				}
-			}
+		if (b.id == this.contentHomeId) {
+			this.content.hide ();
+			this.contentHome.show ();
+			return;
 		}
 
-		b.toggle (true, true);
+		this.content.show ();
+		this.contentHome.hide ();
 
-		/* Find menu module in content area. */
+		switch (_g_menu_mode) {
+		case 0:
+			tab		= me.menu.getActiveTab ();
+			tbar	= tab.dockedItems.getAt (0);
+
+			// Remove toggle from menu button
+			for (var m = 0; m < tbar.items.items.length; m++) {
+				var mb = tbar.items.items[m];
+
+				if (undefined == mb.menu) {
+					mb.toggle (false, true);
+				} else {
+					var submenu = mb.menu.items.items;
+
+					for (var sm = 0; sm < submenu.length; sm++) {
+						submenu [sm].toggle (false, true);
+					}
+				}
+			}
+
+			b.toggle (true, true);
+			break;
+
+		case 1:
+			tbar	= me.menuBar;
+			break;
+		}
+
+		// Find menu module in content area.
 		switch (_g_content_type) {
+		case 0:
+			// do nothing
+			break;
 		case 1:
 			var c = me.content.getComponent (b.module);
 
@@ -417,7 +417,7 @@ function JxMain ()
 			break;
 		}
 
-		/* If not exist, add module to content area */
+		// If not exist, add module to content area
 		Ext.Ajax.request ({
 			scope	:me
 		,	url		:_g_module_dir +"/"+ b.module +"/layout.js"
@@ -470,8 +470,18 @@ function JxMain ()
 
 				/* Add tab with toolbar to menu */
 				for (var i = 0; i < r.length; i++) {
-					var tab		= this.menu.add (r[i].raw);
-					var tbar	= tab.dockedItems.getAt (0);
+					var tab, tbar;
+
+					switch (_g_menu_mode) {
+					case 0:
+						tab		= this.menu.add (r[i].raw);
+						tbar	= tab.dockedItems.getAt (0);
+						break;
+					case 1:
+						tbar	= this.menuBar;
+						tbar.add (r[i].raw);
+						break;
+					}
 
 					/* Inject "click" event to each button menu */
 					for (var m = 0; m < tbar.items.items.length; m++) {
@@ -494,6 +504,49 @@ function JxMain ()
 
 	this.init = function ()
 	{
+		switch (_g_menu_mode) {
+		case 0:
+			this.menu			= Ext.create ("Ext.tab.Panel", {
+					region		:"north"
+				,	padding		:"5 5 0 5"
+				,	activeTab	:0
+				,	plain		:true
+				,	centered	:true
+				,	tabBar		:
+					{
+						plain		:true
+					,	layout		:
+						{
+							pack		:"center"
+						}
+					}
+				,	items		:[]
+				});
+
+			this.menu.on ("tabchange", this.onTabChange, this);
+			break;
+
+		case 1:
+			this.menuBar		= Ext.create ("Ext.toolbar.Toolbar", {
+					dock		:"top"
+				,	layout		:
+					{
+						overflowHandler	:"Menu"
+					}
+				,	items		:[]
+				});
+
+			this.menu			= Ext.create ("Ext.panel.Panel", {
+					region		:"north"
+				,	height		:40
+				,	dockedItems	:
+					[
+						this.menuBar
+					]
+				});
+			break;
+		}
+
 		switch (_g_content_type) {
 		case 0:
 			this.content		= Ext.create ("Ext.container.Container", {
@@ -504,7 +557,7 @@ function JxMain ()
 				,	layout		:"fit"
 				});
 			break;
-		default:
+		case 1:
 			this.content		= Ext.create ("Ext.tab.Panel", {
 					region		:"center"
 				,	margin		:"5 0 0 0"
@@ -515,12 +568,11 @@ function JxMain ()
 			break;
 		}
 
+		this.main.add (this.menu);
 		this.main.add (this.content);
 
 		this.buttonProfile.setHandler (this.showUserProfile, this);
 		this.buttonLogout.setHandler (this.doLogout, this);
-
-		this.menu.on ("tabchange", this.onTabChange, this);
 
 		this.loadMenu ();
 	}

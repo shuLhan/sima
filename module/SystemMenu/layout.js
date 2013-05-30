@@ -139,7 +139,7 @@ function JxSystemMenuGroup ()
 	this.panel				= Ext.create ("Jx.GridPaging", {
 			id				:this.id
 		,	region			:"center"
-		,	title			:"System Group"
+		,	title			:"Groups of User"
 		,	store			:this.store
 		,	autoCreateForm	:false
 		,	buttonBarList	:["refresh"]
@@ -174,10 +174,12 @@ function JxSystemMenu ()
 	SystemMenuMenu	= new JxSystemMenuMenu ();
 	SystemMenuGroup	= new JxSystemMenuGroup ();
 
-	this.panel		= Ext.create ("Ext.container.Container", {
-			id		:this.id
-		,	layout	:"border"
-		,	items	:
+	this.panel			= Ext.create ("Ext.container.Container", {
+			id			:this.id
+		,	title		:"Menu Access"
+		,	closable	:true
+		,	layout		:"border"
+		,	items		:
 			[
 				SystemMenuGroup.panel
 			,	SystemMenuMenu.panel

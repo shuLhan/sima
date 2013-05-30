@@ -72,7 +72,12 @@ try {
 
 	JSONObject	tbar		= null;
 	JSONObject	tbar_layout	= null;
-	JSONArray	tbar_items	= null;
+	JSONArray	menu_items	= null;
+	int			id			= 0;
+	int			pid			= 0;
+	String		label		= "";
+	String		icon		= "";
+	String		module		= "";
 
 	_q	="	select	A.id"
 		+"	,		A.pid"
@@ -86,7 +91,8 @@ try {
 		+"	and		A.id			= B._menu_id"
 		+"	and		B._group_id		= C._group_id"
 		+"	and		C._user_id		= ?"
-		+"	and		B.permission	> 0";
+		+"	and		B.permission	> 0"
+		+"	order by A.id";
 
 	_cn	= Jaring.getConnection (request);
 	_ps	= _cn.prepareStatement (_q);
@@ -97,23 +103,40 @@ try {
 	_a	= new JSONArray ();
 
 	while (_rs.next ()) {
-		_o	= new JSONObject ();
+		_o		= new JSONObject ();
+		id		= _rs.getInt ("id");
+		pid		= _rs.getInt ("pid");
+		label	= _rs.getString ("label");
+		icon	= _rs.getString ("icon");
+		module	= _rs.getString ("module");
 
-		tbar		= new JSONObject ();
-		tbar_layout	= new JSONObject ();
-		
-		tbar_layout.put ("overflowHandler", "Menu");
+		_o.put ("id"		, module);
+		_o.put ("menu_id"	, id);
+		_o.put ("menu_pid"	, pid);
+		_o.put ("title"		, label);
+		_o.put ("text"		, label);
+		_o.put ("iconCls"	, icon);
 
-		tbar_items	= getMenu (_cn, Jaring._c_uid, _rs.getInt ("id"));
+		menu_items = getMenu (_cn, Jaring._c_uid, id);
 
-		tbar.put ("layout"	, tbar_layout);
-		tbar.put ("items"	, tbar_items);
+		switch (Jaring._menu_mode) {
+		case 0:
+			tbar		= new JSONObject ();
+			tbar_layout	= new JSONObject ();
 
-		_o.put ("menu_id"	, _rs.getLong ("id"));
-		_o.put ("menu_pid"	, _rs.getLong ("pid"));
-		_o.put ("title"		, _rs.getString ("label"));
-		_o.put ("iconCls"	, _rs.getString ("icon"));
-		_o.put ("tbar"		, tbar);
+			tbar_layout.put ("overflowHandler", "Menu");
+
+			tbar.put ("layout"	, tbar_layout);
+			tbar.put ("items"	, menu_items);
+
+			_o.put ("tbar"		, tbar);
+			break;
+		case 1:
+			if (menu_items.size () > 0) {
+				_o.put ("menu"	, menu_items);
+			}
+			break;
+		}
 
 		_a.add (_o);
 	}
