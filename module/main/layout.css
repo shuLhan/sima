@@ -21,22 +21,27 @@
 .cancel	{ background-image: url("../../images/cancel.png") !important; }
 
 /* header and footer */
-#app-header{
-	padding:6px 10px 10px 40px;
-	background:url(../../images/logo.png) no-repeat 10px 8px;
-	color:white;
-	font-size:24px;
-	font-weight:bold;
-	text-shadow:0 1px 0 #4e691f
+#MainHeader {
+	background-image	:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#8fc33a),color-stop(100%,#739b2e));
+	background-image	:-webkit-linear-gradient(top,#8fc33a,#739b2e);
+	background-image	:-moz-linear-gradient(top,#8fc33a,#739b2e);
+	background-image	:-o-linear-gradient(top,#8fc33a,#739b2e);
+	background-image	:linear-gradient(top,#8fc33a,#739b2e);
+	border-bottom		:1px solid #567422;
 }
 
-#app-background {
-	background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#8fc33a),color-stop(100%,#739b2e));background-image:-webkit-linear-gradient(top,#8fc33a,#739b2e);background-image:-moz-linear-gradient(top,#8fc33a,#739b2e);background-image:-o-linear-gradient(top,#8fc33a,#739b2e);background-image:linear-gradient(top,#8fc33a,#739b2e);border-bottom:1px solid #567422
+#MainHeaderText {
+	padding		:6px 10px 10px 40px;
+	background	:url(../../images/logo.png) no-repeat 10px 8px;
+	color		:white;
+	font-size	:24px;
+	font-weight	:bold;
+	text-shadow	:0 1px 0 #4e691f;
 }
 
-#app-footer{
-	text-align:center;
-	color:white;
-	font-size:12px;
-	text-shadow:0 1px 0 #4e691f
+#MainFooter {
+	text-align	:center;
+	color		:white;
+	font-size	:12px;
+	text-shadow	:0 1px 0 #4e691f;
 }

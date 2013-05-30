@@ -37,6 +37,7 @@ public class Jaring {
 	public static String	_path			= "/jaring";
 	public static String	_path_mod		= "/module";
 	public static int		_content_type	= 0;
+	public static int		_menu_mode		= 1;
 	public static int		_paging_size	= 50;
 	public static String	_db_class		= "";
 	public static String	_db_url			= "";
@@ -238,6 +239,7 @@ public class Jaring {
 			Jaring._name		= props.getProperty ("app.name");
 			Jaring._path_mod	= props.getProperty ("app.module.dir");
 			Jaring._content_type= Integer.parseInt (props.getProperty ("app.content.type"));
+			Jaring._menu_mode	= Integer.parseInt (props.getProperty ("app.menu.mode"));
 			Jaring._paging_size	= Integer.parseInt (props.getProperty ("app.paging.size"));
 			Jaring._db_class	= props.getProperty ("db.class");
 			Jaring._db_url		= props.getProperty ("db.url");

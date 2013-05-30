@@ -17,6 +17,7 @@
 		var _g_paging_size	= <%= Jaring._paging_size %>;
 		var _g_title		= "<%= Jaring._title %>";
 		var _g_c_username	= "<%= Jaring._c_username %>";
+		var _g_menu_mode	= <%= Jaring._menu_mode %>;
 	</script>
 
 	<link rel="stylesheet" type="text/css" href="<%= Jaring._path %>/js/extjs/resources/css/ext-all-neptune.css" />

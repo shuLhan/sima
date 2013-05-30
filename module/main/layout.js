@@ -3,17 +3,6 @@
 	Authors:
 		- mhd.sulhan (sulhan@x10c-lab.com)
 */
-/* stores */
-var jx_menu_store;
-/* views */
-var jx_header;
-var jx_footer;
-var jx_menu;
-var jx_content;
-var jx_main;
-var jx_menu_button_last_click;
-var jx_UserProfile;
-
 function JxUserChangePassword ()
 {
 	this.id		= "ChangePassword";
@@ -237,39 +226,51 @@ function JxUserProfile ()
 	}
 }
 
-Ext.onReady (function ()
+function JxMain ()
 {
-	jx_menu_store		= new Ext.data.JsonStore ({
-			storeId		:"jx_menu_store"
-		,	fields		:
+	this.id				= "Main";
+	this.menuStoreId	= this.id +"MenuStore";
+	this.contentHomeId	= this.id +"Home";
+	this.headerId		= this.id +"Header";
+	this.headerTextId	= this.id +"HeaderText";
+	this.footerId		= this.id +"Footer";
+	this.dir			= _g_module_dir + this.id;
+
+	this.store	= Ext.create ("Jx.Store", {
+			storeId	:this.menuStoreId
+		,	url		:_g_module_path +"menu.jsp"
+		,	fields	:
 			[
 				"title"
 			,	"tbar"
 			]
-		,	proxy		:
-			{
-				type		:"ajax"
-			,	url			:_g_module_path +"menu.jsp"
-			,	reader		:
-				{
-					type		:"json"
-				,	root		:"data"
-				}
-			}
 		});
 
-	jx_header			= Ext.create ("Ext.container.Container", {
-			id			:"app-background"
+	this.buttonProfile	= Ext.create ("Ext.button.Button", {
+			text		:"Profile"
+		,	iconCls		:"profile"
+		});
+
+	this.buttonLogout	= Ext.create ("Ext.button.Button", {
+			text		:"Logout"
+		,	iconCls		:"logout"
+		});
+
+	/*
+		Main header
+	*/
+	this.header	= Ext.create ("Ext.container.Container", {
+			id			:this.headerId
 		,	region		:"north"
+		,	height		:45
 		,	layout		:
 			{
 				type		:"hbox"
 			,	align		:"middle"
 			}
-		,	height		:45
 		,	items		:
 			[{
-				id			:"app-header"
+				id			:this.headerTextId
 			,	xtype		:"box"
 			,	html		:_g_title
 			,	flex		:1
@@ -281,33 +282,23 @@ Ext.onReady (function ()
 			,	iconCls		:"account"
 			,	menuAlign	:"tr-br"
 			,	menu		:
-				[{
-					text		:"Profile"
-				,	iconCls		:"profile"
-				,	handler		:function (b)
-					{
-						jx_show_UserProfile ();
-					}
-				},"-",{
-					text		:"Logout"
-				,	iconCls		:"logout"
-				,	handler		:function (b)
-					{
-						jx_do_logout ();
-					}
-				}]
+				[
+					this.buttonProfile
+				,	this.buttonLogout
+				]
 			}]
 		});
-	
-	jx_footer			= Ext.create ("Ext.container.Container", {
-			region		:"south"
+
+	this.footer			= Ext.create ("Ext.container.Container", {
+			id			:this.footerId
+		,	region		:"south"
+		,	height		:20
 		,	layout		:
 			{
 				type		:"hbox"
 			,	align		:"middle"
 			,	pack		:"center"
 			}
-		,	height		:20
 		,	items		:
 			[{
 				id			:"app-footer"
@@ -317,7 +308,7 @@ Ext.onReady (function ()
 			}]
 		});
 
-	jx_menu				= Ext.create ("Ext.tab.Panel", {
+	this.menu			= Ext.create ("Ext.tab.Panel", {
 			region		:"north"
 		,	padding		:"5 5 0 5"
 		,	activeTab	:0
@@ -333,87 +324,68 @@ Ext.onReady (function ()
 			}
 		,	items		:
 			[{
-				id			:"content_home"
+				id			:this.contentHomeId
 			,	iconCls		:"home"
 			}]
 		});
 
-	jx_content_home		= Ext.create ("Ext.panel.Panel", {
+	this.contentHome	= Ext.create ("Ext.panel.Panel", {
 			region		:"center"
 		,	margin		:"5 0 0 0"
 		,	padding		:"0 5 0 5"
 		,	bodyPadding	:5
 		,	html		:"<h1>Welcome!</h1>"
 		});
-		
-	switch (_g_content_type) {
-	case 0:
-		jx_content			= Ext.create ("Ext.container.Container", {
-				region		:"center"
-			,	margin		:"5 0 0 0"
-			,	padding		:"0 5 0 5"
-			,	plain		:true
-			,	layout		:"fit"
-			});
-		break;
-	case 1:
-		jx_content			= Ext.create ("Ext.tab.Panel", {
-				region		:"center"
-			,	margin		:"5 0 0 0"
-			,	padding		:"0 5 0 5"
-			,	plain		:true
-			,	items		:[]
-			});
-		break;
-	}
 
-	jx_menu.on ("tabchange", jx_onTabChange);
-	
-	jx_main				= Ext.create ("Ext.container.Viewport", {
+	// Main interface
+	this.main			= Ext.create ("Ext.container.Viewport", {
 			layout		:"border"
 		,	renderTo	:Ext.getBody ()
 		,	items		:
 			[
-				jx_header
-			,	jx_menu
-			,	jx_content
-			,	jx_content_home
-			,	jx_footer
+				this.header
+			,	this.menu
+			,	this.contentHome
+			,	this.footer
 			]
 		});
 
-	function jx_show_UserProfile ()
+/*
+	Functions
+*/
+	this.showUserProfile = function ()
 	{
-		if (jx_UserProfile == undefined) {
-			jx_UserProfile = new JxUserProfile ();
+		if (this.userProfile == undefined) {
+			this.userProfile = new JxUserProfile ();
 		} else {
-			if (jx_UserProfile.win != undefined) {
-				delete jx_UserProfile;
-				jx_UserProfile = new JxUserProfile ();
+			if (this.userProfile.win != undefined) {
+				delete this.userProfile;
+				this.userProfile = new JxUserProfile ();
 			}
 		}
-		jx_UserProfile.doShow ();
+		this.userProfile.doShow ();
 	}
 
-	function jx_do_logout ()
+	this.doLogout = function ()
 	{
 		location.href = _g_module_path +"logout.jsp";
 	}
 
-	function jx_onTabChange (tabp, newc, oldc, e)
+	this.onTabChange	= function (tabp, newc, oldc, e)
 	{
-		if (newc.id == "content_home") {
-			jx_content.hide ();
-			jx_content_home.show ();
+		if (newc.id == this.contentHomeId) {
+			this.content.hide ();
+			this.contentHome.show ();
 		} else {
-			jx_content.show ();
-			jx_content_home.hide ();
+			this.content.show ();
+			this.contentHome.hide ();
 		}
 	}
-	
-	function jx_menu_button_onClick (b, force)
+
+	this.onMenuClick = function (b, force)
 	{
-		var tab		= jx_menu.getActiveTab ();
+		var me		= this;
+		var tab		= me.menu.getActiveTab ();
 		var tbar	= tab.dockedItems.getAt (0);
 
 		/* Remove toggle from menu button */
@@ -436,10 +408,10 @@ Ext.onReady (function ()
 		/* Find menu module in content area. */
 		switch (_g_content_type) {
 		case 1:
-			var c = jx_content.getComponent (b.module);
+			var c = me.content.getComponent (b.module);
 
 			if (c != undefined) {
-				jx_content.setActiveTab (c);
+				me.content.setActiveTab (c);
 				return;
 			}
 			break;
@@ -447,7 +419,8 @@ Ext.onReady (function ()
 
 		/* If not exist, add module to content area */
 		Ext.Ajax.request ({
-			url		:_g_module_dir +"/"+ b.module +"/layout.js"
+			scope	:me
+		,	url		:_g_module_dir +"/"+ b.module +"/layout.js"
 		,	failure	:function (response, opts)
 			{
 				Jx.msg.error ("Fail to load module!");
@@ -463,19 +436,17 @@ Ext.onReady (function ()
 
 					switch (_g_content_type) {
 					case 0:
-						jx_content.removeAll (true);
-						jx_content.add (module.panel);
+						me.content.removeAll (true);
+						me.content.add (module.panel);
 						break;
 					case 1:
-						jx_content.add (module.panel);
-						jx_content.setActiveTab (module.panel);
-						jx_content.doLayout ();
+						me.content.add (module.panel);
+						me.content.setActiveTab (module.panel);
+						me.content.doLayout ();
 						break;
 					}
 
 					module.doRefresh (b.permission);
-
-					jx_menu_button_last_click = b;
 				} catch (e) {
 					if (undefined != console) {
 						console.log (e);
@@ -486,9 +457,9 @@ Ext.onReady (function ()
 		});
 	}
 
-	function jx_load_menus ()
+	this.loadMenu	= function ()
 	{
-		jx_menu_store.load ({
+		this.store.load ({
 			scope		:this
 		,	callback	:function (r, op, success)
 			{
@@ -499,7 +470,7 @@ Ext.onReady (function ()
 
 				/* Add tab with toolbar to menu */
 				for (var i = 0; i < r.length; i++) {
-					var tab		= jx_menu.add (r[i].raw);
+					var tab		= this.menu.add (r[i].raw);
 					var tbar	= tab.dockedItems.getAt (0);
 
 					/* Inject "click" event to each button menu */
@@ -507,12 +478,12 @@ Ext.onReady (function ()
 						var b = tbar.items.items[m];
 
 						if (undefined == b.menu) {
-							b.setHandler (jx_menu_button_onClick, this);
+							b.setHandler (this.onMenuClick, this);
 						} else {
 							var submenu = b.menu.items.items;
 
 							for (var sm = 0; sm < submenu.length; sm++) {
-								submenu [sm].setHandler (jx_menu_button_onClick, this);
+								submenu [sm].setHandler (this.onMenuClick, this);
 							}
 						}
 					}
@@ -521,5 +492,43 @@ Ext.onReady (function ()
 		});
 	}
 
-	jx_load_menus ();
+	this.init = function ()
+	{
+		switch (_g_content_type) {
+		case 0:
+			this.content		= Ext.create ("Ext.container.Container", {
+					region		:"center"
+				,	margin		:"5 0 0 0"
+				,	padding		:"0 5 0 5"
+				,	plain		:true
+				,	layout		:"fit"
+				});
+			break;
+		default:
+			this.content		= Ext.create ("Ext.tab.Panel", {
+					region		:"center"
+				,	margin		:"5 0 0 0"
+				,	padding		:"0 5 0 5"
+				,	plain		:true
+				,	items		:[]
+				});
+			break;
+		}
+
+		this.main.add (this.content);
+
+		this.buttonProfile.setHandler (this.showUserProfile, this);
+		this.buttonLogout.setHandler (this.doLogout, this);
+
+		this.menu.on ("tabchange", this.onTabChange, this);
+
+		this.loadMenu ();
+	}
+}
+
+Ext.onReady (function ()
+{
+	var main = new JxMain ();
+
+	main.init ();
 });
