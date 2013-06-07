@@ -2,7 +2,9 @@
 	Copyright 2013 x10c-lab.com
 	Authors:
 		- mhd.sulhan (sulhan@x10c-lab.com)
+		- agus sugianto (agus@x10c-lab.com)
 */
+
 function JxUserChangePassword ()
 {
 	this.id		= "ChangePassword";
@@ -228,13 +230,15 @@ function JxUserProfile ()
 
 function JxMain ()
 {
-	this.id				= "Main";
-	this.menuStoreId	= this.id +"MenuStore";
-	this.contentHomeId	= this.id +"Home";
-	this.headerId		= this.id +"Header";
-	this.headerTextId	= this.id +"HeaderText";
-	this.footerId		= this.id +"Footer";
-	this.dir			= _g_module_dir + this.id;
+	this.id					= "Main";
+	this.menuStoreId		= this.id +"MenuStore";
+	this.homeStoreId		= this.id +"HomeStore";
+	this.contentHomeId		= this.id +"Home";
+	this.contentDashboardId	= this.id +"Dashboard";
+	this.headerId			= this.id +"Header";
+	this.headerTextId		= this.id +"HeaderText";
+	this.footerId			= this.id +"Footer";
+	this.dir				= _g_module_dir + this.id;
 
 	this.store	= Ext.create ("Jx.Store", {
 			storeId	:this.menuStoreId
@@ -246,12 +250,26 @@ function JxMain ()
 			]
 		});
 
-	this.buttonProfile	= Ext.create ("Ext.button.Button", {
+	this.storeHome	= Ext.create ("Jx.Store", {
+			storeId		:this.homeStoreId
+		,	url			:_g_module_path +"menuHome.jsp"
+		,	fields		:
+			[
+				"id"
+			,	"label"
+			,	"image"
+			,	"description"
+			,	"module"
+			,	"permission"
+			]
+		});
+
+	this.buttonProfile	= Ext.create ("Ext.menu.Item", {
 			text		:"Profile"
 		,	iconCls		:"profile"
 		});
 
-	this.buttonLogout	= Ext.create ("Ext.button.Button", {
+	this.buttonLogout	= Ext.create ("Ext.menu.Item", {
 			text		:"Logout"
 		,	iconCls		:"logout"
 		});
@@ -308,12 +326,50 @@ function JxMain ()
 			}]
 		});
 
+	this.contentHomeView	= Ext.create ("Ext.view.View", {
+			id				:"home-menus"
+		,	store			:this.storeHome
+		,	tpl				:Ext.create ("Ext.XTemplate"
+			,	'<tpl for=".">'
+			,		'<div class="home-menu">'
+			,			(
+							Ext.isIE6
+							? '<div style="width:138px;height:138px;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'images/{[values.image.replace(/ /g, "-")]}.png\',sizingMethod=\'scale\')"></div>'
+							: '<img width="128" height="128" src="images/{[values.image.replace(/ /g, "-")]}.png" />'
+						)
+			,			'<strong>{name}</strong>'
+			,			'<span>{description}</span>'
+			,		'</div>'
+			,	'</tpl>'
+			)
+		,	itemSelector	:"div.home-menu"
+		,	overItemCls		:"home-menu-hover"
+		});
+
 	this.contentHome	= Ext.create ("Ext.panel.Panel", {
 			region		:"center"
 		,	margin		:"5 0 0 0"
 		,	padding		:"0 5 0 5"
-		,	bodyPadding	:5
-		,	html		:"<h1>Welcome!</h1>"
+		,	bodyCls		:"panel-background"
+		,	layout		:
+			{
+				type		:"hbox"
+			,	pack		:"center"
+			,	align		:"middle"
+			}
+		,	items		:
+			[
+				this.contentHomeView
+			]
+		});
+
+	this.contentDashboard	= Ext.create ("Ext.panel.Panel", {
+			region		:"center"
+		,	margin		:"5 0 0 0"
+		,	padding		:"0 5 0 5"
+		,	layout		:"fit"
+		,	bodyCls		:"panel-background"
+		,	hidden		:true
 		});
 
 	// Main interface
@@ -324,6 +380,7 @@ function JxMain ()
 			[
 				this.header
 			,	this.contentHome
+			,	this.contentDashboard
 			,	this.footer
 			]
 		});
@@ -354,9 +411,15 @@ function JxMain ()
 		if (newc.id == this.contentHomeId) {
 			this.content.hide ();
 			this.contentHome.show ();
+			this.contentDashboard.hide ();
+		} else if (newc.id == this.contentDashboardId) {
+			this.content.hide ();
+			this.contentHome.hide ();
+			this.contentDashboard.show ();
 		} else {
 			this.content.show ();
 			this.contentHome.hide ();
+			this.contentDashboard.hide ();
 		}
 	}
 
@@ -373,6 +436,7 @@ function JxMain ()
 
 		this.content.show ();
 		this.contentHome.hide ();
+		this.contentDashboard.hide ();
 
 		switch (_g_menu_mode) {
 		case 0:
@@ -380,7 +444,7 @@ function JxMain ()
 			tbar	= tab.dockedItems.getAt (0);
 
 			// Remove toggle from menu button
-			for (var m = 0; m < tbar.items.items.length; m++) {
+			for (var m = 0; tbar != undefined && m < tbar.items.items.length; m++) {
 				var mb = tbar.items.items[m];
 
 				if (undefined == mb.menu) {
@@ -394,7 +458,9 @@ function JxMain ()
 				}
 			}
 
-			b.toggle (true, true);
+			if (b.toggle != undefined) {
+				b.toggle (true, true);
+			}
 			break;
 
 		case 1:
@@ -474,8 +540,8 @@ function JxMain ()
 
 					switch (_g_menu_mode) {
 					case 0:
-						tab		= this.menu.add (r[i].raw);
-						tbar	= tab.dockedItems.getAt (0);
+						tab			= this.menu.add (r[i].raw);
+						tbar		= tab.dockedItems.getAt (0);
 						break;
 					case 1:
 						tbar	= this.menuBar;
@@ -484,7 +550,7 @@ function JxMain ()
 					}
 
 					/* Inject "click" event to each button menu */
-					for (var m = 0; m < tbar.items.items.length; m++) {
+					for (var m = 0; tbar != undefined && m < tbar.items.items.length; m++) {
 						var b = tbar.items.items[m];
 
 						if (undefined == b.menu) {
@@ -498,8 +564,44 @@ function JxMain ()
 						}
 					}
 				}
+
+				this.menu.setActiveTab (0);
 			}
 		});
+	}
+
+	this.loadHomeMenu = function ()
+	{
+		this.storeHome.load ({
+			scope		:this
+		,	callback	:function (r, op, success)
+			{
+				if (! success) {
+					Jx.msg.error ("Failed to load home menu! <br/>");
+					return;
+				}
+			}
+		});
+	}
+
+	this.contentHomeViewOnClick = function (dv, rec, item, idx, e, eopts)
+	{
+		this.onMenuClick (rec.raw);
+
+		for (var i = 0; i < this.menu.items.length; i++) {
+			var tab		= this.menu.items.getAt (i);
+			var tbar	= tab.getDockedItems ('toolbar[dock="top"]');
+
+			for (var j = 0; j < tbar.length; j++) {
+				for (var k = 0; k < tbar[j].items.items.length; k++) {
+					if (tbar[j].items.items[k].module == rec.raw.module) {
+						this.menu.setActiveTab (i);
+						tbar[j].items.items[k].toggle (true, true);
+						return;
+					}
+				}
+			}
+		}
 	}
 
 	this.init = function ()
@@ -549,12 +651,13 @@ function JxMain ()
 
 		switch (_g_content_type) {
 		case 0:
-			this.content		= Ext.create ("Ext.container.Container", {
+			this.content		= Ext.create ("Ext.panel.Panel", {
 					region		:"center"
 				,	margin		:"5 0 0 0"
 				,	padding		:"0 5 0 5"
 				,	plain		:true
 				,	layout		:"fit"
+				,	bodyCls		:"panel-background"
 				});
 			break;
 		case 1:
@@ -563,6 +666,7 @@ function JxMain ()
 				,	margin		:"5 0 0 0"
 				,	padding		:"0 5 0 5"
 				,	plain		:true
+				,	bodyCls		:"panel-background"
 				,	items		:[]
 				});
 			break;
@@ -573,13 +677,24 @@ function JxMain ()
 
 		this.buttonProfile.setHandler (this.showUserProfile, this);
 		this.buttonLogout.setHandler (this.doLogout, this);
+		this.contentHomeView.on ("itemclick", this.contentHomeViewOnClick, this);
 
 		this.loadMenu ();
+		this.loadHomeMenu ();
 	}
 }
 
 Ext.onReady (function ()
 {
+	task = new Ext.util.DelayedTask(function () {
+		setTimeout(function(){
+			Ext.get ('loading').remove();
+			Ext.get ('loading-mask').fadeOut({remove:true});
+		}, 100);
+	});
+
+	task.delay(2000);
+
 	var main = new JxMain ();
 
 	main.init ();

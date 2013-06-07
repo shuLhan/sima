@@ -33,5 +33,16 @@
 	<script type="text/javascript" src="${pageContext.request.requestURI}layout.js"></script>
 </head>
 <body>
+    <div id="loading-mask" style=""></div>
+    <div id="loading">
+        <div class="loading-indicator">
+            <img src="<%= Jaring._path %>/images/loading.gif" width="32" height="32" style="margin-right:8px;float:left;vertical-align:top;"/>
+			<%= Jaring._title %>
+			-
+			<a href="http://www.x10c-lab.com">x10c-lab.com</a>
+            <br />
+			<span id="loading-msg">Loading application...</span>
+        </div>
+    </div>
 </body>
 </html>

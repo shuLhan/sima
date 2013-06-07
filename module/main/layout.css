@@ -2,6 +2,7 @@
 	Menu's icons
 */
 .home				{ background-image: url("../../images/home.png") !important; }
+.dashboard			{ background-image: url("../../images/dashboard.png") !important; }
 .account			{ background-image: url("../../images/account.png") !important; }
 .profile			{ background-image: url("../../images/profile.png") !important; }
 .change-password	{ background-image: url("../../images/change-password.png") !important; }
@@ -44,4 +45,101 @@
 	color		:white;
 	font-size	:12px;
 	text-shadow	:0 1px 0 #4e691f;
+}
+
+/*
+	Loading
+*/
+#loading-mask {
+	background-color:white;
+	height			:100%;
+	position		:absolute;
+	left			:0;
+	top				:0;
+	width			:100%;
+	z-index			:20000;
+}
+#loading {
+	height			:auto;
+	position		:absolute;
+	left			:43%;
+	top				:40%;
+	padding			:2px;
+	z-index			:20001;
+}
+#loading a {
+	color			:#225588;
+}
+#loading .loading-indicator{
+	background		:white;
+	color			:#444;
+	font			:bold 13px Helvetica, Arial, sans-serif;
+	height			:auto;
+	margin			:0;
+	padding			:10px;
+}
+#loading-msg {
+	font-size		: 10px;
+	font-weight		: normal;
+}
+
+
+/*
+	Home menus
+*/
+.panel-background {
+	background				: url(../../images/background.jpg) no-repeat center center fixed;
+	-webkit-background-size	: cover;
+	-moz-background-size	: cover;
+	-o-background-size		: cover;
+	background-size			: cover;
+}
+#home-menus {
+    text-shadow	: #fff 0 1px 0;
+    position	: relative;
+    display		: block;
+    height		: auto;
+}
+#home-menus div.home-menu img {
+    margin-bottom	: 1px;
+}
+#home-menus div.home-menu {
+    float		: left;
+    padding		: 8px 17px;
+    margin		: 5px;
+    text-align	: center;
+    line-height	: 14px;
+    color		: #333;
+    font-size	: 10px;
+    font-family	: "Helvetica Neue",sans-serif;
+    height		: 190px;
+    width		: 180px;
+    overflow	: hidden;
+    border-top	: 1px solid transparent;
+    cursor		: pointer;
+}
+
+.x-ie6 #home-menus div.home-menu,
+.x-ie7 #home-menus div.home-menu,
+.x-ie8 #home-menus div.home-menu {
+    border-top	: none;
+    padding		: 3px 2px;
+    margin		: 2px;
+}
+
+#home-menus div.home-menu-hover {
+    background-color: #eee;
+}
+
+#home-menus .x-item-selected {
+    background-color: #D3E1F1 !important;
+}
+
+#home-menus div.home-menu strong {
+    color	: #000;
+    display	: block;
+}
+
+#home-menus div.home-menu span {
+    color	: #999;
 }

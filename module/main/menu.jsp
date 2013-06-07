@@ -25,6 +25,10 @@
 			+"	and		B._group_id		= C._group_id"
 			+"	and		C._user_id		= ?"
 			+"	and		B.permission	> 0"
+			+"	and		("
+			+"			A.type			= 1"
+			+"		or	A.type			= 3"
+			+"	)"
 			+"	group by A.id"
 			+"	order by A.id";
 
@@ -121,15 +125,17 @@ try {
 
 		switch (Jaring._menu_mode) {
 		case 0:
-			tbar		= new JSONObject ();
-			tbar_layout	= new JSONObject ();
+			if (menu_items.size () > 0) {
+				tbar		= new JSONObject ();
+				tbar_layout	= new JSONObject ();
 
-			tbar_layout.put ("overflowHandler", "Menu");
+				tbar_layout.put ("overflowHandler", "Menu");
 
-			tbar.put ("layout"	, tbar_layout);
-			tbar.put ("items"	, menu_items);
+				tbar.put ("layout"	, tbar_layout);
+				tbar.put ("items"	, menu_items);
 
-			_o.put ("tbar"		, tbar);
+				_o.put ("tbar"		, tbar);
+			}
 			break;
 		case 1:
 			if (menu_items.size () > 0) {
