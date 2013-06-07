@@ -52,14 +52,23 @@ create table _user_group
 
 /*
 	Menu
+
+	_menu.type
+		0: not active.
+		1: menu will displayed in tab toolbar.
+		2: menu will displayed in tab screen.
+		3: menu will displayed in tab toolbar and screen.
 */
 create table _menu
 (
 	id			integer			not null
 ,	pid			integer			not null
+,	type		integer			default 1
 ,	label		varchar (64)	default ''
 ,	icon		varchar (32)	default ''
+,	image		varchar (32)	default ''
 ,	module		varchar (128)	default ''
+,	description	varchar (128)	default ''
 ,	constraint	_menu_pk		primary key (id)
 );
 
