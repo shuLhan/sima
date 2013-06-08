@@ -7,6 +7,7 @@ try {
 	int		limit	= Jaring.getIntParameter (request, "limit", Jaring._paging_size);
 	int		start	= Jaring.getIntParameter (request, "start", 0);
 	long	id		= 0;
+	String	pwd		= "";
 	String	enc		= "";
 
 	if (null == query) {
@@ -59,13 +60,19 @@ try {
 		for (int i = 0; i < _a.size (); i++) {
 			_o	= _a.getJSONObject (i);
 			id	= _o.getIntValue ("id");
-			enc	= Jaring.encrypt (_o.getString ("password"));
+			pwd	= _o.getString ("password");
 
 			if (id < 0) {
 				throw new Exception ("Invalid data ID!");
 			}
-			if (enc.equals ("")) {
-				throw new Exception ("Failed to encrypt data!");
+
+			if (pwd.isEmpty ()) {
+				enc = _o.getString ("old_password");
+			} else {
+				enc	= Jaring.encrypt (pwd);
+				if (enc.isEmpty ()) {
+					throw new Exception ("Failed to encrypt data!");
+				}
 			}
 
 			_i	= 1;
@@ -149,10 +156,11 @@ try {
 		while (_rs.next ()) {
 			_o	= new JSONObject ();
 
-			_o.put ("id"		, _rs.getInt ("id"));
-			_o.put ("name"		, _rs.getString ("name"));
-			_o.put ("realname"	, _rs.getString ("realname"));
-			_o.put ("password"	, _rs.getString ("password"));
+			_o.put ("id"			, _rs.getInt ("id"));
+			_o.put ("name"			, _rs.getString ("name"));
+			_o.put ("realname"		, _rs.getString ("realname"));
+			_o.put ("old_password"	, _rs.getString ("password"));
+			_o.put ("password"		, "");
 
 			_a.add (_o);
 		}
