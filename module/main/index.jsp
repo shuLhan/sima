@@ -29,6 +29,10 @@
 	<script type="text/javascript" src="<%= Jaring._path %>/js/extjs/ux/ProgressBarPager.js"></script>
 	
 	<script type="text/javascript" src="<%= Jaring._path %>/js/jaring.js"></script>
+	<script type="text/javascript" src="<%= Jaring._path %>/js/jx/StorePaging.js"></script>
+	<script type="text/javascript" src="<%= Jaring._path %>/js/jx/ComboPaging.js"></script>
+	<script type="text/javascript" src="<%= Jaring._path %>/js/jx/Form.js"></script>
+	<script type="text/javascript" src="<%= Jaring._path %>/js/jx/GridPaging.js"></script>
 
 	<script type="text/javascript" src="${pageContext.request.requestURI}layout.js"></script>
 </head>

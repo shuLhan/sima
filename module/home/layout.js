@@ -4,13 +4,9 @@ Ext.onReady (function ()
 			url				:_g_module_path +"login.jsp"
 		,	title			:_g_title +" :: Login"
 		,	id				:"login_form"
-		,	bodyPadding		:10
-		,	border			:false
 		,	defaults		:
 			{
-				anchor			:"100%"
-			,	labelAlign		:"right"
-			,	vtype			:"alphanum"
+				vtype			:"alphanum"
 			,	allowBlank		:false
 			}
 		,	items			:
