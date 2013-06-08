@@ -108,7 +108,7 @@ function JxUserProfile ()
 	this.dir	= _g_module_path;
 
 	this.store			= Ext.create ("Jx.Store", {
-			storeId		:this.id
+			storeId		:this.id +"Store"
 		,	url			:this.dir +"UserProfile.jsp"
 		,	fields		:
 			[
@@ -385,9 +385,9 @@ function JxMain ()
 			]
 		});
 
-/*
-	Functions
-*/
+	/*
+		Functions
+	*/
 	this.showUserProfile = function ()
 	{
 		if (this.userProfile == undefined) {

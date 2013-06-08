@@ -183,14 +183,18 @@ Ext.define ("Jx.Form", {
 ,	afterSaveSuccess	:function ()
 	{
 		this.store.proxy.extraParams.action = this.store.action = "read";
-		this.store.reload ();
-
-		if (this.owner.afterFormSave
-		&& typeof (this.owner.afterFormSave) === "function") {
-			if (this.owner.afterFormSave (true) == false) {
-				return;
-			}
-		}
+		this.store.reload ({
+				scope		:this
+			,	callback	:function (r, op, success)
+				{
+					if (this.owner.afterFormSave
+					&& typeof (this.owner.afterFormSave) === "function") {
+						if (this.owner.afterFormSave (success) == false) {
+							return;
+						}
+					}
+				}
+			});
 	}
 
 ,	afterSaveFailure	:function (action)
