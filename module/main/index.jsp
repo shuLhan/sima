@@ -26,6 +26,13 @@
 
 	<script type="text/javascript" src="<%= Jaring._path %>/js/extjs/ext-all-debug.js"></script>
 	<script type="text/javascript" src="<%= Jaring._path %>/js/extjs/ext-theme-neptune.js"></script>
+	<script type="text/javascript" src="<%= Jaring._path %>/js/extjs/ux/StatusBar.js"></script>
+	<script type="text/javascript" src="<%= Jaring._path %>/js/extjs/ux/BoxReorderer.js"></script>
+	<script type="text/javascript" src="<%= Jaring._path %>/js/extjs/ux/CheckCombo.js"></script>
+	<script type="text/javascript" src="<%= Jaring._path %>/js/extjs/ux/DataTip.js"></script>
+	<script type="text/javascript" src="<%= Jaring._path %>/js/extjs/ux/LiveSearchAddGridPanel.js"></script>
+	<script type="text/javascript" src="<%= Jaring._path %>/js/extjs/ux/LiveSearchGridPanel.js"></script>
+	<script type="text/javascript" src="<%= Jaring._path %>/js/extjs/ux/GridHeaderToolTip.js"></script>
 	<script type="text/javascript" src="<%= Jaring._path %>/js/extjs/ux/ProgressBarPager.js"></script>
 	
 	<script type="text/javascript" src="<%= Jaring._path %>/js/jaring.js"></script>
