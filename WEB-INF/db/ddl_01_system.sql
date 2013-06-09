@@ -32,6 +32,8 @@ create table _user
 ,	name		varchar (32)	not null
 ,	realname	varchar (128)	not null
 ,	password	varchar (256)	not null
+,	status		int				default 1
+,	last_login	timestamp		default current_timestamp
 ,	constraint	_user_pk		primary key (id)
 );
 
