@@ -2,6 +2,8 @@
 <%@ page import="java.sql.PreparedStatement" %>
 <%@ page import="java.sql.ResultSet" %>
 <%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.Date" %>
+<%@ page import="java.sql.Types" %>
 
 <%@ page import="com.alibaba.fastjson.JSONArray" %>
 <%@ page import="com.alibaba.fastjson.JSONObject" %>
