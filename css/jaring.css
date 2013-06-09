@@ -1,6 +1,11 @@
 /*
 	Global stylesheet for application.
  */
+
+.login	{
+	background-image	: url("../images/login.png") !important;
+}
+
 /*
 	Jaring message
 */
@@ -54,4 +59,35 @@
 
 #jx-msg .error p {
 	margin				: 0;
+}
+
+#wallpaper {
+	position	: fixed;
+	top			: 0;
+	left		: 0;
+	min-width	: 100%;
+	min-height	: 100%;
+}
+
+#poweredby {
+    position		: absolute;
+    bottom			: 20px;
+    right			: 20px;
+    z-index			: 15000;
+    /* IE 5-7 */
+    filter			: alpha(opacity=70);
+    /* Netscape */
+    -moz-opacity	: 0.7;
+    /* Safari 1.x */
+    -khtml-opacity	: 0.7;
+    /* Good browsers */
+    opacity			: 0.7;
+}
+
+#poweredby div {
+    position			: relative;
+    width				: 150px;
+    height				: 25px;
+    background-image	: url(../images/powered-by-ext-js.png);
+    background-repeat	: no-repeat;
 }

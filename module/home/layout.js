@@ -2,18 +2,28 @@ Ext.onReady (function ()
 {
 	var jx_login_form = Ext.create ("Ext.form.Panel", {
 			url				:_g_module_path +"login.jsp"
-		,	title			:_g_title +" :: Login"
+		,	title			:".:: " + _g_title + " ::."
 		,	id				:"login_form"
 		,	defaults		:
 			{
-				vtype			:"alphanum"
+				anchor			:"100%"
+			,	labelAlign		:"right"
+			,	labelWidth		:70
+			,	labelStyle		:"font-weight:bold"
+			,	vtype			:"alphanum"
 			,	allowBlank		:false
 			}
 		,	items			:
 			[{
+				xtype			: 'component'
+			,	html			: '<img src="images/main_logo.png" style="display:block; margin-left:auto; margin-right:auto;" height="128"/>'
+			,	height			: 130
+			,	padding			: '0 0 0 0'
+			},{
 				xtype			:"textfield"
-			,	fieldLabel		:"User name"
+			,	fieldLabel		:"Username"
 			,	name			:"username"
+			,	itemId			:"username"
 			},{
 				xtype			:"textfield"
 			,	fieldLabel		:"Password"
@@ -29,13 +39,14 @@ Ext.onReady (function ()
 					}
 				}
 			}]
-		,	bbar			:
+		,	buttons			:
 			[
 				"->"
 			,	"-"
 			,{
 				text			:"Login"
 			,	itemId			:"login"
+			,	iconCls			:"login"
 			,	formBind		:true
 			,	handler			:function (b)
 				{
@@ -64,6 +75,7 @@ Ext.onReady (function ()
 	,	draggable	:false
 	,	closable	:false
 	,	resizable	:false
+	,	defaultFocus:"username"
 	,	items		:
 		[
 			jx_login_form

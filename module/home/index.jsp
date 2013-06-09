@@ -18,10 +18,13 @@
 	<link rel="stylesheet" type="text/css" href="<%= Jaring._path %>/css/jaring.css" />
 
 	<script type="text/javascript" src="<%= Jaring._path %>/js/extjs/ext-all-debug.js"></script>
+	<script type="text/javascript" src="<%= Jaring._path %>/js/extjs/ext-theme-neptune.js"></script>
 	<script type="text/javascript" src="<%= Jaring._path %>/js/jaring.js"></script>
 
 	<script type="text/javascript" src="${pageContext.request.requestURI}layout.js"></script>
 </head>
 <body>
+	<img src="<%= Jaring._path %>/images/wallpaper.jpg" id="wallpaper" alt="">
+    <a href="http://www.sencha.com" target="_blank" alt="Powered by Ext JS" id="poweredby"><div></div></a>
 </body>
 </html>
