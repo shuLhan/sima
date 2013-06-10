@@ -337,7 +337,7 @@ function JxMain ()
 							? '<div style="width:138px;height:138px;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'images/{[values.image.replace(/ /g, "-")]}.png\',sizingMethod=\'scale\')"></div>'
 							: '<img width="128" height="128" src="images/{[values.image.replace(/ /g, "-")]}.png" />'
 						)
-			,			'<strong>{name}</strong>'
+			,			'<strong>{label}</strong>'
 			,			'<span>{description}</span>'
 			,		'</div>'
 			,	'</tpl>'
