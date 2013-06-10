@@ -69,7 +69,7 @@ Ext.override (Ext.form.Panel, {
 	,	defaults	:
 		{
 			anchor		:"100%"
-		,	labelAlign	:"right"
+		,	labelAlign	:"left"
 		}
 });
 

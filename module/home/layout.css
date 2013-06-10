@@ -8,7 +8,7 @@ body {
 /*
 	Icons
 */
-.login	{ background-image	: url("../../images/buttons/login.png") !important; }
+.login	{ background-image	: url(../../images/buttons/login.png) !important; }
 
 /*
 	ID

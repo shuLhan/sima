@@ -1,76 +1,74 @@
-Ext.onReady (function ()
+function JxLogin ()
 {
-	var jx_login_form = Ext.create ("Ext.form.Panel", {
-			url				:_g_module_path +"login.jsp"
-		,	title			:".:: " + _g_title + " ::."
-		,	id				:"login_form"
-		,	defaults		:
-			{
-				anchor			:"100%"
-			,	labelAlign		:"right"
-			,	labelWidth		:70
-			,	labelStyle		:"font-weight:bold"
-			,	vtype			:"alphanum"
-			,	allowBlank		:false
-			}
-		,	items			:
-			[{
-				xtype			: 'component'
-			,	html			: '<img src="images/main_logo.png" style="display:block; margin-left:auto; margin-right:auto;" height="128"/>'
-			,	height			: 130
-			,	padding			: '0 0 0 0'
-			},{
-				xtype			:"textfield"
-			,	fieldLabel		:"Username"
-			,	name			:"username"
-			,	itemId			:"username"
-			},{
-				xtype			:"textfield"
-			,	fieldLabel		:"Password"
-			,	name			:"password"
-			,	inputType		:"password"
-			,	listeners		:
-				{
-					specialkey		:function (f, e)
-					{
-						if (e.ENTER == e.getKey ()) {
-							f.up ("form").do_login ();
-						}
-					}
-				}
-			}]
-		,	buttons			:
-			[
-				"->"
-			,	"-"
-			,{
-				text			:"Login"
-			,	itemId			:"login"
-			,	iconCls			:"login"
-			,	formBind		:true
-			,	handler			:function (b)
-				{
-					b.up ("form").do_login ();
-				}
-			}]
+	this.id				= "Login";
 
-		,	do_login		:function ()
+	this.logo		= Ext.create ("Ext.Component", {
+			height	:130
+		,	html	:"<img "
+					+"	src='images/home/login/logo.png'"
+					+"	style='display:block; margin-left:auto; margin-right:auto;'"
+					+"	height='128'/>"
+		,	padding	:0
+		});
+
+	this.username		= Ext.create ("Ext.form.field.Text", {
+			fieldLabel	:"Username"
+		,	itemId		:"username"
+		,	name		:"username"
+		});
+
+	this.password		= Ext.create ("Ext.form.field.Text", {
+			fieldLabel	:"Password"
+		,	itemId		:"password"
+		,	name		:"password"
+		,	inputType	:"password"
+		,	listeners	:
 			{
-				this.getForm ().submit ({
-					success	:function (form, action)
-					{
-						location.href = _g_root;
+				scope		:this
+			,	specialkey	:function (f, e)
+				{
+					if (e.ENTER == e.getKey ()) {
+						this.doLogin ();
 					}
-				,	failure	:function (form, action)
-					{
-						Jx.msg.error (action.result.data);
-					}
-				});
+				}
 			}
 		});
 
-	var jx_login = Ext.create ("Ext.window.Window", {
-		id			:"login"
+	this.buttonLogin	= Ext.create ("Ext.button.Button", {
+			text			:"Login"
+		,	itemId			:"login"
+		,	iconCls			:"login"
+		,	formBind		:true
+		});
+
+	this.buttonLogin.setHandler (this.doLogin, this);
+
+	this.panel			= Ext.create ("Ext.form.Panel", {
+			id			:this.id +"Form"
+		,	url			:_g_module_path +"login.jsp"
+		,	title		:".:: " + _g_title + " ::."
+		,	defaults	:
+			{
+				labelStyle	:"font-weight:bold"
+			,	vtype		:"alphanum"
+			,	allowBlank	:false
+			,	anchor		:"100%"
+			}
+		,	items		:
+			[
+				this.logo
+			,	this.username
+			,	this.password
+			]
+		,	buttons		:
+			[
+				"->"
+			,	this.buttonLogin
+			]
+		});
+
+	this.win		= Ext.create ("Ext.window.Window", {
+		id			:this.id
 	,	autoShow	:true
 	,	draggable	:false
 	,	closable	:false
@@ -78,7 +76,26 @@ Ext.onReady (function ()
 	,	defaultFocus:"username"
 	,	items		:
 		[
-			jx_login_form
+			this.panel
 		]
 	});
+
+	this.doLogin = function ()
+	{
+		this.panel.submit ({
+			success	:function (form, action)
+			{
+				location.href = _g_root;
+			}
+		,	failure	:function (form, action)
+			{
+				Jx.msg.error (action.result.data);
+			}
+		});
+	}
+}
+
+Ext.onReady (function ()
+{
+	var loginwin = new JxLogin ();
 });
