@@ -619,7 +619,7 @@ function JxMain ()
 						plain		:true
 					,	layout		:
 						{
-							pack		:"center"
+							pack		:"left"
 						}
 					}
 				,	items		:[]
