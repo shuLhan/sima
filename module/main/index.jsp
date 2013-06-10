@@ -7,7 +7,7 @@
 <head>
 	<title><%= Jaring._title %></title>
 
-	<link rel="shortcut icon" href="<%= Jaring._path %>/images/fav_icon.ico"/>
+	<link rel="shortcut icon" href="<%= Jaring._path %>/images/favicon.ico"/>
 
 	<script>
 		var _g_root			= "<%= Jaring._path %>";
