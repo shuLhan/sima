@@ -11,23 +11,52 @@ function JxSystemMenuMenu ()
 	this.id		= "SystemMenu_Menu";
 	this.dir	= _g_module_dir + this.id.replace (/_/g, "/");
 
-	this.store			= Ext.create ("Jx.StorePaging", {
+	this.store			= Ext.create ("Ext.data.TreeStore", {
 			storeId		:this.id
-		,	url			:this.dir +"/data.jsp"
-		,	extraParams	:
+		,	autoLoad	:false
+		,	autoSync	:true
+		,	root		:
 			{
-				_group_id	:0
+				text		:'Menu'
+			,	id			:'src'
+			,	expanded	:true
+			,	loaded		:true
 			}
 		,	fields		:
 			[
 				"id"
 			,	"pid"
 			,	"label"
-			,	"icon"
+			,	"iconCls"
 			,	"module"
 			,	"_group_id"
 			,	"permission"
 			]
+		,	proxy			:
+			{
+				type		:"ajax"
+			,	api			:
+				{
+					read		:this.dir +"/data.jsp?action=read"
+				,	create		:this.dir +"/data.jsp?action=create"
+				,	update		:this.dir +"/data.jsp?action=update"
+				,	destroy		:this.dir +"/data.jsp?action=destroy"
+				}
+			,	extraParams	:
+				{
+					_group_id	:0
+				}
+			,	reader		:
+				{
+					type		:"json"
+				,	root		:"children"
+				}
+			,	writer		:
+				{
+					type		:"json"
+				,	allowSingle	:false
+				}
+			}
 		});
 
 	this.storePerm	= Ext.create ("Ext.data.Store", {
@@ -56,48 +85,55 @@ function JxSystemMenuMenu ()
 			}]
 		});
 
-	this.panel					= Ext.create ("Jx.GridPaging", {
-			id					:this.id
-		,	region				:"east"
-		,	split				:true
-		,	width				:"50%"
-		,	title				:"System Menu"
-		,	store				:this.store
-		,	autoCreateForm		:false
-		,	autoCreateRowEditor	:true
-		,	buttonBarList		:["edit", "refresh"]
-		,	syncUseStore		:false
-		,	columns				:
+	this.panel				= Ext.create ("Ext.tree.Panel", {
+			id				:this.id
+		,	region			:"east"
+		,	width			:"50%"
+		,	title			:"System Menu"
+		,	titleAlign		:"center"
+		,	split			:true
+		,	layout			:"fit"
+		,	useArrows		:true
+		,	rootVisible		:false
+		,	store			:this.store
+		,	selModel		:
+			{
+				selType			:"cellmodel"
+			}
+		,	plugins			:
+			[
+				Ext.create ("Ext.grid.plugin.CellEditing", {
+					clicksToEdit:1
+				})
+			]
+		,	columns			:
 			[{
-				header				:"ID"
-			,	dataIndex			:"id"
-			,	hidden				:true
+				header			:"ID"
+			,	dataIndex		:"id"
+			,	hidden			:true
 			},{
-				header				:"PID"
-			,	dataIndex			:"pid"
-			,	hidden				:true
+				header			:"PID"
+			,	dataIndex		:"pid"
+			,	hidden			:true
 			},{
-				header				:"Name"
-			,	dataIndex			:"label"
-			,	flex				:1
+				xtype			:"treecolumn"
+			,	header			:"Name"
+			,	dataIndex		:"label"
+			,	flex			:1
 			},{
-				header				:"Icon"
-			,	dataIndex			:"icon"
-			,	hidden				:true
+				header			:"Module"
+			,	dataIndex		:"module"
+			,	hidden			:true
 			},{
-				header				:"Module"
-			,	dataIndex			:"module"
-			,	hidden				:true
+				header			:"Group ID"
+			,	dataIndex		:"_group_id"
+			,	hidden			:true
 			},{
-				header				:"Group ID"
-			,	dataIndex			:"_group_id"
-			,	hidden				:true
-			},{
-				header				:"Permission"
-			,	dataIndex			:"permission"
-			,	flex				:1
-			,	renderer			:this.storePerm.renderData ("permission", "name")
-			,	editor				:
+				header			:"Permission"
+			,	dataIndex		:"permission"
+			,	flex			:1
+			,	renderer		:this.storePerm.renderData ("permission", "name")
+			,	editor			:
 				{
 					xtype				:"combobox"
 				,	valueField			:"permission"
@@ -106,17 +142,26 @@ function JxSystemMenuMenu ()
 				,	editable			:false
 				}
 			}]
+		,	tbar			:
+			[{
+				iconCls		:"refresh"
+			,	tooltip		:"Refresh data"
+			,	scope		:this
+			,	handler		:function ()
+				{
+					this.store.reload ();
+				}
+			}]
 		});
 
-	this.doRefresh	= function (perm, id)
+	this.doRefresh = function (perm, id)
 	{
 		if (id <= 0) {
-			this.panel.clearData ();
 			return;
 		}
 
 		this.store.proxy.extraParams._group_id = id;
-		this.panel.doRefresh (perm);
+		this.store.load ();
 	}
 }
 
@@ -189,7 +234,6 @@ function JxSystemMenu ()
 	this.doRefresh	= function (perm)
 	{
 		SystemMenuGroup.doRefresh (perm);
-		SystemMenuMenu.doRefresh (perm, 0);
 	}
 }
 

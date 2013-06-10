@@ -417,12 +417,13 @@ Ext.define ("Jx.GridPaging", {
 		/* Refresh grid details */
 		if (data.length > 0) {
 			id	= data[0].get (this.getStore ().getFieldId ());
-		}
-		for (var i = 0, c = null; i < this.compDetails.length; i++) {
-			this.compDetails[i].doRefresh (this.perm, id);
-		}
-		if (this.afterSelectionChange && typeof (this.afterSelectionChange) === "function") {
-			this.afterSelectionChange (model, data, e);
+
+			for (var i = 0, c = null; i < this.compDetails.length; i++) {
+				this.compDetails[i].doRefresh (this.perm, id);
+			}
+			if (this.afterSelectionChange && typeof (this.afterSelectionChange) === "function") {
+				this.afterSelectionChange (model, data, e);
+			}
 		}
 	}
 
