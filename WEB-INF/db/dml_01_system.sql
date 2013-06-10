@@ -23,11 +23,10 @@ insert into _user_group (_user_id, _group_id) values (1, 1);
 
 insert into _menu (id, pid, type, label, icon, image, module, description) values (1		,0		,0	,'Home'			,'home'			,''				,'MainHome'			,'');
 insert into _menu (id, pid, type, label, icon, image, module, description) values (2		,0		,0	,'Dashboard'	,'dashboard'	,''				,'MainDashboard'	,'');
-insert into _menu (id, pid, type, label, icon, image, module, description) values (3		,0		,0	,'System'		,'sys'			,''				,'System'			,'');
-insert into _menu (id, pid, type, label, icon, image, module, description) values (4		,3		,1	,'User'			,'user'			,''				,'SystemUser'		,'');
-insert into _menu (id, pid, type, label, icon, image, module, description) values (5		,3		,1	,'Group'		,'group'		,''				,'SystemGroup'		,'');
-insert into _menu (id, pid, type, label, icon, image, module, description) values (6		,3		,1	,'Menu Access'	,'menu'			,''				,'SystemMenu'		,'');
-insert into _menu (id, pid, type, label, icon, image, module, description) values (101		,1		,2	,'User'			,'user'			,'home_user'	,'SystemUser'		,'System user');
+insert into _menu (id, pid, type, label, icon, image, module, description) values (1000		,0		,0	,'System'		,'sys'			,''				,'System'			,'');
+insert into _menu (id, pid, type, label, icon, image, module, description) values (1001		,1000	,1	,'User'			,'user'			,''				,'SystemUser'		,'');
+insert into _menu (id, pid, type, label, icon, image, module, description) values (1002		,1000	,1	,'Group'		,'group'		,''				,'SystemGroup'		,'');
+insert into _menu (id, pid, type, label, icon, image, module, description) values (1003		,1000	,1	,'Menu Access'	,'menu'			,''				,'SystemMenu'		,'');
 
 /*
 	Group -> Menu
@@ -35,8 +34,7 @@ insert into _menu (id, pid, type, label, icon, image, module, description) value
 
 insert into _group_menu (_group_id, _menu_id, permission) values (1		,1		,4);
 insert into _group_menu (_group_id, _menu_id, permission) values (1		,2		,4);
-insert into _group_menu (_group_id, _menu_id, permission) values (1		,3		,4);
-insert into _group_menu (_group_id, _menu_id, permission) values (1		,4		,4);
-insert into _group_menu (_group_id, _menu_id, permission) values (1		,5		,4);
-insert into _group_menu (_group_id, _menu_id, permission) values (1		,6		,4);
-insert into _group_menu (_group_id, _menu_id, permission) values (1		,101	,4);
+insert into _group_menu (_group_id, _menu_id, permission) values (1		,1000	,4);
+insert into _group_menu (_group_id, _menu_id, permission) values (1		,1001	,4);
+insert into _group_menu (_group_id, _menu_id, permission) values (1		,1002	,4);
+insert into _group_menu (_group_id, _menu_id, permission) values (1		,1003	,4);
