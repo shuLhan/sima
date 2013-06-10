@@ -1,49 +1,49 @@
 /*
 	Header's icons
 */
-.account				{ background-image: url("../../images/account.png") !important; }
-.profile				{ background-image: url("../../images/profile.png") !important; }
-.change-password		{ background-image: url("../../images/change-password.png") !important; }
-.logout					{ background-image: url("../../images/logout.png") !important; }
+.account				{ background-image: url("../../images/icons/account.png") !important; }
+.profile				{ background-image: url("../../images/icons/profile.png") !important; }
+.change-password		{ background-image: url("../../images/icons/change-password.png") !important; }
+.logout					{ background-image: url("../../images/icons/logout.png") !important; }
 /*
 	Menu's icons
 */
-.home				{ background-image: url("../../images/home.png") !important; }
-.dashboard			{ background-image: url("../../images/dashboard.png") !important; }
-.sys				{ background-image: url("../../images/sys.png") !important; }
-.user				{ background-image: url("../../images/user.png") !important; }
-.group				{ background-image: url("../../images/group.png") !important; }
-.menu				{ background-image: url("../../images/menu.png") !important; }
+.home				{ background-image: url("../../images/icons/home.png") !important; }
+.dashboard			{ background-image: url("../../images/icons/dashboard.png") !important; }
+.sys				{ background-image: url("../../images/icons/sys.png") !important; }
+.user				{ background-image: url("../../images/icons/user.png") !important; }
+.group				{ background-image: url("../../images/icons/group.png") !important; }
+.menu				{ background-image: url("../../images/icons/menu.png") !important; }
 /*
 	Button's icons
 */
-.add					{ background-image: url("../../images/add.png") !important; }
-.edit					{ background-image: url("../../images/edit.png") !important; }
-.delete					{ background-image: url("../../images/delete.png") !important; }
-.refresh				{ background-image: url("../../images/refresh.png") !important; }
-.save					{ background-image: url("../../images/save.png") !important; }
-.cancel					{ background-image: url("../../images/cancel.png") !important; }
-.add-multiple			{ background-image: url("../../images/add-multiple.png") !important; }
-.delete-row				{ background-image: url("../../images/delete-row.png") !important; }
+.add					{ background-image: url("../../images/icons/add.png") !important; }
+.edit					{ background-image: url("../../images/icons/edit.png") !important; }
+.delete					{ background-image: url("../../images/icons/delete.png") !important; }
+.refresh				{ background-image: url("../../images/icons/refresh.png") !important; }
+.save					{ background-image: url("../../images/icons/save.png") !important; }
+.cancel					{ background-image: url("../../images/icons/cancel.png") !important; }
+.add-multiple			{ background-image: url("../../images/icons/add-multiple.png") !important; }
+.delete-row				{ background-image: url("../../images/icons/delete-row.png") !important; }
 /*
 	Form's icons
 */
-.form-add				{ background-image: url("../../images/form-add.png") !important; }
-.form-edit				{ background-image: url("../../images/form-edit.png") !important; }
-.form-save				{ background-image: url("../../images/form-save.png") !important; }
-.form-cancel			{ background-image: url("../../images/form-cancel.png") !important; }
-.form-search			{ background-image: url("../../images/form-search.png") !important; }
-.form-browse			{ background-image: url("../../images/form-browse.png") !important; }
-.form-clear				{ background-image: url("../../images/form-clear.png") !important; }
-.form-upload			{ background-image: url("../../images/form-upload.png") !important; }
-.form-edit-history		{ background-image: url("../../images/form-edit-history.png") !important; }
-.form-add-multiple		{ background-image: url("../../images/form-add-multiple.png") !important; }
+.form-add				{ background-image: url("../../images/icons/form-add.png") !important; }
+.form-edit				{ background-image: url("../../images/icons/form-edit.png") !important; }
+.form-save				{ background-image: url("../../images/icons/form-save.png") !important; }
+.form-cancel			{ background-image: url("../../images/icons/form-cancel.png") !important; }
+.form-search			{ background-image: url("../../images/icons/form-search.png") !important; }
+.form-browse			{ background-image: url("../../images/icons/form-browse.png") !important; }
+.form-clear				{ background-image: url("../../images/icons/form-clear.png") !important; }
+.form-upload			{ background-image: url("../../images/icons/form-upload.png") !important; }
+.form-edit-history		{ background-image: url("../../images/icons/form-edit-history.png") !important; }
+.form-add-multiple		{ background-image: url("../../images/icons/form-add-multiple.png") !important; }
 /*
 	Panel's icons
 */
-.panel-add				{ background-image: url("../../images/panel-add.png") !important; }
-.panel-next				{ background-image: url("../../images/panel-next.png") !important; }
-.panel-prev				{ background-image: url("../../images/panel-prev.png") !important; }
+.panel-add				{ background-image: url("../../images/icons/panel-add.png") !important; }
+.panel-next				{ background-image: url("../../images/icons/panel-next.png") !important; }
+.panel-prev				{ background-image: url("../../images/icons/panel-prev.png") !important; }
 
 
 /* header and footer */
@@ -261,7 +261,7 @@
 	StatusBar - visual
 */
 .x-statusbar .x-status-busy {
-    background-image	: url("../../images/loading-gif.gif");
+    background-image	: url("../../images/statusbar/loading.gif");
 }
 .x-statusbar .x-status-text-panel {
     border-color		: #99bbe8 #fff #fff #99bbe8;
@@ -274,10 +274,10 @@
     color				: #777;
 }
 #word-status .x-status-busy {
-    background-image	: url("../../images/saving.gif");
+    background-image	: url("../../images/statusbar/saving.gif");
 }
 #word-status .x-status-saved {
-    background-image	: url("../../images/saved.png");
+    background-image	: url("../../images/statusbar/saved.png");
 }
 
 /*
@@ -285,10 +285,10 @@
 */
 .x-statusbar .x-status-error {
     color				: #C33;
-    background-image	: url("../../images/exclamation.gif");
+    background-image	: url("../../images/statusbar/exclamation.gif");
 }
 .x-statusbar .x-status-valid {
-    background-image	: url("../../images/accept.png");
+    background-image	: url("../../images/statusbar/accept.png");
 }
 .x-status-error-list {
     border-color		: #C33;
@@ -297,6 +297,7 @@
 .x-status-error-list li a {
     color				: #15428B;
 }
+
 /*
 	check combo
 */ 
@@ -304,7 +305,7 @@
 	background-position	: 50% -2px; 
 	margin-left			: 1px; 
 	background-color	: transparent; 
-	background-image	: url("../../images/unchecked.png"); 
+	background-image	: url("../../images/checkbox/unchecked.png"); 
 	background-position	: -1px -1px; 
 	background-repeat	: no-repeat; 
 	height				: 14px; 
@@ -312,5 +313,5 @@
 	display				: inline-block; 
 } 
 .x-boundlist-selected .x-combo-checker { 
-	background-image	: url("../../images/checked.png"); 
+	background-image	: url("../../images/checkbox/checked.png"); 
 }
