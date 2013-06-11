@@ -78,18 +78,6 @@ function JxSystemUser ()
 			,	inputType	:"password"
 			}
 		}]
-
-	,	afterFormSave : function (success)
-		{
-			if (success) {
-				this.form.hide ();
-			}
-		}
-
-	,	afterFormCancel : function ()
-		{
-			this.form.hide ();
-		}
 	});
 
 	this.doRefresh	= function (perm)

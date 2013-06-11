@@ -97,10 +97,6 @@ function JxSystemGroup_User ()
 					this.form.hide ();
 				}
 			}
-		,	afterFormCancel : function ()
-			{
-				this.form.hide ();
-			}
 
 			/* Disable combo _user_id before deletion */
 		,	beforeDelete : function ()
@@ -130,7 +126,6 @@ function JxSystemGroup_User ()
 		this.storeNon.load ();
 		this.panel.doRefresh (perm);
 	}
-
 }
 
 function JxSystemGroup_Group ()
@@ -180,18 +175,6 @@ function JxSystemGroup_Group ()
 			[
 				SystemGroupUser
 			]
-
-		,	afterFormSave : function (success)
-			{
-				if (success) {
-					this.form.hide ();
-				}
-			}
-
-		,	afterFormCancel : function ()
-			{
-				this.form.hide ();
-			}
 		});
 
 	this.doRefresh			= function (perm)
