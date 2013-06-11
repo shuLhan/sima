@@ -25,10 +25,7 @@
 			+"	and		B._group_id		= C._group_id"
 			+"	and		C._user_id		= ?"
 			+"	and		B.permission	> 0"
-			+"	and		("
-			+"			A.type			= 1"
-			+"		or	A.type			= 3"
-			+"	)"
+			+"	and		A.type			in (1,3)"
 			+"	group by A.id"
 			+"	order by A.id";
 
@@ -54,7 +51,7 @@
 				submenu = getMenu (db_con, _uid, rs.getInt ("id"));
 
 				if (submenu.size () > 0) {
-					menu.put ("arrowAlign"	, "bottom");
+					menu.put ("arrowAlign"	, "right");
 					menu.put ("menu"		, submenu);
 				}
 

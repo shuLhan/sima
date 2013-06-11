@@ -150,11 +150,11 @@ function JxUserProfile ()
 			},{
 				fieldLabel	:"User ID"
 			,	name		:"name"
-			,	disabled	:true
+			,	readOnly	:true
 			},{
 				fieldLabel	:"Group"
 			,	name		:"group_name"
-			,	disabled	:true
+			,	readOnly	:true
 			},{
 				xtype		:"fieldset"
 			,	autoEl		:
@@ -302,6 +302,7 @@ function JxMain ()
 			,	menu		:
 				[
 					this.buttonProfile
+				,	"-"
 				,	this.buttonLogout
 				]
 			}]
