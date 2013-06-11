@@ -9,7 +9,7 @@ Ext.define ("Jx.ComboGrid", {
 	[
 		"Ext.grid.Panel"
     ]
-,	alias			:"jx.combogrid"
+,	alias			:"widget.jx.combogrid"
 ,	createPicker	:function()
 	{
 		var me 		= this
