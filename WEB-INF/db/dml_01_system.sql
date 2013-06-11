@@ -21,7 +21,7 @@ insert into _user_group (_user_id, _group_id) values (1, 1);
 	Menu
 */
 
-insert into _menu (id, pid, type, label, icon, image, module, description) values (1		,0		,0	,'Home'			,'home'			,''				,'MainHome'			,'');
+insert into _menu (id, pid, type, label, icon, image, module, description) values (1		,0		,0	,''			,'home'			,''				,'MainHome'			,'');
 insert into _menu (id, pid, type, label, icon, image, module, description) values (2		,0		,0	,'Dashboard'	,'dashboard'	,''				,'MainDashboard'	,'');
 insert into _menu (id, pid, type, label, icon, image, module, description) values (1000		,0		,0	,'System'		,'sys'			,''				,'System'			,'');
 insert into _menu (id, pid, type, label, icon, image, module, description) values (1001		,1000	,1	,'User'			,'user'			,''				,'SystemUser'		,'');
