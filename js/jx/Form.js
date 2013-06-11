@@ -129,6 +129,7 @@ Ext.define ("Jx.Form", {
 			,	success	:function (batch, action)
 				{
 					Jx.msg.info (Jx.msg.AJAX_SUCCESS);
+					this.hide ();
 					this.afterSaveSuccess ();
 				}
 			,	failure	:function (batch, action)
@@ -227,6 +228,8 @@ Ext.define ("Jx.Form", {
 				return;
 			}
 		}
+
+		this.hide ();
 
 		if (this.owner.afterFormCancel
 		&& typeof (this.owner.afterFormCancel) === "function") {
