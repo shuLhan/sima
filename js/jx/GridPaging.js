@@ -44,6 +44,7 @@ Ext.define ("Jx.GridPaging", {
 	,	dockPosition		:"right"	// position of form in grid.
 	,	showButtonText		:false		// true, to show icon and text on buttons.
 	,	lastSearchStr		:""
+	,	selectedData		:[]			// array of selected row
 	}
 
 ,	initComponent	:function ()
@@ -110,7 +111,7 @@ Ext.define ("Jx.GridPaging", {
 		this.buttonAdd.setHandler (this.doAdd, this);
 		this.buttonEdit.setHandler (this.doEdit, this);
 		this.buttonDelete.setHandler (this.doDelete, this);
-		this.buttonRefresh.setHandler (this.doRefresh, this);
+		this.buttonRefresh.setHandler (this.doReload, this);
 
 		/* Add buttons bar to the top of grid panel. */
 		var barName		= "ButtonBar";
@@ -246,6 +247,11 @@ Ext.define ("Jx.GridPaging", {
 		this.store.loadData ([], false);
 	}
 
+,	getSelectedData	:function ()
+	{
+		this.selectedData = this.getSelectionModel ().getSelection ();
+	}
+
 /*
 	beforeSearch	:function, overridden by instance, return false to cancel.
 	afterSearch		:function, overridden by instance.
@@ -265,6 +271,7 @@ Ext.define ("Jx.GridPaging", {
 		}
 
 		this.lastSearchStr					= v;
+		this.store.proxy.extraParams.action	= this.store.action = "read";
 		this.store.proxy.extraParams.query	= v;
 		this.store.load ();
 
@@ -288,7 +295,7 @@ Ext.define ("Jx.GridPaging", {
 			return;
 		}
 
-		this.store.action	= "create";
+		this.store.proxy.extraParams.action	= this.store.action = "create";
 
 		if (true == this.autoCreateForm) {
 			this.form.setTitle ("Create new data");
@@ -323,10 +330,19 @@ Ext.define ("Jx.GridPaging", {
 			return false;
 		}
 
-		this.store.action	= "update";
+		this.store.proxy.extraParams.action	= this.store.action = "update";
+
+		// check user selection
+		this.getSelectedData ();
+
+		if (this.selectedData.length <= 0) {
+			return;
+		}
 
 		if (true == this.autoCreateForm) {
 			this.form.setTitle ("Updating data");
+			this.form.getForm ().reset ();
+			this.form.loadRecord (this.selectedData[0]);
 			this.form.show ();
 		}
 		if (this.afterEdit && typeof (this.afterEdit) === "function") {
@@ -350,12 +366,22 @@ Ext.define ("Jx.GridPaging", {
 		if (this.perm < 4) {
 			return;
 		}
+
+		// check user selection
+		this.getSelectedData ();
+
+		if (this.selectedData.length <= 0) {
+			return;
+		}
+
 		Jx.msg.confirm (
 			function ()
 			{
-				this.store.action	= "destroy";
+				this.store.proxy.extraParams.action	= this.store.action = "destroy";
 
 				if (true == this.autoCreateForm) {
+					this.form.getForm ().reset ();
+					this.form.loadRecord (this.selectedData[0]);
 					this.form.doSave ();
 				}
 				if (this.afterDelete && typeof (this.afterDelete) === "function") {
@@ -364,6 +390,11 @@ Ext.define ("Jx.GridPaging", {
 			}
 		,	this
 		);
+	}
+
+,	doReload		:function ()
+	{
+		this.doRefresh (this.perm);
 	}
 
 /*
@@ -380,7 +411,8 @@ Ext.define ("Jx.GridPaging", {
 
 		this.perm			= perm;
 		this.buttonAdd.setDisabled (perm < 2);
-		this.store.action	= "read";
+		this.getSelectionModel ().deselectAll ();
+		this.store.proxy.extraParams.action	= this.store.action = "read";
 		this.store.load ();
 
 		if (this.afterRefresh && typeof (this.afterRefresh) === "function") {

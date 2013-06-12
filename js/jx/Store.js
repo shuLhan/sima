@@ -8,9 +8,13 @@
 Ext.define ("Jx.Store", {
 	extend		:"Ext.data.Store"
 ,	alias		:"jx.store"
+,	autoLoad	:false
+,	autoSync	:false
+,	autoDestroy	:true
 ,	config		:
 	{
-		proxy		:
+		action		:"read"	// store's current action (read, create, update, destroy).
+	,	proxy		:
 		{
 			type		:"ajax"
 		,	filterParam	:undefined

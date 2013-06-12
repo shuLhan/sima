@@ -84,7 +84,6 @@ function JxSystemUser ()
 	{
 		this.panel.doRefresh (perm);
 	}
-
 };
 
 /* moduleName = className */

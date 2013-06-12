@@ -22,21 +22,21 @@
 Ext.define ("Jx.Form", {
 	extend			:"Ext.form.Panel"
 ,	alias			:"jx.form"
+,	autoScroll		:true
+,	bodyPadding		:10
+,	border			:false
+,	layout			:"anchor"
+,	titleAlign		:"center"
+,	defaultType		:"textfield"
+,	defaults		:
+	{
+		anchor			:"100%"
+	,	labelAlign		:"left"
+	}
 ,	config			:
 	{
 		owner			:undefined	// owner of this component
 	,	createButtonBar	:true
-	,	autoScroll		:true
-	,	bodyPadding		:10
-	,	border			:false
-	,	layout			:"anchor"
-	,	titleAlign		:"center"
-	,	defaultType		:"textfield"
-	,	defaults		:
-		{
-			anchor			:"100%"
-		,	labelAlign		:"left"
-		}
 	,	ui				:"default"
 	,	syncUseStore	:true
 	}
