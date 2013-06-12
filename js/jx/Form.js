@@ -2,16 +2,15 @@
 	Copyright 2013 - x10c-lab.com
 	Authors:
 		- mhd.sulhan (sulhan@x10c-lab.com)
+		- agus sugianto (agus@x10c-lab.com)
 
 	Custom form panel with capabilities to use store to sync data.
 
 	Additional configuration:
 	- owner			:parent component.
 
-	- createButtonBar
-		+ true		:create buttom bar with addition button, save and cancel (default).
-		+ false		:no buttom bar created.
-
+	- ui			:ui style for form, values are "default" and "light"
+	
 	- syncUseStore
 		+ true		:sync data using store from owner.
 		+ false		:sync data using form submit.
@@ -22,69 +21,41 @@ Ext.define ("Jx.Form", {
 ,	config			:
 	{
 		owner			:undefined	// owner of this component
-	,	createButtonBar	:true
+	,	autoScroll		:true
+	,	bodyPadding		:10
+	,	border			:false
+	,	layout			:"anchor"
+	,	titleAlign		:"center"
+	,	defaultType		:"textfield"
+	,	defaults		:
+		{
+			anchor			:"100%"
+		,	labelAlign		:"left"
+		}
+	,	ui				:"default"
 	,	syncUseStore	:true
 	}
 
 ,	initComponent	:function ()
 	{
+		this.buttons = [{
+			text		:"Save"
+		,	itemId		:"save"
+		,	iconCls		:"form-save"
+		,	formBind	:true
+		,	tooltip		:"Save record"
+		,	scope		:this
+		,	handler		:this.doSave
+		},{
+			text		:"Cancel"
+		,	itemId		:"cancel"
+		,	iconCls		:"form-cancel"
+		,	tooltip		:"Cancel record operation"
+		,	scope		:this
+		,	handler		:this.doCancel
+		}]
+		
 		this.callParent (arguments);
-
-		this.createButtonBar ();
-	}
-
-	/*
-		Add button bar to form.
-	*/
-,	createButtonBar	:function ()
-	{
-		if (false == this.createButtonBar) {
-			return;
-		}
-
-		this.buttonSave		= Ext.create ("Ext.button.Button", {
-				text		:"Save"
-			,	itemId		:"save"
-			,	iconCls		:"save"
-			,	formBind	:true
-			,	tooltip		:"Save record"
-			});
-
-		this.buttonCancel	= Ext.create ("Ext.button.Button", {
-				text		:"Cancel"
-			,	itemId		:"cancel"
-			,	iconCls		:"cancel"
-			,	tooltip		:"Cancel record operation"
-			});
-
-		this.buttonSave.setHandler (this.doSave, this);
-		this.buttonCancel.setHandler (this.doCancel, this);
-
-		var	barName			= "ButtonBar";
-		var id				= (this.id
-								? this.id + barName
-								: (this.itemId
-									? this.itemId + barName
-									: "JxForm"+ barName
-								)
-							);
-
-		this.buttonBar	= Ext.create ("Ext.toolbar.Toolbar", {
-				id			:id
-			,	dock		:"bottom"
-			,	border		:true
-			,	shadow		:true
-			,	items		:
-				[
-					this.buttonCancel
-				,	"-"
-				,	"->"
-				,	"-"
-				,	this.buttonSave
-				]
-			});
-
-		this.addDocked (this.buttonBar);
 	}
 
 ,	doSave		:function ()
@@ -170,6 +141,7 @@ Ext.define ("Jx.Form", {
 			,	success	:function (form, action)
 				{
 					Jx.msg.info (action.result.data);
+					this.hide ();
 					this.afterSaveSuccess ();
 				}
 			,	failure	:function (form, action)

@@ -34,11 +34,7 @@ Ext.override (Ext.grid.locking.View, {
 	- Add function renderData to store, to render column using store.
 */
 Ext.override (Ext.data.Store, {
-		autoLoad	:false
-	,	autoSync	:false
-	,	autoDestroy	:true
-	,	action		:"read"		// store current action (read, create, update, destroy).
-	,	renderData	:function (valueField, displayField)
+	renderData	:function (valueField, displayField)
 		{
 			var store = this;
 			return function (v) {
@@ -51,27 +47,6 @@ Ext.override (Ext.data.Store, {
 			}
 		}
 	});
-
-/*
-	Ext.form.Panel
-	- Set default label align to "right".
-	- Set default layout to "anchor".
-	- Set default item type to "textfield".
-	- Set default form item anchor to "100%".
-*/
-Ext.override (Ext.form.Panel, {
-		autoScroll	:true
-	,	bodyPadding	:10
-	,	border		:false
-	,	layout		:"anchor"
-	,	titleAlign	:"center"
-	,	defaultType	:"textfield"
-	,	defaults	:
-		{
-			anchor		:"100%"
-		,	labelAlign	:"left"
-		}
-});
 
 /*
 	Register our application.

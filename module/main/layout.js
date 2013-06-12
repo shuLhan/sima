@@ -445,16 +445,13 @@ function JxMain ()
 			tbar	= tab.dockedItems.getAt (0);
 
 			// Remove toggle from menu button
-			for (var m = 0; tbar != undefined && m < tbar.items.items.length; m++) {
-				var mb = tbar.items.items[m];
+			for (var i = 0; i < me.menu.items.length; i++) {
+				tab = me.menu.items.getAt (i);
+				tbar = tab.getDockedItems ('toolbar[dock="top"]');
 
-				if (undefined == mb.menu) {
-					mb.toggle (false, true);
-				} else {
-					var submenu = mb.menu.items.items;
-
-					for (var sm = 0; sm < submenu.length; sm++) {
-						submenu [sm].toggle (false, true);
+				for (var j = 0; j < tbar.length; j++) {
+					for (var k = 0; k < tbar[j].items.items.length; k++) {
+						tbar[j].items.items[k].toggle (false, true);
 					}
 				}
 			}
@@ -694,7 +691,7 @@ Ext.onReady (function ()
 		}, 100);
 	});
 
-	task.delay(2000);
+	task.delay(200);
 
 	var main = new JxMain ();
 
