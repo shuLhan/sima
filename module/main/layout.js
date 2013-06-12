@@ -5,6 +5,8 @@
 		- agus sugianto (agus@x10c-lab.com)
 */
 
+var main;
+
 function JxUserChangePassword ()
 {
 	this.id		= "ChangePassword";
@@ -426,7 +428,6 @@ function JxMain ()
 
 	this.onMenuClick = function (b, force)
 	{
-		var me		= this;
 		var tab, tbar;
 
 		if (b.id == this.contentHomeId) {
@@ -441,7 +442,7 @@ function JxMain ()
 
 		switch (_g_menu_mode) {
 		case 0:
-			tab		= me.menu.getActiveTab ();
+			tab		= main.menu.getActiveTab ();
 			tbar	= tab.dockedItems.getAt (0);
 
 			// Remove toggle from menu button
@@ -462,7 +463,7 @@ function JxMain ()
 			break;
 
 		case 1:
-			tbar	= me.menuBar;
+			tbar	= main.menuBar;
 			break;
 		}
 
@@ -472,10 +473,10 @@ function JxMain ()
 			// do nothing
 			break;
 		case 1:
-			var c = me.content.getComponent (b.module);
+			var c = main.content.getComponent (b.module);
 
 			if (c != undefined) {
-				me.content.setActiveTab (c);
+				main.content.setActiveTab (c);
 				return;
 			}
 			break;
@@ -483,8 +484,7 @@ function JxMain ()
 
 		// If not exist, add module to content area
 		Ext.Ajax.request ({
-			scope	:me
-		,	url		:_g_module_dir +"/"+ b.module +"/layout.js"
+			url		:_g_module_dir +"/"+ b.module +"/layout.js"
 		,	failure	:function (response, opts)
 			{
 				Jx.msg.error ("Fail to load module!");
@@ -500,13 +500,13 @@ function JxMain ()
 
 					switch (_g_content_type) {
 					case 0:
-						me.content.removeAll (true);
-						me.content.add (module.panel);
+						main.content.removeAll (true);
+						main.content.add (module.panel);
 						break;
 					case 1:
-						me.content.add (module.panel);
-						me.content.setActiveTab (module.panel);
-						me.content.doLayout ();
+						main.content.add (module.panel);
+						main.content.setActiveTab (module.panel);
+						main.content.doLayout ();
 						break;
 					}
 
@@ -656,6 +656,7 @@ function JxMain ()
 				,	plain		:true
 				,	layout		:"fit"
 				,	bodyCls		:"panel-background"
+				,	hidden		:true
 				});
 			break;
 		case 1:
@@ -665,6 +666,7 @@ function JxMain ()
 				,	padding		:"0 5 0 5"
 				,	plain		:true
 				,	bodyCls		:"panel-background"
+				,	hidden		:true
 				,	items		:[]
 				});
 			break;
@@ -693,7 +695,7 @@ Ext.onReady (function ()
 
 	task.delay(200);
 
-	var main = new JxMain ();
+	main = new JxMain ();
 
 	main.init ();
 });
