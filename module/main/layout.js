@@ -446,8 +446,8 @@ function JxMain ()
 			tbar	= tab.dockedItems.getAt (0);
 
 			// Remove toggle from menu button
-			for (var i = 0; i < me.menu.items.length; i++) {
-				tab = me.menu.items.getAt (i);
+			for (var i = 0; i < main.menu.items.length; i++) {
+				tab = main.menu.items.getAt (i);
 				tbar = tab.getDockedItems ('toolbar[dock="top"]');
 
 				for (var j = 0; j < tbar.length; j++) {
