@@ -43,24 +43,25 @@ function JxLogin ()
 
 	this.buttonLogin.setHandler (this.doLogin, this);
 
-	this.panel			= Ext.create ("Ext.form.Panel", {
-			id			:this.id +"Form"
-		,	url			:_g_module_path +"login.jsp"
-		,	title		:".:: " + _g_title + " ::."
-		,	defaults	:
+	this.panel				= Ext.create ("Jx.Form", {
+			id				:this.id +"Form"
+		,	url				:_g_module_path +"login.jsp"
+		,	title			:".:: " + _g_title + " ::."
+		,	createButtonBar	:false
+		,	syncUseStore	:false
+		,	defaults		:
 			{
-				labelStyle	:"font-weight:bold"
-			,	vtype		:"alphanum"
-			,	allowBlank	:false
-			,	anchor		:"100%"
+				labelStyle		:"font-weight:bold"
+			,	vtype			:"alphanum"
+			,	allowBlank		:false
 			}
-		,	items		:
+		,	items			:
 			[
 				this.logo
 			,	this.username
 			,	this.password
 			]
-		,	buttons		:
+		,	buttons			:
 			[
 				"->"
 			,	this.buttonLogin

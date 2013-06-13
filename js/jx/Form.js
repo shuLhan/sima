@@ -28,26 +28,26 @@ Ext.define ("Jx.Form", {
 ,	layout			:"anchor"
 ,	titleAlign		:"center"
 ,	defaultType		:"textfield"
-,	defaults		:
-	{
-		anchor			:"100%"
-	,	labelAlign		:"left"
-	}
 ,	config			:
 	{
 		owner			:undefined	// owner of this component
 	,	createButtonBar	:true
 	,	ui				:"default"
 	,	syncUseStore	:true
+	,	defaults		:
+		{
+			anchor			:"100%"
+		,	labelAlign		:"right"
+		}
 	}
 
 ,	initComponent	:function ()
 	{
 		this.callParent (arguments);
-		this.createButtonBar ();
+		this.doCreateButtonBar ();
 	}
 
-,	createButtonBar :function ()
+,	doCreateButtonBar :function ()
 	{
 		if (false == this.createButtonBar) {
 			return;
@@ -56,7 +56,7 @@ Ext.define ("Jx.Form", {
 		this.buttonSave			= Ext.create ("Ext.button.Button", {
 					text		:"Save"
 			,       itemId		:"save"
-			,       iconCls		:"save"
+			,       iconCls		:"form-save"
 			,       formBind	:true
 			,       tooltip		:"Save record"
 			});
@@ -64,7 +64,7 @@ Ext.define ("Jx.Form", {
 		this.buttonCancel		= Ext.create ("Ext.button.Button", {
 						text	:"Cancel"
 				,       itemId	:"cancel"
-				,       iconCls	:"cancel"
+				,       iconCls	:"form-cancel"
 				,       tooltip	:"Cancel record operation"
 				});
 
