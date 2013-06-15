@@ -489,7 +489,7 @@ function JxMain ()
 
 		// If not exist, add module to content area
 		Ext.Ajax.request ({
-			url		:_g_module_dir +"/"+ b.module +"/layout.js"
+			url		:_g_module_dir + b.module.replace (/_/g, "/") +"/layout.js"
 		,	failure	:function (response, opts)
 			{
 				Jx.msg.error ("Fail to load module!");
