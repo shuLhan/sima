@@ -105,4 +105,20 @@ Jx = {
 			);
 		}
 	}
+,	mask		:undefined
+,	showMask	:function ()
+	{
+		if (undefined === this.mask) {
+			this.mask = Ext.create ("Ext.LoadMask", {
+				target		:Ext.getBody ()
+			});
+		}
+		this.mask.show ();
+	}
+,	hideMask	:function ()
+	{
+		if (undefined !== this.mask) {
+			this.mask.hide ();
+		}
+	}
 };

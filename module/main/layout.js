@@ -406,6 +406,7 @@ function JxMain ()
 
 	this.doLogout = function ()
 	{
+		this.showLoading ();
 		location.href = _g_module_path +"logout.jsp";
 	}
 
@@ -430,9 +431,12 @@ function JxMain ()
 	{
 		var tab, tbar;
 
+		Jx.showMask ();
+
 		if (b.id == this.contentHomeId) {
 			this.content.hide ();
 			this.contentHome.show ();
+			Jx.hideMask ();
 			return;
 		}
 
@@ -477,6 +481,7 @@ function JxMain ()
 
 			if (c != undefined) {
 				main.content.setActiveTab (c);
+				Jx.hideMask ();
 				return;
 			}
 			break;
@@ -511,11 +516,13 @@ function JxMain ()
 					}
 
 					module.doRefresh (b.permission);
+					Jx.hideMask ();
 				} catch (e) {
 					if (undefined != console) {
 						console.log (e);
 					}
 					Jx.msg.error (e.message);
+					Jx.hideMask ();
 				}
 			}
 		});
@@ -602,6 +609,28 @@ function JxMain ()
 		}
 	}
 
+	this.showLoading = function ()
+	{
+		Ext.get ('loading').show ();
+		Ext.get ('loading-mask').fadeIn ({
+			remove		:false
+		,	useDisplay	:true
+		});
+	}
+
+	this.hideLoading = function ()
+	{
+		setTimeout (function ()
+		{
+			Ext.get ('loading').hide ();
+			Ext.get ('loading-mask').fadeOut({
+				remove		:false
+			,	useDisplay	:true
+			});
+		}
+		, 100);
+	}
+
 	this.init = function ()
 	{
 		switch (_g_menu_mode) {
@@ -681,20 +710,12 @@ function JxMain ()
 
 		this.loadMenu ();
 		this.loadHomeMenu ();
+		this.hideLoading ();
 	}
 }
 
 Ext.onReady (function ()
 {
-	task = new Ext.util.DelayedTask(function () {
-		setTimeout(function(){
-			Ext.get ('loading').remove();
-			Ext.get ('loading-mask').fadeOut({remove:true});
-		}, 100);
-	});
-
-	task.delay(200);
-
 	main = new JxMain ();
 
 	main.init ();
