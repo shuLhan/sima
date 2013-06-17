@@ -214,7 +214,33 @@ Ext.define ("Jx.GridPaging", {
 		/* Add each column's editor to form */
 		for (var i = 0, c = null; i < this.columns.length; i++) {
 			c = this.columns[i];
-			if (undefined != c.editor) {
+
+			if (undefined != c.columns) {
+				var fs	= Ext.create ("Ext.form.FieldSet", {
+						title			:c.header
+					,	layout			:"anchor"
+					,	defaultType		:"textfield"
+					,	flex			:1
+					,	fieldDefaults	:
+						{
+							anchor			:"100%"
+						,	msgTarget		:"side"
+						}
+					});
+
+				for (var k = 0, cc = null; k < c.columns.length; k++) {
+					cc = c.columns[k];
+
+					if (undefined != cc.editor) {
+						cc.editor.fieldLabel	= cc.header;
+						cc.editor.name			= cc.dataIndex;
+
+						fs.add (cc.editor);
+					}
+				}
+
+				this.form.add (fs);
+			} else if (undefined != c.editor) {
 				c.editor.fieldLabel	= c.header;
 				c.editor.name		= c.dataIndex;
 
