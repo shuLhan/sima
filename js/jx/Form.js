@@ -6,50 +6,50 @@
 
 	Custom form panel with capabilities to use store to sync data.
 
-	Additional configuration:
-	- owner			:parent component.
-
 	- createButtonBar
 		+ true		:create buttom bar with addition button, save and cancel (default).
 		+ false		:no buttom bar created.
 
-	- ui			:ui style for form, values are "default" and "light"
-	
 	- syncUseStore
-		+ true		:sync data using store from owner.
+		+ true		:sync data using store.
 		+ false		:sync data using form submit.
 */
 Ext.define ("Jx.Form", {
 	extend			:"Ext.form.Panel"
 ,	alias			:"jx.form"
-,	autoScroll		:true
-,	bodyPadding		:10
-,	border			:false
-,	layout			:"anchor"
-,	titleAlign		:"center"
-,	defaultType		:"textfield"
 ,	config			:
 	{
-		owner			:undefined	// owner of this component
-	,	createButtonBar	:true
+		autoScroll		:true
+	,	bodyPadding		:10
+	,	border			:false
+	,	defaultType		:"textfield"
+	,	titleAlign		:"center"
 	,	ui				:"default"
-	,	syncUseStore	:true
 	,	defaults		:
 		{
 			anchor			:"100%"
 		,	labelAlign		:"right"
 		}
+		/* custom configurations */
+	,	createButtonBar	:true
+	,	syncUseStore	:true
 	}
 
-,	initComponent	:function ()
+,	constructor	:function (cfg)
 	{
 		this.callParent (arguments);
-		this.doCreateButtonBar ();
+
+		var opts = Ext.merge ({}, this.config);
+			opts = Ext.merge (opts, cfg);
+
+		this.initConfig (opts);
+
+		this.doCreateButtonBar (opts);
 	}
 
-,	doCreateButtonBar :function ()
+,	doCreateButtonBar :function (cfg)
 	{
-		if (false == this.createButtonBar) {
+		if (false == cfg.createButtonBar) {
 			return;
 		}
 
@@ -73,11 +73,11 @@ Ext.define ("Jx.Form", {
 
 		var barName		= "ButtonBar";
 		var id			= (
-							this.id
-							? this.id + barName
+							cfg.id
+							? cfg.id + barName
 							: (
-								this.itemId
-								? this.itemId + barName
+								cfg.itemId
+								? cfg.itemId + barName
 								: "JxForm"+ barName
 							)
 						);
@@ -103,9 +103,9 @@ Ext.define ("Jx.Form", {
 
 ,	doSave		:function ()
 	{
-		if (this.owner.beforeFormSave
-		&& typeof (this.owner.beforeFormSave) === "function") {
-			if (this.owner.beforeFormSave () == false) {
+		if (this.beforeFormSave
+		&& typeof (this.beforeFormSave) === "function") {
+			if (this.beforeFormSave () == false) {
 				return;
 			}
 		}
@@ -203,9 +203,9 @@ Ext.define ("Jx.Form", {
 				scope		:this
 			,	callback	:function (r, op, success)
 				{
-					if (this.owner.afterFormSave
-					&& typeof (this.owner.afterFormSave) === "function") {
-						if (this.owner.afterFormSave (success) == false) {
+					if (this.afterFormSave
+					&& typeof (this.afterFormSave) === "function") {
+						if (this.afterFormSave (success) == false) {
 							return;
 						}
 					}
@@ -227,9 +227,9 @@ Ext.define ("Jx.Form", {
 			break;
 		}
 
-		if (this.owner.afterFormSave
-		&& typeof (this.owner.afterFormSave) === "function") {
-			if (this.owner.afterFormSave (false) == false) {
+		if (this.afterFormSave
+		&& typeof (this.afterFormSave) === "function") {
+			if (this.afterFormSave (false) == false) {
 				return;
 			}
 		}
@@ -237,18 +237,18 @@ Ext.define ("Jx.Form", {
 
 ,	doCancel	:function ()
 	{
-		if (this.owner.beforeFormCancel
-		&& typeof (this.owner.beforeFormCancel) === "function") {
-			if (this.owner.beforeFormCancel () == false) {
+		if (this.beforeFormCancel
+		&& typeof (this.beforeFormCancel) === "function") {
+			if (this.beforeFormCancel () == false) {
 				return;
 			}
 		}
 
 		this.hide ();
 
-		if (this.owner.afterFormCancel
-		&& typeof (this.owner.afterFormCancel) === "function") {
-			this.owner.afterFormCancel ();
+		if (this.afterFormCancel
+		&& typeof (this.afterFormCancel) === "function") {
+			this.afterFormCancel ();
 		}
 	}
 });

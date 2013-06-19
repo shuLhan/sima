@@ -13,9 +13,6 @@ Ext.define ("Jx.ComboPaging", {
 ,	shrinkWrap		:3
 ,	typeAhead		:true
 ,	typeAheadDelay	:500
-,	config			:
-	{
-	}
 
 ,	initComponent	:function ()
 	{

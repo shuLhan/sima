@@ -39,9 +39,12 @@ function JxLogin ()
 		,	itemId			:"login"
 		,	iconCls			:"login"
 		,	formBind		:true
+		,	scope			:this
+		,	handler			:function (b)
+			{
+				this.doLogin ();
+			}
 		});
-
-	this.buttonLogin.setHandler (this.doLogin, this);
 
 	this.panel				= Ext.create ("Jx.Form", {
 			id				:this.id +"Form"

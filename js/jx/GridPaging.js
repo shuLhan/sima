@@ -7,7 +7,7 @@
 */
 Ext.define ("Jx.GridPaging", {
 	extend			:"Ext.grid.Panel"
-,	alias			:"jx.gridpaging"
+,	alias			:"widget.jx.gridpaging"
 ,	layout			:"fit"
 ,	titleAlign		:"center"
 ,	enableLocking	:true
@@ -28,20 +28,9 @@ Ext.define ("Jx.GridPaging", {
 	,	searchField			:undefined
 	,	buttonBar			:undefined
 	,	pagingBar			:undefined
-	,	autoCreateForm		:true		// automatically create form for add/edit data in grid.
-	,	syncUseStore		:true		// default insert, update, delete using store (page body)
-	,	form				:
-		{
-			buttonSave			:undefined
-		,	buttonCancel		:undefined
-		,	buttonBar			:undefined
-		}
 		// list of buttons that will be showed at the top of the bar.
 	,	buttonBarList		:["add", "edit", "delete", "refresh"]
-	,	autoCreateRowEditor	:false		// automatically create row editor if true
-	,	rowEditor			:undefined
 	,	compDetails			:[]			// list of data details, for master-detail grid.
-	,	dockPosition		:"right"	// position of form in grid.
 	,	showButtonText		:false		// true, to show icon and text on buttons.
 	,	lastSearchStr		:""
 	,	selectedData		:[]			// array of selected row
@@ -51,16 +40,11 @@ Ext.define ("Jx.GridPaging", {
 	{
 		this.callParent (arguments);
 
-		/* Add row number to grid */
-		this.columns.splice (0, 0, { xtype : "rownumberer" });
-
 		this.createButtonBar ();
 		this.createPagingBar ();
-		this.createForm ();
-		this.createRowEditor ();
 
 		/* Listen to user selection on grid row */
-		this.on ("selectionchange", this.onSelectionChange, this);
+		this.on ("selectionchange", this._onSelectionChange, this);
 	}
 
 ,	createButtonBar	:function ()
@@ -108,9 +92,9 @@ Ext.define ("Jx.GridPaging", {
 			,	tooltip		:"Type any string and enter to filter data"
 			});
 
-		this.buttonAdd.setHandler (this.doAdd, this);
-		this.buttonEdit.setHandler (this.doEdit, this);
-		this.buttonDelete.setHandler (this.doDelete, this);
+		this.buttonAdd.setHandler (this._doAdd, this);
+		this.buttonEdit.setHandler (this._doEdit, this);
+		this.buttonDelete.setHandler (this._doDelete, this);
 		this.buttonRefresh.setHandler (this.doReload, this);
 
 		/* Add buttons bar to the top of grid panel. */
@@ -186,88 +170,6 @@ Ext.define ("Jx.GridPaging", {
 		this.addDocked (this.pagingBar);
 	}
 
-,	createForm	:function ()
-	{
-		/* Create form only if user enable it */
-		if (false == this.autoCreateForm) {
-			return;
-		}
-
-		var barName			= "Form";
-		var id				= (this.id
-								? this.id + barName
-								: (this.itemId
-									? this.itemId + barName
-									: "JxGridPaging" + barName
-								)
-							);
-
-		this.form			= Ext.create ("Jx.Form", {
-				id			:id
-			,	dock		:this.dockPosition
-			,	hidden		:true
-			,	owner		:this
-			,	store		:this.store
-			,	syncUseStore:this.syncUseStore
-			});
-
-		/* Add each column's editor to form */
-		for (var i = 0, c = null; i < this.columns.length; i++) {
-			c = this.columns[i];
-
-			if (undefined != c.columns) {
-				var fs	= Ext.create ("Ext.form.FieldSet", {
-						title			:c.header
-					,	layout			:"anchor"
-					,	defaultType		:"textfield"
-					,	flex			:1
-					,	fieldDefaults	:
-						{
-							anchor			:"100%"
-						,	msgTarget		:"side"
-						}
-					});
-
-				for (var k = 0, cc = null; k < c.columns.length; k++) {
-					cc = c.columns[k];
-
-					if (undefined != cc.editor) {
-						cc.editor.fieldLabel	= cc.header;
-						cc.editor.name			= cc.dataIndex;
-
-						fs.add (cc.editor);
-					}
-				}
-
-				this.form.add (fs);
-			} else if (undefined != c.editor) {
-				c.editor.fieldLabel	= c.header;
-				c.editor.name		= c.dataIndex;
-
-				this.form.add (c.editor);
-			}
-		}
-
-		this.addDocked (this.form);
-	}
-
-,	createRowEditor	:function ()
-	{
-		if (true == this.autoCreateRowEditor)
-		{
-			this.rowEditor		= Ext.create ("Ext.grid.plugin.RowEditing", {
-					pluginId	:this.id +"RowEditor"
-				});
-
-			/* Add listener for grid row editor */
-			this.rowEditor.on ("beforeedit"	, this.doEdit		, this);
-			this.rowEditor.on ("edit"		, this.doRowSave	, this);
-			this.rowEditor.on ("canceledit"	, this.doRowCancel	, this);
-
-			this.rowEditor.init (this);
-		}
-	}
-
 ,	clearData	:function ()
 	{
 		this.store.loadData ([], false);
@@ -310,42 +212,35 @@ Ext.define ("Jx.GridPaging", {
 	beforeAdd	:function, overridden by instance, return false to cancel.
 	afterAdd	:function, overridden by instance.
 */
-,	doAdd		:function ()
+,	_doAdd		:function ()
 	{
 		if (this.beforeAdd && typeof (this.beforeAdd) === "function") {
 			if (this.beforeAdd () == false) {
-				return;
+				return false;
 			}
 		}
 		if (this.perm < 2) {
-			return;
+			return false;
 		}
 
 		this.store.proxy.extraParams.action	= this.store.action = "create";
 
-		if (true == this.autoCreateForm) {
-			this.form.setTitle ("Create new data");
-			this.form.getForm ().reset ();
-			this.form.show ();
-		} else if (true == this.autoCreateRowEditor) {
-			this.rowEditor.cancelEdit ();
-
-			var r = this.store.create ();
-
-			this.store.insert (0, r);
-			this.rowEditor.startEdit (0, 0);
+		if (this.doAdd && (typeof (this.doAdd) === "function")) {
+			this.doAdd ();
 		}
 
 		if (this.afterAdd && typeof (this.afterAdd) === "function") {
 			this.afterAdd ();
 		}
+
+		return true;
 	}
 
 /*
 	beforeEdit	:function, overridden by instance, return false to cancel.
 	afterEdit	:function, overridden by instance.
 */
-,	doEdit		:function ()
+,	_doEdit		:function ()
 	{
 		if (this.beforeEdit && typeof (this.beforeEdit) === "function") {
 			if (this.beforeEdit () == false) {
@@ -362,14 +257,10 @@ Ext.define ("Jx.GridPaging", {
 		this.getSelectedData ();
 
 		if (this.selectedData.length <= 0) {
-			return;
+			return false;
 		}
-
-		if (true == this.autoCreateForm) {
-			this.form.setTitle ("Updating data");
-			this.form.getForm ().reset ();
-			this.form.loadRecord (this.selectedData[0]);
-			this.form.show ();
+		if (this.doEdit && (typeof (this.doEdit) === "function")) {
+			this.doEdit ();
 		}
 		if (this.afterEdit && typeof (this.afterEdit) === "function") {
 			this.afterEdit ();
@@ -382,22 +273,22 @@ Ext.define ("Jx.GridPaging", {
 	beforeDelete	:function (), overridden by instance, return false to cancel.
 	afterDelete		:function (), overridden by instance.
 */
-,	doDelete	:function ()
+,	_doDelete	:function ()
 	{
 		if (this.beforeDelete && typeof (this.beforeDelete) === "function") {
 			if (this.beforeDelete () == false) {
-				return;
+				return false;
 			}
 		}
 		if (this.perm < 4) {
-			return;
+			return false;
 		}
 
 		// check user selection
 		this.getSelectedData ();
 
 		if (this.selectedData.length <= 0) {
-			return;
+			return false;
 		}
 
 		Jx.msg.confirm (
@@ -405,11 +296,10 @@ Ext.define ("Jx.GridPaging", {
 			{
 				this.store.proxy.extraParams.action	= this.store.action = "destroy";
 
-				if (true == this.autoCreateForm) {
-					this.form.getForm ().reset ();
-					this.form.loadRecord (this.selectedData[0]);
-					this.form.doSave ();
+				if (this.doDelete && (typeof (this.doDelete) === "function")) {
+					this.doDelete ();
 				}
+
 				if (this.afterDelete && typeof (this.afterDelete) === "function") {
 					this.afterDelete ();
 				}
@@ -450,7 +340,7 @@ Ext.define ("Jx.GridPaging", {
 	beforeSelectionChange	:function, overridden by instance, return false to cancel.
 	afterSelectionChange	:function, overridden by instance.
 */
-,	onSelectionChange		:function (model, data, e)
+,	_onSelectionChange		:function (model, data, e)
 	{
 		var s	= (data.length <= 0);
 		var id	= 0;
@@ -466,11 +356,6 @@ Ext.define ("Jx.GridPaging", {
 		if (this.perm >= 3) {
 			this.buttonEdit.setDisabled (s);
 		}
-		if (!s) {
-			if (true == this.autoCreateForm) {
-				this.form.loadRecord (data[0]);
-			}
-		}
 
 		/* Refresh grid details */
 		if (data.length > 0) {
@@ -479,6 +364,11 @@ Ext.define ("Jx.GridPaging", {
 			for (var i = 0, c = null; i < this.compDetails.length; i++) {
 				this.compDetails[i].doRefresh (this.perm, id);
 			}
+
+			if (this.onSelectionChange && typeof (this.onSelectionChange) === "function") {
+				this.onSelectionChange (model, data, e);
+			}
+
 			if (this.afterSelectionChange && typeof (this.afterSelectionChange) === "function") {
 				this.afterSelectionChange (model, data, e);
 			}
@@ -494,65 +384,4 @@ Ext.define ("Jx.GridPaging", {
 	beforeFormCancel	:function, overridden by instance, return false to cancel.
 	afterFormCancel		:function, overridden by instance.
 */
-
-/*
-	beforeRowSave	:function, overridden by instance, return false to cancel.
-	afterRowSave	:function, overridden by instance.
-*/
-,	doRowSave	:function ()
-	{
-		if (this.beforeRowSave && typeof (this.beforeRowSave) === "function") {
-			if (this.beforeRowSave () == false) {
-				return false;
-			}
-		}
-
-		this.store.proxy.extraParams.action = this.store.action;
-
-		this.store.sync ({
-				params		:this.store.proxy.extraParams
-			,	scope		:this
-			,	success		:function (batch, op)
-				{
-					Jx.msg.info ("Data has been saved.");
-
-					this.store.proxy.extraParams.action = this.store.action = "read";
-
-					// reload store to retrieve ID of data (for table that depend on ID)
-					this.store.reload ();
-
-					if (this.afterRowSave && typeof (this.afterRowSave) === "function") {
-						this.afterRowSave ();
-					}
-				}
-			,	failure		:function (batch, op)
-				{
-					Jx.msg.error ("Ajax communication failed!");
-				}
-			});
-	}
-
-/*
-	beforeRowCancel	:function, overridden by instance, return false to cancel.
-	afterRowCancel	:function, overridden by instance.
-*/
-,	doRowCancel	:function ()
-	{
-		if (this.beforeRowCancel && typeof (this.beforeRowCancel) === "function") {
-			if (this.beforeRowCancel () == false) {
-				return false;
-			}
-		}
-
-		if ("create" == this.store.action) {
-			this.store.removeAt (0);
-			if (this.store.count () > 0) {
-				this.getSelectionModel ().select (0);
-			}
-		}
-
-		if (this.afterRowCancel && typeof (this.afterRowCancel) === "function") {
-			this.afterRowCancel ();
-		}
-	}
 });

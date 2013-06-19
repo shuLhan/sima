@@ -26,7 +26,6 @@ function JxUserChangePassword ()
 
 	this.panel				= Ext.create ("Jx.Form", {
 			id				:this.id +"Form"
-		,	owner			:this
 		,	store			:this.store
 		,	fieldDefaults	:
 			{
@@ -50,6 +49,32 @@ function JxUserChangePassword ()
 			,	name			:"password_confirm"
 			,	itemId			:"password_confirm"
 			}]
+
+		,	beforeFormSave	: function ()
+			{
+				/* Check if new-password and password-confirmation is equal. */
+				var pass_1 = this.getComponent ("password_new").getValue ();
+				var pass_2 = this.getComponent ("password_confirm").getValue ();
+
+				if (pass_1 != pass_2) {
+					Jx.msg.error ("New password doesn't match!");
+					return false;
+				}
+
+				this.store.action = "update";
+
+				return true;
+			}
+
+		,	afterSaveSuccess	: function ()
+			{
+				this.ownerCt.close ();
+			}
+
+		,	afterFormCancel	: function ()
+			{
+				this.ownerCt.close ();
+			}
 		});
 
 	this.win	= Ext.create ("Ext.window.Window", {
@@ -73,34 +98,6 @@ function JxUserChangePassword ()
 
 		this.panel.loadRecord (this.store.getAt (0));
 		this.win.show ();
-	}
-
-	this.beforeFormSave	= function ()
-	{
-		/* Check if new-password and password-confirmation is equal. */
-		var pass_1 = this.panel.getComponent ("password_new").getValue ();
-		var pass_2 = this.panel.getComponent ("password_confirm").getValue ();
-
-		if (pass_1 != pass_2) {
-			Jx.msg.error ("New password doesn't match!");
-			return false;
-		}
-
-		this.store.action = "update";
-
-		return true;
-	}
-
-	this.afterFormSave = function (success)
-	{
-		if (success) {
-			this.win.close ();
-		}
-	}
-
-	this.afterFormCancel = function ()
-	{
-		this.win.close ();
 	}
 }
 
@@ -139,7 +136,6 @@ function JxUserProfile ()
 
 	this.panel			= Ext.create ("Jx.Form", {
 			id			:this.id +"Form"
-		,	owner		:this
 		,	store		:this.store
 		,	items		:
 			[{
@@ -175,6 +171,23 @@ function JxUserProfile ()
 					this.buttonChangePassword
 				]
 			}]
+
+		,	beforeFormSave	: function ()
+			{
+				this.store.action = "update";
+			}
+
+		,	afterFormSave	: function (success)
+			{
+				if (success) {
+					this.ownerCt.close ();
+				}
+			}
+
+		,	afterFormCancel : function ()
+			{
+				this.ownerCt.close ();
+			}
 		});
 
 	this.win			= Ext.create ("Ext.window.Window", {
@@ -210,23 +223,6 @@ function JxUserProfile ()
 			}
 		});
 		return true;
-	}
-
-	this.beforeFormSave	= function ()
-	{
-		this.store.action = "update";
-	}
-
-	this.afterFormSave = function (success)
-	{
-		if (success) {
-			this.win.close ();
-		}
-	}
-
-	this.afterFormCancel = function ()
-	{
-		this.win.close ();
 	}
 }
 

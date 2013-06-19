@@ -22,10 +22,13 @@ function JxSystemUser ()
 		]
 	});
 
-	this.panel	= Ext.create ("Jx.GridPaging", {
+	this.panel	= Ext.create ("Jx.GridPaging.FormEditor", {
 		id			:this.id
-	,	title		:"System User"
-	,	closable	:true
+	,	panelConfig	:
+		{
+			title		:"System User"
+		,	closable	:true
+		}
 	,	store		:this.store
 	,	columns		:
 		[{

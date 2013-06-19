@@ -26,6 +26,7 @@
 
 	<script type="text/javascript" src="<%= Jaring._path %>/js/extjs/ext-all-debug.js"></script>
 	<script type="text/javascript" src="<%= Jaring._path %>/js/extjs/ext-theme-neptune.js"></script>
+
 	<script type="text/javascript" src="<%= Jaring._path %>/js/extjs/ux/StatusBar.js"></script>
 	<script type="text/javascript" src="<%= Jaring._path %>/js/extjs/ux/BoxReorderer.js"></script>
 	<script type="text/javascript" src="<%= Jaring._path %>/js/extjs/ux/CheckCombo.js"></script>
@@ -34,12 +35,13 @@
 	<script type="text/javascript" src="<%= Jaring._path %>/js/extjs/ux/LiveSearchGridPanel.js"></script>
 	<script type="text/javascript" src="<%= Jaring._path %>/js/extjs/ux/GridHeaderToolTip.js"></script>
 	<script type="text/javascript" src="<%= Jaring._path %>/js/extjs/ux/ProgressBarPager.js"></script>
-	
+
 	<script type="text/javascript" src="<%= Jaring._path %>/js/jaring.js"></script>
 	<script type="text/javascript" src="<%= Jaring._path %>/js/jx/StorePaging.js"></script>
 	<script type="text/javascript" src="<%= Jaring._path %>/js/jx/ComboPaging.js"></script>
 	<script type="text/javascript" src="<%= Jaring._path %>/js/jx/Form.js"></script>
-	<script type="text/javascript" src="<%= Jaring._path %>/js/jx/GridPaging.js"></script>
+	<script type="text/javascript" src="<%= Jaring._path %>/js/jx/GridPagingRowEditor.js"></script>
+	<script type="text/javascript" src="<%= Jaring._path %>/js/jx/GridPagingFormEditor.js"></script>
 
 	<script type="text/javascript" src="${pageContext.request.requestURI}layout.js"></script>
 </head>

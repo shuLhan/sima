@@ -50,16 +50,22 @@ function JxSystemGroup_User ()
 		,	allowBlank		:false
 		});
 
-	this.panel				= Ext.create ("Jx.GridPaging", {
+	this.panel				= Ext.create ("Jx.GridPaging.FormEditor", {
 			id				:this.id
-		,	region			:"east"
-		,	split			:true
-		,	title			:"Users of Group"
-		,	width			:"50%"
+		,	panelConfig		:
+			{
+				region			:"east"
+			,	split			:true
+			,	width			:"50%"
+			,	title			:"Users of Group"
+			}
+		,	formConfig		:
+			{
+				region			:"south"
+			,	syncUseStore	:false
+			}
 		,	store			:this.store
 		,	__class__		:this
-		,	dockPosition	:"bottom"
-		,	syncUseStore	:false
 		,	columns			:
 			[{
 				header			:"ID"
@@ -144,13 +150,19 @@ function JxSystemGroup_Group ()
 			]
 		});
 
-	this.panel				= Ext.create ("Jx.GridPaging", {
+	this.panel				= Ext.create ("Jx.GridPaging.FormEditor", {
 			id				:this.id
-		,	region			:"center"
-		,	title			:"Groups"
+		,	panelConfig		:
+			{
+				region			:"center"
+			,	title			:"Group of User"
+			}
+		,	formConfig		:
+			{
+				region			:"south"
+			,	syncUseStore	:false
+			}
 		,	store			:this.store
-		,	dockPosition	:"bottom"
-		,	syncUseStore	:false
 		,	columns			:
 			[{
 				header			:"ID"
@@ -191,9 +203,10 @@ function JxSystemGroup ()
 	SystemGroupUser		= new JxSystemGroup_User ();
 	SystemGroupGroup	= new JxSystemGroup_Group ();
 
-	this.panel			= Ext.create ("Ext.container.Container", {
+	this.panel			= Ext.create ("Ext.panel.Panel", {
 			id			:this.id
 		,	title		:"System Group"
+		,	titleAlign	:"center"
 		,	closable	:true
 		,	layout		:"border"
 		,	items		:

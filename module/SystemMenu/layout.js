@@ -219,9 +219,10 @@ function JxSystemMenu ()
 	SystemMenuMenu	= new JxSystemMenuMenu ();
 	SystemMenuGroup	= new JxSystemMenuGroup ();
 
-	this.panel			= Ext.create ("Ext.container.Container", {
+	this.panel			= Ext.create ("Ext.panel.Panel", {
 			id			:this.id
 		,	title		:"Menu Access"
+		,	titleAlign	:"center"
 		,	closable	:true
 		,	layout		:"border"
 		,	items		:
