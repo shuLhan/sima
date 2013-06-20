@@ -6,12 +6,13 @@
 
 function JxSystemUser ()
 {
-	this.id		= "SystemUser";
-	this.dir	= _g_module_dir + this.id;
+	this.id		= "System_User";
+	this.dir	= _g_module_dir + this.id.replace (/_/g, "/");
 
 	this.store	= Ext.create ("Jx.StorePaging", {
 		storeId		:this.id +"Store"
-	,	url			:this.dir +"/data.jsp"
+	,	url			:this.dir
+	,	singleApi	:false
 	,	fields		:
 		[
 			"id"
@@ -90,4 +91,4 @@ function JxSystemUser ()
 };
 
 /* moduleName = className */
-var SystemUser = new JxSystemUser ();
+var System_User = new JxSystemUser ();

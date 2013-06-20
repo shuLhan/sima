@@ -80,7 +80,7 @@ try {
 		_ps.executeUpdate ();
 		_ps.close ();
 
-		_r.put ("data", Jaring.MSG_SUCCESS_DELETE);
+		_r.put ("data", Jaring.MSG_SUCCESS_DESTROY);
 
 	/* default action: read */
 	} else {

@@ -30,12 +30,14 @@ import com.alibaba.fastjson.JSONObject;
 public class Jaring {
 	public static final String		MSG_SUCCESS_CREATE	= "New data has been created.";
 	public static final String		MSG_SUCCESS_UPDATE	= "Data has been updated.";
-	public static final String		MSG_SUCCESS_DELETE	= "Data has been deleted.";
+	public static final String		MSG_SUCCESS_DESTROY	= "Data has been deleted.";
+	public static final String		MOD_INIT			= "/init.jsp";
 
 	public static String	_title			= "x10c Lab - Jaring Framework";
 	public static String	_name			= "jaring";
 	public static String	_path			= "/jaring";
 	public static String	_path_mod		= "/module";
+	public static String	_mod_init		= "/module/init.jsp";
 	public static int		_content_type	= 0;
 	public static int		_menu_mode		= 1;
 	public static int		_paging_size	= 50;
@@ -238,6 +240,7 @@ public class Jaring {
 			Jaring._title		= props.getProperty ("app.title");
 			Jaring._name		= props.getProperty ("app.name");
 			Jaring._path_mod	= props.getProperty ("app.module.dir");
+			Jaring._mod_init	= Jaring._path_mod + Jaring.MOD_INIT;
 			Jaring._content_type= Integer.parseInt (props.getProperty ("app.content.type"));
 			Jaring._menu_mode	= Integer.parseInt (props.getProperty ("app.menu.mode"));
 			Jaring._paging_size	= Integer.parseInt (props.getProperty ("app.paging.size"));
@@ -253,6 +256,7 @@ public class Jaring {
 			application.setAttribute ("app.name"		, Jaring._name);
 			application.setAttribute ("app.path"		, Jaring._path);
 			application.setAttribute ("app.module.dir"	, Jaring._path_mod);
+			application.setAttribute ("app.module.init"	, Jaring._mod_init);
 			application.setAttribute ("app.content.type", Jaring._content_type);
 			application.setAttribute ("app.paging.size"	, Jaring._paging_size);
 			application.setAttribute ("db.class"		, Jaring._db_class);

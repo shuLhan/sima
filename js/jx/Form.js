@@ -148,6 +148,7 @@ Ext.define ("Jx.Form", {
 				}
 			,	failure	:function (batch, action)
 				{
+					this.store.rejectChanges ();
 					this.afterSaveFailure ();
 				}
 			});
@@ -189,6 +190,7 @@ Ext.define ("Jx.Form", {
 				}
 			,	failure	:function (form, action)
 				{
+					this.store.rejectChanges ();
 					this.afterSaveFailure (action);
 				}
 			,	clientValidation	:false
@@ -217,13 +219,16 @@ Ext.define ("Jx.Form", {
 	{
 		switch (action.failureType) {
 		case Ext.form.action.Action.CLIENT_INVALID:
-			Jx.msg.error ("Form fields may not be submitted with invalid values");
+			Jx.msg.error (Jx.msg.CLIENT_INVALID);
 			break;
 		case Ext.form.action.Action.CONNECT_FAILURE:
 			Jx.msg.error (Jx.msg.AJAX_FAILURE);
 			break;
 		case Ext.form.action.Action.SERVER_INVALID:
 			Jx.msg.error (this.store.proxy.reader.rawData.data);
+			break;
+		default:
+			Jx.msg.error (Jx.msg.SERVER_ERROR);
 			break;
 		}
 

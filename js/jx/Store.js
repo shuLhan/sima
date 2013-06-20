@@ -14,6 +14,8 @@ Ext.define ("Jx.Store", {
 ,	config		:
 	{
 		action		:"read"	// store's current action (read, create, update, destroy).
+	,	singleApi	:true
+	,	extension	:".jsp"
 	,	proxy		:
 		{
 			type		:"ajax"
@@ -34,27 +36,47 @@ Ext.define ("Jx.Store", {
 			,	allowSingle	:false
 			}
 		}
+	,	api			:
+		{
+			read		:"/read"
+		,	create		:"/create"
+		,	update		:"/update"
+		,	destroy		:"/destroy"
+		}
 	}
 
 ,	constructor	:function (config)
 	{
-		this.callParent (arguments);
-		this.initConfig (config);
+		var opts = Ext.merge (this.config, config);
 
-		if (config.url) {
-			this.getProxy ().api = {
-					read	:config.url
-				,	create	:config.url
-				,	update	:config.url
-				,	destroy	:config.url
-				}
-		} else if (config.api) {
-			this.getProxy ().api = config.api;
+		this.callParent (arguments);
+		this.initConfig (opts);
+
+		console.log (opts);
+
+		if (opts.url) {
+			if (opts.singleApi) {
+				this.proxy.api = {
+						read	:opts.url
+					,	create	:opts.url
+					,	update	:opts.url
+					,	destroy	:opts.url
+					};
+			} else {
+				this.proxy.api = {
+						read	:opts.url + opts.api.read		+ opts.extension
+					,	create	:opts.url + opts.api.create		+ opts.extension
+					,	update	:opts.url + opts.api.update 	+ opts.extension
+					,	destroy	:opts.url + opts.api.destroy	+ opts.extension
+					};
+			}
+		} else if (opts.api) {
+			this.proxy.api = opts.api;
 		}
 
 		/* Check and merge for extra parameters */
-		if (config.extraParams && typeof (config.extraParams) === "object") {
-			this.proxy.extraParams = Ext.merge (this.proxy.extraParams, config.extraParams);
+		if (opts.extraParams && typeof (opts.extraParams) === "object") {
+			this.proxy.extraParams = Ext.merge (this.proxy.extraParams, opts.extraParams);
 		}
 	}
 });

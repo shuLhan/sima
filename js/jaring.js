@@ -62,9 +62,11 @@ Jx = {
 ,	msg			:
 	{
 		el				:""
-	,	AJAX_FAILURE	:"AJAX communication failed!"
-	,	AJAX_SUCCESS	:"Data has been saved!"
+	,	AJAX_FAILURE	:"AJAX communication failed."
+	,	AJAX_SUCCESS	:"Data has been saved."
 	,	ACTION_UNKNOWN	:"Unknown action "
+	,	CLIENT_INVALID	:"Form fields may not be submitted with invalid values."
+	,	SERVER_ERROR	:"Server request error.".
 
 	,	display 		:function (title, format, cls, delay)
 		{
