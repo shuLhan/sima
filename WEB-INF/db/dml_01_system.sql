@@ -26,7 +26,7 @@ insert into _menu (id, pid, type, label, icon, image, module, description) value
 insert into _menu (id, pid, type, label, icon, image, module, description) values (1000		,0		,0	,'System'		,'sys'			,''				,'System'			,'');
 insert into _menu (id, pid, type, label, icon, image, module, description) values (1001		,1000	,1	,'User'			,'user'			,''				,'System_User'		,'');
 insert into _menu (id, pid, type, label, icon, image, module, description) values (1002		,1000	,1	,'Group'		,'group'		,''				,'System_Group'		,'');
-insert into _menu (id, pid, type, label, icon, image, module, description) values (1003		,1000	,1	,'Menu Access'	,'menu'			,''				,'SystemMenu'		,'');
+insert into _menu (id, pid, type, label, icon, image, module, description) values (1003		,1000	,1	,'Menu Access'	,'menu'			,''				,'System_Menu'		,'');
 
 /*
 	Group -> Menu
