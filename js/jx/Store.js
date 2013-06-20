@@ -52,8 +52,6 @@ Ext.define ("Jx.Store", {
 		this.callParent (arguments);
 		this.initConfig (opts);
 
-		console.log (opts);
-
 		if (opts.url) {
 			if (opts.singleApi) {
 				this.proxy.api = {
