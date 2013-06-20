@@ -3,17 +3,16 @@
 	Authors:
 		- mhd.sulhan (sulhan@x10c-lab.com)
 */
-var SystemGroupGroup;
 var SystemGroupUser;
 
 function JxSystemGroup_User ()
 {
-	this.id		= "SystemGroup_User";
-	this.dir	= _g_module_dir + this.id.replace (/_/g, "/");
+	this.id		= "System_Group_User";
+	this.dir	= Jx.generateModDir (this.id);
 
 	this.store			= Ext.create ("Jx.StorePaging", {
-			storeId		:this.id
-		,	url			:this.dir +"/data.jsp"
+			url			:this.dir
+		,	singleApi	:false
 		,	extraParams	:
 			{
 				_group_id	:0
@@ -28,9 +27,11 @@ function JxSystemGroup_User ()
 			]
 		});
 
+	this.dirNon	= Jx.generateModDir ("System_Group_UserNon");
+
 	this.storeNon		= Ext.create ("Jx.StorePaging", {
-			storeId		:this.id +"Non"
-		,	url			:this.dir +"/data_non.jsp"
+			url			:this.dirNon
+		,	singleApi	:false
 		,	extraParams	:
 			{
 				_group_id	:0
@@ -63,6 +64,13 @@ function JxSystemGroup_User ()
 			{
 				region			:"south"
 			,	syncUseStore	:false
+			,	afterFormSave	:function (success)
+				{
+					if (success) {
+						this.ownerCt.grid.__class__.storeNon.load ();
+						this.ownerCt.form.hide ();
+					}
+				}
 			}
 		,	store			:this.store
 		,	__class__		:this
@@ -73,8 +81,7 @@ function JxSystemGroup_User ()
 			,	hidden			:true
 			,	editor			:
 				{
-					xtype			:"textfield"
-				,	hidden			:true
+					hidden			:true
 				}
 			},{
 				header			:"User"
@@ -87,22 +94,13 @@ function JxSystemGroup_User ()
 			,	hidden			:true
 			,	editor			:
 				{
-					xtype			:"textfield"
-				,	hidden			:true
+					hidden			:true
 				}
 			},{
 				header			:"User"
 			,	dataIndex		:"_user_realname"
 			,	flex			:1
 			}]
-
-		,	afterFormSave	:function (success)
-			{
-				if (success) {
-					this.__class__.storeNon.load ();
-					this.form.hide ();
-				}
-			}
 
 			/* Disable combo _user_id before deletion */
 		,	beforeDelete : function ()
@@ -134,14 +132,15 @@ function JxSystemGroup_User ()
 	}
 }
 
-function JxSystemGroup_Group ()
+function JxSystemGroup ()
 {
-	this.id		= "SystemGroup_Group";
-	this.dir	= _g_module_dir + this.id.replace (/_/g, "/");
+	this.id		= "System_Group";
+	this.dir	= Jx.generateModDir (this.id);
+	this.Users	= new JxSystemGroup_User ();
 
 	this.store			= Ext.create ("Jx.StorePaging", {
-			storeId		:this.id
-		,	url			:this.dir +"/data.jsp"
+			url			:this.dir
+		,	singleApi	:false
 		,	fieldId		:"id"
 		,	fields		:
 			[
@@ -150,8 +149,9 @@ function JxSystemGroup_Group ()
 			]
 		});
 
-	this.panel				= Ext.create ("Jx.GridPaging.FormEditor", {
+	this.grid				= Ext.create ("Jx.GridPaging.FormEditor", {
 			id				:this.id
+		,	store			:this.store
 		,	panelConfig		:
 			{
 				region			:"center"
@@ -162,7 +162,6 @@ function JxSystemGroup_Group ()
 				region			:"south"
 			,	syncUseStore	:false
 			}
-		,	store			:this.store
 		,	columns			:
 			[{
 				header			:"ID"
@@ -170,8 +169,7 @@ function JxSystemGroup_Group ()
 			,	hidden			:true
 			,	editor			:
 				{
-					xtype			:"textfield"
-				,	hidden			:true
+					hidden			:true
 				}
 			},{
 				header			:"Group name"
@@ -179,48 +177,32 @@ function JxSystemGroup_Group ()
 			,	flex			:1
 			,	editor			:
 				{
-					xtype			:"textfield"
-				,	allowBlank		:false
+					allowBlank		:false
 				}
 			}]
 		,	compDetails		:
 			[
-				SystemGroupUser
+				this.Users
 			]
 		});
 
-	this.doRefresh			= function (perm)
-	{
-		this.panel.doRefresh (perm);
-	}
-};
-
-function JxSystemGroup ()
-{
-	this.id			="SystemGroup";
-	this.dir		= _g_module_dir + this.id;
-
-	SystemGroupUser		= new JxSystemGroup_User ();
-	SystemGroupGroup	= new JxSystemGroup_Group ();
-
 	this.panel			= Ext.create ("Ext.panel.Panel", {
-			id			:this.id
-		,	title		:"System Group"
+			title		:"System Group"
 		,	titleAlign	:"center"
 		,	closable	:true
 		,	layout		:"border"
 		,	items		:
 			[
-				SystemGroupGroup.panel
-			,	SystemGroupUser.panel
+				this.grid
+			,	this.Users.panel
 			]
 		});
 
-	this.doRefresh	= function (perm)
+	this.doRefresh = function (perm)
 	{
-		SystemGroupGroup.doRefresh (perm);
-		SystemGroupUser.doRefresh (perm, 0);
+		this.grid.doRefresh (perm);
+		this.Users.doRefresh (perm, 0);
 	}
-}
+};
 
-var SystemGroup = new JxSystemGroup ();
+var System_Group = new JxSystemGroup ();

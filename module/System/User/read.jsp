@@ -1,18 +1,10 @@
-<%@ include file="/module/init.jsp" %>
-<%@ page contentType="application/json" %>
+<%@ include file="/module/json_begin.jsp" %>
 <%
-try {
 	String	query	= request.getParameter ("query");
 	int		limit	= Jaring.getIntParameter (request, "limit", Jaring._paging_size);
 	int		start	= Jaring.getIntParameter (request, "start", 0);
 
-	long	id		= 0;
-	String	pwd		= "";
-	String	enc		= "";
-
-	_cn	= Jaring.getConnection (request);
-
-	/* Get total row */
+	// Get total row
 	_q	="	select		count (id) as total"
 		+"	from		_user"
 		+"	where		(name		like ?"
@@ -31,7 +23,7 @@ try {
 	_ps.close ();
 	_rs.close ();
 
-	/* Get data */
+	// Get data
 	_q	="	select		id"
 		+"	,			name"
 		+"	,			realname"
@@ -67,17 +59,7 @@ try {
 	_rs.close ();
 	_ps.close ();
 
-	_r.put ("success"	,true);
 	_r.put ("data"		,_a);
 	_r.put ("total"		,_t);
-
-} catch (Exception e) {
-	if (_cn != null) {
-		_cn.close ();
-	}
-	_r.put ("success"	,false);
-	_r.put ("data"		,e.getMessage ());
-} finally {
-	out.print (_r);
-}
 %>
+<%@ include file="/module/json_end.jsp" %>

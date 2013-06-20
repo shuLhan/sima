@@ -1,10 +1,6 @@
-<%@ include file="/module/init.jsp" %>
-<%@ page contentType="application/json" %>
+<%@ include file="/module/json_begin.jsp" %>
 <%
-try {
 	String enc = "";
-
-	_cn	= Jaring.getConnection (request);
 
 	_a	= Jaring.getRequestBodyJson (request);
 
@@ -33,16 +29,6 @@ try {
 
 	_ps.close ();
 
-	_r.put ("success"	,true);
 	_r.put ("data"		,Jaring.MSG_SUCCESS_CREATE);
-
-} catch (Exception e) {
-	if (_cn != null) {
-		_cn.close ();
-	}
-	_r.put ("success"	,false);
-	_r.put ("data"		,e.getMessage ());
-} finally {
-	out.print (_r);
-}
 %>
+<%@ include file="/module/json_end.jsp" %>

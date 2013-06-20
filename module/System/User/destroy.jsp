@@ -1,17 +1,10 @@
-<%@ include file="/module/init.jsp" %>
-<%@ page contentType="application/json" %>
+<%@ include file="/module/json_begin.jsp" %>
 <%
-try {
-	long	id		= 0;
-	String	pwd		= "";
-	String	enc		= "";
-
-	_cn	= Jaring.getConnection (request);
-
-	_a	= Jaring.getRequestBodyJson (request);
+	long id = 0;
 
 	_q	="	delete from _user where id = ?";
 
+	_a	= Jaring.getRequestBodyJson (request);
 	_ps	= _cn.prepareStatement (_q);
 	
 	for (int x = 0; x < _a.size (); x++) {
@@ -28,16 +21,7 @@ try {
 	}
 
 	_ps.close ();
-	_r.put ("success"	,true);
-	_r.put ("data"		,Jaring.MSG_SUCCESS_DESTROY);
 
-} catch (Exception e) {
-	if (_cn != null) {
-		_cn.close ();
-	}
-	_r.put ("success"	,false);
-	_r.put ("data"		,e.getMessage ());
-} finally {
-	out.print (_r);
-}
+	_r.put ("data"		,Jaring.MSG_SUCCESS_DESTROY);
 %>
+<%@ include file="/module/json_end.jsp" %>

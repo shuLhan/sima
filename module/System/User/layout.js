@@ -7,11 +7,10 @@
 function JxSystemUser ()
 {
 	this.id		= "System_User";
-	this.dir	= _g_module_dir + this.id.replace (/_/g, "/");
+	this.dir	= Jx.generateModDir (this.id);
 
 	this.store	= Ext.create ("Jx.StorePaging", {
-		storeId		:this.id +"Store"
-	,	url			:this.dir
+		url			:this.dir
 	,	singleApi	:false
 	,	fields		:
 		[

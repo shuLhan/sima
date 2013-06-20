@@ -66,7 +66,7 @@ Jx = {
 	,	AJAX_SUCCESS	:"Data has been saved."
 	,	ACTION_UNKNOWN	:"Unknown action "
 	,	CLIENT_INVALID	:"Form fields may not be submitted with invalid values."
-	,	SERVER_ERROR	:"Server request error.".
+	,	SERVER_ERROR	:"Server request error."
 
 	,	display 		:function (title, format, cls, delay)
 		{
@@ -122,5 +122,13 @@ Jx = {
 		if (undefined !== this.mask) {
 			this.mask.hide ();
 		}
+	}
+
+	/*
+		@return: module directory.
+	*/
+,	generateModDir	:function (id)
+	{
+		return _g_module_dir + id.replace (/_/g, "/");
 	}
 };
