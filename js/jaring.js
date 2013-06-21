@@ -106,6 +106,18 @@ Jx = {
 				}
 			);
 		}
+
+	,	saveChanges	:function (cb, scope)
+		{
+			Ext.Msg.show ({
+				title	:'Save Changes?'
+			,	msg		:'You are leaving module that has unsaved changes. Would you like to save your changes?'
+			,	buttons	:Ext.Msg.YESNOCANCEL
+			,	icon	:Ext.Msg.QUESTION
+			,	fn		:cb
+			,	scope	:scope
+			});
+		}
 	}
 ,	mask		:undefined
 ,	showMask	:function ()
