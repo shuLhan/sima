@@ -489,6 +489,7 @@ function JxMain ()
 		,	failure	:function (response, opts)
 			{
 				Jx.msg.error ("Fail to load module!");
+				Jx.hideMask ();
 			}
 		,	success	:function (response, opts)
 			{
