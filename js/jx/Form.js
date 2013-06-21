@@ -225,7 +225,11 @@ Ext.define ("Jx.Form", {
 			Jx.msg.error (Jx.msg.AJAX_FAILURE);
 			break;
 		case Ext.form.action.Action.SERVER_INVALID:
-			Jx.msg.error (this.store.proxy.reader.rawData.data);
+			if (action.result) {
+				Jx.msg.error (action.result.data);
+			} else {
+				Jx.msg.error (this.store.proxy.reader.rawData.data);
+			}
 			break;
 		default:
 			Jx.msg.error (Jx.msg.SERVER_ERROR);
