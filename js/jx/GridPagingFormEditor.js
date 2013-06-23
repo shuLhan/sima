@@ -45,6 +45,13 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 					this.ownerCt.form.loadRecord (data[0]);
 				}
 			}
+		,	onItemDoubleClick	:function (view, record, itemEl, index, e)
+			{
+				this.ownerCt.form.setTitle ("Updating data");
+				this.ownerCt.form.getForm ().reset ();
+				this.ownerCt.form.loadRecord (record);
+				this.ownerCt.form.show ();
+			}
 		}
 
 	,	form			:undefined
@@ -81,6 +88,8 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 			opts = Ext.merge (opts, cfg);
 
 		this.grid = Ext.create ("Jx.GridPaging", opts);
+
+		this.grid.on ("itemdblclick", this.grid.onItemDoubleClick, this.grid);
 
 		this.add (this.grid);
 	}
