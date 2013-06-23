@@ -40,6 +40,7 @@
 	<script type="text/javascript" src="<%= Jaring._path %>/js/jx/StorePaging.js"></script>
 	<script type="text/javascript" src="<%= Jaring._path %>/js/jx/ComboPaging.js"></script>
 	<script type="text/javascript" src="<%= Jaring._path %>/js/jx/Form.js"></script>
+	<script type="text/javascript" src="<%= Jaring._path %>/js/jx/SearchField.js"></script>
 	<script type="text/javascript" src="<%= Jaring._path %>/js/jx/GridPagingRowEditor.js"></script>
 	<script type="text/javascript" src="<%= Jaring._path %>/js/jx/GridPagingFormEditor.js"></script>
 

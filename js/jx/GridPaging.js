@@ -89,11 +89,8 @@ Ext.define ("Jx.GridPaging", {
 			,	tooltip		:"Refresh data"
 			});
 
-		this.searchField	= Ext.create ("Ext.form.field.Text", {
+		this.searchField	= Ext.create ("Jx.SearchField", {
 				itemId		:"searchfield"
-			,	fieldLabel	:"Search"
-			,	labelAlign	:"right"
-			,	tooltip		:"Type any string and enter to filter data"
 			});
 
 		this.buttonAdd.setHandler (this._doAdd, this);
