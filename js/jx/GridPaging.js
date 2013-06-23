@@ -34,23 +34,27 @@ Ext.define ("Jx.GridPaging", {
 	,	showButtonText		:false		// true, to show icon and text on buttons.
 	,	lastSearchStr		:""
 	,	selectedData		:[]			// array of selected row
+	,	buttons				:[]
 	}
 
-,	initComponent	:function ()
+,	constructor		:function (config)
 	{
-		this.callParent (arguments);
+		var	opts = Ext.merge ({}, this.config);
+			opts = Ext.merge (opts, config);
 
-		this.createButtonBar ();
+		this.callParent (arguments);
+		this.initConfig (opts);
+
+		this.createButtonBar (opts);
 		this.createPagingBar ();
 
-		/* Listen to user selection on grid row */
 		this.on ("selectionchange", this._onSelectionChange, this);
 	}
 
-,	createButtonBar	:function ()
+,	createButtonBar	:function (config)
 	{
 		this.buttonAdd		= Ext.create ("Ext.button.Button", {
-				text		:this.showButtonText ? "Add" : ""
+				text		:config.showButtonText ? "Add" : ""
 			,	itemId		:"add"
 			,	iconCls		:"add"
 			,	disabled	:true
@@ -59,7 +63,7 @@ Ext.define ("Jx.GridPaging", {
 			});
 
 		this.buttonEdit		= Ext.create ("Ext.button.Button", {
-				text		:this.showButtonText ? "Edit" : ""
+				text		:config.showButtonText ? "Edit" : ""
 			,	itemId		:"edit"
 			,	iconCls		:"edit"
 			,	disabled	:true
@@ -68,7 +72,7 @@ Ext.define ("Jx.GridPaging", {
 			});
 
 		this.buttonDelete	= Ext.create ("Ext.button.Button", {
-				text		:this.showButtonText ? "Delete" : ""
+				text		:config.showButtonText ? "Delete" : ""
 			,	itemId		:"delete"
 			,	iconCls		:"delete"
 			,	disabled	:true
@@ -77,7 +81,7 @@ Ext.define ("Jx.GridPaging", {
 			});
 
 		this.buttonRefresh	= Ext.create ("Ext.button.Button", {
-				text		:this.showButtonText ? "Refresh" : ""
+				text		:config.showButtonText ? "Refresh" : ""
 			,	itemId		:"refresh"
 			,	iconCls		:"refresh"
 			,	disabled	:false
@@ -99,10 +103,10 @@ Ext.define ("Jx.GridPaging", {
 
 		/* Add buttons bar to the top of grid panel. */
 		var barName		= "ButtonBar";
-		var id			= (this.id
-								? this.id + barName
-								: (this.itemId
-									? this.itemId + barName
+		var id			= (config.id
+								? config.id + barName
+								: (config.itemId
+									? config.itemId + barName
 									: "JxGridPaging"+ barName
 								)
 						);
@@ -110,22 +114,27 @@ Ext.define ("Jx.GridPaging", {
 		this.buttonBar	= Ext.create ("Ext.toolbar.Toolbar", {
 				id			:id
 			,	dock		:"top"
-			,	items		:
-				[
-					this.buttonDelete
-				,	this.buttonAdd
-				,	this.buttonEdit
-				,	this.buttonRefresh
-				,	"->"
-				,	this.searchField
-				]
 			});
+
+		this.buttonBar.add (this.buttonDelete);
+		this.buttonBar.add (this.buttonAdd);
+		this.buttonBar.add (this.buttonEdit);
+		this.buttonBar.add (this.buttonRefresh);
+
+		if (config.buttons && config.buttons.length > 0) {
+			for (var i = 0; i < config.buttons.length; i++) {
+				this.buttonBar.add (config.buttons[i]);
+			}
+		}
+
+		this.buttonBar.add ("->");
+		this.buttonBar.add (this.searchField);
 
 		this.addDocked (this.buttonBar);
 
 		/* Show/hide button based on user configuration */
-		for (var i = 0; i < this.buttonBarList.length; i++) {
-			switch (this.buttonBarList[i]) {
+		for (var i = 0; i < config.buttonBarList.length; i++) {
+			switch (config.buttonBarList[i]) {
 			case "add":
 				this.buttonAdd.show ();
 				break;
