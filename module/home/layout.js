@@ -1,11 +1,11 @@
 function JxLogin ()
 {
-	this.id				= "Login";
+	this.id			= "Login";
 
 	this.logo		= Ext.create ("Ext.Component", {
 			height	:130
 		,	html	:"<img "
-					+"	src='images/home/login/logo.png'"
+					+"	src='"+ _g_root +"/images/home/login/logo.png'"
 					+"	style='display:block; margin-left:auto; margin-right:auto;'"
 					+"	height='128'/>"
 		,	padding	:0
@@ -48,7 +48,7 @@ function JxLogin ()
 
 	this.panel				= Ext.create ("Jx.Form", {
 			id				:this.id +"Form"
-		,	url				:_g_module_path +"login.jsp"
+		,	url				:_g_module_path +"login"+ _g_ext
 		,	title			:".:: " + _g_title + " ::."
 		,	createButtonBar	:false
 		,	syncUseStore	:false

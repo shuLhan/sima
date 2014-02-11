@@ -53,7 +53,7 @@ Ext.override (Ext.data.Store, {
 */
 Ext.application ({
 	name		:"Jx"
-,	appFolder	:"js/jx"
+,	appFolder	:_g_root +"/js/jx"
 ,	appProperty	:""
 });
 

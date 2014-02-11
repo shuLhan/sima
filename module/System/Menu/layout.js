@@ -30,9 +30,9 @@ function JxSystemMenuMenu ()
 				type		:"ajax"
 			,	api			:
 				{
-					read		:this.dir +"/read.jsp"
+					read		:this.dir +"/read"+ _g_ext
 				,	create		:undefined
-				,	update		:this.dir +"/update.jsp"
+				,	update		:this.dir +"/update"+ _g_ext
 				,	destroy		:undefined
 				}
 			,	extraParams	:

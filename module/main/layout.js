@@ -1,7 +1,7 @@
 /*
-	Copyright 2013 x10c-lab.com
+	Copyright 2014 x10c-lab.com
 	Authors:
-		- mhd.sulhan (sulhan@x10c-lab.com)
+		- mhd.sulhan (m.shulhan@gmail.com)
 		- agus sugianto (agus@x10c-lab.com)
 */
 
@@ -14,7 +14,7 @@ function JxUserChangePassword ()
 
 	this.store		= Ext.create ("Jx.Store", {
 			storeId	:this.id
-		,	url		:this.dir +"ChangePassword.jsp"
+		,	url		:this.dir +"ChangePassword"+ _g_ext
 		,	fields	:
 			[
 				"id"
@@ -108,7 +108,7 @@ function JxUserProfile ()
 
 	this.store			= Ext.create ("Jx.Store", {
 			storeId		:this.id +"Store"
-		,	url			:this.dir +"UserProfile.jsp"
+		,	url			:this.dir +"UserProfile"+ _g_ext
 		,	fields		:
 			[
 				"id"
@@ -240,7 +240,7 @@ function JxMain ()
 
 	this.store	= Ext.create ("Jx.Store", {
 			storeId	:this.menuStoreId
-		,	url		:_g_module_path +"menu.jsp"
+		,	url		:_g_module_path +"menu"+ _g_ext
 		,	fields	:
 			[
 				"title"
@@ -250,7 +250,7 @@ function JxMain ()
 
 	this.storeHome	= Ext.create ("Jx.Store", {
 			storeId		:this.homeStoreId
-		,	url			:_g_module_path +"menuHome.jsp"
+		,	url			:_g_module_path +"menuHome"+ _g_ext
 		,	fields		:
 			[
 				"id"
@@ -333,8 +333,8 @@ function JxMain ()
 			,		'<div class="home-menu">'
 			,			(
 							Ext.isIE6
-							? '<div style="width:138px;height:138px;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'images/{[values.image.replace(/ /g, "-")]}.png\',sizingMethod=\'scale\')"></div>'
-							: '<img width="128" height="128" src="images/{[values.image.replace(/ /g, "-")]}.png" />'
+							? '<div style="width:138px;height:138px;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'/stp/images/{[values.image.replace(/ /g, "-")]}.png\',sizingMethod=\'scale\')"></div>'
+							: '<img width="128" height="128" src="/stp/images/{[values.image.replace(/ /g, "-")]}.png" />'
 						)
 			,			'<strong>{label}</strong>'
 			,			'<span>{description}</span>'
@@ -403,7 +403,7 @@ function JxMain ()
 	this.doLogout = function ()
 	{
 		this.showLoading ();
-		location.href = _g_module_path +"logout.jsp";
+		location.href = _g_module_path +"logout"+ _g_ext;
 	}
 
 	this.onTabChange	= function (tabp, newc, oldc, e)

@@ -15,7 +15,7 @@ Ext.define ("Jx.Store", {
 	{
 		action		:"read"	// store's current action (read, create, update, destroy).
 	,	singleApi	:true
-	,	extension	:".jsp"
+	,	extension	:_g_ext
 	,	proxy		:
 		{
 			type		:"ajax"
