@@ -30,7 +30,7 @@ try {
 	$ps->closeCursor ();
 
 	if (count ($rs) > 0) {
-		$t = (int) $rs["total"];
+		$t = (int) $rs[0]["total"];
 	}
 
 	// Get data
