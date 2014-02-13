@@ -217,23 +217,27 @@ Ext.define ("Jx.Form", {
 
 ,	afterSaveFailure	:function (action)
 	{
-		switch (action.failureType) {
-		case Ext.form.action.Action.CLIENT_INVALID:
-			Jx.msg.error (Jx.msg.CLIENT_INVALID);
-			break;
-		case Ext.form.action.Action.CONNECT_FAILURE:
-			Jx.msg.error (Jx.msg.AJAX_FAILURE);
-			break;
-		case Ext.form.action.Action.SERVER_INVALID:
-			if (action.result) {
-				Jx.msg.error (action.result.data);
-			} else {
-				Jx.msg.error (this.store.proxy.reader.rawData.data);
+		if (undefined != action.failureType) {
+			switch (action.failureType) {
+			case Ext.form.action.Action.CLIENT_INVALID:
+				Jx.msg.error (Jx.msg.CLIENT_INVALID);
+				break;
+			case Ext.form.action.Action.CONNECT_FAILURE:
+				Jx.msg.error (Jx.msg.AJAX_FAILURE);
+				break;
+			case Ext.form.action.Action.SERVER_INVALID:
+				if (action.result) {
+					Jx.msg.error (action.result.data);
+				} else {
+					Jx.msg.error (this.store.proxy.reader.rawData.data);
+				}
+				break;
+			default:
+				Jx.msg.error (Jx.msg.SERVER_ERROR);
+				break;
 			}
-			break;
-		default:
-			Jx.msg.error (Jx.msg.SERVER_ERROR);
-			break;
+		} else {
+			Jx.msg.error (action.result.data);
 		}
 
 		if (this.afterFormSave
