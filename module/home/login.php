@@ -35,8 +35,8 @@ try {
 	$ps->bindValue (1, (int) $rs[0]['id'], PDO::PARAM_INT);
 	$ps->execute ();
 	
-	setcookie (Jaring::$_name .".user.id", $rs[0]['id'], 0, Jaring::$_path);
-	setcookie (Jaring::$_name .".user.name", $rs[0]['realname'], 0, Jaring::$_path);
+	setcookie ("user.id", $rs[0]['id'], 0, Jaring::$_path);
+	setcookie ("user.name", $rs[0]['realname'], 0, Jaring::$_path);
 	
 	$r['success']	= true;
 	$r['data']		= "Logging in ...";

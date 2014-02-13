@@ -66,12 +66,12 @@ class Jaring
 	
 	public static function getCookiesValue ()
 	{
-		$ckey = self::$_name .'_user_id';
+		$ckey = 'user_id';
 		if (isset ($_COOKIE[$ckey])) {
 			self::$_c_uid = (int) $_COOKIE[$ckey];
 		}
 
-		$ckey = self::$_name .'_user_name';
+		$ckey = 'user_name';
 		if (isset ($_COOKIE[$ckey])) {
 			self::$_c_username = $_COOKIE[$ckey];
 		}

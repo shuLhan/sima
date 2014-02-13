@@ -84,7 +84,10 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 		/* Add row number to grid */
 		cfg.columns.splice (0, 0, { xtype : "rownumberer" });
 
-		var opts = Ext.merge ({ id : id }, this.gridConfig);
+		var opts	= Ext.merge ({
+						id		: id
+					,	_parent	: this
+					}, this.gridConfig);
 			opts = Ext.merge (opts, cfg);
 
 		this.grid = Ext.create ("Jx.GridPaging", opts);
@@ -130,8 +133,10 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 					cc = c.columns[k];
 
 					if (undefined != cc.editor) {
-						cc.editor.fieldLabel	= cc.header || cc.text;
-						cc.editor.name			= cc.dataIndex;
+						if (undefined == cc.editor.fieldLabel) {
+							cc.editor.fieldLabel = cc.header || cc.text;
+						}
+						cc.editor.name = cc.dataIndex;
 
 						fs.add (cc.editor);
 					}
@@ -139,7 +144,9 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 
 				this.form.add (fs);
 			} else if (undefined != c.editor) {
-				c.editor.fieldLabel	= c.header || c.text;
+				if (undefined == c.editor.fieldLabel) {
+					c.editor.fieldLabel	= c.header || c.text;
+				}
 				c.editor.name		= c.dataIndex;
 
 				this.form.add (c.editor);

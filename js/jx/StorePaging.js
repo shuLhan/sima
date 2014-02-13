@@ -23,6 +23,6 @@ Ext.define ("Jx.StorePaging", {
 
 ,	getFieldId	:function ()
 	{
-		return this.fieldId
+		return this.fieldId;
 	}
 });

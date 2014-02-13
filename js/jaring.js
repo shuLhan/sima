@@ -44,7 +44,7 @@ Ext.override (Ext.data.Store, {
 				}
 				var r = store.getAt (i);
 				return r ? r.get (displayField) : "[no data found]";
-			}
+			};
 		}
 	});
 
