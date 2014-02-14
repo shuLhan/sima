@@ -10,5 +10,13 @@ $r = array (
 ,	'total'		=> 0
 );
 
-Jaring::initDB ();
+try {
+	Jaring::initDB ();
+} catch (Exception $e) {
+	$r['data'] = $e->getMessage ();
+	
+	echo json_encode ($r);
+
+	die ();
+}
 ?>

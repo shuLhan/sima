@@ -17,4 +17,3 @@ if (Jaring::$_c_uid != 0) {
 }
 
 die ();
-?>

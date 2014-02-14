@@ -25,4 +25,3 @@ try {
 }
 
 require_once "../../json_end.php";
-?>

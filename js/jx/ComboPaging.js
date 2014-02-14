@@ -13,6 +13,11 @@ Ext.define ("Jx.ComboPaging", {
 ,	shrinkWrap		:3
 ,	typeAhead		:true
 ,	typeAheadDelay	:500
+,	listConfig		:
+	{
+		loadingText		:"Loading ..."
+	,	emptyText		:"Data not found."
+	}
 
 ,	initComponent	:function ()
 	{

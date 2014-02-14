@@ -179,7 +179,8 @@ Ext.define ("Jx.Form", {
 				url		:url
 			,	params	:
 				{
-					action	:this.store.action
+					action		:this.store.action
+				,	subaction	:this.store.proxy.extraParams.subaction
 				}
 			,	scope	:this
 			,	success	:function (form, action)

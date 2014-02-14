@@ -120,10 +120,10 @@ Ext.define ("Jx.GridPaging", {
 		this.buttonBar.add ("-");
 		this.buttonBar.add (this.buttonRefresh);
 
-		if (config.buttons && config.buttons.length > 0) {
+		if (config.addButtons && config.addButtons.length > 0) {
 			this.buttonBar.add ("-");
-			for (var i = 0; i < config.buttons.length; i++) {
-				this.buttonBar.add (config.buttons[i]);
+			for (var i = 0; i < config.addButtons.length; i++) {
+				this.buttonBar.add (config.addButtons[i]);
 			}
 		}
 

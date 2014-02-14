@@ -102,4 +102,3 @@ class Jaring
 		Jaring::getCookiesValue ();
 	}
 }
-?>

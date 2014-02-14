@@ -24,6 +24,7 @@ Ext.define ("Jx.Store", {
 			{
 				action		:"read"
 			,	query		:""
+			,	subaction	:""
 			}
 		,	reader		:
 			{
