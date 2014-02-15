@@ -202,7 +202,7 @@ Ext.define ("Jx.GridPaging", {
 			return;
 		}
 		if (this.beforeSearch && typeof (this.beforeSearch) === "function") {
-			if (this.beforeSearch () == false) {
+			if (this.beforeSearch (v) == false) {
 				return;
 			}
 		}
@@ -213,7 +213,7 @@ Ext.define ("Jx.GridPaging", {
 		this.store.load ();
 
 		if (this.afterSearch && typeof (this.afterSearch) === "function") {
-			this.afterSearch ();
+			this.afterSearch (v);
 		}
 	}
 
