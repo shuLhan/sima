@@ -717,3 +717,4 @@ Ext.onReady (function ()
 
 	main.init ();
 });
+>>>>>>> 8fef20c... [Jaring] Create db initialization for mysql.
