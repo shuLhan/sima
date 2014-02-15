@@ -22,6 +22,7 @@ require_once "../init.php";
 	<link rel="stylesheet" type="text/css" href="<?= Jaring::$_path ?>/js/extjs/resources/css/ext-all-neptune.css" />
 	<link rel="stylesheet" type="text/css" href="<?= Jaring::$_path ?>/css/Jaring.css" />
 	<link rel="stylesheet" type="text/css" href="<?= $_SERVER['REQUEST_URI'] ?>layout.css" />
+	<link rel="stylesheet" type="text/css" href="<?= $_SERVER['REQUEST_URI'] ?>app.css" />
 
 	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/extjs/ext-all-debug.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/extjs/ext-theme-neptune.js"></script>

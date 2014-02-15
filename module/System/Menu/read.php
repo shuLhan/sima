@@ -38,9 +38,9 @@ function getSystemMenu ($gid, $pid, $depth)
 	$ps->bindValue ($i++, $pid, PDO::PARAM_INT);
 	$ps->bindValue ($i++, $pid, PDO::PARAM_INT);
 	$ps->execute ();
-	$rs = $ps->fetchAll ();
+	$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
 	$ps->closeCursor ();
-	
+
 	$index = 0;
 	foreach ($rs as &$m) {
 		$id = $m['id'];

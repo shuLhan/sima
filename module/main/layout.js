@@ -333,8 +333,8 @@ function JxMain ()
 			,		'<div class="home-menu">'
 			,			(
 							Ext.isIE6
-							? '<div style="width:138px;height:138px;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\''+ _g_root +'/images/{[values.image.replace(/ /g, "-")]}.png\',sizingMethod=\'scale\')"></div>'
-							: '<img width="128" height="128" src="'+ _g_root +'/images/{[values.image.replace(/ /g, "-")]}.png" />'
+							? '<div style="width:138px;height:138px;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\''+ _g_root +'/images/app/{[values.image.replace(/ /g, "-")]}.png\',sizingMethod=\'scale\')"></div>'
+							: '<img width="128" height="128" src="'+ _g_root +'/images/app/{[values.image.replace(/ /g, "-")]}.png" />'
 						)
 			,			'<h3>{label}</h3>'
 			,			'<span>{description}</span>'
