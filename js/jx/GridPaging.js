@@ -26,6 +26,7 @@ Ext.define ("Jx.GridPaging", {
 	,	buttonDelete		:undefined
 	,	buttonRefresh		:undefined
 	,	searchField			:undefined
+	,	showSearchField		:true
 	,	buttonBar			:undefined
 	,	pagingBar			:undefined
 		// list of buttons that will be showed at the top of the bar.
@@ -127,8 +128,10 @@ Ext.define ("Jx.GridPaging", {
 			}
 		}
 
-		this.buttonBar.add ("->");
-		this.buttonBar.add (this.searchField);
+		if (config.showSearchField == true) {
+			this.buttonBar.add ("->");
+			this.buttonBar.add (this.searchField);
+		}
 
 		this.addDocked (this.buttonBar);
 

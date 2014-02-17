@@ -7,7 +7,7 @@ function JxLogin ()
 		,	html	:"<img "
 					+"	src='"+ _g_root +"/images/home/login/logo.png'"
 					+"	style='display:block; margin-left:auto; margin-right:auto;'"
-					+"	height='128'/>"
+					+"	height='98'/>"
 		,	padding	:0
 		});
 
@@ -15,6 +15,7 @@ function JxLogin ()
 			fieldLabel	:"Username"
 		,	itemId		:"username"
 		,	name		:"username"
+		,	labelAlign	:"right"
 		});
 
 	this.password		= Ext.create ("Ext.form.field.Text", {
@@ -22,6 +23,7 @@ function JxLogin ()
 		,	itemId		:"password"
 		,	name		:"password"
 		,	inputType	:"password"
+		,	labelAlign	:"right"
 		,	listeners	:
 			{
 				scope		:this
@@ -64,6 +66,13 @@ function JxLogin ()
 			,	this.username
 			,	this.password
 			]
+		,	layout			:'vbox'
+		,	layoutConfig	:
+			{
+				padding		:'5'
+			,	pack		:'center'
+			,	align		:'middle'
+			}
 		,	buttons			:
 			[
 				"->"
@@ -82,6 +91,10 @@ function JxLogin ()
 		[
 			this.panel
 		]
+	,	layout		:
+		{
+			pack		:"center"
+		}
 	});
 
 	this.doLogin = function ()
@@ -96,7 +109,7 @@ function JxLogin ()
 				Jx.msg.error (action.result.data);
 			}
 		});
-	}
+	};
 }
 
 Ext.onReady (function ()
