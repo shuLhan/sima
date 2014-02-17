@@ -56,7 +56,7 @@ function JxUserChangePassword ()
 				var pass_1 = this.getComponent ("password_new").getValue ();
 				var pass_2 = this.getComponent ("password_confirm").getValue ();
 
-				if (pass_1 != pass_2) {
+				if (pass_1 !== pass_2) {
 					Jx.msg.error ("New password doesn't match!");
 					return false;
 				}
@@ -92,13 +92,13 @@ function JxUserChangePassword ()
 
 	this.doShow	= function (id)
 	{
-		var r = [{ id : id }]
+		var r = [{ id : id }];
 
 		this.store.loadData (r, false);
 
 		this.panel.loadRecord (this.store.getAt (0));
 		this.win.show ();
-	}
+	};
 }
 
 function JxUserProfile ()
@@ -130,7 +130,7 @@ function JxUserProfile ()
 		var winChangePassword = new JxUserChangePassword ();
 
 		winChangePassword.doShow (this.store.getAt (0).get ("id"));
-	}
+	};
 
 	this.buttonChangePassword.setHandler (this.doChangePassword, this);
 
@@ -223,7 +223,7 @@ function JxUserProfile ()
 			}
 		});
 		return true;
-	}
+	};
 }
 
 function JxMain ()
@@ -389,30 +389,30 @@ function JxMain ()
 	*/
 	this.showUserProfile = function ()
 	{
-		if (this.userProfile == undefined) {
+		if (this.userProfile === undefined) {
 			this.userProfile = new JxUserProfile ();
 		} else {
-			if (this.userProfile.win != undefined) {
+			if (this.userProfile.win !== undefined) {
 				delete this.userProfile;
 				this.userProfile = new JxUserProfile ();
 			}
 		}
 		this.userProfile.doShow ();
-	}
+	};
 
 	this.doLogout = function ()
 	{
 		this.showLoading ();
 		location.href = _g_module_path +"logout"+ _g_ext;
-	}
+	};
 
 	this.onTabChange	= function (tabp, newc, oldc, e)
 	{
-		if (newc.id == this.contentHomeId) {
+		if (newc.id === this.contentHomeId) {
 			this.content.hide ();
 			this.contentHome.show ();
 			this.contentDashboard.hide ();
-		} else if (newc.id == this.contentDashboardId) {
+		} else if (newc.id === this.contentDashboardId) {
 			this.content.hide ();
 			this.contentHome.hide ();
 			this.contentDashboard.show ();
@@ -421,7 +421,7 @@ function JxMain ()
 			this.contentHome.hide ();
 			this.contentDashboard.hide ();
 		}
-	}
+	};
 
 	this.onMenuClick = function (b, force)
 	{
@@ -429,7 +429,7 @@ function JxMain ()
 
 		Jx.showMask ();
 
-		if (b.id == this.contentHomeId) {
+		if (b.id === this.contentHomeId) {
 			this.content.hide ();
 			this.contentHome.show ();
 			Jx.hideMask ();
@@ -457,7 +457,7 @@ function JxMain ()
 				}
 			}
 
-			if (b.toggle != undefined) {
+			if (b.toggle !== undefined) {
 				b.toggle (true, true);
 			}
 			break;
@@ -475,7 +475,7 @@ function JxMain ()
 		case 1:
 			var c = main.content.getComponent (b.module);
 
-			if (c != undefined) {
+			if (c !== undefined) {
 				main.content.setActiveTab (c);
 				Jx.hideMask ();
 				return;
@@ -515,7 +515,7 @@ function JxMain ()
 					module.doRefresh (b.permission);
 					Jx.hideMask ();
 				} catch (e) {
-					if (undefined != console) {
+					if (undefined !== console) {
 						console.log (e);
 					}
 					Jx.msg.error (e.message);
@@ -523,7 +523,7 @@ function JxMain ()
 				}
 			}
 		});
-	}
+	};
 
 	this.loadMenu	= function ()
 	{
@@ -552,10 +552,10 @@ function JxMain ()
 					}
 
 					/* Inject "click" event to each button menu */
-					for (var m = 0; tbar != undefined && m < tbar.items.items.length; m++) {
+					for (var m = 0; tbar !== undefined && m < tbar.items.items.length; m++) {
 						var b = tbar.items.items[m];
 
-						if (undefined == b.menu) {
+						if (undefined === b.menu) {
 							b.setHandler (this.onMenuClick, this);
 						} else {
 							var submenu = b.menu.items.items;
@@ -570,7 +570,7 @@ function JxMain ()
 				this.menu.setActiveTab (0);
 			}
 		});
-	}
+	};
 
 	this.loadHomeMenu = function ()
 	{
@@ -584,7 +584,7 @@ function JxMain ()
 				}
 			}
 		});
-	}
+	};
 
 	this.contentHomeViewOnClick = function (dv, rec, item, idx, e, eopts)
 	{
@@ -596,7 +596,7 @@ function JxMain ()
 
 			for (var j = 0; j < tbar.length; j++) {
 				for (var k = 0; k < tbar[j].items.items.length; k++) {
-					if (tbar[j].items.items[k].module == rec.raw.module) {
+					if (tbar[j].items.items[k].module === rec.raw.module) {
 						this.menu.setActiveTab (i);
 						tbar[j].items.items[k].toggle (true, true);
 						return;
@@ -604,7 +604,7 @@ function JxMain ()
 				}
 			}
 		}
-	}
+	};
 
 	this.showLoading = function ()
 	{
@@ -613,7 +613,7 @@ function JxMain ()
 			remove		:false
 		,	useDisplay	:true
 		});
-	}
+	};
 
 	this.hideLoading = function ()
 	{
@@ -626,7 +626,7 @@ function JxMain ()
 			});
 		}
 		, 100);
-	}
+	};
 
 	this.init = function ()
 	{
@@ -708,7 +708,7 @@ function JxMain ()
 		this.loadMenu ();
 		this.loadHomeMenu ();
 		this.hideLoading ();
-	}
+	};
 }
 
 Ext.onReady (function ()
@@ -717,4 +717,3 @@ Ext.onReady (function ()
 
 	main.init ();
 });
->>>>>>> 8fef20c... [Jaring] Create db initialization for mysql.
