@@ -200,8 +200,7 @@ Ext.define ("Jx.GridPaging", {
 	{
 		var v = f.getValue ();
 
-		if (e.getKey ()	!= e.ENTER
-		||	v			== this.lastSearchStr) {
+		if (e.getKey ()	!= e.ENTER) {
 			return;
 		}
 		if (this.beforeSearch && typeof (this.beforeSearch) === "function") {
