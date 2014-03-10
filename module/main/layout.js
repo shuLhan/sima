@@ -320,7 +320,7 @@ function JxMain ()
 			[{
 				id			:"app-footer"
 			,	xtype		:"box"
-			,	html		:_g_title +"&nbsp;&nbsp;&copy;&nbsp;&nbsp;2013 x10c-lab.com"
+			,	html		:_g_title +"&nbsp;&nbsp;&copy;&nbsp;&nbsp;"+ new Date().getFullYear() +" - x10c-lab.com"
 			,	flex		:1
 			}]
 		});
