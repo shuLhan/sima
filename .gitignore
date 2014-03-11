@@ -1,2 +1,3 @@
 WEB-INF/app.conf
-/nbproject/private/
+WEB-INF/db/jaring.sq3
+nbproject/private/*

@@ -53,17 +53,45 @@ class Jaring
 
 	public static function initDB ()
 	{
-		self::$_db = new SafePDO (self::$_db_url, self::$_db_user, self::$_db_pass);
-		self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		if (stristr(self::$_db_url, "sqlite") !== FALSE) {
+			self::initSqliteDb ();
+		} else {
+			self::$_db = new SafePDO (self::$_db_url, self::$_db_user, self::$_db_pass);
+			self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		}
 	}
-	
+
+	public static function initSqliteDb ()
+	{
+		$a				= explode(":", self::$_db_url);
+		$a[1]			= APP_PATH . $a[1];
+		$f_db			= $a[1];
+		self::$_db_url	= implode (":", $a);
+
+		self::$_db = new SafePDO (self::$_db_url);
+		self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+		if (file_exists ($f_db)) {
+			return;
+		}
+
+		$f_sql		= APP_PATH ."/WEB-INF/db/init.sqlite.sql";
+		$f_sql_v	= file_get_contents($f_sql);
+		$queries	= explode (";", $f_sql_v);
+
+		foreach ($queries as $q) {
+			$q	.= ";";
+			self::$_db->exec ($q);
+		}
+	}
+
 	public static function getConnection ()
 	{
 		if (self::_db == null) {
 			self::initDB ();
 		}
 	}
-	
+
 	public static function getCookiesValue ()
 	{
 		$ckey = 'user_id';
@@ -76,7 +104,7 @@ class Jaring
 			self::$_c_username = $_COOKIE[$ckey];
 		}
 	}
-	
+
 	public static function init ()
 	{
 		$f_app_conf	= APP_PATH ."/WEB-INF/app.conf";

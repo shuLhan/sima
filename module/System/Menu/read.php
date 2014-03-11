@@ -25,7 +25,7 @@ $q	="	select		A.id"
 	."		on M2.id = A.pid"
 	."	where		A.pid		= ?"
 	."	and			A.type	in (0, 1, 3)"
-	."	order by	id";
+	."	order by	A.id";
 
 function getSystemMenu ($gid, $pid, $depth)
 {
@@ -85,4 +85,3 @@ try {
 }
 
 require_once "../../json_end.php";
-?>

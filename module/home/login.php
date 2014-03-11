@@ -28,7 +28,7 @@ try {
 	}
 
 	$q	="	update	_user"
-		."	set		last_login	= now()"
+		."	set		last_login	= ". mktime ()
 		."	where	id			= ?";
 
 	$ps = Jaring::$_db->prepare ($q);
@@ -45,4 +45,3 @@ try {
 }
 
 require_once "../json_end.php";
-?>
