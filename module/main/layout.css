@@ -31,8 +31,8 @@
 */
 .form-add				{ background-image: url("../../images/icons/form-add.png") !important; }
 .form-edit				{ background-image: url("../../images/icons/form-edit.png") !important; }
-.form-save				{ background-image: url("../../images/icons/form-save.png") !important; }
-.form-cancel			{ background-image: url("../../images/icons/form-cancel.png") !important; }
+.form-save				{ background-image: url("../../images/icons/check.png") !important; }
+.form-cancel			{ background-image: url("../../images/icons/delete.png") !important; }
 .form-search			{ background-image: url("../../images/icons/form-search.png") !important; }
 .form-browse			{ background-image: url("../../images/icons/form-browse.png") !important; }
 .form-clear				{ background-image: url("../../images/icons/form-clear.png") !important; }
@@ -57,10 +57,11 @@
 	border-bottom		:1px solid #567422;
 }
 
+#MainHeaderLogo {
+	margin: 0px 16px 0px 16px;
+}
+
 #MainHeaderText {
-	padding		:6px 10px 10px 130px;
-	background	:url(../../images/logo.png) no-repeat 10px 4px;
-	background-size	:auto 80%;
 	color		:white;
 	font-size	:24px;
 	font-weight	:bold;
@@ -69,10 +70,15 @@
 }
 
 #MainFooter {
-	text-align	:center;
-	color		:white;
-	font-size	:12px;
-	text-shadow	:0 1px 0 #4e691f;
+	text-align		:center;
+	color			:white;
+	font-size		:12px;
+	text-shadow		:0 1px 0 #4e691f;
+}
+
+#MainFooter a:link, #MainFooter a:visited {
+	text-decoration	:none;
+	color			:white;
 }
 
 /*
@@ -116,11 +122,7 @@
 	Home menus
 */
 .panel-background {
-	background				: url(../../images/background.jpg) no-repeat center center fixed;
-	-webkit-background-size	: cover;
-	-moz-background-size	: cover;
-	-o-background-size		: cover;
-	background-size			: cover;
+	background		: url(../../images/background.gif) repeat;
 }
 #home-menus {
     text-shadow	: #fff 0 1px 0;

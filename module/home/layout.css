@@ -2,13 +2,15 @@
 	Elements
 */
 body {
-	background-image: url(../../images/home/wallpaper.jpg) !important;
+	background-image	:url(../../images/home/wallpaper.jpg) !important;
+	background-repeat	:no-repeat !important;
+	background-size		:cover !important;
 }
 
 /*
 	Icons
 */
-.login	{ background-image	: url(../../images/buttons/login.png) !important; }
+.login	{ background-image	: url(../../images/icons/login.png) !important; }
 
 /*
 	ID
