@@ -234,6 +234,7 @@ function JxMain ()
 	this.contentHomeId		= this.id +"Home";
 	this.contentDashboardId	= this.id +"Dashboard";
 	this.headerId			= this.id +"Header";
+	this.headerLogo			= this.id +"HeaderLogo";
 	this.headerTextId		= this.id +"HeaderText";
 	this.footerId			= this.id +"Footer";
 	this.dir				= _g_module_dir + this.id;
@@ -283,9 +284,14 @@ function JxMain ()
 			{
 				type		:"hbox"
 			,	align		:"middle"
+			,	pack		:"start"
 			}
 		,	items		:
 			[{
+				id			:this.headerLogo
+			,	xtype		:"container"
+			,	html		:"<img style='height:36;' src='../../images/logo.png'></img>"
+			},{
 				id			:this.headerTextId
 			,	xtype		:"box"
 			,	html		:_g_title
@@ -320,7 +326,7 @@ function JxMain ()
 			[{
 				id			:"app-footer"
 			,	xtype		:"box"
-			,	html		:_g_title +"&nbsp;&nbsp;&copy;&nbsp;&nbsp;"+ new Date().getFullYear() +" - x10c-lab.com"
+			,	html		:"<a href='https://github.com/x10c/Jaring' target='_blank'>"+ _g_title +"&nbsp;&nbsp;&copy;&nbsp;&nbsp;"+ new Date().getFullYear() +" - x10c-lab.com </a>"
 			,	flex		:1
 			}]
 		});

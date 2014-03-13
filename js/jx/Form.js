@@ -21,6 +21,7 @@ Ext.define ("Jx.Form", {
 	{
 		autoScroll		:true
 	,	bodyPadding		:10
+	,	bodyStyle		:'border:0px;'
 	,	border			:false
 	,	defaultType		:"textfield"
 	,	titleAlign		:"center"
@@ -49,7 +50,7 @@ Ext.define ("Jx.Form", {
 
 ,	doCreateButtonBar :function (cfg)
 	{
-		if (false == cfg.createButtonBar) {
+		if (false === cfg.createButtonBar) {
 			return;
 		}
 
@@ -105,7 +106,7 @@ Ext.define ("Jx.Form", {
 	{
 		if (this.beforeFormSave
 		&& typeof (this.beforeFormSave) === "function") {
-			if (this.beforeFormSave () == false) {
+			if (this.beforeFormSave () === false) {
 				return;
 			}
 		}
@@ -120,7 +121,7 @@ Ext.define ("Jx.Form", {
 		}
 
 		/* If syncUseStore is true, use store.api to sync data */
-		if (true == this.syncUseStore) {
+		if (true === this.syncUseStore) {
 			switch (this.store.action) {
 			case "create":
 				this.store.add (f.getValues ());
@@ -208,7 +209,7 @@ Ext.define ("Jx.Form", {
 				{
 					if (this.afterFormSave
 					&& typeof (this.afterFormSave) === "function") {
-						if (this.afterFormSave (success) == false) {
+						if (this.afterFormSave (success) === false) {
 							return;
 						}
 					}
@@ -218,7 +219,7 @@ Ext.define ("Jx.Form", {
 
 ,	afterSaveFailure	:function (action)
 	{
-		if (undefined != action.failureType) {
+		if (undefined !== action.failureType) {
 			switch (action.failureType) {
 			case Ext.form.action.Action.CLIENT_INVALID:
 				Jx.msg.error (Jx.msg.CLIENT_INVALID);
@@ -243,7 +244,7 @@ Ext.define ("Jx.Form", {
 
 		if (this.afterFormSave
 		&& typeof (this.afterFormSave) === "function") {
-			if (this.afterFormSave (false) == false) {
+			if (this.afterFormSave (false) === false) {
 				return;
 			}
 		}
@@ -253,7 +254,7 @@ Ext.define ("Jx.Form", {
 	{
 		if (this.beforeFormCancel
 		&& typeof (this.beforeFormCancel) === "function") {
-			if (this.beforeFormCancel () == false) {
+			if (this.beforeFormCancel () === false) {
 				return;
 			}
 		}

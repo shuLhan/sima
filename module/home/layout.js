@@ -1,15 +1,14 @@
 function JxLogin ()
 {
-	this.id			= "Login";
+	this.id				= "Login";
 
-	this.logo		= Ext.create ("Ext.Component", {
-			height	:130
-		,	html	:"<img "
-					+"	src='"+ _g_root +"/images/home/login/logo.png'"
-					+"	style='display:block; margin-left:auto; margin-right:auto;'"
-					+"	height='98'/>"
-		,	padding	:0
-		});
+	this.logo			= Ext.create ("Ext.Component", {
+			height		:130
+		,	html		:"<img src='../../images/logo.png' />"
+		,	margin		:'10'
+		,	width		:"100%"
+		,	style		:"vertical-align:center; text-align:center;"
+	});
 
 	this.username		= Ext.create ("Ext.form.field.Text", {
 			fieldLabel	:"Username"
@@ -29,7 +28,7 @@ function JxLogin ()
 				scope		:this
 			,	specialkey	:function (f, e)
 				{
-					if (e.ENTER == e.getKey ()) {
+					if (e.ENTER === e.getKey ()) {
 						this.doLogin ();
 					}
 				}
@@ -37,7 +36,7 @@ function JxLogin ()
 		});
 
 	this.buttonLogin	= Ext.create ("Ext.button.Button", {
-			text			:"Login"
+			text			:"Log In"
 		,	itemId			:"login"
 		,	iconCls			:"login"
 		,	formBind		:true
@@ -51,7 +50,6 @@ function JxLogin ()
 	this.panel				= Ext.create ("Jx.Form", {
 			id				:this.id +"Form"
 		,	url				:_g_module_path +"login"+ _g_ext
-		,	title			:".:: " + _g_title + " ::."
 		,	createButtonBar	:false
 		,	syncUseStore	:false
 		,	defaults		:
@@ -62,8 +60,7 @@ function JxLogin ()
 			}
 		,	items			:
 			[
-				this.logo
-			,	this.username
+				this.username
 			,	this.password
 			]
 		,	layout			:'vbox'
@@ -75,13 +72,14 @@ function JxLogin ()
 			}
 		,	buttons			:
 			[
-				"->"
-			,	this.buttonLogin
+				this.buttonLogin
 			]
 		});
 
 	this.win		= Ext.create ("Ext.window.Window", {
 		id			:this.id
+	,	title		:".:: " + _g_title + " ::."
+	,	titleAlign	:"center"
 	,	autoShow	:true
 	,	draggable	:false
 	,	closable	:false
@@ -89,12 +87,9 @@ function JxLogin ()
 	,	defaultFocus:"username"
 	,	items		:
 		[
-			this.panel
+			this.logo
+		,	this.panel
 		]
-	,	layout		:
-		{
-			pack		:"center"
-		}
 	});
 
 	this.doLogin = function ()
