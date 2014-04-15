@@ -15,5 +15,3 @@ if (Jaring::$_c_uid != 0) {
 } else {
 	header ("Location:". $m_home);
 }
-
-die ();
