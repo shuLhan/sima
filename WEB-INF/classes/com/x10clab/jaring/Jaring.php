@@ -28,15 +28,15 @@ class Jaring
 	public static $MOD_INIT				= '/init';
 
 	public static $_ext				= '.php';
-	public static $_title			= 'x10c Lab - Jaring Framework';
+	public static $_title			= 'Jaring Framework';
 	public static $_name			= 'jaring';
-	public static $_path			= '/stp';
-	public static $_path_mod		= '/module';
+	public static $_path				= '/';
+	public static $_path_mod		= 'module';
 	public static $_mod_init		= '';
 	public static $_content_type	= 0;
 	public static $_menu_mode		= 1;
 	public static $_paging_size		= 50;
-	public static $_db_class		= '';
+	public static $_db_class			= '';
 	public static $_db_url			= '';
 	public static $_db_user			= '';
 	public static $_db_pass			= '';
@@ -65,15 +65,18 @@ class Jaring
 	{
 		$a				= explode(":", self::$_db_url);
 		$a[1]			= APP_PATH . $a[1];
-		$f_db			= $a[1];
-		self::$_db_url	= implode (":", $a);
+
+		if (count ($a) >= 4 && $a[2] !== "memory") {
+			$f_db			= $a[1];
+			self::$_db_url	= implode (":", $a);
+
+			if (file_exists ($f_db)) {
+				return;
+			}
+		}
 
 		self::$_db = new SafePDO (self::$_db_url);
 		self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-		if (file_exists ($f_db)) {
-			return;
-		}
 
 		$f_sql		= APP_PATH ."/WEB-INF/db/init.sqlite.sql";
 		$f_sql_v	= file_get_contents($f_sql);
@@ -108,6 +111,10 @@ class Jaring
 	public static function init ()
 	{
 		$f_app_conf	= APP_PATH ."/WEB-INF/app.conf";
+
+		if (!file_exists($f_app_conf)) {
+			$f_app_conf = APP_PATH . "/WEB-INF/app.default.conf";
+		}
 
 		$app_conf = parse_ini_file ($f_app_conf);
 

@@ -48,7 +48,7 @@ create table _group_menu
 
 insert into _group (name, type) values ('Administrator', 0);	-- 1
 
-insert into _user (name, realname, password) values ('root', 'Administrator', '3f38a07b0dc3ee666018ffb423e2e7d117b40cf51a7ae97cc9f68b3940fe01fb');	-- 1
+insert into _user (name, realname, password) values ('admin', 'Administrator', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918');	-- 1
 
 insert into _user_group (_user_id, _group_id) values (1, 1);
 

@@ -1,7 +1,7 @@
 /*
-	Copyright 2013 x10c-lab.com
+	Copyright 2014 - Mhd Sulhan
 	Authors:
-		- mhd.sulhan (sulhan@x10c-lab.com)
+		- mhd.sulhan (m.shulhan@gmail.com)
 */
 
 Ext.QuickTips.init();
@@ -53,7 +53,7 @@ Ext.override (Ext.data.Store, {
 */
 Ext.application ({
 	name		:"Jx"
-,	appFolder	:_g_root +"/js/jx"
+,	appFolder	:_g_root +"js/jx"
 ,	appProperty	:""
 });
 

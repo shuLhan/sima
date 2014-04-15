@@ -5,7 +5,7 @@ require_once "../init.php";
 <head>
 	<title><?= Jaring::$_title ?></title>
 
-	<link rel="shortcut icon" href="<?= Jaring::$_path ?>/images/favicon.ico"/>
+	<link rel="shortcut icon" href="<?= Jaring::$_path ?>images/favicon.ico"/>
 
 	<script>
 		var _g_root			="<?= Jaring::$_path ?>";
@@ -19,30 +19,30 @@ require_once "../init.php";
 		var _g_ext			="<?= Jaring::$_ext ?>";
 	</script>
 
-	<link rel="stylesheet" type="text/css" href="<?= Jaring::$_path ?>/js/extjs/resources/css/ext-all-neptune.css" />
-	<link rel="stylesheet" type="text/css" href="<?= Jaring::$_path ?>/css/Jaring.css" />
+	<link rel="stylesheet" type="text/css" href="<?= Jaring::$_path ?>js/extjs/resources/css/ext-all-neptune.css" />
+	<link rel="stylesheet" type="text/css" href="<?= Jaring::$_path ?>css/jaring.css" />
 	<link rel="stylesheet" type="text/css" href="<?= $_SERVER['REQUEST_URI'] ?>layout.css" />
 	<link rel="stylesheet" type="text/css" href="<?= $_SERVER['REQUEST_URI'] ?>app.css" />
 
-	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/extjs/ext-all-debug.js"></script>
-	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/extjs/ext-theme-neptune.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ext-all-debug.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ext-theme-neptune.js"></script>
 
-	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/extjs/ux/StatusBar.js"></script>
-	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/extjs/ux/BoxReorderer.js"></script>
-	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/extjs/ux/CheckCombo.js"></script>
-	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/extjs/ux/DataTip.js"></script>
-	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/extjs/ux/LiveSearchAddGridPanel.js"></script>
-	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/extjs/ux/LiveSearchGridPanel.js"></script>
-	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/extjs/ux/GridHeaderToolTip.js"></script>
-	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/extjs/ux/ProgressBarPager.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ux/StatusBar.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ux/BoxReorderer.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ux/CheckCombo.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ux/DataTip.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ux/LiveSearchAddGridPanel.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ux/LiveSearchGridPanel.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ux/GridHeaderToolTip.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ux/ProgressBarPager.js"></script>
 
-	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/Jaring.js"></script>
-	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/jx/StorePaging.js"></script>
-	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/jx/ComboPaging.js"></script>
-	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/jx/Form.js"></script>
-	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/jx/SearchField.js"></script>
-	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/jx/GridPagingRowEditor.js"></script>
-	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/jx/GridPagingFormEditor.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jaring.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/StorePaging.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/ComboPaging.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/Form.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/SearchField.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/GridPagingRowEditor.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/GridPagingFormEditor.js"></script>
 
 	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>layout.js"></script>
 </head>
@@ -50,7 +50,7 @@ require_once "../init.php";
     <div id="loading-mask" style=""></div>
     <div id="loading">
         <div class="loading-indicator">
-            <img src="<?= Jaring::$_path ?>/images/loading.gif" width="32" height="32" style="margin-right:8px;float:left;vertical-align:top;"/>
+            <img src="<?= Jaring::$_path ?>images/loading.gif" width="32" height="32" style="margin-right:8px;float:left;vertical-align:top;"/>
 			<?= Jaring::$_title ?>
 			-
 			<a href="http://www.x10c-lab.com">x10c-lab.com</a>

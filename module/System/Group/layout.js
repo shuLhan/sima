@@ -129,7 +129,7 @@ function JxSystemGroup_User ()
 		this.storeNon.proxy.extraParams._group_id	= id;
 		this.storeNon.load ();
 		this.panel.doRefresh (perm);
-	}
+	};
 }
 
 function JxSystemGroup ()
@@ -150,8 +150,7 @@ function JxSystemGroup ()
 		});
 
 	this.grid				= Ext.create ("Jx.GridPaging.FormEditor", {
-			id				:this.id
-		,	store			:this.store
+			store			:this.store
 		,	panelConfig		:
 			{
 				region			:"center"
@@ -187,7 +186,8 @@ function JxSystemGroup ()
 		});
 
 	this.panel			= Ext.create ("Ext.panel.Panel", {
-			title		:"System Group"
+			id			:this.id
+		,	title		:"System Group"
 		,	titleAlign	:"center"
 		,	closable	:true
 		,	layout		:"border"
@@ -202,7 +202,7 @@ function JxSystemGroup ()
 	{
 		this.grid.doRefresh (perm);
 		this.Users.doRefresh (perm, 0);
-	}
+	};
 };
 
 var System_Group = new JxSystemGroup ();

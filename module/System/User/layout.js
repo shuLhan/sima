@@ -86,7 +86,7 @@ function JxSystemUser ()
 	this.doRefresh	= function (perm)
 	{
 		this.panel.doRefresh (perm);
-	}
+	};
 };
 
 /* moduleName = className */

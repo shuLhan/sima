@@ -1,7 +1,7 @@
 /*
-	Copyright 2013 - x10c-lab.com
+	Copyright 2014 - Mhd Sulhan
 	Authors:
-		- mhd.sulhan (sulhan@x10c-lab.com)
+		- mhd.sulhan (m.shulhan@gmail.com)
 
 	Custom store with AJAX and JSON.
 */

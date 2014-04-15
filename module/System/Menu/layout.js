@@ -145,7 +145,7 @@ function JxSystemMenuMenu ()
 
 		this.store.proxy.extraParams._group_id = id;
 		this.store.load ();
-	}
+	};
 }
 
 function JxSystemMenuGroup ()
@@ -165,7 +165,7 @@ function JxSystemMenuGroup ()
 		});
 
 	this.panel				= Ext.create ("Jx.GridPaging", {
-			id				:this.id
+			id				:"SystemMenu_Group"
 		,	region			:"center"
 		,	title			:"Groups of User"
 		,	store			:this.store
@@ -191,16 +191,19 @@ function JxSystemMenuGroup ()
 	this.doRefresh	= function (perm)
 	{
 		this.panel.doRefresh (perm);
-	}
+	};
 }
 
 function JxSystemMenu ()
 {
+	this.id			= "SystemMenu";
+
 	SystemMenuMenu	= new JxSystemMenuMenu ();
 	SystemMenuGroup	= new JxSystemMenuGroup ();
 
 	this.panel			= Ext.create ("Ext.panel.Panel", {
-			title		:"Menu Access"
+			id			:this.id
+		,	title		:"Menu Access"
 		,	titleAlign	:"center"
 		,	closable	:true
 		,	layout		:"border"
@@ -214,7 +217,7 @@ function JxSystemMenu ()
 	this.doRefresh	= function (perm)
 	{
 		SystemMenuGroup.doRefresh (perm);
-	}
+	};
 }
 
 var System_Menu = new JxSystemMenu ();

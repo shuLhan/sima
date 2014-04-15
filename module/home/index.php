@@ -12,7 +12,7 @@ if (Jaring::$_c_uid != 0) {
 <head>
 	<title><?= Jaring::$_title ?></title>
 
-	<link rel="shortcut icon" href="<?= Jaring::$_path ?>/images/favicon.ico"/>
+	<link rel="shortcut icon" href="<?= Jaring::$_path ?>images/favicon.ico"/>
 
 	<script>
 		var _g_root			="<?= Jaring::$_path ?>";
@@ -23,12 +23,12 @@ if (Jaring::$_c_uid != 0) {
 		var _g_ext			="<?= Jaring::$_ext ?>";
 	</script>
 
-	<link rel="stylesheet" type="text/css" href="<?= Jaring::$_path ?>/js/extjs/resources/css/ext-all-neptune.css" />
-	<link rel="stylesheet" type="text/css" href="<?= Jaring::$_path ?>/css/Jaring.css" />
+	<link rel="stylesheet" type="text/css" href="<?= Jaring::$_path ?>js/extjs/resources/css/ext-all-neptune.css" />
+	<link rel="stylesheet" type="text/css" href="<?= Jaring::$_path ?>css/jaring.css" />
 
-	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/extjs/ext-all-debug.js"></script>
-	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/extjs/ext-theme-neptune.js"></script>
-	<script type="text/javascript" src="<?= Jaring::$_path ?>/js/Jaring.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ext-all-debug.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ext-theme-neptune.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jaring.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="<?= $_SERVER['REQUEST_URI'] ?>layout.css" />
 	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>layout.js"></script>
