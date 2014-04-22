@@ -1,5 +1,5 @@
 /*
-	Copyright 2013 x10c-lab.com
+	Copyright 2014 Mhd Sulhan
 	Authors:
 		- mhd.sulhan (sulhan@x10c-lab.com)
 */
@@ -44,7 +44,7 @@ function JxSystemGroup_User ()
 		});
 
 	this.fUserId			= Ext.create ("Jx.ComboPaging", {
-			id				:"_user_id"
+			itemId			:"_user_id"
 		,	store			:this.storeNon
 		,	valueField		:"_user_id"
 		,	displayField	:"_user_realname"
@@ -52,7 +52,7 @@ function JxSystemGroup_User ()
 		});
 
 	this.panel				= Ext.create ("Jx.GridPaging.FormEditor", {
-			id				:this.id
+			itemId				:this.id
 		,	panelConfig		:
 			{
 				region			:"east"
@@ -186,7 +186,7 @@ function JxSystemGroup ()
 		});
 
 	this.panel			= Ext.create ("Ext.panel.Panel", {
-			id			:this.id
+			itemId		:this.id
 		,	title		:"System Group"
 		,	titleAlign	:"center"
 		,	closable	:true

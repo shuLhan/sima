@@ -1,7 +1,7 @@
 /*
-	Copyright 2013 x10c-lab.com
+	Copyright 2014 Mhd Sulhan
 	Authors:
-		- mhd.sulhan (sulhan@x10c-lab.com)
+		- mhd.sulhan (m.shulhan@gmail.com)
  */
 var SystemMenuGroup;
 var SystemMenuMenu;
@@ -77,7 +77,7 @@ function JxSystemMenuMenu ()
 		});
 
 	this.panel				= Ext.create ("Ext.tree.Panel", {
-			id				:this.id
+			itemId			:this.id
 		,	region			:"east"
 		,	width			:"50%"
 		,	title			:"System Menu"
@@ -165,7 +165,7 @@ function JxSystemMenuGroup ()
 		});
 
 	this.panel				= Ext.create ("Jx.GridPaging", {
-			id				:"SystemMenu_Group"
+			itemId			:"SystemMenu_Group"
 		,	region			:"center"
 		,	title			:"Groups of User"
 		,	store			:this.store
@@ -196,7 +196,7 @@ function JxSystemMenuGroup ()
 
 function JxSystemMenu ()
 {
-	this.id			= "SystemMenu";
+	this.id			= "System_Menu";
 
 	SystemMenuMenu	= new JxSystemMenuMenu ();
 	SystemMenuGroup	= new JxSystemMenuGroup ();
