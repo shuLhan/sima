@@ -1,8 +1,7 @@
 /*
-	Copyright 2014 x10c-lab.com
+	Copyright 2014 Mhd Sulhan
 	Authors:
 		- mhd.sulhan (m.shulhan@gmail.com)
-		- agus sugianto (agus@x10c-lab.com)
 */
 
 var main;
@@ -109,6 +108,7 @@ function JxUserProfile ()
 	this.store			= Ext.create ("Jx.Store", {
 			storeId		:this.id +"Store"
 		,	url			:this.dir +"UserProfile"+ _g_ext
+		,	singleApi	:true
 		,	fields		:
 			[
 				"id"
@@ -230,7 +230,6 @@ function JxMain ()
 {
 	this.id					= "Main";
 	this.menuStoreId		= this.id +"MenuStore";
-	this.homeStoreId		= this.id +"HomeStore";
 	this.contentHomeId		= this.id +"Home";
 	this.contentDashboardId	= this.id +"Dashboard";
 	this.headerId			= this.id +"Header";
@@ -246,20 +245,6 @@ function JxMain ()
 			[
 				"title"
 			,	"tbar"
-			]
-		});
-
-	this.storeHome	= Ext.create ("Jx.Store", {
-			storeId		:this.homeStoreId
-		,	url			:_g_module_path +"menuHome"+ _g_ext
-		,	fields		:
-			[
-				"id"
-			,	"label"
-			,	"image"
-			,	"description"
-			,	"module"
-			,	"permission"
 			]
 		});
 
@@ -326,51 +311,19 @@ function JxMain ()
 			[{
 				id			:"app-footer"
 			,	xtype		:"box"
-			,	html		:"<a href='https://github.com/x10c/Jaring' target='_blank'>"+ _g_title +"&nbsp;&nbsp;&copy;&nbsp;&nbsp;"+ new Date().getFullYear() +" - x10c-lab.com </a>"
+			,	html		:"<a href='https://github.com/shuLhan/Jaring'"
+							+" target='_blank'>"+ _g_title
+							+"&nbsp;&nbsp;&copy;&nbsp;&nbsp;"
+							+ new Date().getFullYear()
+							+" - Mhd Sulhan </a>"
 			,	flex		:1
 			}]
 		});
 
-	this.contentHomeView	= Ext.create ("Ext.view.View", {
-			id				:"home-menus"
-		,	store			:this.storeHome
-		,	tpl				:Ext.create ("Ext.XTemplate"
-			,	'<tpl for=".">'
-			,		'<div class="home-menu">'
-			,			(
-							Ext.isIE6
-							? '<div style="width:138px;height:138px;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\''+ _g_root +'/images/app/{[values.image.replace(/ /g, "-")]}.png\',sizingMethod=\'scale\')"></div>'
-							: '<img width="128" height="128" src="'+ _g_root +'/images/app/{[values.image.replace(/ /g, "-")]}.png" />'
-						)
-			,			'<h3>{label}</h3>'
-			,			'<span>{description}</span>'
-			,		'</div>'
-			,	'</tpl>'
-			)
-		,	itemSelector	:"div.home-menu"
-		,	overItemCls		:"home-menu-hover"
-		});
-
-	this.contentHome	= Ext.create ("Ext.panel.Panel", {
-			region		:"center"
-		,	margin		:"5 0 0 0"
-		,	padding		:"0 5 0 5"
-		,	bodyCls		:"panel-background"
-		,	layout		:
-			{
-				type		:"hbox"
-			,	pack		:"center"
-			,	align		:"middle"
-			}
-		,	items		:
-			[
-				this.contentHomeView
-			]
-		});
+	this.contentHome	= new JxMainHome (this);
 
 	this.contentDashboard	= Ext.create ("Ext.panel.Panel", {
 			region		:"center"
-		,	margin		:"5 0 0 0"
 		,	padding		:"0 5 0 5"
 		,	layout		:"fit"
 		,	bodyCls		:"panel-background"
@@ -384,7 +337,7 @@ function JxMain ()
 		,	items		:
 			[
 				this.header
-			,	this.contentHome
+			,	this.contentHome.panel
 			,	this.contentDashboard
 			,	this.footer
 			]
@@ -578,40 +531,6 @@ function JxMain ()
 		});
 	};
 
-	this.loadHomeMenu = function ()
-	{
-		this.storeHome.load ({
-			scope		:this
-		,	callback	:function (r, op, success)
-			{
-				if (! success) {
-					Jx.msg.error ("Failed to load home menu! <br/>");
-					return;
-				}
-			}
-		});
-	};
-
-	this.contentHomeViewOnClick = function (dv, rec, item, idx, e, eopts)
-	{
-		this.onMenuClick (rec.raw);
-
-		for (var i = 0; i < this.menu.items.length; i++) {
-			var tab		= this.menu.items.getAt (i);
-			var tbar	= tab.getDockedItems ('toolbar[dock="top"]');
-
-			for (var j = 0; j < tbar.length; j++) {
-				for (var k = 0; k < tbar[j].items.items.length; k++) {
-					if (tbar[j].items.items[k].module === rec.raw.module) {
-						this.menu.setActiveTab (i);
-						tbar[j].items.items[k].toggle (true, true);
-						return;
-					}
-				}
-			}
-		}
-	};
-
 	this.showLoading = function ()
 	{
 		Ext.get ('loading').show ();
@@ -709,10 +628,9 @@ function JxMain ()
 
 		this.buttonProfile.setHandler (this.showUserProfile, this);
 		this.buttonLogout.setHandler (this.doLogout, this);
-		this.contentHomeView.on ("itemclick", this.contentHomeViewOnClick, this);
 
 		this.loadMenu ();
-		this.loadHomeMenu ();
+		this.contentHome.init ();
 		this.hideLoading ();
 	};
 }

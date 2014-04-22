@@ -11,9 +11,9 @@
 .home				{ background-image: url("../../images/icons/home.png") !important; }
 .dashboard			{ background-image: url("../../images/icons/dashboard.png") !important; }
 .sys				{ background-image: url("../../images/icons/sys.png") !important; }
-.user				{ background-image: url("../../images/icons/user.png") !important; }
-.group				{ background-image: url("../../images/icons/group.png") !important; }
-.menu				{ background-image: url("../../images/icons/menu.png") !important; }
+.user				{ background: 0px 0px/16px 16px url("../../images/icons/user.svg") !important; }
+.group				{ background: 0px 0px/16px 16px url("../../images/icons/group.svg") !important; }
+.menu				{ background: 0px 0px/16px 16px url("../../images/icons/menu.svg") !important; }
 /*
 	Button's icons
 */

@@ -1,4 +1,10 @@
 <?php
+/*
+	Copyright 2014 Mhd Sulhan
+	Authors:
+		- mhd.sulhan (m.shulhan@gmail.com)
+*/
+
 require_once "../init.php";
 ?>
 <html>
@@ -45,6 +51,7 @@ require_once "../init.php";
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/GridPagingFormEditor.js"></script>
 
 	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>layout.js"></script>
+	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>home/layout.js"></script>
 </head>
 <body>
     <div id="loading-mask" style=""></div>
