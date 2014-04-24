@@ -30,13 +30,13 @@ class Jaring
 	public static $_ext				= '.php';
 	public static $_title			= 'Jaring Framework';
 	public static $_name			= 'jaring';
-	public static $_path				= '/';
+	public static $_path			= '/';
 	public static $_path_mod		= 'module';
 	public static $_mod_init		= '';
 	public static $_content_type	= 0;
 	public static $_menu_mode		= 1;
 	public static $_paging_size		= 50;
-	public static $_db_class			= '';
+	public static $_db_class		= '';
 	public static $_db_url			= '';
 	public static $_db_user			= '';
 	public static $_db_pass			= '';
@@ -63,14 +63,18 @@ class Jaring
 
 	public static function initSqliteDb ()
 	{
-		$a				= explode(":", self::$_db_url);
-		$a[1]			= APP_PATH . $a[1];
+		/* Check if sqlite is file or memory. */
+		$a = explode(":", self::$_db_url);
 
-		if (count ($a) >= 4 && $a[2] !== "memory") {
-			$f_db			= $a[1];
+		/* sqlite is file based */
+		if (count ($a) === 2) {
+			$a[1] = $f_db	= APP_PATH . $a[1];
 			self::$_db_url	= implode (":", $a);
 
 			if (file_exists ($f_db)) {
+				self::$_db = new SafePDO (self::$_db_url);
+				self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
 				return;
 			}
 		}
@@ -78,6 +82,7 @@ class Jaring
 		self::$_db = new SafePDO (self::$_db_url);
 		self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+			/* Populate new database file. */
 		$f_sql		= APP_PATH ."/WEB-INF/db/init.sqlite.sql";
 		$f_sql_v	= file_get_contents($f_sql);
 		$queries	= explode (";", $f_sql_v);
