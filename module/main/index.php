@@ -52,6 +52,7 @@ require_once "../init.php";
 
 	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>layout.js"></script>
 	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>home/layout.js"></script>
+	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>UserProfile/layout.js"></script>
 </head>
 <body>
     <div id="loading-mask" style=""></div>
@@ -60,7 +61,7 @@ require_once "../init.php";
             <img src="<?= Jaring::$_path ?>images/loading.gif" width="32" height="32" style="margin-right:8px;float:left;vertical-align:top;"/>
 			<?= Jaring::$_title ?>
 			-
-			<a href="http://www.x10c-lab.com">x10c-lab.com</a>
+			<a href="http://github.com/shuLhan/Jaring">Mhd Sulhan</a>
             <br />
 			<span id="loading-msg">Loading application...</span>
         </div>

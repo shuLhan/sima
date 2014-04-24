@@ -21,16 +21,17 @@ try {
 	}
 
 	// Get data
-	$q	="	select		id"
-		."	,			name"
-		."	,			realname"
-		."	,			password	as old_password"
-		."	,			''			as password"
-		."	from		_user"
-		."	where		(name		like ?"
-		."	or			realname	like ?)"
-		."	order by	name"
-		."	limit		". (int) $_GET["start"] .",". (int) $_GET["limit"];
+	$q	="
+		select		id
+		,			name
+		,			realname
+		,			password	as password_old
+		,			''			as password
+		from		_user
+		where		(name		like ?
+		or			realname	like ?)
+		order by	name
+		limit		". (int) $_GET["start"] .",". (int) $_GET["limit"];
 
 	$ps = Jaring::$_db->prepare ($q);
 	$ps->execute (array (

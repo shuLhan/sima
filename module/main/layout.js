@@ -100,132 +100,6 @@ function JxUserChangePassword ()
 	};
 }
 
-function JxUserProfile ()
-{
-	this.id		= "UserProfile";
-	this.dir	= _g_module_path;
-
-	this.store			= Ext.create ("Jx.Store", {
-			storeId		:this.id +"Store"
-		,	url			:this.dir +"UserProfile"+ _g_ext
-		,	singleApi	:true
-		,	fields		:
-			[
-				"id"
-			,	"name"
-			,	"realname"
-			,	"group_name"
-			]
-		});
-
-	this.buttonChangePassword	= Ext.create ("Ext.button.Button", {
-			text		:"Change password"
-		,	itemId		:"changePassword"
-		,	iconCls		:"change-password"
-		,	tooltip		:"Click this button to change your password"
-		});
-
-	this.doChangePassword	= function ()
-	{
-		var winChangePassword = new JxUserChangePassword ();
-
-		winChangePassword.doShow (this.store.getAt (0).get ("id"));
-	};
-
-	this.buttonChangePassword.setHandler (this.doChangePassword, this);
-
-	this.panel			= Ext.create ("Jx.Form", {
-			id			:this.id +"Form"
-		,	store		:this.store
-		,	items		:
-			[{
-				name		:"id"
-			,	hidden		:true
-			},{
-				fieldLabel	:"User name"
-			,	name		:"realname"
-			,	allowBlank	:false
-			},{
-				fieldLabel	:"User ID"
-			,	name		:"name"
-			,	readOnly	:true
-			},{
-				fieldLabel	:"Group"
-			,	name		:"group_name"
-			,	readOnly	:true
-			},{
-				xtype		:"fieldset"
-			,	autoEl		:
-				{
-					tag			:"center"
-				}
-			,	layout		:
-				{
-					type		:"hbox"
-				,	pack		:"center"
-				,	align		:"middle"
-				,	padding		:10
-				}
-			,	items		:
-				[
-					this.buttonChangePassword
-				]
-			}]
-
-		,	beforeFormSave	: function ()
-			{
-				this.store.action = "update";
-			}
-
-		,	afterFormSave	: function (success)
-			{
-				if (success) {
-					this.ownerCt.close ();
-				}
-			}
-
-		,	afterFormCancel : function ()
-			{
-				this.ownerCt.close ();
-			}
-		});
-
-	this.win			= Ext.create ("Ext.window.Window", {
-			id			:this.id
-		,	title		:"User Profile"
-		,	modal		:true
-		,	draggable	:false
-		,	autoResize	:false
-		,	layout		:"fit"
-		,	items		:
-			[
-				this.panel
-			]
-		});
-
-	this.doShow	= function ()
-	{
-		this.store.load ({
-			scope		:this
-		,	callback	:function (r, op, success)
-			{
-				if (! success) {
-					Jx.msg.error ("Failed to load user's profile!");
-					return false;
-				}
-				if (r.length <= 0) {
-					Jx.msg.error ("Can't load user's profile!");
-					return false;
-				}
-				this.panel.loadRecord (r[0]);
-				this.win.show ();
-				return true;
-			}
-		});
-		return true;
-	};
-}
-
 function JxMain ()
 {
 	this.id					= "Main";
@@ -237,6 +111,7 @@ function JxMain ()
 	this.headerTextId		= this.id +"HeaderText";
 	this.footerId			= this.id +"Footer";
 	this.dir				= _g_module_dir + this.id;
+	this.userProfile		= undefined;
 
 	this.store	= Ext.create ("Jx.Store", {
 			storeId	:this.menuStoreId
@@ -349,11 +224,11 @@ function JxMain ()
 	this.showUserProfile = function ()
 	{
 		if (this.userProfile === undefined) {
-			this.userProfile = new JxUserProfile ();
+			this.userProfile = new JxMainUserProfile ();
 		} else {
 			if (this.userProfile.win !== undefined) {
 				delete this.userProfile;
-				this.userProfile = new JxUserProfile ();
+				this.userProfile = new JxMainUserProfile ();
 			}
 		}
 		this.userProfile.doShow ();

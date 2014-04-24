@@ -8,4 +8,3 @@ setcookie ("user.name"	, "", $exp, Jaring::$_path);
 
 header ("Location:". Jaring::$_path);
 die ();
-?>

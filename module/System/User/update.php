@@ -14,15 +14,23 @@ try {
 
 	foreach ($users as $user) {
 		$id = (int) $user['id'];
-		
+
 		if ($id <= 0) {
 			throw new Exception ("Invalid user ID (". $id .") !");
+		}
+
+		$password = $user['password'];
+
+		if (empty ($password)) {
+			$password = $user['password_old'];
+		} else {
+			$password = hash ("sha256", $user['password']);
 		}
 
 		$i = 1;
 		$ps->bindValue ($i++, $user['name'], PDO::PARAM_STR);
 		$ps->bindValue ($i++, $user['realname'], PDO::PARAM_STR);
-		$ps->bindValue ($i++, hash ("sha256", $user['password']), PDO::PARAM_STR);
+		$ps->bindValue ($i++, $password, PDO::PARAM_STR);
 		$ps->bindValue ($i++, $id, PDO::PARAM_INT);
 
 		$ps->execute ();

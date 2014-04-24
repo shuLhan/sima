@@ -18,7 +18,7 @@ function JxSystemUser ()
 		,	"name"
 		,	"realname"
 		,	"password"
-		,	"old_password"
+		,	"password_old"
 		]
 	});
 
@@ -61,15 +61,8 @@ function JxSystemUser ()
 			}
 		},{
 			header		:"Current Password"
-		,	dataIndex	:"old_password"
+		,	dataIndex	:"password_old"
 		,	hidden		:true
-		,	editor		:
-			{
-				xtype		:"textfield"
-			,	vtype		:"alphanum"
-			,	inputType	:"password"
-			,	hidden		:"true"
-			}
 		},{
 			header		:"Password"
 		,	dataIndex	:"password"
