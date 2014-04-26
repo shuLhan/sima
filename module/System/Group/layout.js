@@ -150,7 +150,8 @@ function JxSystemGroup ()
 		});
 
 	this.grid				= Ext.create ("Jx.GridPaging.FormEditor", {
-			store			:this.store
+			id				:this.id +"_Group"
+		,	store			:this.store
 		,	panelConfig		:
 			{
 				region			:"center"

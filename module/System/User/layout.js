@@ -22,59 +22,59 @@ function JxSystemUser ()
 		]
 	});
 
-	this.panel	= Ext.create ("Jx.GridPaging.FormEditor", {
-		id			:this.id
-	,	panelConfig	:
-		{
-			title		:"System User"
-		,	closable	:true
-		}
-	,	store		:this.store
-	,	columns		:
-		[{
-			header		:"ID"
-		,	dataIndex	:"id"
-		,	hidden		:true
-		,	editor		:
+	this.panel			= Ext.create ("Jx.GridPaging.FormEditor", {
+			panelConfig	:
 			{
-				xtype		:"textfield"
+				itemId		:this.id
+			,	title		:"System User"
+			,	closable	:true
+			}
+		,	store		:this.store
+		,	columns		:
+			[{
+				header		:"ID"
+			,	dataIndex	:"id"
 			,	hidden		:true
-			}
-		},{
-			header		:"User ID"
-		,	dataIndex	:"name"
-		,	flex		:1
-		,	editor		:
-			{
-				xtype		:"textfield"
-			,	vtype		:"alphanum"
-			,	allowBlank	:false
-			}
-		},{
-			header		:"User name"
-		,	dataIndex	:"realname"
-		,	flex		:1
-		,	editor		:
-			{
-				xtype		:"textfield"
-			,	allowBlank	:false
-			}
-		},{
-			header		:"Current Password"
-		,	dataIndex	:"password_old"
-		,	hidden		:true
-		},{
-			header		:"Password"
-		,	dataIndex	:"password"
-		,	hidden		:true
-		,	editor		:
-			{
-				xtype		:"textfield"
-			,	vtype		:"alphanum"
-			,	inputType	:"password"
-			}
-		}]
-	});
+			,	editor		:
+				{
+					xtype		:"textfield"
+				,	hidden		:true
+				}
+			},{
+				header		:"User ID"
+			,	dataIndex	:"name"
+			,	flex		:1
+			,	editor		:
+				{
+					xtype		:"textfield"
+				,	vtype		:"alphanum"
+				,	allowBlank	:false
+				}
+			},{
+				header		:"User name"
+			,	dataIndex	:"realname"
+			,	flex		:1
+			,	editor		:
+				{
+					xtype		:"textfield"
+				,	allowBlank	:false
+				}
+			},{
+				header		:"Current Password"
+			,	dataIndex	:"password_old"
+			,	hidden		:true
+			},{
+				header		:"Password"
+			,	dataIndex	:"password"
+			,	hidden		:true
+			,	editor		:
+				{
+					xtype		:"textfield"
+				,	vtype		:"alphanum"
+				,	inputType	:"password"
+				}
+			}]
+		});
 
 	this.doRefresh	= function (perm)
 	{

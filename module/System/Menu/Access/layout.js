@@ -77,7 +77,7 @@ function JxSystemMenuMenu ()
 		});
 
 	this.panel				= Ext.create ("Ext.tree.Panel", {
-			itemId			:this.id
+			itemId			:this.id +"_Grid"
 		,	region			:"east"
 		,	width			:"50%"
 		,	title			:"System Menu"
@@ -202,7 +202,7 @@ function JxSystemMenuAccess ()
 	SystemMenuGroup	= new JxSystemMenuAccessGroup ();
 
 	this.panel			= Ext.create ("Ext.panel.Panel", {
-			id			:this.id
+			itemId		:this.id
 		,	title		:"System Menu Access"
 		,	titleAlign	:"center"
 		,	closable	:true
