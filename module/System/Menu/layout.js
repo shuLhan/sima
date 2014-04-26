@@ -18,7 +18,7 @@ function JxSystemMenuMenu ()
 		,	fields				:
 			[
 				"id"
-			,	"pid"
+			,	"parentId"
 			,	"label"
 			,	"iconCls"
 			,	"module"
@@ -100,7 +100,7 @@ function JxSystemMenuMenu ()
 			,	hidden			:true
 			},{
 				header			:"PID"
-			,	dataIndex		:"pid"
+			,	dataIndex		:"parentId"
 			,	hidden			:true
 			},{
 				xtype			:"treecolumn"
