@@ -47,10 +47,7 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 			}
 		,	onItemDoubleClick	:function (view, record, itemEl, index, e)
 			{
-				this.ownerCt.form.setTitle ("Updating data");
-				this.ownerCt.form.getForm ().reset ();
-				this.ownerCt.form.loadRecord (record);
-				this.ownerCt.form.show ();
+				this.ownerCt.grid._doEdit ();
 			}
 		}
 
