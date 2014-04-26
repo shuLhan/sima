@@ -8,16 +8,13 @@ var main;
 
 function JxMain ()
 {
-	this.id					= "Main";
+	this.id					= "main";
 	this.menuStoreId		= this.id +"MenuStore";
-	this.contentHomeId		= this.id +"Home";
-	this.contentDashboardId	= this.id +"Dashboard";
-	this.headerId			= this.id +"Header";
-	this.headerLogo			= this.id +"HeaderLogo";
-	this.headerTextId		= this.id +"HeaderText";
-	this.footerId			= this.id +"Footer";
+	this.contentHomeId		= this.id +"_home";
+	this.contentDashboardId	= this.id +"_dashboard";
+	this.headerId			= this.id +"_header";
+	this.footerId			= this.id +"_footer";
 	this.dir				= _g_module_dir + this.id;
-	this.userProfile		= undefined;
 
 	this.store	= Ext.create ("Jx.Store", {
 			storeId	:this.menuStoreId
@@ -29,87 +26,10 @@ function JxMain ()
 			]
 		});
 
-	this.buttonProfile	= Ext.create ("Ext.menu.Item", {
-			text		:"Profile"
-		,	iconCls		:"profile"
-		});
-
-	this.buttonLogout	= Ext.create ("Ext.menu.Item", {
-			text		:"Logout"
-		,	iconCls		:"logout"
-		});
-
-	/*
-		Main header
-	*/
-	this.header	= Ext.create ("Ext.container.Container", {
-			id			:this.headerId
-		,	region		:"north"
-		,	height		:50
-		,	layout		:
-			{
-				type		:"hbox"
-			,	align		:"middle"
-			,	pack		:"start"
-			}
-		,	items		:
-			[{
-				id			:this.headerLogo
-			,	xtype		:"container"
-			,	html		:"<img style='height:36;' src='../../images/logo.png'></img>"
-			},{
-				id			:this.headerTextId
-			,	xtype		:"box"
-			,	html		:_g_title
-			,	flex		:1
-			},{
-				xtype		:"button"
-			,	margin		:"0 5 0 0"
-			,	scale		:"medium"
-			,	text		:_g_c_username
-			,	iconCls		:"account"
-			,	menuAlign	:"tr-br"
-			,	menu		:
-				[
-					this.buttonProfile
-				,	"-"
-				,	this.buttonLogout
-				]
-			}]
-		});
-
-	this.footer			= Ext.create ("Ext.container.Container", {
-			id			:this.footerId
-		,	region		:"south"
-		,	height		:20
-		,	layout		:
-			{
-				type		:"hbox"
-			,	align		:"middle"
-			,	pack		:"center"
-			}
-		,	items		:
-			[{
-				id			:"app-footer"
-			,	xtype		:"box"
-			,	html		:"<a href='https://github.com/shuLhan/Jaring'"
-							+" target='_blank'>"+ _g_title
-							+"&nbsp;&nbsp;&copy;&nbsp;&nbsp;"
-							+ new Date().getFullYear()
-							+" - Mhd Sulhan </a>"
-			,	flex		:1
-			}]
-		});
-
-	this.contentHome	= new JxMainHome (this);
-
-	this.contentDashboard	= Ext.create ("Ext.panel.Panel", {
-			region		:"center"
-		,	padding		:"0 5 0 5"
-		,	layout		:"fit"
-		,	bodyCls		:"panel-background"
-		,	hidden		:true
-		});
+	this.header				= new JxMainHeader (this, this.headerId);
+	this.contentHome		= new JxMainHome (this, this.contentHomeId);
+	this.contentDashboard	= new JxMainDashboard (this, this.contentDashboardId);
+	this.footer				= new JxMainFooter (this, this.footerId);
 
 	// Main interface
 	this.main			= Ext.create ("Ext.container.Viewport", {
@@ -117,34 +37,16 @@ function JxMain ()
 		,	renderTo	:Ext.getBody ()
 		,	items		:
 			[
-				this.header
+				this.header.panel
 			,	this.contentHome.panel
-			,	this.contentDashboard
-			,	this.footer
+			,	this.contentDashboard.panel
+			,	this.footer.panel
 			]
 		});
 
 	/*
 		Functions
 	*/
-	this.showUserProfile = function ()
-	{
-		if (this.userProfile === undefined) {
-			this.userProfile = new JxMainUserProfile ();
-		} else {
-			if (this.userProfile.win !== undefined) {
-				delete this.userProfile;
-				this.userProfile = new JxMainUserProfile ();
-			}
-		}
-		this.userProfile.doShow ();
-	};
-
-	this.doLogout = function ()
-	{
-		this.showLoading ();
-		location.href = _g_module_path +"logout"+ _g_ext;
-	};
 
 	this.onTabChange	= function (tabp, newc, oldc, e)
 	{
@@ -406,9 +308,6 @@ function JxMain ()
 
 		this.main.add (this.menu);
 		this.main.add (this.content);
-
-		this.buttonProfile.setHandler (this.showUserProfile, this);
-		this.buttonLogout.setHandler (this.doLogout, this);
 
 		this.loadMenu ();
 		this.contentHome.init ();

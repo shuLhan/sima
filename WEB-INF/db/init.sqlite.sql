@@ -52,8 +52,8 @@ insert into _user (name, realname, password) values ('admin', 'Administrator', '
 
 insert into _user_group (_user_id, _group_id) values (1, 1);
 
-insert into _menu (id, pid, type, label, icon, image, module, description) values (1		,0		,0	,''				,'home'			,''				,'MainHome'			,'');
-insert into _menu (id, pid, type, label, icon, image, module, description) values (2		,0		,0	,'Dashboard'	,'dashboard'	,''				,'MainDashboard'	,'');
+insert into _menu (id, pid, type, label, icon, image, module, description) values (1		,0		,0	,''				,'home'			,''				,'main_home'			,'');
+insert into _menu (id, pid, type, label, icon, image, module, description) values (2		,0		,0	,'Dashboard'	,'dashboard'	,''				,'main_dashboard'	,'');
 insert into _menu (id, pid, type, label, icon, image, module, description) values (1000		,0		,0	,'System'		,'sys'			,''				,'System'			,'');
 insert into _menu (id, pid, type, label, icon, image, module, description) values (1001		,1000	,3	,'User'			,'user'			,'../icons/user.svg'	,'System_User'		,'');
 insert into _menu (id, pid, type, label, icon, image, module, description) values (1002		,1000	,3	,'Group'		,'group'		,'../icons/group.svg'	,'System_Group'		,'');

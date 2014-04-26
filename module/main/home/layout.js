@@ -85,10 +85,10 @@ JxMainHomeMenu.prototype.viewOnClick = function (dv, rec, item, idx, e, eopts)
 	}
 };
 
-function JxMainHome (jxmain)
+function JxMainHome (jx_main, id)
 {
-	this._parent	= jxmain;
-	this.id			= "main_home";
+	this._parent	= jx_main;
+	this.id			= id;
 	this.dir		= Jx.generateModDir (this.id);
 
 	this.store	= Ext.create ("Jx.Store", {

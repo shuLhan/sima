@@ -50,18 +50,25 @@ require_once "../init.php";
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/GridPagingRowEditor.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/GridPagingFormEditor.js"></script>
 
-	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>layout.js"></script>
+	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>header/layout.js"></script>
 	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>home/layout.js"></script>
+	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>dashboard/layout.js"></script>
 	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>UserProfile/layout.js"></script>
+	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>footer/layout.js"></script>
+	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>layout.js"></script>
 </head>
 <body>
     <div id="loading-mask" style=""></div>
     <div id="loading">
         <div class="loading-indicator">
-            <img src="<?= Jaring::$_path ?>images/loading.gif" width="32" height="32" style="margin-right:8px;float:left;vertical-align:top;"/>
-			<?= Jaring::$_title ?>
+            <img src="<?= Jaring::$_path ?>images/loading.gif"
+				width="32"
+				height="32"
+				style="margin-right:8px;float:left;vertical-align:top;"
+			/>
+			<a href="http://github.com/shuLhan/Jaring">Jaring</a>
 			-
-			<a href="http://github.com/shuLhan/Jaring">Mhd Sulhan</a>
+			<?= Jaring::$_title ?>
             <br />
 			<span id="loading-msg">Loading application...</span>
         </div>
