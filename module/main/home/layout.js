@@ -39,7 +39,7 @@ function JxMainHomeMenu (jx_main_home, pid, title)
 			,	'<div id="home-menus">'
 			,		'<tpl for=".">'
 			,			'<div class="home-menu">'
-			,				'<img width="128" height="128"'
+			,				'<img width="98" height="98"'
 			,					'src="/images/app/{image_path}" />'
 			,				'<h3>{label}</h3>'
 			,				'<span>{description}</span>'

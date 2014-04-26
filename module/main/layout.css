@@ -137,13 +137,10 @@
 	background		: url(../../images/background.gif) repeat;
 }
 #home-menus {
-    text-shadow	: #fff 0 1px 0;
+    text-shadow	: #fff 0px 1px 0px;
     position	: relative;
     display		: block;
     height		: auto;
-}
-#home-menus div.home-menu img {
-    margin-bottom	: 1px;
 }
 #home-menus div.home-menu {
     float		: left;
@@ -154,11 +151,14 @@
     color		: #333;
     font-size	: 16px;
     font-family	: "Helvetica Neue",sans-serif;
-    height		: 190px;
-    width		: auto;
+    height		: auto;
+    width		: 200px;
     overflow	: hidden;
     border-top	: 1px solid transparent;
     cursor		: pointer;
+}
+#home-menus div.home-menu img {
+    margin-bottom	: 1px;
 }
 
 .x-ie6 #home-menus div.home-menu,
@@ -177,13 +177,14 @@
     background-color: #D3E1F1 !important;
 }
 
-#home-menus div.home-menu strong {
+#home-menus div.home-menu h3 {
     color	: #000;
     display	: block;
 }
 
 #home-menus div.home-menu span {
-    color: #999;
+    color	: #3e3e3e;
+    display	: block;
 }
 
 /*
