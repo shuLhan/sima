@@ -1,9 +1,0 @@
-<#if licenseFirst??>
-${licenseFirst}
-</#if>
-${licensePrefix}Copyright 2014 - Mhd Sulhan
-${licensePrefix}Authors:
-${licensePrefix}  - mhd.sulhan (m.shulhan@gmail.com)
-<#if licenseLast??>
-${licenseLast}
-</#if>
