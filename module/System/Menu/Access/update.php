@@ -1,5 +1,5 @@
 <?php
-require_once "../../json_begin.php";
+require_once "../../../json_begin.php";
 
 try {
 	$menus = json_decode (file_get_contents('php://input'), true);
@@ -51,5 +51,4 @@ try {
 	$r['data']		= $e->getMessage ();
 }
 
-require_once "../../json_end.php";
-?>
+require_once "../../../json_end.php";

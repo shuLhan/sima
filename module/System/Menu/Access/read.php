@@ -1,5 +1,5 @@
 <?php
-require_once "../../json_begin.php";
+require_once "../../../json_begin.php";
 
 $q	="	select		A.id"
 	."	,			A.pid		as parentId"
@@ -84,4 +84,4 @@ try {
 	$r['data']		= $e->getMessage ();
 }
 
-require_once "../../json_end.php";
+require_once "../../../json_end.php";

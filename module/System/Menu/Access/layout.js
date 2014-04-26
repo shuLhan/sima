@@ -8,7 +8,7 @@ var SystemMenuMenu;
 
 function JxSystemMenuMenu ()
 {
-	this.id		= "System_Menu";
+	this.id		= "System_Menu_Access";
 	this.dir	= Jx.generateModDir (this.id);
 
 	this.store			= Ext.create ("Ext.data.TreeStore", {
@@ -148,7 +148,7 @@ function JxSystemMenuMenu ()
 	};
 }
 
-function JxSystemMenuGroup ()
+function JxSystemMenuAccessGroup ()
 {
 	this.id		= "System_Group";
 	this.dir	= Jx.generateModDir (this.id);
@@ -194,16 +194,16 @@ function JxSystemMenuGroup ()
 	};
 }
 
-function JxSystemMenu ()
+function JxSystemMenuAccess ()
 {
-	this.id			= "System_Menu";
+	this.id			= "System_Menu_Access";
 
 	SystemMenuMenu	= new JxSystemMenuMenu ();
-	SystemMenuGroup	= new JxSystemMenuGroup ();
+	SystemMenuGroup	= new JxSystemMenuAccessGroup ();
 
 	this.panel			= Ext.create ("Ext.panel.Panel", {
 			id			:this.id
-		,	title		:"Menu Access"
+		,	title		:"System Menu Access"
 		,	titleAlign	:"center"
 		,	closable	:true
 		,	layout		:"border"
@@ -220,4 +220,4 @@ function JxSystemMenu ()
 	};
 }
 
-var System_Menu = new JxSystemMenu ();
+var System_Menu_Access = new JxSystemMenuAccess ();
