@@ -321,3 +321,5 @@ Ext.onReady (function ()
 
 	main.init ();
 });
+
+//# sourceURL=module/main/layout.js

@@ -207,3 +207,5 @@ function JxSystemGroup ()
 };
 
 var System_Group = new JxSystemGroup ();
+
+//# sourceURL=module/System/Group/layout.js

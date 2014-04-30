@@ -221,3 +221,5 @@ function JxSystemMenuAccess ()
 }
 
 var System_Menu_Access = new JxSystemMenuAccess ();
+
+//# sourceURL=module/System/Menu/Access/layout.js

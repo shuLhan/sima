@@ -133,3 +133,5 @@ function JxMainUserProfile ()
 		return true;
 	};
 }
+
+//# sourceURL=module/main/UserProfile/layout.js

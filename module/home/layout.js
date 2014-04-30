@@ -111,3 +111,5 @@ Ext.onReady (function ()
 {
 	var loginwin = new JxLogin ();
 });
+
+//# sourceURL=module/home/layout.js
