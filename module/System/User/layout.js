@@ -1,7 +1,7 @@
 /*
-	Copyright 2013 x10c-lab.com
+	Copyright 2014 - Mhd Sulhan
 	Authors:
-		- mhd.sulhan (sulhan@x10c-lab.com)
+		- mhd.sulhan (m.shulhan@gmail.com)
 */
 
 function JxSystemUser ()
@@ -23,13 +23,14 @@ function JxSystemUser ()
 	});
 
 	this.panel			= Ext.create ("Jx.GridPaging.FormEditor", {
-			panelConfig	:
+			itemId		:this.id
+		,	store		:this.store
+		,	panelConfig	:
 			{
 				itemId		:this.id
 			,	title		:"System User"
 			,	closable	:true
 			}
-		,	store		:this.store
 		,	columns		:
 			[{
 				header		:"ID"
@@ -82,5 +83,6 @@ function JxSystemUser ()
 	};
 };
 
-/* moduleName = className */
 var System_User = new JxSystemUser ();
+
+//# sourceURL=module/System/User/layout.js
