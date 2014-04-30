@@ -12,6 +12,7 @@ function JxSystemMenu ()
 	this.store			= Ext.create ("Jx.Store", {
 			url			:this.dir
 		,	singleApi	:false
+		,	idProperty	:null
 		,	fields		:
 			[
 				"id"
@@ -26,7 +27,7 @@ function JxSystemMenu ()
 		});
 
 	this.panel			= Ext.create ("Jx.GridPaging.FormEditor", {
-			id			:this.id
+			itemId		:this.id
 		,	store		:this.store
 		,	panelConfig	:
 			{
@@ -94,7 +95,7 @@ function JxSystemMenu ()
 			},{
 				header		:"Description"
 			,	dataIndex	:"description"
-			,	flex		:1
+			,	width		:300
 			,	editor		:
 				{
 					xtype		:"textarea"
@@ -109,3 +110,5 @@ function JxSystemMenu ()
 }
 
 var System_Menu = new JxSystemMenu ();
+
+//# sourceURL=module/System/Menu/layout.js
