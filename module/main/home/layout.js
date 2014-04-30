@@ -17,7 +17,6 @@ function JxMainHomeMenu (jx_main_home, pid, title)
 			{
 				pid			:pid
 			}
-		,	autoLoad	:true
 		,	fields		:
 			[
 				"id"
@@ -145,3 +144,5 @@ JxMainHome.prototype.init = function ()
 {
 	this.store.load ();
 }
+
+//# sourceURL=module/main/home/layout.js
