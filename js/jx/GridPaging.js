@@ -370,7 +370,7 @@ Ext.define ("Jx.GridPaging", {
 
 		/* Refresh grid details */
 		if (data.length > 0) {
-			id	= data[0].get (this.getStore ().getFieldId ());
+			id	= data[0].get (this.getStore ().getIdProperty ());
 
 			for (var i = 0, c = null; i < this.compDetails.length; i++) {
 				this.compDetails[i].doRefresh (this.perm, id);

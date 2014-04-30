@@ -12,17 +12,11 @@ Ext.define ("Jx.StorePaging", {
 	{
 		remoteFilter:true
 	,	pageSize	:Jx.pageSize
-	,	fieldId		:"id"		// used later by GridPaging.compDetails.
 	}
 
 ,	constructor	:function (config)
 	{
 		this.callParent (arguments);
 		this.initConfig (config);
-	}
-
-,	getFieldId	:function ()
-	{
-		return this.fieldId;
 	}
 });

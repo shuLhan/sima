@@ -16,6 +16,7 @@ Ext.define ("Jx.Store", {
 		action		:"read"	// store's current action (read, create, update, destroy).
 	,	singleApi	:true
 	,	extension	:_g_ext
+	,	idProperty	:"id"
 	,	proxy		:
 		{
 			type		:"ajax"
@@ -33,8 +34,9 @@ Ext.define ("Jx.Store", {
 			}
 		,	writer		:
 			{
-				type		:"json"
-			,	allowSingle	:false
+				type			:"json"
+			,	allowSingle		:false
+			,	writeRecordId	:false
 			}
 		}
 	,	api			:
@@ -48,7 +50,9 @@ Ext.define ("Jx.Store", {
 
 ,	constructor	:function (config)
 	{
-		var opts = Ext.merge (this.config, config);
+		var opts = Ext.merge ({}, this.config);
+
+		Ext.merge (opts, config);
 
 		this.callParent (arguments);
 		this.initConfig (opts);
@@ -75,7 +79,15 @@ Ext.define ("Jx.Store", {
 
 		/* Check and merge for extra parameters */
 		if (opts.extraParams && typeof (opts.extraParams) === "object") {
-			this.proxy.extraParams = Ext.merge (this.proxy.extraParams, opts.extraParams);
+			Ext.merge (this.proxy.extraParams, opts.extraParams);
 		}
+
+		/* Set idProperty */
+		this.model.prototype.idProperty = opts.idProperty;
+	}
+
+,	getIdProperty	:function ()
+	{
+		return this.model.prototype.idProperty;
 	}
 });

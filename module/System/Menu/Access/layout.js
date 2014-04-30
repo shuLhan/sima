@@ -156,7 +156,7 @@ function JxSystemMenuAccessGroup ()
 	this.store			= Ext.create ("Jx.StorePaging", {
 			url			:this.dir
 		,	singleApi	:false
-		,	fieldId		:"id"
+		,	idProperty	:"id"
 		,	fields		:
 			[
 				"id"
