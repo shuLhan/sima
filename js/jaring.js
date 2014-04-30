@@ -29,8 +29,6 @@ Ext.override (Ext.grid.locking.View, {
 
 /*
 	Ext.data.Store.
-	- Set "autoLoad" and "autoSync" default to false.
-	- Set "autoDestroy" to true.
 	- Add function renderData to store, to render column using store.
 */
 Ext.override (Ext.data.Store, {

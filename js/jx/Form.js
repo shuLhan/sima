@@ -143,14 +143,16 @@ Ext.define ("Jx.Form", {
 				scope	:this
 			,	success	:function (batch, action)
 				{
-					Jx.msg.info (Jx.msg.AJAX_SUCCESS);
+					var data = this.store.proxy.reader.rawData.data;
+
+					Jx.msg.info (data || Jx.msg.AJAX_SUCCESS);
 					this.hide ();
 					this.afterSaveSuccess ();
 				}
 			,	failure	:function (batch, action)
 				{
 					this.store.rejectChanges ();
-					this.afterSaveFailure ();
+					this.afterSaveFailure (action);
 				}
 			});
 
@@ -239,7 +241,11 @@ Ext.define ("Jx.Form", {
 				break;
 			}
 		} else {
-			Jx.msg.error (action.result.data);
+			if (action.result) {
+				Jx.msg.error (action.result.data);
+			} else {
+				Jx.msg.error (this.store.proxy.reader.rawData.data);
+			}
 		}
 
 		if (this.afterFormSave
