@@ -1,6 +1,17 @@
+create user jaring password 'jaring';
+
+create database jaring owner jaring;
+
 /*
-	Common tables for system application.
-	Please keep DDL in this script vendor agnostic.
+drop table	jaring._group_menu;
+drop table	jaring._menu;
+drop table	jaring._user_group;
+drop table	jaring._group;
+drop table	jaring._user;
+
+drop sequence	jaring._user_group_seq;
+drop sequence	jaring._group_seq;
+drop sequence	jaring._user_seq;
 */
 
 /*
@@ -10,9 +21,11 @@
 	- 0 : system group, can't be deleted
 	- 1 : user group.
  */
+create sequence	jaring._group_seq;
+
 create table jaring._group
 (
-	id			integer			not null AUTO_INCREMENT
+	id			integer			not null default nextval ('_group_seq')
 ,	name		varchar (128)	not null
 ,	type		integer			default 1
 ,	constraint	_group_pk		primary key (id)
@@ -22,9 +35,11 @@ create table jaring._group
 	User of application.
 	_user.password encrypted with function sha256 (salt + real-password).
 */
+create sequence jaring._user_seq;
+
 create table jaring._user
 (
-	id			integer			not null AUTO_INCREMENT
+	id			integer			not null default nextval ('_user_seq')
 ,	name		varchar (32)	not null
 ,	realname	varchar (128)	not null
 ,	password	varchar (256)	not null
@@ -36,9 +51,11 @@ create table jaring._user
 /*
 	User -> Group
 */
+create sequence jaring._user_group_seq;
+
 create table jaring._user_group
 (
-	id			integer			not null AUTO_INCREMENT
+	id			integer			not null default nextval ('_user_group_seq')
 ,	_user_id	integer			not null
 ,	_group_id	integer			not null
 ,	constraint	_user_group_pk		primary key (id)
