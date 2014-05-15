@@ -2,7 +2,7 @@
 	Group
 */
 
-insert into jaring._group (name, type) values ('Administrator', 0);	-- 1
+insert into jaring._group (id, pid, name, type) values (1, 0, 'Administrator', 0);	-- 1
 
 /*
 	User

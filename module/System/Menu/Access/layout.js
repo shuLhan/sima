@@ -11,11 +11,11 @@ function JxSystemMenuMenu ()
 	this.id		= "System_Menu_Access";
 	this.dir	= Jx.generateModDir (this.id);
 
-	this.store			= Ext.create ("Ext.data.TreeStore", {
-			autoLoad			:false
-		,	autoSync			:true
-		,	defaultRootProperty	:"children"
-		,	fields				:
+	this.store			= Ext.create ("Jx.StoreTree", {
+			url			:this.dir
+		,	autoSync	:true
+		,	singleApi	:false
+		,	fields		:
 			[
 				"id"
 			,	"parentId"
@@ -25,30 +25,6 @@ function JxSystemMenuMenu ()
 			,	"_group_id"
 			,	"permission"
 			]
-		,	proxy			:
-			{
-				type		:"ajax"
-			,	api			:
-				{
-					read		:this.dir +"/read"+ _g_ext
-				,	create		:undefined
-				,	update		:this.dir +"/update"+ _g_ext
-				,	destroy		:undefined
-				}
-			,	extraParams	:
-				{
-					_group_id	:0
-				}
-			,	reader		:
-				{
-					type		:"json"
-				}
-			,	writer		:
-				{
-					type		:"json"
-				,	allowSingle	:false
-				}
-			}
 		});
 
 	this.storePerm	= Ext.create ("Ext.data.Store", {
@@ -153,44 +129,53 @@ function JxSystemMenuAccessGroup ()
 	this.id		= "System_Group";
 	this.dir	= Jx.generateModDir (this.id);
 
-	this.store			= Ext.create ("Jx.StorePaging", {
+	this.store			= Ext.create ("Jx.StoreTree", {
 			url			:this.dir
 		,	singleApi	:false
 		,	idProperty	:"id"
 		,	fields		:
 			[
 				"id"
+			,	"pid"
 			,	"name"
+			,	"text"
 			]
 		});
 
-	this.panel				= Ext.create ("Jx.GridPaging", {
-			itemId			:"SystemMenu_Group"
+	this.panel				= Ext.create ("Ext.tree.Panel", {
+			itemId			:this.id +"_Grid"
 		,	region			:"center"
-		,	title			:"Groups of User"
+		,	title			:"Group of User"
+		,	titleAlign		:"center"
+		,	useArrows		:true
+		,	rootVisible		:false
 		,	store			:this.store
-		,	autoCreateForm	:false
-		,	buttonBarList	:["refresh"]
-		,	syncUseStore	:false
+		,	plugins			:
+			[
+				Ext.create ("Jx.plugin.CrudButtons", {
+					buttonBarList	:["refresh"]
+				})
+			]
 		,	columns			:
 			[{
 				header			:"ID"
 			,	dataIndex		:"id"
 			,	hidden			:true
 			},{
+				header			:"Parent Group"
+			,	dataIndex		:"pid"
+			,	hidden			:true
+			},{
 				header			:"Group name"
-			,	dataIndex		:"name"
+			,	xtype			:"treecolumn"
+			,	dataIndex		:"text"
 			,	flex			:1
 			}]
-		,	compDetails		:
-			[
-				SystemMenuMenu
-			]
 		});
 
 	this.doRefresh	= function (perm)
 	{
-		this.panel.doRefresh (perm);
+		this.store.load ();
 	};
 }
 
@@ -216,8 +201,22 @@ function JxSystemMenuAccess ()
 
 	this.doRefresh	= function (perm)
 	{
+		this.perm = perm;
 		SystemMenuGroup.doRefresh (perm);
 	};
+
+	this.onGroupSelect = function (sm, data)
+	{
+		if (data.length <= 0) {
+			return;
+		}
+
+		var id = data[0].get ("id");
+
+		SystemMenuMenu.doRefresh (this.perm, id);
+	}
+
+	SystemMenuGroup.panel.on ("selectionchange", this.onGroupSelect, this);
 }
 
 var System_Menu_Access = new JxSystemMenuAccess ();

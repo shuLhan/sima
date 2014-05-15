@@ -132,59 +132,140 @@ function JxSystemGroup_User ()
 	};
 }
 
-function JxSystemGroup ()
+function JxSystemGroup_Group ()
 {
+	var self	= this;
 	this.id		= "System_Group";
 	this.dir	= Jx.generateModDir (this.id);
-	this.Users	= new JxSystemGroup_User ();
 
-	this.store			= Ext.create ("Jx.StorePaging", {
+	this.store			= Ext.create ("Jx.StoreTree", {
 			url			:this.dir
 		,	singleApi	:false
 		,	idProperty	:"id"
 		,	fields		:
-			[
-				"id"
-			,	"name"
-			]
+			[{
+				name	:"id"
+			,	type	:"int"
+			},{
+				name	:"pid"
+			,	type	:"int"
+			},{
+				name	:"name"
+			,	type	:"string"
+			},{
+				name	:"text"
+			,	type	:"string"
+			}]
 		});
 
-	this.grid				= Ext.create ("Jx.GridPaging.FormEditor", {
-			id				:this.id +"_Group"
+	this.form				= Ext.create ("Jx.Form", {
+			itemId			:this.id +"_Form"
+		,	store			:self.store
+		,	syncUseStore	:false
+		,	hidden			:true
+		,	region			:"south"
+		,	split			:true
+		,	layout			:"anchor"
+		,	defaults		:
+			{
+				labelAlign		:"right"
+			,	anchor			:"100%"
+			}
+		,	items			:
+			[{
+				name			:"id"
+			,	hidden			:true
+			},{
+				fieldLabel		:"Parent Group"
+			,	name			:"pid"
+			,	xtype			:"treecombo"
+			,	rootVisible		:false
+			,	selectChildren	:false
+			,	canSelectFolders:true
+			,	store			:self.store
+			,	valueField		:"id"
+			,	displayField	:"text"
+			,	allowBlank		:false
+			},{
+				fieldLabel		:"Group name"
+			,	name			:"name"
+			,	allowBlank		:false
+			}]
+		});
+
+	this.grid				= Ext.create ("Ext.tree.Panel", {
+			itemId			:this.id +"_Grid"
+		,	region			:"center"
+		,	useArrows		:true
+		,	rootVisible		:false
 		,	store			:this.store
-		,	panelConfig		:
-			{
-				region			:"center"
-			,	title			:"Group of User"
-			}
-		,	formConfig		:
-			{
-				region			:"south"
-			,	syncUseStore	:false
-			}
+		,	plugins			:
+			[
+				Ext.create ("Jx.plugin.CrudButtons")
+			]
 		,	columns			:
 			[{
 				header			:"ID"
 			,	dataIndex		:"id"
 			,	hidden			:true
-			,	editor			:
-				{
-					hidden			:true
-				}
+			},{
+				header			:"Parent Group"
+			,	dataIndex		:"pid"
+			,	hidden			:true
 			},{
 				header			:"Group name"
-			,	dataIndex		:"name"
+			,	xtype			:"treecolumn"
+			,	dataIndex		:"text"
 			,	flex			:1
-			,	editor			:
-				{
-					allowBlank		:false
-				}
 			}]
-		,	compDetails		:
+		,	doAdd		:function ()
+			{
+				self.form.setTitle ("Create new data");
+				self.form.getForm ().reset ();
+				self.form.show ();
+			}
+		,	doEdit		:function ()
+			{
+				self.form.setTitle ("Updating data");
+				self.form.getForm ().reset ();
+				self.form.loadRecord (this.selectedData[0]);
+				self.form.show ();
+			}
+		,	doDelete	:function ()
+			{
+				self.form.getForm ().reset ();
+				self.form.loadRecord (this.selectedData[0]);
+				self.form.doSave ();
+			}
+		});
+
+	this.panel	= Ext.create ("Ext.panel.Panel", {
+			itemId		:this.id +"_Group"
+		,	region		:"center"
+		,	title		:"Group of User"
+		,	titleAlign	:"center"
+		,	layout		:"border"
+		,	items		:
 			[
-				this.Users
+				this.grid
+			,	this.form
 			]
 		});
+
+	this.doRefresh	= function (perm)
+	{
+		this.perm		= perm;
+		this.grid.perm	= perm;
+		this.grid.fireEvent ("refresh", perm);
+	};
+}
+
+function JxSystemGroup ()
+{
+	this.id		= "System_Group";
+	this.dir	= Jx.generateModDir (this.id);
+	this.Users	= new JxSystemGroup_User ();
+	this.Groups	= new JxSystemGroup_Group ();
 
 	this.panel			= Ext.create ("Ext.panel.Panel", {
 			itemId		:this.id
@@ -194,16 +275,32 @@ function JxSystemGroup ()
 		,	layout		:"border"
 		,	items		:
 			[
-				this.grid
+				this.Groups.panel
 			,	this.Users.panel
 			]
 		});
 
+	this.onGroupSelect = function (sm, data)
+	{
+		if (data.length <= 0) {
+			return;
+		}
+
+		var id = data[0].get ("id");
+
+		this.Groups.form.loadRecord (data[0]);
+
+		this.Users.doRefresh (this.perm, id);
+	}
+
 	this.doRefresh = function (perm)
 	{
-		this.grid.doRefresh (perm);
+		this.perm = perm;
+		this.Groups.doRefresh (perm);
 		this.Users.doRefresh (perm, 0);
 	};
+
+	this.Groups.grid.on ("selectionchange", this.onGroupSelect, this);
 };
 
 var System_Group = new JxSystemGroup ();

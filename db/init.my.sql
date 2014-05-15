@@ -22,6 +22,7 @@ drop table	jaring._user;
 create table jaring._group
 (
 	id			integer			not null AUTO_INCREMENT
+,	pid			integer			default 0
 ,	name		varchar (128)	not null
 ,	type		integer			default 1
 ,	constraint	_group_pk		primary key (id)

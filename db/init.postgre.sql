@@ -26,6 +26,7 @@ create sequence	jaring._group_seq;
 create table jaring._group
 (
 	id			integer			not null default nextval ('_group_seq')
+,	pid			integer			default 0
 ,	name		varchar (128)	not null
 ,	type		integer			default 1
 ,	constraint	_group_pk		primary key (id)

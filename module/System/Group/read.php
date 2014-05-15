@@ -1,44 +1,60 @@
 <?php
 require_once "../../json_begin.php";
 
-try {
-	$q	="	select		COUNT(id) as total"
-		."	from		_group"
-		."	where		name like ?";
+$q	="	select		A.id"
+	."	,			A.pid"
+	."	,			A.name"
+	."	,			A.name		as text"
+	."	from		_group		A"
+	."	where		A.pid		= ?"
+	."	order by	A.id";
+
+function getGroup ($pid, $depth)
+{
+	global $q;
 
 	$ps = Jaring::$_db->prepare ($q);
-	$ps->execute (array (
-			"%". $_GET["query"] ."%"
-		)
-	);
+	$i	= 1;
+	$ps->bindValue ($i++, $pid, PDO::PARAM_INT);
+	$ps->execute ();
 	$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
 	$ps->closeCursor ();
 
-	if (count ($rs) > 0) {
-		$t = (int) $rs[0]["total"];
+	$index = 0;
+	foreach ($rs as &$m) {
+		$id = $m["id"];
+
+		if ($index === 0) {
+			$m["isFirst"] = true;
+		} else {
+			$m["isFirst"] = false;
+		}
+
+		$m["index"] = $index++;
+		$m["depth"]	= $depth;
+
+		$c = getGroup ($id, $depth + 1);
+
+		if (count ($c) <= 0) {
+			$m["leaf"]			= true;
+		} else {
+			$m["children"]		= $c;
+			$m["expandable"]	= true;
+			$m["expanded"]		= true;
+			$m["loaded"]		= true;
+		}
 	}
 
-	// Get data
-	$q	="	select		id"
-		."	,			name"
-		."	from		_group"
-		."	where		name like ?"
-		."	order by	name"
-		."	limit		". (int) $_GET["start"] .",". (int) $_GET["limit"];
+	return $rs;
+}
 
-	$ps = Jaring::$_db->prepare ($q);
-	$ps->execute (array (
-			"%". $_GET["query"] ."%"
-		)
-	);
-	$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
+try {
+	$data = getGroup (0, 0);
 
-	$r['success']	= true;
-	$r['data']		= $rs;
-	$r['total']		= $t;
+	$r["success"]	= true;
+	$r["children"]	= $data;
 } catch (Exception $e) {
-	$r['data']	= $e->getMessage ();
+	$r["data"]		= $e->getMessage ();
 }
 
 require_once "../../json_end.php";
-?>

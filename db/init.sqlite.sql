@@ -1,6 +1,7 @@
 create table _group
 (
 	id			integer			primary key
+,	pid			integer			default 0
 ,	name		varchar (128)	not null
 ,	type		integer			default 1
 );
@@ -49,7 +50,7 @@ create table _group_menu
 /*
 	Administrator account.
  */
-insert into _group (name, type) values ('Administrator', 0);	-- 1
+insert into _group (id, pid, name, type) values (1, 0, 'Administrator', 0);	-- 1
 
 insert into _user (name, realname, password)
 values ('admin', 'Administrator', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918');	-- 1

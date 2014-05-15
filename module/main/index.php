@@ -41,12 +41,18 @@ require_once "../init.php";
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ux/LiveSearchGridPanel.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ux/GridHeaderToolTip.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ux/ProgressBarPager.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ux/TreeCombo.js"></script>
 
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jaring.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/plugins/CrudButtons.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/plugins/SearchField.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/Store.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/StoreTree.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/StorePaging.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/ComboPaging.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/Form.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/SearchField.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/GridPaging.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/GridPagingRowEditor.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/GridPagingFormEditor.js"></script>
 

@@ -2,12 +2,18 @@
 require_once "../../json_begin.php";
 
 try {
-	$q	="	insert into _group ("
-		."		name"
-		."	) values ( ? )";
+	$q	="
+	insert into _group (
+		pid
+	,	name
+	) values ( ?, ? )
+	";
 
 	$ps = Jaring::$_db->prepare ($q);
-	$ps->execute (array ($_POST['name']));
+	$ps->execute (array (
+			$_POST['pid']
+		,	$_POST['name']
+		));
 
 	$r['success']	= true;
 	$r['data']		= Jaring::$MSG_SUCCESS_CREATE;

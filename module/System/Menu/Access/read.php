@@ -44,18 +44,18 @@ function getSystemMenu ($gid, $pid, $depth)
 	$index = 0;
 	foreach ($rs as &$m) {
 		$id = $m['id'];
-		
+
 		if ($index === 0) {
 			$m['isFirst'] = true;
 		} else {
 			$m['isFirst'] = false;
 		}
-		
+
 		$m['index'] = $index++;
 		$m['depth']	= $depth;
-		
+
 		$c = getSystemMenu ($gid, $id, $depth + 1);
-		
+
 		if (count ($c) <= 0) {
 			$m['leaf'] = true;
 		} else {
@@ -65,7 +65,7 @@ function getSystemMenu ($gid, $pid, $depth)
 			$m['loaded']		= true;
 		}
 	}
-	
+
 	return $rs;
 }
 
@@ -73,7 +73,7 @@ try {
 	$gid = (int) $_GET["_group_id"];
 
 	if ($gid <= 0) {
-		throw new Exception ("Invalid group ID : '". $gid ."'!");
+		throw new Exception ("Invalid group ID : ". $gid ."!");
 	}
 
 	$menus = getSystemMenu ($gid, 0, 0);
