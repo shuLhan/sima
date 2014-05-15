@@ -30,8 +30,9 @@ function getGroup ($pid, $depth)
 			$m["isFirst"] = false;
 		}
 
-		$m["index"] = $index++;
-		$m["depth"]	= $depth;
+		$m["iconCls"]	= "group";
+		$m["index"] 	= $index++;
+		$m["depth"]		= $depth;
 
 		$c = getGroup ($id, $depth + 1);
 
