@@ -15,7 +15,6 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 			layout		:"border"
 		,	titleAlign	:"center"
 		}
-
 	,	grid		:undefined
 	,	gridConfig	:
 		{
@@ -82,7 +81,7 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 		cfg.columns.splice (0, 0, { xtype : "rownumberer" });
 
 		var opts	= Ext.merge ({
-						id		: id
+						itemId	: id
 					,	_parent	: this
 					}, this.gridConfig);
 			opts = Ext.merge (opts, cfg);
@@ -101,7 +100,7 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 
 		var opts	= Ext.merge ({
 							store	:cfg.store
-						,	id		:id
+						,	itemId	:id
 					}
 					, this.formConfig);
 
