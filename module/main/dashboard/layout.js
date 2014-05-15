@@ -32,5 +32,3 @@ JxMainDashboard.prototype.hide = function ()
 JxMainDashboard.prototype.doRefresh = function ()
 {
 }
-
-//# sourceURL=module/main/dashboard/layout.js

@@ -88,5 +88,3 @@ JxMainHeader.prototype.doLogout = function ()
 
 	location.href = _g_module_path +"logout"+ _g_ext;
 };
-
-//# sourceURL=module/main/header/layout.js

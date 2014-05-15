@@ -144,5 +144,3 @@ JxMainHome.prototype.init = function ()
 {
 	this.store.load ();
 }
-
-//# sourceURL=module/main/home/layout.js

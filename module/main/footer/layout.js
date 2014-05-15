@@ -36,5 +36,3 @@ function JxMainFooter (jx_main, id)
 			}]
 		});
 }
-
-//# sourceURL=module/main/footer/layout.js

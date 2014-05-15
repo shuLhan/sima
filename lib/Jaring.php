@@ -115,10 +115,10 @@ class Jaring
 
 	public static function init ()
 	{
-		$f_app_conf	= APP_PATH ."/WEB-INF/app.conf";
+		$f_app_conf	= APP_PATH ."/app.conf";
 
 		if (!file_exists($f_app_conf)) {
-			$f_app_conf = APP_PATH . "/WEB-INF/app.default.conf";
+			$f_app_conf = APP_PATH . "/app.default.conf";
 		}
 
 		$app_conf = parse_ini_file ($f_app_conf);
@@ -132,7 +132,6 @@ class Jaring
 		self::$_content_type	= $app_conf['app.content.type'];
 		self::$_menu_mode		= $app_conf['app.menu.mode'];
 		self::$_paging_size		= $app_conf['app.paging.size'];
-		self::$_db_class		= $app_conf['db.class'];
 		self::$_db_url			= $app_conf['db.url'];
 		self::$_db_user			= $app_conf['db.username'];
 		self::$_db_pass			= $app_conf['db.password'];

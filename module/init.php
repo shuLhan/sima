@@ -2,7 +2,7 @@
 define ("APP_PATH", realpath (dirname (__FILE__) ."/../") ."/");
 
 function __autoload($class_name) {
-    require_once  APP_PATH ."/WEB-INF/classes/com/x10clab/jaring/". $class_name . ".php";
+	require_once  APP_PATH ."/lib/". $class_name . ".php";
 }
 
 Jaring::init ();
