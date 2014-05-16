@@ -41,10 +41,10 @@ Ext.define ("Jx.Store", {
 		}
 	,	api			:
 		{
-			read		:"/read"
-		,	create		:"/create"
-		,	update		:"/update"
-		,	destroy		:"/destroy"
+			read		:"read"
+		,	create		:"create"
+		,	update		:"update"
+		,	destroy		:"destroy"
 		}
 	}
 

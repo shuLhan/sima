@@ -139,6 +139,6 @@ Jx = {
 	*/
 ,	generateModDir	:function (id)
 	{
-		return _g_module_dir + id.replace (/_/g, "/");
+		return _g_module_dir + id.replace (/_/g, "/") +"/";
 	}
 };
