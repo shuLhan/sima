@@ -9,9 +9,11 @@ function JxSystemUser ()
 	this.id		= "System_User";
 	this.dir	= Jx.generateModDir (this.id);
 
-	this.store	= Ext.create ("Jx.StorePaging", {
-		url			:this.dir
-	,	singleApi	:false
+	this.store	= Ext.create ("Jx.StoreRest", {
+		proxy		:
+		{
+			url			:this.dir
+		}
 	,	fields		:
 		[
 			"id"

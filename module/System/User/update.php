@@ -1,7 +1,4 @@
 <?php
-require_once "../../json_begin.php";
-
-try {
 	$users = json_decode (file_get_contents('php://input'), true);
 
 	$q	="	update	_user"
@@ -38,10 +35,5 @@ try {
 		$ps->closeCursor ();
 	}
 
-	$r['success']	= true;
-	$r['data']		= Jaring::$MSG_SUCCESS_UPDATE;
-} catch (Exception $e) {
-	$r['data']	= $e->getMessage ();
-}
-
-require_once "../../json_end.php";
+	Jaring::$_out['success']	= true;
+	Jaring::$_out['data']		= Jaring::$MSG_SUCCESS_UPDATE;
