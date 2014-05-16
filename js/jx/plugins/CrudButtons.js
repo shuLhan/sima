@@ -248,11 +248,11 @@ Ext.define ("Jx.plugin.CrudButtons", {
 
 		this.cmp.selectedData = data;
 
-		if (this.cmp.perm >= 4) {
-			this.cmp.buttonDelete.setDisabled (s);
+		if (this.cmp.buttonDelete) {
+			this.cmp.buttonDelete.setDisabled (this.cmp.perm < 4);
 		}
-		if (this.cmp.perm >= 3) {
-			this.cmp.buttonEdit.setDisabled (s);
+		if (this.cmp.buttonEdit) {
+			this.cmp.buttonEdit.setDisabled (this.cmp.perm < 3);
 		}
 	}
 });
