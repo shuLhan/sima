@@ -25,12 +25,12 @@ function getMenu ($uid, $pid)
 	$ps->execute (array ($pid, $uid));
 	$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
 	$ps->closeCursor ();
-	
+
 	foreach ($rs as &$menu) {
 		$menu['enableToggle'] = true;
 
 		$submenu = getMenu ($uid, $menu['menu_id']);
-		
+
 		if (count ($submenu) > 0) {
 			$menu['arrowAlign']	= "right";
 			$menu['menu']		= $submenu;
@@ -76,7 +76,7 @@ try {
 				'layout'	=> $tbar_layout
 			,	'items'		=> $menu_items
 			);
-			
+
 			$menu['tbar']	= $tbar;
 
 			break;
@@ -87,7 +87,7 @@ try {
 			break;
 		}
 	}
-	
+
 	$r['success']	= true;
 	$r['data']		= $rs;
 } catch (Exception $e) {
