@@ -14,6 +14,7 @@ Ext.define ("Jx.StoreRest", {
 ,	config		:
 	{
 		pageSize	:Jx.pageSize
+	,	singleApi	:true
 	,	idProperty	:"id"
 	,	proxy		:
 		{
@@ -43,6 +44,35 @@ Ext.define ("Jx.StoreRest", {
 		Ext.merge (opts, config);
 
 		this.callParent ([opts]);
+		this.initConfig (opts);
+
+		if (opts.url) {
+			if (opts.singleApi) {
+				this.proxy.api = {
+						read	:opts.url
+					,	create	:opts.url
+					,	update	:opts.url
+					,	destroy	:opts.url
+					};
+			} else {
+				this.proxy.api = {
+						read	:opts.url + opts.api.read		+ opts.extension
+					,	create	:opts.url + opts.api.create		+ opts.extension
+					,	update	:opts.url + opts.api.update 	+ opts.extension
+					,	destroy	:opts.url + opts.api.destroy	+ opts.extension
+					};
+			}
+		} else if (opts.api) {
+			this.proxy.api = opts.api;
+		}
+
+		/* Check and merge for extra parameters */
+		if (opts.extraParams && typeof (opts.extraParams) === "object") {
+			Ext.merge (this.proxy.extraParams, opts.extraParams);
+		}
+
+		/* Set idProperty */
+		this.model.prototype.idProperty = opts.idProperty;
 	}
 
 ,	getIdProperty	:function ()
