@@ -1,10 +1,5 @@
 <?php
-require_once "../../../json_begin.php";
-
-try {
-	$menus = json_decode (file_get_contents('php://input'), true);
-
-	foreach ($menus as $m) {
+	foreach ($data as $m) {
 		$perm		= (int) $m['permission'];
 		$gid		= (int) $m['_group_id'];
 		$menu_id	= (int) $m['id'];
@@ -45,10 +40,5 @@ try {
 		$ps->closeCursor ();
 	}
 
-	$r['success']	= true;
-	$r['data']		= Jaring::$MSG_SUCCESS_UPDATE;
-} catch (Exception $e) {
-	$r['data']		= $e->getMessage ();
-}
-
-require_once "../../../json_end.php";
+	Jaring::$_out['success']	= true;
+	Jaring::$_out['data']		= Jaring::$MSG_SUCCESS_UPDATE;

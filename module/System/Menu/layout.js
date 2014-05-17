@@ -9,10 +9,8 @@ function JxSystemMenu ()
 	this.id		= "System_Menu";
 	this.dir	= Jx.generateModDir (this.id);
 
-	this.store			= Ext.create ("Jx.Store", {
+	this.store			= Ext.create ("Jx.StoreRest", {
 			url			:this.dir
-		,	singleApi	:false
-		,	idProperty	:null
 		,	fields		:
 			[
 				"id"

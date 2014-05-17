@@ -1,9 +1,4 @@
 <?php
-require_once "../../json_begin.php";
-
-try {
-	$objs = json_decode (file_get_contents('php://input'), true);
-
 	$q	="
 		insert into _menu (
 			id
@@ -18,8 +13,8 @@ try {
 		";
 
 	$ps = Jaring::$_db->prepare ($q);
-		
-	foreach ($objs as $o) {
+
+	foreach ($data as $o) {
 		$ps->execute (array (
 				$o['id']
 			,	$o['pid']
@@ -33,10 +28,5 @@ try {
 		$ps->closeCursor ();
 	}
 
-	$r['success']	= true;
-	$r['data']		= Jaring::$MSG_SUCCESS_CREATE;
-} catch (Exception $e) {
-	$r['data']		= $e->getMessage ();
-}
-
-require_once "../../json_end.php";
+	Jaring::$_out['success']	= true;
+	Jaring::$_out['data']		= Jaring::$MSG_SUCCESS_CREATE;

@@ -1,8 +1,5 @@
 <?php
-require_once "../../json_begin.php";
-
-try {
-	$id = (int) $_POST['id'];
+	$id = (int) $data['id'];
 
 	if ($id < 0) {
 		throw new Exception ("Invalid data ID!");
@@ -19,7 +16,7 @@ try {
 
 	if (count ($rs) > 0) {
 		$type = (int) $rs[0]['type'];
-		
+
 		if ($type === 0) {
 			throw new Exception ("This group is system group and can't be deleted.");
 		}
@@ -44,11 +41,5 @@ try {
 	$ps->execute ();
 	$ps->closeCursor ();
 
-	$r['success']	= true;
-	$r['data']		= Jaring::$MSG_SUCCESS_DESTROY;
-} catch (Exception $e) {
-	$r['data']		= $e->getMessage ();
-}
-
-require_once "../../json_end.php";
-?>
+	Jaring::$_out['success']	= true;
+	Jaring::$_out['data']		= Jaring::$MSG_SUCCESS_DESTROY;

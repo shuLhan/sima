@@ -1,7 +1,4 @@
 <?php
-require_once "../../json_begin.php";
-
-try {
 	$q	="
 	insert into _group (
 		pid
@@ -11,15 +8,9 @@ try {
 
 	$ps = Jaring::$_db->prepare ($q);
 	$ps->execute (array (
-			$_POST['pid']
-		,	$_POST['name']
+			$data['pid']
+		,	$data['name']
 		));
 
-	$r['success']	= true;
-	$r['data']		= Jaring::$MSG_SUCCESS_CREATE;
-} catch (Exception $e) {
-	$r['data']		= $e->getMessage ();
-}
-
-require_once "../../json_end.php";
-?>
+	Jaring::$_out['success']	= true;
+	Jaring::$_out['data']		= Jaring::$MSG_SUCCESS_CREATE;

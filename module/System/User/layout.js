@@ -10,11 +10,11 @@ function JxSystemUser ()
 	this.dir	= Jx.generateModDir (this.id);
 
 	this.store	= Ext.create ("Jx.StoreRest", {
-		proxy		:
+		proxy	:
 		{
-			url			:this.dir
+			url		:this.dir
 		}
-	,	fields		:
+	,	fields	:
 		[
 			"id"
 		,	"name"

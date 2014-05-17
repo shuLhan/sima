@@ -1,7 +1,4 @@
 <?php
-require_once "../../../json_begin.php";
-
-try {
 	$q	="	select		COUNT(A.id) as total"
 		."	from		_user_group	A"
 		."	,			_user		B"
@@ -45,12 +42,6 @@ try {
 	$ps->execute ();
 	$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
 
-	$r['success']	= true;
-	$r['data']		= $rs;
-	$r['total']		= $t;
-} catch (Exception $e) {
-	$r['data']		= $e->getMessage ();
-}
-
-require_once "../../../json_end.php";
-?>
+	Jaring::$_out['success']	= true;
+	Jaring::$_out['data']		= $rs;
+	Jaring::$_out['total']		= $t;

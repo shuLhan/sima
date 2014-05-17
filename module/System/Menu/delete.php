@@ -1,15 +1,11 @@
 <?php
-require_once "../../json_begin.php";
-
-try {
-	$objs	= json_decode (file_get_contents('php://input'), true);
 	$q_gm	=" delete from _group_menu where _menu_id = ? ";
 	$q		=" delete from _menu where id = ?";
 
 	$ps_gm	= Jaring::$_db->prepare ($q_gm);
 	$ps		= Jaring::$_db->prepare ($q);
 
-	foreach ($objs as $o) {
+	foreach ($data as $o) {
 		$id = (int) $o['id'];
 
 		if ($id < 0) {
@@ -25,10 +21,5 @@ try {
 		$ps->closeCursor ();
 	}
 
-	$r['success']	= true;
-	$r['data']		= Jaring::$MSG_SUCCESS_DESTROY;
-} catch (Exception $e) {
-	$r['data']		= $e->getMessage ();
-}
-
-require_once "../../json_end.php";
+	Jaring::$_out['success']	= true;
+	Jaring::$_out['data']		= Jaring::$MSG_SUCCESS_DESTROY;

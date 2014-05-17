@@ -14,7 +14,12 @@ function JxSystemMenuMenu ()
 	this.store			= Ext.create ("Jx.StoreTree", {
 			url			:this.dir
 		,	autoSync	:true
-		,	singleApi	:false
+		,	proxy		:
+			{
+				type		:"rest"
+			,	appendId	:false
+			,	noCache		:true
+			}
 		,	fields		:
 			[
 				"id"
@@ -28,11 +33,14 @@ function JxSystemMenuMenu ()
 		});
 
 	this.storePerm	= Ext.create ("Ext.data.Store", {
-			fields			:
-			[
-				"permission"
-			,	"name"
-			]
+			fields	:
+			[{
+				name	:"permission"
+			,	type	:"int"
+			},{
+				name	:"name"
+			,	type	:"string"
+			}]
 		,	data			:
 			[{
 				permission		:0
@@ -131,8 +139,13 @@ function JxSystemMenuAccessGroup ()
 
 	this.store			= Ext.create ("Jx.StoreTree", {
 			url			:this.dir
-		,	singleApi	:false
-		,	idProperty	:"id"
+		,	singleApi	:true
+		,	proxy		:
+			{
+				type		:"rest"
+			,	appendId	:false
+			,	noCache		:true
+			}
 		,	fields		:
 			[
 				"id"
@@ -175,7 +188,7 @@ function JxSystemMenuAccessGroup ()
 
 	this.doRefresh	= function (perm)
 	{
-		this.store.load ();
+		this.panel.fireEvent ("refresh", perm);
 	};
 }
 

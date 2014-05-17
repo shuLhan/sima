@@ -1,9 +1,8 @@
 <?php
-	$users	= json_decode (file_get_contents('php://input'), true);
 	$q		=" delete from _user where id = ?";
 	$ps		= Jaring::$_db->prepare ($q);
 
-	foreach ($users as $user) {
+	foreach ($data as $user) {
 		$id = (int) $user['id'];
 
 		if ($id < 0) {

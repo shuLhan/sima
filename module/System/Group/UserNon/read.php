@@ -1,9 +1,6 @@
 <?php
-require_once "../../../json_begin.php";
-
-try {
 	$gid = $_GET['_group_id'];
-	
+
 	if ($gid <= 0) {
 		throw new Exception ("Invalid group ID (". $gid .") !");
 	}
@@ -21,9 +18,10 @@ try {
 		."	)";
 
 	$ps = Jaring::$_db->prepare ($q);
-	$ps->bindValue (1, $gid, PDO::PARAM_INT);
-	$ps->bindValue (2, "%". $_GET["query"] ."%", PDO::PARAM_STR);
-	$ps->bindValue (3, "%". $_GET["query"] ."%", PDO::PARAM_STR);
+	$i	= 1;
+	$ps->bindValue ($i++, $gid, PDO::PARAM_INT);
+	$ps->bindValue ($i++, "%". $_GET["query"] ."%", PDO::PARAM_STR);
+	$ps->bindValue ($i++, "%". $_GET["query"] ."%", PDO::PARAM_STR);
 	$ps->execute ();
 
 	$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
@@ -50,20 +48,15 @@ try {
 		."	limit		? , ?";
 
 	$ps = Jaring::$_db->prepare ($q);
-	$ps->bindValue (1, $gid, PDO::PARAM_INT);
-	$ps->bindValue (2, "%". $_GET["query"] ."%", PDO::PARAM_STR);
-	$ps->bindValue (3, "%". $_GET["query"] ."%", PDO::PARAM_STR);
-	$ps->bindValue (4, (int) $_GET['start'], PDO::PARAM_INT);
-	$ps->bindValue (5, (int) $_GET['limit'], PDO::PARAM_INT);
+	$i	= 1;
+	$ps->bindValue ($i++, $gid, PDO::PARAM_INT);
+	$ps->bindValue ($i++, "%". $_GET["query"] ."%", PDO::PARAM_STR);
+	$ps->bindValue ($i++, "%". $_GET["query"] ."%", PDO::PARAM_STR);
+	$ps->bindValue ($i++, (int) $_GET['start'], PDO::PARAM_INT);
+	$ps->bindValue ($i++, (int) $_GET['limit'], PDO::PARAM_INT);
 	$ps->execute ();
 	$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
 
-	$r['success']	= true;
-	$r['data']		= $rs;
-	$r['total']		= $t;
-} catch (Exception $e) {
-	$r['data']		= $e->getMessage ();
-}
-
-require_once "../../../json_end.php";
-?>
+	Jaring::$_out['success']	= true;
+	Jaring::$_out['data']		= $rs;
+	Jaring::$_out['total']		= $t;

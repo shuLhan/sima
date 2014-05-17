@@ -1,18 +1,18 @@
 /*
 	Copyright 2014 Mhd Sulhan
 	Authors:
-		- mhd.sulhan (sulhan@x10c-lab.com)
+		- mhd.sulhan (m.shulhan@gmail.com)
 */
 var SystemGroupUser;
 
 function JxSystemGroup_User ()
 {
+	var self	= this;
 	this.id		= "System_Group_User";
 	this.dir	= Jx.generateModDir (this.id);
 
-	this.store			= Ext.create ("Jx.StorePaging", {
+	this.store			= Ext.create ("Jx.StoreRest", {
 			url			:this.dir
-		,	singleApi	:false
 		,	extraParams	:
 			{
 				_group_id	:0
@@ -29,9 +29,8 @@ function JxSystemGroup_User ()
 
 	this.dirNon	= Jx.generateModDir ("System_Group_UserNon");
 
-	this.storeNon		= Ext.create ("Jx.StorePaging", {
+	this.storeNon		= Ext.create ("Jx.StoreRest", {
 			url			:this.dirNon
-		,	singleApi	:false
 		,	extraParams	:
 			{
 				_group_id	:0
@@ -52,7 +51,8 @@ function JxSystemGroup_User ()
 		});
 
 	this.panel				= Ext.create ("Jx.GridPaging.FormEditor", {
-			itemId				:this.id
+			itemId			:this.id
+		,	store			:this.store
 		,	panelConfig		:
 			{
 				region			:"east"
@@ -67,13 +67,11 @@ function JxSystemGroup_User ()
 			,	afterFormSave	:function (success)
 				{
 					if (success) {
-						this.ownerCt.grid.__class__.storeNon.load ();
+						self.storeNon.load ();
 						this.ownerCt.form.hide ();
 					}
 				}
 			}
-		,	store			:this.store
-		,	__class__		:this
 		,	columns			:
 			[{
 				header			:"ID"
@@ -105,16 +103,16 @@ function JxSystemGroup_User ()
 			/* Disable combo _user_id before deletion */
 		,	beforeDelete : function ()
 			{
-				this.__class__.fUserId.allowBlank		= true;
-				this.__class__.fUserId.forceSelection	= false;
-				this.__class__.fUserId.submitValue		= false;
+				self.fUserId.allowBlank		= true;
+				self.fUserId.forceSelection	= false;
+				self.fUserId.submitValue	= false;
 				return true;
 			}
 		,	afterDelete : function ()
 			{
-				this.__class__.fUserId.allowBlank		= false;
-				this.__class__.fUserId.forceSelection	= true;
-				this.__class__.fUserId.submitValue		= true;
+				self.fUserId.allowBlank		= false;
+				self.fUserId.forceSelection	= true;
+				self.fUserId.submitValue	= true;
 			}
 		});
 
@@ -140,8 +138,12 @@ function JxSystemGroup_Group ()
 
 	this.store			= Ext.create ("Jx.StoreTree", {
 			url			:this.dir
-		,	singleApi	:false
+		,	singleApi	:true
 		,	idProperty	:"id"
+		,	proxy		:
+			{
+				type		:"rest"
+			}
 		,	fields		:
 			[{
 				name	:"id"

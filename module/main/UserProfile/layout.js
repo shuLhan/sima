@@ -9,9 +9,8 @@ function JxMainUserProfile ()
 	this.id		= "main_UserProfile";
 	this.dir	= Jx.generateModDir (this.id);
 
-	this.store			= Ext.create ("Jx.Store", {
+	this.store			= Ext.create ("Jx.StoreRest", {
 			url			:Jx.generateModDir ("System_User")
-		,	singleApi	:false
 		,	fields		:
 			[
 				"id"

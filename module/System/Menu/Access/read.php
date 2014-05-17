@@ -1,7 +1,7 @@
 <?php
-require_once "../../../json_begin.php";
-
-$q	="	select		A.id"
+function getSystemMenu ($gid, $pid, $depth)
+{
+	$q	="	select		A.id"
 	."	,			A.pid		as parentId"
 	."	,			A.label"
 	."	,			A.icon		as iconCls"
@@ -26,10 +26,6 @@ $q	="	select		A.id"
 	."	where		A.pid		= ?"
 	."	and			A.type	in (0, 1, 3)"
 	."	order by	A.id";
-
-function getSystemMenu ($gid, $pid, $depth)
-{
-	global $q;
 
 	$ps = Jaring::$_db->prepare ($q);
 	$i	= 1;
@@ -69,7 +65,6 @@ function getSystemMenu ($gid, $pid, $depth)
 	return $rs;
 }
 
-try {
 	$gid = (int) $_GET["_group_id"];
 
 	if ($gid <= 0) {
@@ -78,10 +73,5 @@ try {
 
 	$menus = getSystemMenu ($gid, 0, 0);
 
-	$r['success']	= true;
-	$r["children"]	= $menus;
-} catch (Exception $e) {
-	$r['data']		= $e->getMessage ();
-}
-
-require_once "../../../json_end.php";
+	Jaring::$_out['success']	= true;
+	Jaring::$_out["children"]	= $menus;

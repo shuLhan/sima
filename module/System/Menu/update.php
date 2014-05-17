@@ -1,9 +1,4 @@
 <?php
-require_once "../../json_begin.php";
-
-try {
-	$objs = json_decode (file_get_contents('php://input'), true);
-
 	$q	="
 		update	_menu
 		set		id			= ?
@@ -14,11 +9,11 @@ try {
 		,		image		= ?
 		,		description	= ?
 		where	id			= ?
-";
+		";
 
 	$ps = Jaring::$_db->prepare ($q);
 
-	foreach ($objs as $o) {
+	foreach ($data as $o) {
 		$id = (int) $o['id'];
 
 		if ($id <= 0) {
@@ -40,10 +35,5 @@ try {
 		$ps->closeCursor ();
 	}
 
-	$r['success']	= true;
-	$r['data']		= Jaring::$MSG_SUCCESS_UPDATE;
-} catch (Exception $e) {
-	$r['data']	= $e->getMessage ();
-}
-
-require_once "../../json_end.php";
+	Jaring::$_out['success']	= true;
+	Jaring::$_out['data']		= Jaring::$MSG_SUCCESS_UPDATE;
