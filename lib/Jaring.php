@@ -90,6 +90,9 @@ class Jaring
 			$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
 			$ps->closeCursor ();
 
+			if (count ($rs) <= 0) {
+				return false;
+			}
 			if (((int) $rs[0]["permission"]) >= $access) {
 				return true;
 			}
@@ -131,8 +134,17 @@ class Jaring
 		self::$_db = new SafePDO (self::$_db_url);
 		self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-			/* Populate new database file. */
-		$f_sql		= APP_PATH ."/WEB-INF/db/init.sqlite.sql";
+		/* Populate new database file. */
+		$f_sql		= APP_PATH ."/db/init.sqlite.sql";
+		$f_sql_v	= file_get_contents($f_sql);
+		$queries	= explode (";", $f_sql_v);
+
+		foreach ($queries as $q) {
+			$q	.= ";";
+			self::$_db->exec ($q);
+		}
+
+		$f_sql		= APP_PATH ."/db/init.dml.sql";
 		$f_sql_v	= file_get_contents($f_sql);
 		$queries	= explode (";", $f_sql_v);
 
@@ -252,6 +264,8 @@ class Jaring
 			if (false === $s) {
 				throw new Exception (Jaring::$MSG_ACCESS_FAIL);
 			}
+
+			$data = json_decode (file_get_contents('php://input'), true);
 
 			switch ($access) {
 			case 1:
