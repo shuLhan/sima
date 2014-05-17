@@ -20,6 +20,7 @@ Ext.define ("Jx.Form", {
 ,	config			:
 	{
 		autoScroll		:true
+	,	jsonSubmit		:true
 	,	bodyPadding		:10
 	,	bodyStyle		:'border:0px;'
 	,	border			:false
@@ -158,20 +159,36 @@ Ext.define ("Jx.Form", {
 
 		} else { /* Otherwise use basic form submit */
 			var url;
+			var method = "GET";
 
 			/* Generate url based on user action */
 			switch (this.store.action) {
 			case "read":
-				url = this.store.proxy.api.read;
+				url		= this.store.proxy.api.read;
+				method	= "GET";
 				break;
 			case "create":
-				url = this.store.proxy.api.create;
+				url		= this.store.proxy.api.create;
+				method	= "POST";
 				break;
 			case "update":
 				url = this.store.proxy.api.update;
+
+				if (this.store.singleApi) {
+					method	= "PUT";
+				} else {
+					method	= "POST";
+				}
 				break;
 			case "destroy":
 				url = this.store.proxy.api.destroy;
+
+				if (this.store.singleApi) {
+					method	= "DELETE";
+				} else {
+					method	= "POST";
+				}
+
 				break;
 			default:
 				Jx.msg.error (Jx.msg.ACTION_UNKNOWN +"'"+ this.store.action +"'");
@@ -180,6 +197,7 @@ Ext.define ("Jx.Form", {
 
 			f.submit ({
 				url		:url
+			,	method	:method
 			,	params	:
 				{
 					action		:this.store.action

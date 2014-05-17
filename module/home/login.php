@@ -2,8 +2,10 @@
 require_once "../json_begin.php";
 
 try {
-	if (! isset ($_POST['username'])
-	||  ! isset ($_POST['password'])) {
+	$data = json_decode (file_get_contents('php://input'), true);
+
+	if (! isset ($data['username'])
+	||  ! isset ($data['password'])) {
 		throw new Exception ("Invalid username or password!");
 	}
 
@@ -15,7 +17,7 @@ try {
 		."	and		password	= ? ";
 
 	$ps = Jaring::$_db->prepare ($q);
-	$ps->execute (array ($_POST['username'], hash ("sha256", $_POST['password'])));
+	$ps->execute (array ($data['username'], hash ("sha256", $data['password'])));
 	$rs = $ps->fetchAll ();
 	$ps->closeCursor ();
 
