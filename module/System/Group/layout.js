@@ -48,6 +48,7 @@ function JxSystemGroup_User ()
 		,	valueField		:"_user_id"
 		,	displayField	:"_user_realname"
 		,	allowBlank		:false
+		,	editable		:false
 		});
 
 	this.panel				= Ext.create ("Jx.GridPaging.FormEditor", {
@@ -104,7 +105,7 @@ function JxSystemGroup_User ()
 		,	beforeDelete : function ()
 			{
 				self.fUserId.allowBlank		= true;
-				self.fUserId.forceSelection	= false;
+				self.fUserId.editable		= true;
 				self.fUserId.submitValue	= false;
 				return true;
 			}
@@ -182,6 +183,7 @@ function JxSystemGroup_Group ()
 			,	valueField		:"id"
 			,	displayField	:"text"
 			,	allowBlank		:false
+			,	editable		:false
 			},{
 				fieldLabel		:"Group name"
 			,	name			:"name"
