@@ -5,110 +5,110 @@
 
 	Custom store with AJAX and JSON.
 */
-Ext.define ("Jx.base.Store", {
-	autoLoad			:false
-,	autoSync			:false
-,	autoDestroy			:true
-,	remoteFilter		:true
-,	pageSize			:Jx.pageSize
-,	config				:
+var storeDefaultConfig = {
+	autoLoad		:false
+,	autoSync		:false
+,	autoDestroy		:true
+,	proxy			:
 	{
-		// store's current action (read, create, update, destroy).
-		action		:"read"
-	,	singleApi	:true
-	,	extension	:_g_ext
-	,	idProperty	:"id"
-	,	proxy		:
+		type			:"ajax"
+	,	url				:""
+	,	filterParam		:undefined
+	,	extraParams		:
 		{
-			type		:"ajax"
-		,	filterParam	:undefined
-		,	extraParams	:
-			{
-				action		:"read"
-			,	query		:""
-			,	subaction	:""
-			}
-		,	reader		:
-			{
-				type		:"json"
-			,	root		:"data"
-			}
-		,	writer		:
-			{
-				type			:"json"
-			,	allowSingle		:false
-			,	writeRecordId	:false
-			}
+			action			:"read"
+		,	query			:""
+		,	subaction		:""
 		}
-	,	api			:
+	,	reader			:
 		{
-			read		:"read"
-		,	create		:"create"
-		,	update		:"update"
-		,	destroy		:"destroy"
+			type			:"json"
+		,	root			:"data"
+		}
+	,	writer			:
+		{
+			type			:"json"
+		,	allowSingle		:false
+		,	writeRecordId	:false
 		}
 	}
 
-,	rebuildUrl	:function (opts)
+	// store's current action (read, create, update, destroy).
+,	action		:"read"
+,	singleApi	:true
+,	extension	:_g_ext
+,	idProperty	:"id"
+
+,	api			:
 	{
-		if (opts.url) {
-			if (opts.singleApi) {
-				this.proxy.api = {
-						read	:opts.url
-					,	create	:opts.url
-					,	update	:opts.url
-					,	destroy	:opts.url
-					};
-			} else {
-				this.proxy.api = {
-						read	:opts.url + opts.api.read		+ opts.extension
-					,	create	:opts.url + opts.api.create		+ opts.extension
-					,	update	:opts.url + opts.api.update 	+ opts.extension
-					,	destroy	:opts.url + opts.api.destroy	+ opts.extension
-					};
-			}
-		} else if (opts.api) {
-			this.proxy.api = opts.api;
-		}
+		read		:"read"
+	,	create		:"create"
+	,	update		:"update"
+	,	destroy		:"destroy"
 	}
 
-,	storeInit :function (opts)
+,	storeInit :function ()
 	{
-		this.rebuildUrl (opts);
+		this.rebuildUrl ();
 
 		/* Check and merge for extra parameters */
-		if (opts.extraParams && typeof (opts.extraParams) === "object") {
-			Ext.merge (this.proxy.extraParams, opts.extraParams);
+		if (this.extraParams && typeof (this.extraParams) === "object") {
+			Ext.merge (this.proxy.extraParams, this.extraParams);
 		}
 
 		/* Set idProperty */
-		this.model.prototype.idProperty = opts.idProperty;
+		this.model.prototype.idProperty = this.idProperty;
+	}
+
+,	rebuildUrl	:function ()
+	{
+		if (this.url) {
+			if (this.singleApi) {
+				this.proxy.api = {
+						read	:this.url
+					,	create	:this.url
+					,	update	:this.url
+					,	destroy	:this.url
+					};
+			} else {
+				this.proxy.api = {
+						read	:this.url + this.api.read		+ this.extension
+					,	create	:this.url + this.api.create		+ this.extension
+					,	update	:this.url + this.api.update 	+ this.extension
+					,	destroy	:this.url + this.api.destroy	+ this.extension
+					};
+			}
+		} else if (this.api) {
+			this.proxy.api = this.api;
+		}
 	}
 
 ,	getIdProperty	:function ()
 	{
 		return this.model.prototype.idProperty;
 	}
-});
+};
 
 Ext.define ("Jx.Store", {
-	extend		:"Ext.data.Store"
-,	alias		:"jx.store"
-,	mixins		:
-	[
-		'Jx.base.Store'
-	]
-
+	extend	:"Ext.data.Store"
+,	alias	:"jx.store"
+,	config	:
+	{
+		remoteFilter	:true
+	,	pageSize		:Jx.pageSize
+	}
 ,	constructor	:function (config)
 	{
-		var opts = Ext.merge ({}, this.config);
+		var opts = {};
 
+		Ext.merge (opts, storeDefaultConfig);
+		Ext.merge (opts, this.config);
 		Ext.merge (opts, config);
 
 		this.callParent ([opts]);
-		this.initConfig (opts);
+		this.initConfig (opts)
 
-		this.storeInit (opts);
+		this.storeInit ();
 	}
 });
 
@@ -133,7 +133,6 @@ Ext.define ("Jx.StoreRest", {
 		Ext.merge (opts, config);
 
 		this.callParent ([opts]);
-		this.initConfig (opts);
 	}
 });
 
@@ -143,35 +142,38 @@ Ext.define ("Jx.StoreRest", {
 Ext.define ("Jx.StoreTree", {
 	extend				:"Ext.data.TreeStore"
 ,	alias				:"jx.storetree"
-,	defaultRootProperty	:"children"
-,	root				:
+,	config				:
 	{
-		text				:""
-	,	expanded			:true
-	,	children			:[]
-	}
-,	config	:
-	{
-		proxy	:
+		defaultRootProperty	:"children"
+	,	root				:
 		{
-			type		:"rest"
-		,	appendId	:false
+			text				:""
+		,	expanded			:true
+		,	children			:[]
+		}
+	,	proxy				:
+		{
+			type				:"rest"
+		,	appendId			:false
+		,	reader			:
+			{
+				type			:"json"
+			,	root			:"children"
+			}
 		}
 	}
-,	mixins	:
-	[
-		"Jx.base.Store"
-	]
 
 ,	constructor	:function (config)
 	{
-		var opts = Ext.merge ({}, this.config);
+		var opts = {};
 
+		Ext.merge (opts, storeDefaultConfig);
+		Ext.merge (opts, this.config);
 		Ext.merge (opts, config);
 
 		this.callParent ([opts]);
-		this.initConfig (opts);
+		this.initConfig (opts)
 
-		this.storeInit (opts);
+		this.storeInit ();
 	}
 });

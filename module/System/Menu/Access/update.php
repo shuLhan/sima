@@ -3,7 +3,7 @@
 		$perm		= (int) $m['permission'];
 		$gid		= (int) $m['_group_id'];
 		$menu_id	= (int) $m['id'];
-		
+
 		if ($perm < 0) {
 			throw new Exception ("Invalid permission value :'". $perm ."'!");
 		}

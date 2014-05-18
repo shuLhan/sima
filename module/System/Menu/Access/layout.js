@@ -14,12 +14,6 @@ function JxSystemMenuMenu ()
 	this.store			= Ext.create ("Jx.StoreTree", {
 			url			:this.dir
 		,	autoSync	:true
-		,	proxy		:
-			{
-				type		:"rest"
-			,	appendId	:false
-			,	noCache		:true
-			}
 		,	fields		:
 			[
 				"id"
@@ -139,13 +133,6 @@ function JxSystemMenuAccessGroup ()
 
 	this.store			= Ext.create ("Jx.StoreTree", {
 			url			:this.dir
-		,	singleApi	:true
-		,	proxy		:
-			{
-				type		:"rest"
-			,	appendId	:false
-			,	noCache		:true
-			}
 		,	fields		:
 			[
 				"id"
