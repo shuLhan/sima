@@ -138,12 +138,6 @@ function JxSystemGroup_Group ()
 
 	this.store			= Ext.create ("Jx.StoreTree", {
 			url			:this.dir
-		,	singleApi	:true
-		,	idProperty	:"id"
-		,	proxy		:
-			{
-				type		:"rest"
-			}
 		,	fields		:
 			[{
 				name	:"id"

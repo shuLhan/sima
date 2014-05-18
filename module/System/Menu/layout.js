@@ -11,6 +11,7 @@ function JxSystemMenu ()
 
 	this.store			= Ext.create ("Jx.StoreRest", {
 			url			:this.dir
+		,	idProperty	:""
 		,	fields		:
 			[
 				"id"

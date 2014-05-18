@@ -47,9 +47,6 @@ require_once "../init.php";
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/plugins/CrudButtons.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/plugins/SearchField.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/Store.js"></script>
-	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/StoreRest.js"></script>
-	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/StoreTree.js"></script>
-	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/StorePaging.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/ComboPaging.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/Form.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/SearchField.js"></script>

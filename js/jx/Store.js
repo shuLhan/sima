@@ -5,15 +5,16 @@
 
 	Custom store with AJAX and JSON.
 */
-Ext.define ("Jx.Store", {
-	extend		:"Ext.data.Store"
-,	alias		:"jx.store"
-,	autoLoad	:false
-,	autoSync	:false
-,	autoDestroy	:true
-,	config		:
+Ext.define ("Jx.base.Store", {
+	autoLoad			:false
+,	autoSync			:false
+,	autoDestroy			:true
+,	remoteFilter		:true
+,	pageSize			:Jx.pageSize
+,	config				:
 	{
-		action		:"read"	// store's current action (read, create, update, destroy).
+		// store's current action (read, create, update, destroy).
+		action		:"read"
 	,	singleApi	:true
 	,	extension	:_g_ext
 	,	idProperty	:"id"
@@ -48,15 +49,8 @@ Ext.define ("Jx.Store", {
 		}
 	}
 
-,	constructor	:function (config)
+,	rebuildUrl	:function (opts)
 	{
-		var opts = Ext.merge ({}, this.config);
-
-		Ext.merge (opts, config);
-
-		this.callParent (arguments);
-		this.initConfig (opts);
-
 		if (opts.url) {
 			if (opts.singleApi) {
 				this.proxy.api = {
@@ -76,6 +70,11 @@ Ext.define ("Jx.Store", {
 		} else if (opts.api) {
 			this.proxy.api = opts.api;
 		}
+	}
+
+,	storeInit :function (opts)
+	{
+		this.rebuildUrl (opts);
 
 		/* Check and merge for extra parameters */
 		if (opts.extraParams && typeof (opts.extraParams) === "object") {
@@ -89,5 +88,90 @@ Ext.define ("Jx.Store", {
 ,	getIdProperty	:function ()
 	{
 		return this.model.prototype.idProperty;
+	}
+});
+
+Ext.define ("Jx.Store", {
+	extend		:"Ext.data.Store"
+,	alias		:"jx.store"
+,	mixins		:
+	[
+		'Jx.base.Store'
+	]
+
+,	constructor	:function (config)
+	{
+		var opts = Ext.merge ({}, this.config);
+
+		Ext.merge (opts, config);
+
+		this.callParent ([opts]);
+		this.initConfig (opts);
+
+		this.storeInit (opts);
+	}
+});
+
+/**
+ * Store with RESTful.
+ */
+Ext.define ("Jx.StoreRest", {
+	extend		:"Jx.Store"
+,	alias		:"jx.storerest"
+,	config		:
+	{
+		proxy		:
+		{
+			type		:"rest"
+		,	appendId	:false
+		}
+	}
+,	constructor	:function (config)
+	{
+		var opts = Ext.merge ({}, this.config);
+
+		Ext.merge (opts, config);
+
+		this.callParent ([opts]);
+		this.initConfig (opts);
+	}
+});
+
+/*
+	Custom store tree with REST + JSON.
+*/
+Ext.define ("Jx.StoreTree", {
+	extend				:"Ext.data.TreeStore"
+,	alias				:"jx.storetree"
+,	defaultRootProperty	:"children"
+,	root				:
+	{
+		text				:""
+	,	expanded			:true
+	,	children			:[]
+	}
+,	config	:
+	{
+		proxy	:
+		{
+			type		:"rest"
+		,	appendId	:false
+		}
+	}
+,	mixins	:
+	[
+		"Jx.base.Store"
+	]
+
+,	constructor	:function (config)
+	{
+		var opts = Ext.merge ({}, this.config);
+
+		Ext.merge (opts, config);
+
+		this.callParent ([opts]);
+		this.initConfig (opts);
+
+		this.storeInit (opts);
 	}
 });

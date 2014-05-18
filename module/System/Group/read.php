@@ -19,8 +19,6 @@ function getGroup ($pid, $depth)
 	$rs	= $ps->fetchAll (PDO::FETCH_ASSOC);
 	$ps->closeCursor ();
 
-	Jaring::$_out["q"] = $q;
-
 	$index = 0;
 	foreach ($rs as &$m) {
 		$id = $m["id"];
