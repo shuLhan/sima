@@ -285,6 +285,7 @@ class Jaring
 			Jaring::$_out['data'] = $e->getMessage ();
 		}
 
+		header('Content-Type: application/json');
 		echo json_encode (Jaring::$_out);
 	}
 }
