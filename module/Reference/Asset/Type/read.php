@@ -2,7 +2,7 @@
 // Get total row
 $q	="
 		select	COUNT(id) as total
-		from	asset_type
+		from	". Jaring::$_mod["db_table"] ."
 		where	name like ?
 	";
 
@@ -21,7 +21,7 @@ if (count ($rs) > 0) {
 $q	="
 	select		id
 	,			name
-	from		asset_type
+	from		". Jaring::$_mod["db_table"] ."
 	where		name like ?
 	order by	name
 	limit		". (int) $_GET["start"] .",". (int) $_GET["limit"];

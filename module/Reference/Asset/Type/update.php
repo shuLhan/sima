@@ -1,6 +1,6 @@
 <?php
 $q	="
-	update	asset_type
+	update	". Jaring::$_mod["db_table"] ."
 	set		name		= ?
 	where	id			= ?
 	";

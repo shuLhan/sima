@@ -1,6 +1,6 @@
 <?php
 $q	="
-		insert into asset_type (
+		insert into ". Jaring::$_mod["db_table"] ." (
 			name
 		) values ( ? )
 	";

@@ -1,5 +1,5 @@
 <?php
-$q		=" delete from asset_type where id = ?";
+$q		=" delete from ". Jaring::$_mod["db_table"] ." where id = ?";
 $ps		= Jaring::$_db->prepare ($q);
 
 foreach ($data as $d) {
