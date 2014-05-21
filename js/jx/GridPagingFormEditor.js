@@ -3,7 +3,7 @@
 	Authors:
 		- mhd.sulhan (m.shulhan@gmail.com)
 
-	Custom grid panel with paging and row editor.
+	Custom grid panel with paging and form editor.
 */
 Ext.define ("Jx.GridPaging.FormEditor", {
 	extend		:"Ext.panel.Panel"
