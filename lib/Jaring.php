@@ -55,17 +55,23 @@ class Jaring
 	/*
 		Module configuration. Set by each modules index.
 	*/
-	public static $_mod	= array (
-							"db_table"			=> ""
-						,	"db_table_id"		=> ""
-						,	"db_table_fields"	=> array()
-						);
+	public static $_mod	= [
+							"db_table"	=> [
+								"name"		=> ""
+							,	"id"		=> ["id"]
+							,	"read"		=> []
+							,	"search"	=> []
+							,	"create"	=> []
+							,	"update"	=> []
+							,	"order"		=> []
+							]
+						];
 
-	public static $_out	= array (
+	public static $_out	= [
 							'success'	=> false
 						,	'data'		=> ''
 						,	'total'		=> 0
-						);
+						];
 
 	/*
 		Cookies values.
@@ -221,6 +227,164 @@ class Jaring
 		Jaring::getCookiesValue ();
 	}
 
+	private static function dbExecute ($q)
+	{
+		$ps = Jaring::$_db->prepare ($q);
+		$ps->execute ();
+		$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
+		$ps->closeCursor ();
+
+		return $rs;
+	}
+
+	private static function handleRequestRead ()
+	{
+		$query	= "'%".$_GET["query"]."%'";
+		$start	= (int) $_GET["start"];
+		$limit	= (int) $_GET["limit"];
+
+		$qselect	= "	select	". implode (",", Jaring::$_mod["db_table"]["read"]);
+		$qfrom		= " from ". Jaring::$_mod["db_table"]["name"];
+		$qwhere		= " where ";
+		$qorder		= " order by ". implode (",", Jaring::$_mod["db_table"]["order"]);
+		$qlimit		= "	limit ". $start .",". $limit;
+
+		foreach (Jaring::$_mod["db_table"]["search"] as $k => $v) {
+			if ($k > 0) {
+				$qwhere .= " and ";
+			}
+			$qwhere .= $v ." like ". $query;
+		}
+
+		/* Get total rows */
+		$qtotal	=" select	COUNT(". Jaring::$_mod["db_table"]["id"][0] .") as total "
+				. $qfrom
+				. $qwhere;
+
+		/* Get data */
+		$qread	= $qselect
+				. $qfrom
+				. $qwhere
+				. $qorder
+				. $qlimit;
+
+		Jaring::$_out["total"]		= (int) Jaring::dbExecute ($qtotal)[0]["total"];
+		Jaring::$_out["data"]		= Jaring::dbExecute ($qread);
+		Jaring::$_out["success"]	= true;
+	}
+
+	private static function handleRequestCreate ($data)
+	{
+		$qbind	= "";
+
+		$nfield	= count (Jaring::$_mod["db_table"]["create"]);
+		for ($i = 0; $i < $nfield; $i++) {
+			if ($i > 0) {
+				$qbind .= ",";
+			}
+			$qbind .= "?";
+		}
+
+		$q	=" insert into ". Jaring::$_mod["db_table"]["name"]
+			." (". implode (",", Jaring::$_mod["db_table"]["create"]) .")"
+			." values (". $qbind .")";
+
+		$ps = Jaring::$_db->prepare ($q);
+
+		foreach ($data as $d) {
+			$bindv = [];
+
+			for ($i = 0; $i < $nfield; $i++) {
+				array_push ($bindv, $d[Jaring::$_mod["db_table"]["create"][$i]]);
+			}
+
+			$ps->execute ($bindv);
+			$ps->closeCursor ();
+
+			unset ($bindv);
+		}
+
+		Jaring::$_out['success']	= true;
+		Jaring::$_out['data']		= Jaring::$MSG_SUCCESS_CREATE;
+	}
+
+	private static function handleRequestUpdate ($data)
+	{
+		$qupdate=" update	". Jaring::$_mod["db_table"]["name"];
+		$qset	=" set ";
+		$qwhere	=" where ";
+
+		foreach (Jaring::$_mod["db_table"]["update"] as $k => $v) {
+			if ($k > 0) {
+				$qset .= ",";
+			}
+			$qset .= $v ." = ? ";
+		}
+		foreach (Jaring::$_mod["db_table"]["id"] as $k => $v) {
+			if ($k < 0) {
+				$qwhere .=" and ";
+			}
+			$qwhere .= $v ." = ? ";
+		}
+
+		$q	= $qupdate
+			. $qset
+			. $qwhere;
+
+		$ps = Jaring::$_db->prepare ($q);
+
+		foreach ($data as $d) {
+			$bindv = [];
+
+			foreach (Jaring::$_mod["db_table"]["update"] as $field) {
+				array_push ($bindv, $d[$field]);
+			}
+			foreach (Jaring::$_mod["db_table"]["id"] as $field) {
+				array_push ($bindv, $d[$field]);
+			}
+
+			$ps->execute ($bindv);
+			$ps->closeCursor ();
+
+			unset ($bindv);
+		}
+
+		Jaring::$_out['success']	= true;
+		Jaring::$_out['data']		= Jaring::$MSG_SUCCESS_UPDATE;
+	}
+
+	private static function handleRequestDelete ($data)
+	{
+		$qdelete=" delete from ". Jaring::$_mod["db_table"]["name"];
+		$qwhere	=" where ";
+
+		foreach (Jaring::$_mod["db_table"]["id"] as $k => $v) {
+			if ($k < 0) {
+				$qwhere .=" and ";
+			}
+			$qwhere .= $v ." = ? ";
+		}
+
+		$q	= $qdelete . $qwhere;
+		$ps	= Jaring::$_db->prepare ($q);
+
+		foreach ($data as $d) {
+			$bindv = [];
+
+			foreach (Jaring::$_mod["db_table"]["id"] as $field) {
+				array_push ($bindv, $d[$field]);
+			}
+
+			$ps->execute ($bindv);
+			$ps->closeCursor ();
+
+			unset ($bindv);
+		}
+
+		Jaring::$_out['success']	= true;
+		Jaring::$_out['data']		= Jaring::$MSG_SUCCESS_DESTROY;
+	}
+
 	public static function handleRequest ()
 	{
 		$i		= 1;
@@ -278,20 +442,40 @@ class Jaring
 
 			switch ($access) {
 			case 1:
-				require_once $path."read.php";
+				$path .= "read.php";
+				if (file_exists ($path)) {
+					require_once $path;
+				} else {
+					Jaring::handleRequestRead ();
+				}
 				break;
 			case 2:
-				require_once $path."create.php";
+				$path .= "create.php";
+				if (file_exists ($path)) {
+					require_once $path;
+				} else {
+					Jaring::handleRequestCreate ($data);
+				}
 				break;
 			case 3:
-				require_once $path."update.php";
+				$path .= "update.php";
+				if (file_exists ($path)) {
+					require_once $path;
+				} else {
+					Jaring::handleRequestUpdate ($data);
+				}
 				break;
 			case 4:
-				require_once $path."delete.php";
+				$path .= "delete.php";
+				if (file_exists ($path)) {
+					require_once $path;
+				} else {
+					Jaring::handleRequestDelete ($data);
+				}
 				break;
 			}
 		} catch (Exception $e) {
-			Jaring::$_out['data'] = $e->getMessage ();
+			Jaring::$_out['data'] = addslashes ($e->getMessage ());
 		}
 
 		header('Content-Type: application/json');
