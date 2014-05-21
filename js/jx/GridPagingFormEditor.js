@@ -62,7 +62,15 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 
 ,	constructor	:function (cfg)
 	{
-		var opts = Ext.merge ({}, this.panelConfig);
+		var id			= ( cfg.id
+						? cfg.id
+						: ( cfg.itemId
+							? cfg.itemId
+							: "JxGridPagingFormEditor"));
+
+		var opts = Ext.merge ({
+								itemId: id
+							}, this.panelConfig);
 			opts = Ext.merge (opts, cfg.panelConfig);
 
 		this.callParent ([opts]);
