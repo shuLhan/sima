@@ -3,7 +3,7 @@
 
 function genjs ($out, $in)
 {
-	$fout = fopen ($out, "w");
+	$fout = fopen ($out, "wb");
 
 	foreach ($in as $js) {
 		$fin = file_get_contents ($js);
