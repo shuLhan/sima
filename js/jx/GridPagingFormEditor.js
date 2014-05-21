@@ -75,7 +75,11 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 ,	createGrid	:function (cfg)
 	{
 		var barName		= "Grid";
-		var id			= ( cfg.id ? cfg.id + barName : ( cfg.itemId ? cfg.itemId + barName : "JxGridPagingFormEditor"+ barName));
+		var id			= ( cfg.id
+						? cfg.id + barName
+						: ( cfg.itemId
+							? cfg.itemId + barName
+							: "JxGridPagingFormEditor"+ barName));
 
 		/* Add row number to grid */
 		cfg.columns.splice (0, 0, { xtype : "rownumberer" });
@@ -96,7 +100,11 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 ,	createForm	:function (cfg)
 	{
 		var barName		= "Form";
-		var id			= ( cfg.id ? cfg.id + barName : ( cfg.itemId ? cfg.itemId + barName : "JxGridPagingFormEditor"+ barName));
+		var id			= ( cfg.id
+						? cfg.id + barName
+						: ( cfg.itemId
+							? cfg.itemId + barName
+							: "JxGridPagingFormEditor"+ barName));
 
 		var opts	= Ext.merge ({
 							store	:cfg.store
