@@ -52,11 +52,20 @@ class Jaring
 	public static $_db_pool_max		= 100;
 	public static $_db				= null;
 
-	public static $_out				= array (
-										'success'	=> false
-									,	'data'		=> ''
-									,	'total'		=> 0
-									);
+	/*
+		Module configuration. Set by each modules index.
+	*/
+	public static $_mod	= array (
+							"db_table"			=> ""
+						,	"db_table_id"		=> ""
+						,	"db_table_fields"	=> array()
+						);
+
+	public static $_out	= array (
+							'success'	=> false
+						,	'data'		=> ''
+						,	'total'		=> 0
+						);
 
 	/*
 		Cookies values.
