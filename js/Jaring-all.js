@@ -494,6 +494,12 @@ var storeDefaultConfig = {
 		type			:"ajax"
 	,	url				:""
 	,	filterParam		:undefined
+	,	extraParams		:
+		{
+			action			:"read"
+		,	query			:""
+		,	subaction		:""
+		}
 	,	reader			:
 		{
 			type			:"json"
@@ -570,15 +576,6 @@ Ext.define ("Jx.Store", {
 	{
 		remoteFilter	:true
 	,	pageSize		:Jx.pageSize
-	,	proxy			:
-		{
-			extraParams		:
-			{
-				action			:"read"
-			,	query			:""
-			,	subaction		:""
-			}
-		}
 	}
 ,	constructor	:function (config)
 	{
@@ -1309,7 +1306,7 @@ Ext.define ("Jx.GridPaging.RowEditor", {
 	Authors:
 		- mhd.sulhan (m.shulhan@gmail.com)
 
-	Custom grid panel with paging and row editor.
+	Custom grid panel with paging and form editor.
 */
 Ext.define ("Jx.GridPaging.FormEditor", {
 	extend		:"Ext.panel.Panel"
@@ -1368,7 +1365,15 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 
 ,	constructor	:function (cfg)
 	{
-		var opts = Ext.merge ({}, this.panelConfig);
+		var id			= ( cfg.id
+						? cfg.id
+						: ( cfg.itemId
+							? cfg.itemId
+							: "JxGridPagingFormEditor"));
+
+		var opts = Ext.merge ({
+								itemId: id
+							}, this.panelConfig);
 			opts = Ext.merge (opts, cfg.panelConfig);
 
 		this.callParent ([opts]);
@@ -1381,7 +1386,11 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 ,	createGrid	:function (cfg)
 	{
 		var barName		= "Grid";
-		var id			= ( cfg.id ? cfg.id + barName : ( cfg.itemId ? cfg.itemId + barName : "JxGridPagingFormEditor"+ barName));
+		var id			= ( cfg.id
+						? cfg.id + barName
+						: ( cfg.itemId
+							? cfg.itemId + barName
+							: "JxGridPagingFormEditor"+ barName));
 
 		/* Add row number to grid */
 		cfg.columns.splice (0, 0, { xtype : "rownumberer" });
@@ -1402,7 +1411,11 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 ,	createForm	:function (cfg)
 	{
 		var barName		= "Form";
-		var id			= ( cfg.id ? cfg.id + barName : ( cfg.itemId ? cfg.itemId + barName : "JxGridPagingFormEditor"+ barName));
+		var id			= ( cfg.id
+						? cfg.id + barName
+						: ( cfg.itemId
+							? cfg.itemId + barName
+							: "JxGridPagingFormEditor"+ barName));
 
 		var opts	= Ext.merge ({
 							store	:cfg.store
