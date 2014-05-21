@@ -23,8 +23,7 @@ function JxReferenceAssetProcurement ()
 		,	store		:this.store
 		,	panelConfig	:
 			{
-				itemId		:this.id
-			,	title		:"Referensi > Pengadaan Aset"
+				title		:"Referensi > Pengadaan Aset"
 			,	closable	:true
 			}
 		,	columns		:

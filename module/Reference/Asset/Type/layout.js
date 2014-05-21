@@ -23,8 +23,7 @@ function JxReferenceAssetType ()
 		,	store		:this.store
 		,	panelConfig	:
 			{
-				itemId		:this.id
-			,	title		:"Referensi > Tipe Aset"
+				title		:"Referensi > Tipe Aset"
 			,	closable	:true
 			}
 		,	columns		:
