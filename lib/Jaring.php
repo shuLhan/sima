@@ -251,7 +251,7 @@ class Jaring
 
 		foreach (Jaring::$_mod["db_table"]["search"] as $k => $v) {
 			if ($k > 0) {
-				$qwhere .= " and ";
+				$qwhere .= " or ";
 			}
 			$qwhere .= $v ." like ". $query;
 		}
@@ -439,6 +439,11 @@ class Jaring
 			}
 
 			$data = json_decode (file_get_contents('php://input'), true);
+
+			/* Convert json object to array */
+			if (null !== $data && ! is_array (current ($data))) {
+				$data = array($data);
+			}
 
 			switch ($access) {
 			case 1:
