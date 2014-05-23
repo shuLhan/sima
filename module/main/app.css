@@ -7,3 +7,5 @@ Authors:
 /*
 	Application style.
 */
+.ref		{ background: 0px 0px/16px 16px url("../../images/icons/reference.svg") no-repeat !important; }
+.asset		{ background: 0px 0px/16px 16px url("../../images/icons/asset.svg") no-repeat !important; }
