@@ -7,8 +7,10 @@
 
 require_once "../init.php";
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+	<meta charset="utf-8">
 	<title><?= Jaring::$_title ?></title>
 
 	<link rel="shortcut icon" href="<?= Jaring::$_path ?>images/favicon.ico"/>
@@ -45,6 +47,7 @@ require_once "../init.php";
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ux/TreeCombo.js"></script>
 -->
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/Jaring-all.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/CardGridForm.js"></script>
 <!--
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/plugins/CrudButtons.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/plugins/SearchField.js"></script>
