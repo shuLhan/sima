@@ -141,4 +141,17 @@ Jx = {
 	{
 		return _g_module_dir + id.replace (/_/g, "/") +"/";
 	}
+
+,	chainStoreLoad :function (stores, lastCall, idx)
+	{
+		if (idx === stores.length) {
+			if ("function" === typeof lastCall) {
+				lastCall.call ();
+			}
+			return;
+		}
+		stores[idx].load (function (r,o,s) {
+			Jx.chainStoreLoad (stores, lastCall, idx + 1);
+		});
+	}
 };
