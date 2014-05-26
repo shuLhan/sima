@@ -7,7 +7,7 @@
 */
 Ext.define ("Jx.ComboPaging", {
 	extend			:"Ext.form.field.ComboBox"
-,	alias			:"jx.combopaging"
+,	alias			:"widget.combopaging"
 ,	forceSelection	:true
 ,	pageSize		:_g_paging_size
 ,	shrinkWrap		:3
