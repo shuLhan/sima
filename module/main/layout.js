@@ -73,7 +73,14 @@ function JxMain ()
 
 		if (b.id === this.contentHomeId) {
 			this.content.hide ();
+			this.contentDashboard.hide ();
 			this.contentHome.show ();
+			Jx.hideMask ();
+			return;
+		} else if (b.id === this.contentDashboardId) {
+			this.content.hide ();
+			this.contentHome.hide ();
+			this.contentDashboard.show ();
 			Jx.hideMask ();
 			return;
 		}
@@ -209,7 +216,13 @@ function JxMain ()
 					}
 				}
 
-				this.menu.setActiveTab (0);
+				switch (_g_menu_mode) {
+				case 0:
+					this.menu.setActiveTab (0);
+					break;
+				case 1:
+					break;
+				}
 			}
 		});
 	};
