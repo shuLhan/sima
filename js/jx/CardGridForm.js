@@ -22,7 +22,34 @@ Ext.define ("Jx.CardGridForm", {
 
 ,	statics		:
 	{
-		createStore : function (self, opts)
+		columnToField : function (c)
+		{
+			var f = {};
+
+			if (undefined !== c.dataIndex) {
+				f.name = c.dataIndex;
+
+				if (undefined !== c.type) {
+					f.type = c.type;
+				} else if (undefined !== c.xtype) {
+					// use column xtype as field type
+					switch (c.xtype) {
+					case "datecolumn":
+						f.type = "date";
+						if (undefined !== c.dateFormat) {
+							f.dateFormat = c.dateFormat;
+						} else {
+							f.dateFormat = "c"
+						}
+						break;
+					}
+				}
+			}
+
+			return f;
+		}
+
+	,	createStore : function (self, opts)
 		{
 			if (undefined !== opts.store) {
 				return;
@@ -38,30 +65,12 @@ Ext.define ("Jx.CardGridForm", {
 				if (undefined !== c.columns) {
 					for (var k = 0, cc = undefined; k < c.columns.length; k++) {
 						cc	= c.columns[k];
-						f	= {};
-
-						if (undefined !== cc.dataIndex) {
-							f.name = cc.dataIndex;
-
-							if (undefined !== cc.type) {
-								f.type = cc.type;
-								delete cc.type; // unneeded anymore.
-							}
-
-							fields.push (f);
-						}
-					}
-				} else {
-					if (undefined !== c.dataIndex) {
-						f.name = c.dataIndex;
-
-						if (undefined !== c.type) {
-							f.type = c.type;
-							delete c.type; // unneeded anymore.
-						}
-
+						f	= self.self.columnToField (cc);
 						fields.push (f);
 					}
+				} else {
+					f = self.self.columnToField (cc);
+					fields.push (f);
 				}
 			}
 
