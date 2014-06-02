@@ -30,8 +30,7 @@ function JxSystemMenu ()
 		,	store		:this.store
 		,	panelConfig	:
 			{
-				itemId		:this.id
-			,	title		:"System Menu"
+				title		:"System Menu"
 			,	closable	:true
 			}
 		,	columns		:

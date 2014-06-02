@@ -26,8 +26,7 @@ function JxSystemUser ()
 		,	store		:this.store
 		,	panelConfig	:
 			{
-				itemId		:this.id
-			,	title		:"System User"
+				title		:"System User"
 			,	closable	:true
 			}
 		,	columns		:
