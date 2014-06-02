@@ -129,12 +129,13 @@ function JxAsset ()
 			}]
 		},{
 			header		:"Garansi"
-		,	hidden		:true
 		,	columns		:
 			[{
-				header		:"Tanggal Garansi"
+				header		:"Tanggal Pembelian"
 			,	dataIndex	:"warranty_date"
-			,	hidden		:true
+			,	width		:140
+			,	xtype		:"datecolumn"
+			,	format		:"d M Y"
 			,	editor		:
 				{
 					xtype		:"datefield"
@@ -192,13 +193,12 @@ function JxAsset ()
 			}]
 		},{
 			header		:"Penggunaan"
-		,	hidden		:true
 		,	columns		:
 			[{
 				header		:"Status"
 			,	dataIndex	:"status_id"
 			,	type		:"int"
-			,	hidden		:true
+			,	renderer	:this.storeAssetStatus.renderData ("id", "name")
 			,	editor		:
 				{
 					xtype			:"combobox"
@@ -222,7 +222,7 @@ function JxAsset ()
 				header		:"Lokasi"
 			,	dataIndex	:"location_id"
 			,	type		:"int"
-			,	hidden		:true
+			,	renderer	:this.storeAssetLocation.renderData ("id", "name")
 			,	editor		:
 				{
 					xtype			:"combobox"
