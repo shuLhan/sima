@@ -55,7 +55,7 @@ Ext.application ({
 ,	appProperty	:""
 });
 
-Jx = {
+Ext.apply (Jx, {
 	pageSize	:_g_paging_size
 ,	msg			:
 	{
@@ -154,4 +154,4 @@ Jx = {
 			Jx.chainStoreLoad (stores, lastCall, idx + 1);
 		});
 	}
-};
+});
