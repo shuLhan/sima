@@ -13,7 +13,7 @@ function JxMainHeader (jx_main, id)
 
 	this.appLogo		= Ext.create ("Ext.container.Container", {
 				id		:this.id +"_logo"
-			,	html	:"<img style='height:36;' src='../../images/logo.png'></img>"
+			,	html	:"<img style='height:36px;' src='../../images/logo.png'></img>"
 		});
 
 	this.appTitle		= Ext.create ("Ext.Component", {
