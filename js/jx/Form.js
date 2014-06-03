@@ -284,6 +284,13 @@ Ext.define ("Jx.Form", {
 				scope		:this
 			,	callback	:function (r, op, success)
 				{
+					if (this.beforeFormSave
+					&& typeof (this.beforeFormSave) === "function") {
+						if (this.beforeFormSave (success) === false) {
+							return;
+						}
+					}
+
 					if (this.afterFormSave
 					&& typeof (this.afterFormSave) === "function") {
 						if (this.afterFormSave (success) === false) {
@@ -296,6 +303,13 @@ Ext.define ("Jx.Form", {
 
 ,	afterSaveFailure	:function (action)
 	{
+		if (this.beforeFormSave
+		&& typeof (this.beforeFormSave) === "function") {
+			if (this.beforeFormSave (success) === false) {
+				return;
+			}
+		}
+
 		if (undefined !== action.failureType) {
 			switch (action.failureType) {
 			case Ext.form.action.Action.CLIENT_INVALID:

@@ -150,6 +150,7 @@ Ext.define ("Jx.CardGridForm", {
 
 			Ext.merge (cfg, {
 					itemId				:id
+				,	_parent				:self
 				,	store				:self.store
 				,	afterSaveSuccess	:function ()
 					{

@@ -9,7 +9,7 @@
  */
 Ext.define ("Jx.plugin.CrudButtons", {
 	extend	:"Ext.AbstractPlugin"
-,	alias	:"jx.plugin.crudbuttons"
+,	alias	:"plugin.crudbuttons"
 
 ,	config	:
 	{
@@ -44,11 +44,15 @@ Ext.define ("Jx.plugin.CrudButtons", {
 			cmp.addDocked (tbar);
 		}
 
+		cmp.buttonSep = new Array ();
+
 		/* Show/hide button based on user configuration */
 		for (var i = 0; i < this.buttonBarList.length; i++) {
 			switch (this.buttonBarList[i]) {
 			case "-":
-				tbar.add (Ext.create ("Ext.toolbar.Separator"));
+				var len = cmp.buttonSep.push (Ext.create ("Ext.toolbar.Separator"));
+
+				tbar.add (cmp.buttonSep[len]);
 				break;
 
 			case "add":
@@ -113,6 +117,15 @@ Ext.define ("Jx.plugin.CrudButtons", {
 	{
 		this.cmp.un ("refresh", this._doRefresh, this);
 		this.cmp.un ("selectionchange", this._onSelectionChange, this);
+
+		Ext.destroy (this.cmp.buttonRefresh);
+		Ext.destroy (this.cmp.buttonDelete);
+		Ext.destroy (this.cmp.buttonEdit);
+		Ext.destroy (this.cmp.buttonAdd);
+
+		this.cmp.buttonSep.forEach (Ext.destroy, Ext);
+
+		this.callParent (arguments);
 	}
 
 /*
@@ -227,7 +240,9 @@ Ext.define ("Jx.plugin.CrudButtons", {
 		if (this.cmp.buttonAdd) {
 			this.cmp.buttonAdd.setDisabled (perm < 2);
 		}
-		this.cmp.getSelectionModel ().deselectAll ();
+		if ("function" === typeof (this.cmp.getSelectionModel)) {
+			this.cmp.getSelectionModel ().deselectAll ();
+		}
 		this.cmp.store.proxy.extraParams.action	= this.cmp.store.action = "read";
 		this.cmp.store.load ();
 
