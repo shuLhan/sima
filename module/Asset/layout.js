@@ -3,6 +3,7 @@
 	Authors:
 		- mhd.sulhan (m.shulhan@gmail.com)
 */
+Ext.Loader.setPath ("Jx.Media.Table", "/module/System/Media/Table");
 
 function JxAsset ()
 {
@@ -246,11 +247,20 @@ function JxAsset ()
 			}]
 		}];
 
-	this.panel			= Ext.create ("Jx.CardGridForm", {
+	this.mediaViewer	= Ext.create ("Jx.Media.Table.Viewer",{
+			region		:"east"
+		,	split		:true
+		,	width		:"30%"
+		,	table		:"asset"
+		});
+
+	this.cardPanel		= Ext.create ("Jx.CardGridForm", {
 			itemId		:this.id
 		,	url			:this.dir
 		,	fields		:this.fields
-		,	title		:"Aset"
+		,	closable	:false
+		,	region		:"center"
+		,	_parent		:this
 		,	formConfig	:
 			{
 				layout		:
@@ -262,7 +272,48 @@ function JxAsset ()
 					margin		:10
 				,	width		:300
 				}
+
+			,	beforeFormCancel : function ()
+				{
+					Asset.mediaViewer.crudbar.hide ();
+				}
+
+			,	beforeFormSave : function ()
+				{
+					Asset.mediaViewer.crudbar.hide ();
+				}
 			}
+		,	gridConfig	:
+			{
+				afterSelectionChange : function (model, data)
+				{
+					var id = data[0].get (this.getStore ().getIdProperty ());
+
+					Asset.mediaViewer.doRefresh (Asset.perm, id);
+				}
+
+			,	beforeAdd : function ()
+				{
+					Asset.mediaViewer.crudbar.show ();
+				}
+
+			,	beforeEdit : function ()
+				{
+					Asset.mediaViewer.crudbar.show ();
+				}
+			}
+		});
+
+	this.panel			= Ext.create ("Ext.container.Container", {
+			itemId		:this.id
+		,	title		:"Aset"
+		,	layout		:"border"
+		,	closable	:true
+		,	items		:
+			[
+				this.cardPanel
+			,	this.mediaViewer
+			]
 		});
 
 	this.doRefresh	= function (perm)
@@ -279,7 +330,9 @@ function JxAsset ()
 				]
 			,	function ()
 				{
-					self.panel.doRefresh (perm);
+					self.perm = perm;
+					self.mediaViewer.doRefresh (perm, 0);
+					self.cardPanel.doRefresh (perm);
 				}
 			,	0);
 	};
@@ -287,4 +340,4 @@ function JxAsset ()
 
 var Asset = new JxAsset ();
 
-//# sourceURL=module/Reference/Asset/Location/layout.js
+//# sourceURL=module/Asset/layout.js
