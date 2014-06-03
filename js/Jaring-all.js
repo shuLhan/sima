@@ -734,7 +734,7 @@ Ext.define ("Jx.Form", {
 	,	createButtonBar	:true
 	,	syncUseStore	:true
 
-	,	afterSaveSuccess : function ()
+	,	afterFormSave : function ()
 		{
 			this.hide ();
 		}
