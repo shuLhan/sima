@@ -83,7 +83,9 @@ Ext.define ("Jx.CardGridForm", {
 			/* Add row number to grid */
 			opts.fields.splice (0, 0, { xtype : "rownumberer" });
 
-			self.grid				= Ext.create ("Jx.GridPaging", {
+			var cfg = {};
+
+			Ext.merge (cfg, {
 					itemId			: id
 				,	_parent			: self
 				,	store			: self.store
@@ -116,6 +118,10 @@ Ext.define ("Jx.CardGridForm", {
 						}
 					}
 				});
+
+			Ext.merge (cfg, opts.gridConfig);
+
+			self.grid = Ext.create ("Jx.GridPaging", cfg);
 
 			self.grid.on ("selectionchange", self.grid.onSelectionChange, self.grid);
 
