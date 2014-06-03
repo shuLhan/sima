@@ -41,6 +41,8 @@ insert into _menu (id, pid, type, label, icon, image, module, description)
 values (1006	,1000	,3	,'Menu'				,'menu'			,'../icons/menu.svg'	,'System_Menu'			,'');
 insert into _menu (id, pid, type, label, icon, image, module, description)
 values (1007	,1000	,3	,'Media'			,'media'		,'../icons/media.svg'	,'System_Media'			,'');
+insert into _menu (id, pid, type, label, icon, image, module, description)
+values (1008	,1000	,0	,'Media Table'		,'media'		,'../icons/media.svg'	,'System_Media_Table'	,'');
 
 /*
 	Group -> Menu
@@ -55,3 +57,4 @@ insert into _group_menu (_group_id, _menu_id, permission) values (1		,1004	,4);
 insert into _group_menu (_group_id, _menu_id, permission) values (1		,1005	,4);
 insert into _group_menu (_group_id, _menu_id, permission) values (1		,1006	,4);
 insert into _group_menu (_group_id, _menu_id, permission) values (1		,1007	,4);
+insert into _group_menu (_group_id, _menu_id, permission) values (1		,1008	,4);
