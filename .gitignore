@@ -1,3 +1,4 @@
 /app.conf
 /db/jaring.sq3
-nbproject/*
+/nbproject
+/media
