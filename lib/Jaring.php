@@ -302,8 +302,10 @@ class Jaring
 
 	private static function handleRequestCreate ($data)
 	{
-		Jaring::dbPrepareInsert (Jaring::$_mod["db_table"]["name"]
-								,Jaring::$_mod["db_table"]["create"]);
+		$table	= Jaring::$_mod["db_table"]["name"];
+		$fields	= Jaring::$_mod["db_table"]["create"];
+
+		Jaring::dbPrepareInsert ($table, $fields);
 
 		foreach ($data as $d) {
 			$bindv = [];
@@ -322,19 +324,19 @@ class Jaring
 		Jaring::$_out['data']		= Jaring::$MSG_SUCCESS_CREATE;
 	}
 
-	private static function handleRequestUpdate ($data)
+	private static function dbPrepareUpdate ($table, $fields, $ids)
 	{
-		$qupdate=" update	". Jaring::$_mod["db_table"]["name"];
+		$qupdate=" update $table ";
 		$qset	=" set ";
 		$qwhere	=" where ";
 
-		foreach (Jaring::$_mod["db_table"]["update"] as $k => $v) {
+		foreach ($fields as $k => $v) {
 			if ($k > 0) {
 				$qset .= ",";
 			}
 			$qset .= $v ." = ? ";
 		}
-		foreach (Jaring::$_mod["db_table"]["id"] as $k => $v) {
+		foreach ($ids as $k => $v) {
 			if ($k < 0) {
 				$qwhere .=" and ";
 			}
@@ -346,14 +348,23 @@ class Jaring
 			. $qwhere;
 
 		Jaring::$_db_ps = Jaring::$_db->prepare ($q);
+	}
+
+	private static function handleRequestUpdate ($data)
+	{
+		$table	= Jaring::$_mod["db_table"]["name"];
+		$fields	= Jaring::$_mod["db_table"]["update"];
+		$ids	= Jaring::$_mod["db_table"]["id"];
+
+		Jaring:dbPrepareUpdate ($table, $fields, $ids);
 
 		foreach ($data as $d) {
 			$bindv = [];
 
-			foreach (Jaring::$_mod["db_table"]["update"] as $field) {
+			foreach ($fields as $field) {
 				array_push ($bindv, $d[$field]);
 			}
-			foreach (Jaring::$_mod["db_table"]["id"] as $field) {
+			foreach ($ids as $field) {
 				array_push ($bindv, $d[$field]);
 			}
 
