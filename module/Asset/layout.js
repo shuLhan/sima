@@ -9,7 +9,7 @@ function JxAsset ()
 {
 	this.id		= "Asset";
 	this.dir	= Jx.generateModDir (this.id);
-
+//{{{ stores
 	this.storeAssetType	= Ext.create ("Jx.StoreRest", {
 			url			:Jx.generateModDir ("Reference_Asset_Type")
 		,	fields		:
@@ -64,7 +64,8 @@ function JxAsset ()
 				name	:"name"
 			}]
 		});
-
+//}}}
+//{{{ fields
 	this.fields	=
 		[{
 			header		:"Master Data"
@@ -73,6 +74,14 @@ function JxAsset ()
 				header		:"ID"
 			,	dataIndex	:"id"
 			,	type		:"int"
+			,	hidden		:true
+			,	editor		:
+				{
+					hidden		:true
+				}
+			},{
+				header		:"Media ID"
+			,	dataIndex	:"table_id"
 			,	hidden		:true
 			,	editor		:
 				{
@@ -246,14 +255,16 @@ function JxAsset ()
 				}
 			}]
 		}];
-
+//}}}
+//{{{ media viewer
 	this.mediaViewer	= Ext.create ("Jx.Media.Table.Viewer",{
 			region		:"east"
 		,	split		:true
 		,	width		:"30%"
-		,	table		:"asset"
+		,	table_name	:"asset"
 		});
-
+//}}}
+//{{{ card grid form
 	this.cardPanel		= Ext.create ("Jx.CardGridForm", {
 			itemId		:this.id
 		,	url			:this.dir
@@ -272,38 +283,42 @@ function JxAsset ()
 					margin		:10
 				,	width		:300
 				}
-
-			,	beforeFormCancel : function ()
-				{
-					Asset.mediaViewer.crudbar.hide ();
-				}
-
-			,	beforeFormSave : function ()
-				{
-					Asset.mediaViewer.crudbar.hide ();
+			,	listeners	:{
+					canceled: function ()
+					{
+						Asset.mediaViewer.hide ();
+					}
+				,	savesuccess: function ()
+					{
+						Asset.mediaViewer.hide ();
+					}
 				}
 			}
 		,	gridConfig	:
 			{
 				afterSelectionChange : function (model, data)
 				{
-					var id = data[0].get (this.getStore ().getIdProperty ());
+					var id = data[0].get ("table_id");
 
 					Asset.mediaViewer.doRefresh (Asset.perm, id);
 				}
-
-			,	beforeAdd : function ()
+			,	afterAdd : function ()
 				{
-					Asset.mediaViewer.crudbar.show ();
+					var id = Ext.id (null, "asset-");
+
+					Asset.cardPanel.form.getForm ().setValues ({ table_id : id });
+					Asset.mediaViewer.show (id);
+					Asset.mediaViewer.doRefresh (Asset.perm, id);
 				}
-
-			,	beforeEdit : function ()
+			,	afterEdit : function ()
 				{
-					Asset.mediaViewer.crudbar.show ();
+					var id = this.selectedData[0].get ("table_id");
+					Asset.mediaViewer.show (id);
 				}
 			}
 		});
-
+//}}}
+//{{{ main panel
 	this.panel			= Ext.create ("Ext.container.Container", {
 			itemId		:this.id
 		,	title		:"Aset"
@@ -315,7 +330,8 @@ function JxAsset ()
 			,	this.mediaViewer
 			]
 		});
-
+//}}}
+//{{{ refresh
 	this.doRefresh	= function (perm)
 	{
 		var self = this;
@@ -336,6 +352,7 @@ function JxAsset ()
 				}
 			,	0);
 	};
+//}}}
 };
 
 var Asset = new JxAsset ();

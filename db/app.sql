@@ -75,7 +75,7 @@ create table asset_location
 
 create table asset
 (
-	id					integer			not null primary key
+	id					integer			primary key
 ,	type_id				integer			not null
 ,	merk				varchar(255)	default ''
 ,	model				varchar(255)	default ''
@@ -89,15 +89,17 @@ create table asset
 ,	warranty_length		integer			default 0
 ,	warranty_info		varchar(255)	default ''
 
-,	procurement_id		integer			not null
+,	procurement_id		integer			null
 ,	company				varchar(255)	default ''
 ,	price				float			default 0
 
-,	status_id			integer			not null
-,	_user_id			integer			not null
-,	location_id			integer			not null
+,	status_id			integer			null
+,	_user_id			integer			null
+,	location_id			integer			null
 ,	location_detail		varchar(255)	default ''
 ,	maintenance_info	varchar(255)	default ''
+
+,	table_id			varchar(32)
 
 ,	constraint asset_fk_01 foreign key (type_id)		references asset_type (id)
 ,	constraint asset_fk_02 foreign key (procurement_id)	references asset_procurement (id)
