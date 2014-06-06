@@ -4,6 +4,7 @@
 	Authors:
 		- mhd.sulhan (m.shulhan@gmail.com)
 */
+//{{{ util: safely open PDO class.
 class SafePDO extends PDO
 {
 	public static function exception_handler($exception)
@@ -24,9 +25,11 @@ class SafePDO extends PDO
 		restore_exception_handler();
 	}
 }
+//}}}
 
 class Jaring
 {
+//{{{ var : constanta
 	public static $MSG_SUCCESS_UPDATE	= 'Data has been updated.';
 	public static $MSG_SUCCESS_CREATE	= 'New data has been created.';
 	public static $MSG_SUCCESS_DESTROY	= 'Data has been deleted.';
@@ -39,7 +42,8 @@ class Jaring
 	public static $ACCESS_CREATE	= 2;
 	public static $ACCESS_UPDATE	= 3;
 	public static $ACCESS_DELETE	= 4;
-
+//}}}
+//{{{ var : static
 	public static $_ext				= '.php';
 	public static $_title			= 'Jaring Framework';
 	public static $_name			= 'jaring';
@@ -59,9 +63,7 @@ class Jaring
 	public static $_db				= null;
 	public static $_db_ps			= null;
 
-	/*
-		Module configuration. Set by each modules index.
-	*/
+	//	Module configuration. Set by each modules index.
 	public static $_mod	= [
 							"db_table"	=> [
 								"name"		=> ""
@@ -79,14 +81,15 @@ class Jaring
 						,	'data'		=> ''
 						,	'total'		=> 0
 						];
-
 	/*
 		Cookies values.
 		Variables that will be instantiated when calling getCookiesValue.
 	*/
 	public static $_c_uid			= 0;
 	public static $_c_username		= 'Anonymous';
+//}}}
 
+//{{{ check user access to module
 	public static function checkAccess ($mod, $uid, $access)
 	{
 		$q	="
@@ -124,7 +127,8 @@ class Jaring
 
 		throw new Exception (Jaring::$MSG_ACCESS_FAIL);
 	}
-
+//}}}
+//{{{ initialize database
 	public static function initDB ()
 	{
 		if (stristr(self::$_db_url, "sqlite") !== FALSE) {
@@ -134,7 +138,8 @@ class Jaring
 			self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		}
 	}
-
+//}}}
+//{{{ initialize sqlite database
 	public static function initSqliteDb ()
 	{
 		/* Check if sqlite is file or memory. */
@@ -175,14 +180,16 @@ class Jaring
 			self::$_db->exec ($q);
 		}
 	}
-
+//}}}
+//{{{ get database connection
 	public static function getConnection ()
 	{
 		if (self::_db == null) {
 			self::initDB ();
 		}
 	}
-
+//}}}
+//{{{ get cookies value
 	public static function getCookiesValue ()
 	{
 		$ckey = 'user_id';
@@ -195,7 +202,8 @@ class Jaring
 			self::$_c_username = $_COOKIE[$ckey];
 		}
 	}
-
+//}}}
+//{{{ check if user has cookie
 	public static function checkCookies ()
 	{
 		$m_home	= Jaring::$_path . Jaring::$_path_mod ."/home/";
@@ -205,7 +213,8 @@ class Jaring
 			die ();
 		}
 	}
-
+//}}}
+//{{{ main
 	public static function init ()
 	{
 		$f_app_conf	= APP_PATH ."/app.conf";
@@ -225,7 +234,7 @@ class Jaring
 		self::$_content_type	= $app_conf['app.content.type'];
 		self::$_menu_mode		= $app_conf['app.menu.mode'];
 		self::$_paging_size		= $app_conf['app.paging.size'];
-		self::$_media_dir		= $app_conf['app.media.dir'];
+		self::$_media_dir		= "/". $app_conf['app.media.dir'] ."/";
 		self::$_db_url			= $app_conf['db.url'];
 		self::$_db_user			= $app_conf['db.username'];
 		self::$_db_pass			= $app_conf['db.password'];
@@ -234,17 +243,57 @@ class Jaring
 
 		Jaring::getCookiesValue ();
 	}
-
-	public static function dbExecute ($q)
+//}}}
+//{{{ db : execute query
+	public static function dbExecute ($q, $bindv = null)
 	{
 		Jaring::$_db_ps = Jaring::$_db->prepare ($q);
-		Jaring::$_db_ps->execute ();
+
+		if (null !== $bindv) {
+			Jaring::$_db_ps->execute ($bindv);
+		} else {
+			Jaring::$_db_ps->execute ();
+		}
+
 		$rs = Jaring::$_db_ps->fetchAll (PDO::FETCH_ASSOC);
 		Jaring::$_db_ps->closeCursor ();
 
 		return $rs;
 	}
+//}}}
+//{{{ db : prepare fields for where query
+	public static function db_prepare_fields ($fields, $sep = "and", $op = "=")
+	{
+		$s = "";
 
+		foreach ($fields as $k => $v) {
+			if ($k > 0) {
+				$s .= " $sep ";
+			}
+			$s .= " $v $op ? ";
+		}
+
+		return $s;
+	}
+//}}}
+//{{{ db : get last inserted row id
+	public static function get_last_insert_id ($table, $id, $fields, $bindv)
+	{
+		$q	="
+			select	$id
+			from	$table
+			where ". Jaring::db_prepare_fields ($fields);
+
+		$rs = Jaring::dbExecute ($q, $bindv);
+
+		if (count ($rs) > 0) {
+			return $rs[0][$id];
+		}
+
+		return 0;
+	}
+//}}}
+//{{{ crud -> db : handle read request
 	private static function handleRequestRead ()
 	{
 		$query	= "'%".$_GET["query"]."%'";
@@ -257,11 +306,12 @@ class Jaring
 		$qorder		= " order by ". implode (",", Jaring::$_mod["db_table"]["order"]);
 		$qlimit		= "	limit ". $start .",". $limit;
 
-		foreach (Jaring::$_mod["db_table"]["search"] as $k => $v) {
+		$fields = Jaring::$_mod["db_table"]["search"];
+		foreach ($fields as $k => $v) {
 			if ($k > 0) {
 				$qwhere .= " or ";
 			}
-			$qwhere .= $v ." like ". $query;
+			$qwhere .= " $v like $query ";
 		}
 
 		/* Get total rows */
@@ -280,7 +330,8 @@ class Jaring
 		Jaring::$_out["data"]		= Jaring::dbExecute ($qread);
 		Jaring::$_out["success"]	= true;
 	}
-
+//}}}
+//{{{ db : prepare insert query
 	private static function dbPrepareInsert ($table, $fields)
 	{
 		$qbind	= "";
@@ -297,9 +348,12 @@ class Jaring
 			." (". implode (",", $fields) .")"
 			." values ( $qbind )";
 
+		error_log ($q);
+
 		Jaring::$_db_ps = Jaring::$_db->prepare ($q);
 	}
-
+//}}}
+//{{{ crud -> db : handle create request
 	private static function handleRequestCreate ($data)
 	{
 		$table	= Jaring::$_mod["db_table"]["name"];
@@ -323,25 +377,13 @@ class Jaring
 		Jaring::$_out['success']	= true;
 		Jaring::$_out['data']		= Jaring::$MSG_SUCCESS_CREATE;
 	}
-
+//}}}
+//{{{ db : prepare statement for updating data
 	private static function dbPrepareUpdate ($table, $fields, $ids)
 	{
 		$qupdate=" update $table ";
-		$qset	=" set ";
-		$qwhere	=" where ";
-
-		foreach ($fields as $k => $v) {
-			if ($k > 0) {
-				$qset .= ",";
-			}
-			$qset .= $v ." = ? ";
-		}
-		foreach ($ids as $k => $v) {
-			if ($k < 0) {
-				$qwhere .=" and ";
-			}
-			$qwhere .= $v ." = ? ";
-		}
+		$qset	=" set ". Jaring::db_prepare_fields ($fields, ",");
+		$qwhere	=" where ". Jaring::db_prepare_fields ($ids);
 
 		$q	= $qupdate
 			. $qset
@@ -349,7 +391,8 @@ class Jaring
 
 		Jaring::$_db_ps = Jaring::$_db->prepare ($q);
 	}
-
+//}}}
+//{{{ crud -> db : handle update request
 	private static function handleRequestUpdate ($data)
 	{
 		$table	= Jaring::$_mod["db_table"]["name"];
@@ -377,22 +420,17 @@ class Jaring
 		Jaring::$_out['success']	= true;
 		Jaring::$_out['data']		= Jaring::$MSG_SUCCESS_UPDATE;
 	}
-
+//}}}
+//{{{ db : prepare delete statement
 	private static function dbPrepareDelete ($table, $fields)
 	{
 		$qdelete=" delete from $table";
-		$qwhere	=" where ";
-
-		foreach ($fields as $k => $v) {
-			if ($k < 0) {
-				$qwhere .=" and ";
-			}
-			$qwhere .= " $v = ? ";
-		}
+		$qwhere	=" where ". Jaring::db_prepare_fields ($fields);
 
 		Jaring::$_db_ps	= Jaring::$_db->prepare ($qdelete . $qwhere);
 	}
-
+//}}}
+//{{{ crud -> db : handle delete request
 	private static function handleRequestDelete ($data)
 	{
 		if (function_exists ("beforeRequestDelete")) {
@@ -419,7 +457,8 @@ class Jaring
 		Jaring::$_out['success']	= true;
 		Jaring::$_out['data']		= Jaring::$MSG_SUCCESS_DESTROY;
 	}
-
+//}}}
+//{{{ util : get module name based on request URI.
 	public static function getModuleName ($uri)
 	{
 		return trim (
@@ -437,7 +476,8 @@ class Jaring
 				,	"_"
 				);
 	}
-
+//}}}
+//{{{ crud : get access code based on HTTP method
 	public static function getCrudAccess ($method)
 	{
 		switch ($method) {
@@ -454,7 +494,8 @@ class Jaring
 								. $method);
 		}
 	}
-
+//}}}
+//{{{ crud : get access code based on GET/POST parameter.
 	public static function getActionAccess ($action)
 	{
 		switch ($action) {
@@ -471,7 +512,8 @@ class Jaring
 								. $action);
 		}
 	}
-
+//}}}
+//{{{ crud : get user access.
 	public static function getAccess ($mode)
 	{
 		$access	= Jaring::$ACCESS_NO;
@@ -492,7 +534,8 @@ class Jaring
 
 		return $access;
 	}
-
+//}}}
+//{{{ crud : route request.
 	public static function switchRequest ($path, $access, $data)
 	{
 		switch ($access) {
@@ -533,7 +576,8 @@ class Jaring
 			break;
 		}
 	}
-
+//}}}
+//{{{ crud : main.
 	public static function handleRequest ($mode = "crud")
 	{
 		$i		= 1;
@@ -563,7 +607,6 @@ class Jaring
 			}
 
 			Jaring::switchRequest ($path, $access, $data);
-
 		} catch (Exception $e) {
 			Jaring::$_out['data'] = addslashes ($e->getMessage ());
 		}
@@ -571,4 +614,5 @@ class Jaring
 		header('Content-Type: application/json');
 		echo json_encode (Jaring::$_out);
 	}
+//}}}
 }
