@@ -348,8 +348,6 @@ class Jaring
 			." (". implode (",", $fields) .")"
 			." values ( $qbind )";
 
-		error_log ($q);
-
 		Jaring::$_db_ps = Jaring::$_db->prepare ($q);
 	}
 //}}}
@@ -399,7 +397,7 @@ class Jaring
 		$fields	= Jaring::$_mod["db_table"]["update"];
 		$ids	= Jaring::$_mod["db_table"]["id"];
 
-		Jaring:dbPrepareUpdate ($table, $fields, $ids);
+		Jaring::dbPrepareUpdate ($table, $fields, $ids);
 
 		foreach ($data as $d) {
 			$bindv = [];
