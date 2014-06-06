@@ -8,6 +8,8 @@ Ext.define ("Jx.Media.Table.Viewer", {
 ///{{{ class properties
 	extend		:"Ext.panel.Panel"
 ,	alias		:"widget.mediatableviewer"
+,	title		:"Image"
+,	titleAlign	:"center"
 ,	layout		:"border"
 ,	plugins		:
 	[{
@@ -60,7 +62,7 @@ Ext.define ("Jx.Media.Table.Viewer", {
 			self.view_tpl = new Ext.XTemplate (
 					'<tpl for=".">'
 				+		'<div style="margin-bottom: 10px; text-align:center;" class="image-viewer">'
-				+			'<img width="200" height="auto" src="{path}" />'
+				+			'<img style="width:80%;height:auto;" src="{path}" />'
 				+		'</div>'
 				+	'</tpl>'
 				);
@@ -73,6 +75,7 @@ Ext.define ("Jx.Media.Table.Viewer", {
 				,	selectedItemCls	:"x-boundlist-selected"
 				,	region		:"center"
 				,	baseCls		:"x-panel-body"
+				,	autoScroll	:true
 				});
 
 			self.add (self.viewer);
