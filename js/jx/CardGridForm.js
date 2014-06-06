@@ -48,7 +48,7 @@ Ext.define ("Jx.CardGridForm", {
 
 			return f;
 		}
-
+//{{{ store
 	,	createStore : function (self, opts)
 		{
 			if (undefined !== opts.store) {
@@ -79,7 +79,8 @@ Ext.define ("Jx.CardGridForm", {
 				,	fields	: fields
 				});
 		}
-
+//}}}
+//{{{ grid
 	,	createGrid : function (self, opts)
 		{
 			var barName		= "Grid";
@@ -136,7 +137,8 @@ Ext.define ("Jx.CardGridForm", {
 
 			self.add (self.grid);
 		}
-
+//}}}
+//{{{ form
 	,	createForm : function (self, opts)
 		{
 			var barName		= "Form";
@@ -152,11 +154,13 @@ Ext.define ("Jx.CardGridForm", {
 					itemId				:id
 				,	_parent				:self
 				,	store				:self.store
-				,	afterSaveSuccess	:function ()
+// replace original save and cancel handler
+				,	afterFormSave		:function (success)
 					{
-						self.getLayout ().setActiveItem (self.grid);
+						if (success) {
+							self.getLayout ().setActiveItem (self.grid);
+						}
 					}
-
 				,	afterFormCancel		:function ()
 					{
 						self.getLayout ().setActiveItem (self.grid);
@@ -172,7 +176,8 @@ Ext.define ("Jx.CardGridForm", {
 			self.add (this.form);
 		}
 	}
-
+//}}}
+//{{{ constructor
 ,	constructor	:function (cfg)
 	{
 		var opts = {};
@@ -187,7 +192,7 @@ Ext.define ("Jx.CardGridForm", {
 		this.self.createGrid (this, opts);
 		this.self.createForm (this, opts);
 	}
-
+//}}}
 ,	doRefresh : function (perm)
 	{
 		this.grid.doRefresh (perm);

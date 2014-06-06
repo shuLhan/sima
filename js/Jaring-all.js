@@ -749,12 +749,13 @@ Ext.define ("Jx.Form", {
 	,	createButtonBar	:true
 	,	syncUseStore	:true
 
-	,	afterFormSave : function ()
+	,	afterFormSave	:function (success)
 		{
-			this.hide ();
+			if (success) {
+				this.hide ();
+			}
 		}
-
-	,	afterFormCancel : function ()
+	,	afterFormCancel :function ()
 		{
 			this.hide ();
 		}
@@ -770,6 +771,11 @@ Ext.define ("Jx.Form", {
 		this.initConfig (opts);
 
 		this.doCreateButtonBar (opts);
+
+		// Register events.
+		this.addEvents ("savesuccess");
+		this.addEvents ("savefail");
+		this.addEvents ("canceled");
 	}
 
 ,	doCreateButtonBar :function (cfg)
@@ -997,12 +1003,7 @@ Ext.define ("Jx.Form", {
 				scope		:this
 			,	callback	:function (r, op, success)
 				{
-					if (this.beforeFormSave
-					&& typeof (this.beforeFormSave) === "function") {
-						if (this.beforeFormSave (success) === false) {
-							return;
-						}
-					}
+					this.fireEvent ("savesuccess");
 
 					if (this.afterFormSave
 					&& typeof (this.afterFormSave) === "function") {
@@ -1016,12 +1017,7 @@ Ext.define ("Jx.Form", {
 
 ,	afterSaveFailure	:function (action)
 	{
-		if (this.beforeFormSave
-		&& typeof (this.beforeFormSave) === "function") {
-			if (this.beforeFormSave (success) === false) {
-				return;
-			}
-		}
+		this.fireEvent ("savefail");
 
 		if (undefined !== action.failureType) {
 			switch (action.failureType) {
@@ -1060,6 +1056,8 @@ Ext.define ("Jx.Form", {
 
 ,	doCancel	:function ()
 	{
+		this.fireEvent ("canceled");
+
 		if (this.beforeFormCancel
 		&& typeof (this.beforeFormCancel) === "function") {
 			if (this.beforeFormCancel () === false) {
