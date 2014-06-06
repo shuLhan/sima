@@ -27,8 +27,6 @@
 	// link media id into table _media_table
 	$id = Jaring::get_last_insert_id ($table, "id", $fields, $bindv);
 
-	error_log ($id);
-
 	$table	= "_media_table";
 	$fields	= [ "table_id", "_media_id" ];
 	$bindv	= [

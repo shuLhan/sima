@@ -10,9 +10,11 @@ Ext.define ("Jx.Media.Table.Viewer", {
 ,	alias		:"widget.mediatableviewer"
 ,	layout		:"border"
 ,	plugins		:
-	[
-		"crudbuttons"
-	]
+	[{
+		ptype		: "crudbuttons"
+	,	pluginId	: "media_table_viewer_crudbuttons"
+	,	buttonBarList:["delete","-","add"]
+	}]
 ,	config		:
 	{
 		table_id	:""
@@ -20,7 +22,9 @@ Ext.define ("Jx.Media.Table.Viewer", {
 	,	view_tpl	:undefined
 	,	viewer		:undefined
 	,	crudbar		:undefined
+	,	plug_crud	:undefined
 	,	form		:undefined
+	,	f_file		:undefined
 	}
 //}}}
 ,	statics		:
@@ -55,7 +59,7 @@ Ext.define ("Jx.Media.Table.Viewer", {
 
 			self.view_tpl = new Ext.XTemplate (
 					'<tpl for=".">'
-				+		'<div style="margin-bottom: 10px;" class="image-viewer">'
+				+		'<div style="margin-bottom: 10px; text-align:center;" class="image-viewer">'
 				+			'<img width="200" height="auto" src="{path}" />'
 				+		'</div>'
 				+	'</tpl>'
@@ -66,11 +70,14 @@ Ext.define ("Jx.Media.Table.Viewer", {
 				,	store		:self.store
 				,	tpl			:self.view_tpl
 				,	itemSelector:"div.image-viewer"
+				,	selectedItemCls	:"x-boundlist-selected"
 				,	region		:"center"
 				,	baseCls		:"x-panel-body"
 				});
 
 			self.add (self.viewer);
+
+			self.viewer.on ("selectionchange", self.onSelectionChange, self);
 		}
 //}}}
 //{{{ create form
@@ -87,10 +94,12 @@ Ext.define ("Jx.Media.Table.Viewer", {
 					}
 				,	items			:
 					[{
-						xtype			:"textfield"
-					,	name			:"table_id"
+						name			:"table_id"
 					,	hidden			:true
 					,	value			:self.table_id
+					},{
+						name			:"_media_id"
+					,	hidden			:true
 					},{
 						xtype			:"filefield"
 					,	name			:"content"
@@ -101,6 +110,7 @@ Ext.define ("Jx.Media.Table.Viewer", {
 				});
 
 			self.add (self.form);
+			self.f_file = self.form.down ("filefield");
 		}
 //}}}
 	}
@@ -118,8 +128,8 @@ Ext.define ("Jx.Media.Table.Viewer", {
 		this.callParent ([opts]);
 		this.initConfig (opts);
 
+		this.plug_crud = this.getPlugin ("media_table_viewer_crudbuttons");
 		this.crudbar = this.getDockedItems ('toolbar[dock="top"]')[0];
-
 		this.crudbar.hide ();
 
 		this.self.createView (this, opts);
@@ -147,6 +157,31 @@ Ext.define ("Jx.Media.Table.Viewer", {
 		if (undefined !== id) {
 			this.store.proxy.extraParams.table_id = id;
 		}
+	}
+//}}}
+//{{{ event : on selection change
+,	onSelectionChange : function (model, data, e)
+	{
+		// propagate event to panel
+		this.fireEvent ("selectionchange", model, data, e);
+		// load data to form
+		this.form.getForm ().reset ();
+
+		if (data.length <= 0) {
+			return;
+		}
+
+		this.f_file.allowBlank = true;
+		this.form.loadRecord (data[0]);
+		this.f_file.allowBlank = false;
+	}
+//}}}
+//{{{ event : on button delete clicked
+,	doDelete : function ()
+	{
+		this.f_file.allowBlank = true;
+		this.form.doSave ();
+		this.f_file.allowBlank = false;
 	}
 //}}}
 //{{{ refresh component
