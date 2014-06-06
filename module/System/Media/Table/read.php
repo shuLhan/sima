@@ -7,12 +7,13 @@
 $query	= "'%".$_GET["query"]."%'";
 $start	= (int) $_GET["start"];
 $limit	= (int) $_GET["limit"];
+$fread	= Jaring::$_mod["db_table"]["read"];
 
-$qselect	= "	select ". implode (",", Jaring::$_mod["db_table"]["read"]);
+$qselect	= " select ". implode (",", $fread);
 $qfrom		= " from ". implode (",", Jaring::$_mod["db_table"]["name"]);
 $qwhere		= " where 1 = 1 ";
 $qorder		= " order by ". implode (",", Jaring::$_mod["db_table"]["order"]);
-$qlimit		= "	limit ". $start .",". $limit;
+$qlimit		= " limit ". $start .",". $limit;
 
 // generate relationship
 foreach (Jaring::$_mod["db_table"]["relation"] as $k => $v) {
@@ -25,8 +26,9 @@ foreach (Jaring::$_mod["db_table"]["relation"] as $k => $v) {
 	$qwhere .= " and ". $v[0] ." = ". $v[1];
 }
 
-// find GET parameter that matching with table fields, and use it value to filter
-foreach (Jaring::$_mod["db_table"]["read"] as $v) {
+// find GET parameter that match with table fields
+// and use it's value to filter data
+foreach ($fread as $v) {
 	$f = explode (".", $v)[1];
 	if (array_key_exists ($f, $_GET)) {
 		$x = $_GET[$f];
@@ -49,12 +51,12 @@ foreach (Jaring::$_mod["db_table"]["search"] as $k => $v) {
 
 $qwhere .= " ) ";
 
-/* Get total rows */
+// Get total rows
 $qtotal	=" select COUNT(". Jaring::$_mod["db_table"]["id"][0] .") as total "
 		. $qfrom
 		. $qwhere;
 
-/* Get data */
+// Get data
 $qread	= $qselect
 		. $qfrom
 		. $qwhere

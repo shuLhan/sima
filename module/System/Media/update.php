@@ -41,7 +41,7 @@
 		$bindv[2]	= $_FILES["content"]["size"];
 		$bindv[3]	= $_FILES["content"]["type"];
 		$bindv[4]	= $_POST["description"];
-		$bindv[5]	= Jaring::$_media_dir ."/". $sha1);
+		$bindv[5]	= Jaring::$_media_dir . $sha1);
 	}
 
 	Jaring::dbPrepareUpdate ($table, $fields, $ids);

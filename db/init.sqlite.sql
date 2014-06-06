@@ -66,7 +66,6 @@ create table _media
  */
 create table _media_table
 (
-	table_name	varchar (255)	not null
-,	table_id	integer			not null
+	table_id	varchar(32)		not null
 ,	_media_id	integer			not null
 );

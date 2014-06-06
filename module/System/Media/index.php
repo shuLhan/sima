@@ -24,7 +24,7 @@ Jaring::$_mod["db_table"]["search"]	= ["name", "extension", "mime", "description
 Jaring::$_mod["db_table"]["order"]	= ["id"];
 Jaring::$_mod["db_table"]["create"]	= array_slice ($fields, 1);
 Jaring::$_mod["db_table"]["update"]	= array_slice ($fields, 1);
-
+//{{{ before delete request executed
 function beforeRequestDelete ($data)
 {
 	foreach ($data as $d) {
@@ -36,7 +36,10 @@ function beforeRequestDelete ($data)
 		$rs = Jaring::dbExecute ($q);
 
 		if (count ($rs) > 0) {
-			unlink (APP_PATH ."/". $rs[0]["path"]);
+			$f = APP_PATH ."/". $rs[0]["path"];
+			if (file_exists ($f)) {
+				unlink ($f);
+			}
 		}
 
 		$q	="
@@ -46,5 +49,5 @@ function beforeRequestDelete ($data)
 		$rs = Jaring::dbExecute ($q);
 	}
 }
-
+//}}}
 Jaring::handleRequest ("action");

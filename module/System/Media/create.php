@@ -17,7 +17,7 @@
 	$bindv[2]	= $_FILES["content"]["size"];
 	$bindv[3]	= $_FILES["content"]["type"];
 	$bindv[4]	= $_POST["description"];
-	$bindv[5]	= Jaring::$_media_dir ."/". sha1_file ($_FILES["content"]["tmp_name"]);
+	$bindv[5]	= Jaring::$_media_dir . sha1_file ($_FILES["content"]["tmp_name"]);
 
 	Jaring::$_db_ps->execute ($bindv);
 	Jaring::$_db_ps->closeCursor ();
