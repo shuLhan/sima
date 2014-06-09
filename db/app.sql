@@ -93,13 +93,13 @@ create table asset
 ,	company				varchar(255)	default ''
 ,	price				float			default 0
 
-,	status_id			integer			null
-,	_user_id			integer			null
-,	location_id			integer			null
+,	status_id			integer			default null
+,	_user_id			integer			default null
+,	location_id			integer			default null
 ,	location_detail		varchar(255)	default ''
 ,	maintenance_info	varchar(255)	default ''
 
-,	table_id			varchar(32)
+,	table_id			varchar(32)		default null
 
 ,	constraint asset_fk_01 foreign key (type_id)		references asset_type (id)
 ,	constraint asset_fk_02 foreign key (procurement_id)	references asset_procurement (id)

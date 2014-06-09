@@ -298,7 +298,11 @@ function JxAsset ()
 			{
 				afterSelectionChange : function (model, data)
 				{
-					var id = data[0].get ("table_id");
+					var id = 0;
+
+					if (data.length > 0) {
+						id = data[0].get ("table_id");
+					}
 
 					Asset.mediaViewer.doRefresh (Asset.perm, id);
 				}
