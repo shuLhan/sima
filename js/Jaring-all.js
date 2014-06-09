@@ -394,6 +394,7 @@ Ext.define ("Jx.plugin.CrudButtons", {
 		}
 
 		this.cmp.perm = perm;
+
 		if (this.cmp.buttonAdd) {
 			this.cmp.buttonAdd.setDisabled (perm < 2);
 		}
@@ -418,13 +419,15 @@ Ext.define ("Jx.plugin.CrudButtons", {
 	{
 		var s = (data.length <= 0);
 
+		console.log ("crud");
+
 		this.cmp.selectedData = data;
 
 		if (this.cmp.buttonDelete) {
-			this.cmp.buttonDelete.setDisabled (this.cmp.perm < 4);
+			this.cmp.buttonDelete.setDisabled (this.cmp.perm < 4 || s);
 		}
 		if (this.cmp.buttonEdit) {
-			this.cmp.buttonEdit.setDisabled (this.cmp.perm < 3);
+			this.cmp.buttonEdit.setDisabled (this.cmp.perm < 3 || s);
 		}
 	}
 });
@@ -1203,6 +1206,8 @@ Ext.define ("Jx.GridPaging", {
 		var s	= (data.length <= 0);
 		var id	= 0;
 
+		console.log ("grid");
+
 		if (this.beforeSelectionChange && typeof (this.beforeSelectionChange) === "function") {
 			if (this.beforeSelectionChange (model, data, e) === false) {
 				return false;
@@ -1214,16 +1219,16 @@ Ext.define ("Jx.GridPaging", {
 		/* Refresh grid details */
 		if (data.length > 0) {
 			id	= data[0].get (this.getStore ().getIdProperty ());
+		}
 
-			if (this.onSelectionChange
-			&& typeof (this.onSelectionChange) === "function") {
-				this.onSelectionChange (model, data, e);
-			}
+		if (this.onSelectionChange
+		&& typeof (this.onSelectionChange) === "function") {
+			this.onSelectionChange (model, data, e);
+		}
 
-			if (this.afterSelectionChange
-			&& typeof (this.afterSelectionChange) === "function") {
-				this.afterSelectionChange (model, data, e);
-			}
+		if (this.afterSelectionChange
+		&& typeof (this.afterSelectionChange) === "function") {
+			this.afterSelectionChange (model, data, e);
 		}
 	}
 

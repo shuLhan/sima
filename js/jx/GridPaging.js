@@ -122,16 +122,16 @@ Ext.define ("Jx.GridPaging", {
 		/* Refresh grid details */
 		if (data.length > 0) {
 			id	= data[0].get (this.getStore ().getIdProperty ());
+		}
 
-			if (this.onSelectionChange
-			&& typeof (this.onSelectionChange) === "function") {
-				this.onSelectionChange (model, data, e);
-			}
+		if (this.onSelectionChange
+		&& typeof (this.onSelectionChange) === "function") {
+			this.onSelectionChange (model, data, e);
+		}
 
-			if (this.afterSelectionChange
-			&& typeof (this.afterSelectionChange) === "function") {
-				this.afterSelectionChange (model, data, e);
-			}
+		if (this.afterSelectionChange
+		&& typeof (this.afterSelectionChange) === "function") {
+			this.afterSelectionChange (model, data, e);
 		}
 	}
 
