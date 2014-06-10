@@ -117,7 +117,10 @@ function JxAsset ()
 				header		:"Barcode"
 			,	dataIndex	:"barcode"
 			,	hidden		:true
-			,	editor		:{}
+			,	editor		:
+				{
+					disabled	:true
+				}
 			},{
 				header		:"Service Tag"
 			,	dataIndex	:"service_tag"
@@ -262,6 +265,7 @@ function JxAsset ()
 		,	split		:true
 		,	width		:"30%"
 		,	table_name	:"asset"
+		,	collapsible	:true
 		});
 //}}}
 //{{{ card grid form
@@ -296,7 +300,9 @@ function JxAsset ()
 			}
 		,	gridConfig	:
 			{
-				afterSelectionChange : function (model, data)
+				plugins	:["copybutton"]
+
+			,	afterSelectionChange : function (model, data)
 				{
 					var id = 0;
 
