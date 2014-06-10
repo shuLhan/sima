@@ -6,7 +6,7 @@
 
 Ext.define ("Jx.plugin.SearchField", {
 	extend			:"Ext.AbstractPlugin"
-,	alias			:"jx.plugin.searchfield"
+,	alias			:"plugin.searchfield"
 ,	searchField		:undefined
 ,	lastSearchStr	:""
 
