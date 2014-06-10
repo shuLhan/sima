@@ -46,8 +46,15 @@ insert into _menu (
 		21	,20		,3		,'Aset'				,'asset'	,'../icons/asset.svg'	,'Asset'	,''
 );
 
+insert into _menu (
+		id	,pid	,type	,label				,icon		,image					,module				,description
+) values (
+		22	,20		,3		,'Barcode'			,'asset'	,'../icons/asset.svg'	,'Asset_Barcode'	,''
+);
+
 insert into _group_menu (_group_id, _menu_id, permission) values (1	,20	,4);
 insert into _group_menu (_group_id, _menu_id, permission) values (1	,21	,4);
+insert into _group_menu (_group_id, _menu_id, permission) values (1	,22	,4);
 
 create table asset_type
 (

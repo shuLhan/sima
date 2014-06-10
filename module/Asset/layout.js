@@ -332,8 +332,8 @@ function JxAsset ()
 	this.panel			= Ext.create ("Ext.container.Container", {
 			itemId		:this.id
 		,	title		:"Aset"
-		,	layout		:"border"
 		,	closable	:true
+		,	layout		:"border"
 		,	items		:
 			[
 				this.cardPanel
