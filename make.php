@@ -41,6 +41,7 @@ $in=array (
 	"js/jaring.js"
 ,	"js/jx/plugins/CrudButtons.js"
 ,	"js/jx/plugins/SearchField.js"
+,	"js/jx/plugins/CopyButton.js"
 ,	"js/jx/Store.js"
 ,	"js/jx/ComboPaging.js"
 ,	"js/jx/Form.js"
