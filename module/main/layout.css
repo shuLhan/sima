@@ -28,6 +28,7 @@
 .delete-row				{ background-image: url("../../images/icons/delete-row.png") !important; }
 .print					{ background-image: url("../../images/icons/print.png") !important; }
 .copy					{ background: 0px 0px/16px 16px url("../../images/icons/copy.svg") !important; }
+.import					{ background: 0px 0px/16px 16px url("../../images/icons/import.svg") !important; }
 /*
 	Form's icons
 */
