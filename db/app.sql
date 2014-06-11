@@ -49,7 +49,7 @@ insert into _menu (
 insert into _menu (
 		id	,pid	,type	,label				,icon		,image					,module				,description
 ) values (
-		22	,20		,3		,'Barcode'			,'asset'	,'../icons/asset.svg'	,'Asset_Barcode'	,''
+		22	,20		,3		,'Barcode'			,'asset'	,'../icons/barcode.svg'	,'Asset_Barcode'	,''
 );
 
 insert into _group_menu (_group_id, _menu_id, permission) values (1	,20	,4);
