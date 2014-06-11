@@ -332,7 +332,7 @@ class Jaring
 	}
 //}}}
 //{{{ db : prepare insert query
-	private static function dbPrepareInsert ($table, $fields)
+	public static function dbPrepareInsert ($table, $fields)
 	{
 		$qbind	= "";
 
