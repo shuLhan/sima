@@ -34,8 +34,15 @@ Ext.define ("Jx.plugin.SearchField", {
 			cmp.addDocked (tbar);
 		}
 
-		this.searchField	= Ext.create ("Jx.SearchField", {
-				itemId		:"searchfield"
+		this.searchField		= Ext.create ("Ext.form.field.Trigger", {
+				itemId			:"searchfield"
+			,	emptyText		:"Search ..."
+			,	tooltip			:"Type any string and enter to filter data"
+			,	triggerCls		:"x-form-clear-trigger"
+			,	onTriggerClick	:function ()
+				{
+					this.setRawValue ("");
+				}
 			});
 
 		tbar.add ("->");

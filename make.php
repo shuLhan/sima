@@ -45,7 +45,6 @@ $in=array (
 ,	"js/jx/Store.js"
 ,	"js/jx/ComboPaging.js"
 ,	"js/jx/Form.js"
-,	"js/jx/SearchField.js"
 ,	"js/jx/GridPaging.js"
 ,	"js/jx/GridPagingRowEditor.js"
 ,	"js/jx/GridPagingFormEditor.js"

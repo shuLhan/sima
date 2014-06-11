@@ -467,8 +467,15 @@ Ext.define ("Jx.plugin.SearchField", {
 			cmp.addDocked (tbar);
 		}
 
-		this.searchField	= Ext.create ("Jx.SearchField", {
-				itemId		:"searchfield"
+		this.searchField		= Ext.create ("Ext.form.field.Trigger", {
+				itemId			:"searchfield"
+			,	emptyText		:"Search ..."
+			,	tooltip			:"Type any string and enter to filter data"
+			,	triggerCls		:"x-form-clear-trigger"
+			,	onTriggerClick	:function ()
+				{
+					this.setRawValue('');
+				}
 			});
 
 		tbar.add ("->");
@@ -1193,25 +1200,6 @@ Ext.define ("Jx.Form", {
 		&& typeof (this.afterFormCancel) === "function") {
 			this.afterFormCancel ();
 		}
-	}
-});
-Ext.define ("Jx.SearchField", {
-	extend			:"Ext.form.field.Trigger"
-,	alias			:"widget.jx.searchfield"
-,	emptyText		:"Search ..."
-,	tooltip			:"Type any string and enter to filter data"
-,	initComponent	: function ()
-	{
-		var me = this;
-
-		me.triggerCls = "x-form-clear-trigger"; // native ExtJS class & icon
-
-		me.callParent (arguments);
-	}
-
-,	onTriggerClick: function ()
-	{
-		this.setRawValue('');
 	}
 });
 /*
