@@ -32,7 +32,7 @@ require_once "../init.php";
 	<link rel="stylesheet" type="text/css" href="<?= $_SERVER['REQUEST_URI'] ?>layout.css" />
 	<link rel="stylesheet" type="text/css" href="<?= $_SERVER['REQUEST_URI'] ?>app.css" />
 
-	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ext-all-debug.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ext-all.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ext-theme-neptune.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ux/all.js"></script>
 <!--
@@ -48,6 +48,7 @@ require_once "../init.php";
 -->
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/Jaring-all.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/CardGridForm.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/plugins/ImportButton.js"></script>
 <!--
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/plugins/CrudButtons.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/plugins/SearchField.js"></script>
