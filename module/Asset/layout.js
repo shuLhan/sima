@@ -300,7 +300,13 @@ function JxAsset ()
 			}
 		,	gridConfig	:
 			{
-				plugins	:["copybutton"]
+				plugins	:
+				[{
+					ptype		:"copybutton"
+				},{
+					ptype		:"importbutton"
+				,	importUrl	:this.dir +"import.php"
+				}]
 
 			,	afterSelectionChange : function (model, data)
 				{
@@ -323,6 +329,12 @@ function JxAsset ()
 			,	afterEdit : function ()
 				{
 					var id = this.selectedData[0].get ("table_id");
+
+					if (null === id) {
+						id = Ext.id (null, "asset-");
+						Asset.cardPanel.form.getForm ().setValues ({ table_id : id });
+					}
+
 					Asset.mediaViewer.show (id);
 				}
 			}
