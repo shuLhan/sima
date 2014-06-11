@@ -121,3 +121,5 @@ Ext.define ("Jx.plugin.CopyButton", {
 	}
 //}}}
 });
+
+Ext.preg ("copybutton", Jx.plugin.CopyButton);
