@@ -139,14 +139,4 @@ Ext.define ("Jx.GridPaging", {
 	{
 		this.fireEvent ("refresh", perm);
 	}
-
-/*
-	beforeFormSave	:function, overridden by instance, return false to cancel.
-	afterFormSave	:function, overridden by instance.
-*/
-
-/*
-	beforeFormCancel	:function, overridden by instance, return false to cancel.
-	afterFormCancel		:function, overridden by instance.
-*/
 });
