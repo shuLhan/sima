@@ -42,6 +42,7 @@ Ext.define ("Jx.plugin.CopyButton", {
 		cmp.copyNumber			= Ext.create ("Ext.form.field.Number", {
 				allowDecimals	:false
 			,	minValue		:1
+			,	fieldLabel		:"Copy data x times"
 			});
 
 		cmp.copyButton	= Ext.create ("Ext.button.Button", {
@@ -65,12 +66,14 @@ Ext.define ("Jx.plugin.CopyButton", {
 				text		:"Copy"
 			,	itemId		:"copy"
 			,	iconCls		:"copy"
-			,	disabled	:false
+			,	disabled	:true
 			,	tooltip		:"Copy data"
 			,	menu		:cmp.copyMenu
 			});
 
 		tbar.add (cmp.copyButtonMenu);
+
+		cmp.on ("selectionchange", this._onSelectionChange, cmp);
 	}
 
 ,	destroy	:function ()
@@ -83,6 +86,16 @@ Ext.define ("Jx.plugin.CopyButton", {
 		this.callParent (arguments);
 	}
 
+//{{{ what this plugin do when user change selection
+,	_onSelectionChange : function (model, data)
+	{
+		var s = (data.length <= 0);
+
+		this.copyButtonMenu.setDisabled (s);
+	}
+//}}}
+
+//{{{ what this plugin do when button clicked
 ,	_doCopy : function ()
 	{
 		var ncopy = this.cmp.copyNumber.getValue ();
@@ -106,4 +119,5 @@ Ext.define ("Jx.plugin.CopyButton", {
 
 		store.sync ();
 	}
+//}}}
 });
