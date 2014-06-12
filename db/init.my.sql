@@ -97,3 +97,27 @@ create table jaring._group_menu
 ,	constraint	_group_menu_fk_01	foreign key (_group_id)	references jaring._group (id)
 ,	constraint	_group_menu_fk_02	foreign key (_menu_id)	references jaring._menu (id)
 );
+
+/*
+ * All file saved in here.
+ */
+create table jaring._media
+(
+	id			integer			not null AUTO_INCREMENT
+,	name		varchar (128)	default ''
+,	extension	varchar (5)		default ''
+,	size		integer			default 0
+,	mime		varchar (128)	default ''
+,	description	varchar (255)	default ''
+,	path		varchar (1024)	not null
+,	constraint	_media_pk primary key (id)
+);
+
+/*
+ * What table and id use the content in _media.
+ */
+create table jaring._media_table
+(
+	table_id	varchar(32)		not null
+,	_media_id	integer			not null
+);
