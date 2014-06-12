@@ -65,19 +65,19 @@ create table asset_type
 create table asset_procurement
 (
 	id		integer			not null	primary key
-,	name	varchar(128)
+,	name	varchar(128)	not null
 );
 
 create table asset_status
 (
 	id		integer			not null	primary key
-,	name	varchar(128)
+,	name	varchar(128)	not null
 );
 
 create table asset_location
 (
 	id		integer			not null	primary key
-,	name	varchar(128)
+,	name	varchar(128)	not null
 );
 
 create table asset
