@@ -245,18 +245,29 @@ class Jaring
 	}
 //}}}
 //{{{ db : execute query
-	public static function dbExecute ($q, $bindv = null)
+	/*
+		q		: query.
+		bindv	: array of binding value, if query containt '?'.
+		fetch	: should we fetch after execute? delete statement MUST set to false
+	*/
+	public static function dbExecute ($q, $bindv = null, $fetch = true)
 	{
+		$rs = [];
+		$s = true;
+
 		Jaring::$_db_ps = Jaring::$_db->prepare ($q);
 
 		if (null !== $bindv) {
-			Jaring::$_db_ps->execute ($bindv);
+			$s = Jaring::$_db_ps->execute ($bindv);
 		} else {
-			Jaring::$_db_ps->execute ();
+			$s = Jaring::$_db_ps->execute ();
 		}
 
-		$rs = Jaring::$_db_ps->fetchAll (PDO::FETCH_ASSOC);
-		Jaring::$_db_ps->closeCursor ();
+		if ($s && $fetch) {
+			$rs = Jaring::$_db_ps->fetchAll (PDO::FETCH_ASSOC);
+
+			Jaring::$_db_ps->closeCursor ();
+		}
 
 		return $rs;
 	}
