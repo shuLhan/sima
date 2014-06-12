@@ -47,8 +47,6 @@ function beforeRequestDelete ($data)
 		$q	="	delete from _media_table where _media_id = ". $d["id"];
 
 		Jaring::dbExecute ($q, null, false);
-
-		error_log ("delete media table");
 	}
 }
 //}}}
