@@ -30,24 +30,25 @@ function beforeRequestDelete ($data)
 {
 	foreach ($data as $d) {
 		// delete file
-		$q	=" select path "
-			." from ". Jaring::$_mod["db_table"]["name"]
-			." where id = ". $d['id'];
+		$q	="	select path
+				from ". Jaring::$_mod["db_table"]["name"] ."
+				where id = ". $d["id"];
 
 		$rs = Jaring::dbExecute ($q);
 
 		if (count ($rs) > 0) {
-			$f = APP_PATH ."/". $rs[0]["path"];
+			$f = APP_PATH . $rs[0]["path"];
 			if (file_exists ($f)) {
 				unlink ($f);
 			}
 		}
 
-		$q	="
-			delete from _media_table
-			where	_media_id = ". $d["id"];
+		// delete link to media table.
+		$q	="	delete from _media_table where _media_id = ". $d["id"];
 
-		$rs = Jaring::dbExecute ($q);
+		Jaring::dbExecute ($q, null, false);
+
+		error_log ("delete media table");
 	}
 }
 //}}}
