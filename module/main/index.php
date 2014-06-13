@@ -11,6 +11,7 @@ require_once "../init.php";
 <html lang="en">
 <head>
 	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title><?= Jaring::$_title ?></title>
 
 	<link rel="shortcut icon" href="<?= Jaring::$_path ?>images/favicon.ico"/>

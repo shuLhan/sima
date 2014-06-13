@@ -8,8 +8,11 @@ if (Jaring::$_c_uid != 0) {
 	die ();
 }
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title><?= Jaring::$_title ?></title>
 
 	<link rel="shortcut icon" href="<?= Jaring::$_path ?>images/favicon.ico"/>
@@ -26,7 +29,7 @@ if (Jaring::$_c_uid != 0) {
 	<link rel="stylesheet" type="text/css" href="<?= Jaring::$_path ?>js/extjs/resources/css/ext-all-neptune.css" />
 	<link rel="stylesheet" type="text/css" href="<?= Jaring::$_path ?>css/jaring.css" />
 
-	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ext-all-debug.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ext-all.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ext-theme-neptune.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jaring.js"></script>
 
