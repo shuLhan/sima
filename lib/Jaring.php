@@ -621,7 +621,7 @@ class Jaring
 		}
 
 		header('Content-Type: application/json');
-		echo json_encode (Jaring::$_out);
+		echo json_encode (Jaring::$_out, JSON_NUMERIC_CHECK);
 	}
 //}}}
 }
