@@ -12,7 +12,8 @@ Ext.define ("Jx.CardGridForm", {
 ,	closable	:true
 ,	config		:
 	{
-		itemId		:""
+		perm		:0
+	,	itemId		:""
 	,	url			:""
 	,	store		:undefined
 	,	fields		:[]
@@ -197,6 +198,7 @@ Ext.define ("Jx.CardGridForm", {
 //}}}
 ,	doRefresh : function (perm)
 	{
+		this.perm = perm;
 		this.grid.doRefresh (perm);
 	}
 });

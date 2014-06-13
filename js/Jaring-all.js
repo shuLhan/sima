@@ -46,6 +46,12 @@ Ext.override (Ext.data.Store, {
 		}
 	});
 
+Ext.override (Ext.Loader, {
+	preserveScript	:false
+,	garbageCollect	:true
+,	enabled			:true
+});
+
 /*
 	Register our application.
 */
@@ -1352,7 +1358,6 @@ Ext.define ("Jx.GridPaging", {
 	{
 		enableTextSelection	:true
 	}
-
 ,	config			:
 	{
 		perm					:0
@@ -1474,6 +1479,7 @@ Ext.define ("Jx.GridPaging", {
 
 ,	doRefresh	:function (perm)
 	{
+		this.perm = perm;
 		this.fireEvent ("refresh", perm);
 	}
 });
@@ -1786,7 +1792,8 @@ Ext.define ("Jx.CardGridForm", {
 ,	closable	:true
 ,	config		:
 	{
-		itemId		:""
+		perm		:0
+	,	itemId		:""
 	,	url			:""
 	,	store		:undefined
 	,	fields		:[]
@@ -1971,6 +1978,7 @@ Ext.define ("Jx.CardGridForm", {
 //}}}
 ,	doRefresh : function (perm)
 	{
+		this.perm = perm;
 		this.grid.doRefresh (perm);
 	}
 });

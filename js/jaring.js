@@ -46,6 +46,12 @@ Ext.override (Ext.data.Store, {
 		}
 	});
 
+Ext.override (Ext.Loader, {
+	preserveScript	:false
+,	garbageCollect	:true
+,	enabled			:true
+});
+
 /*
 	Register our application.
 */

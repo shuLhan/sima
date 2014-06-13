@@ -18,7 +18,6 @@ Ext.define ("Jx.GridPaging", {
 	{
 		enableTextSelection	:true
 	}
-
 ,	config			:
 	{
 		perm					:0
@@ -140,6 +139,7 @@ Ext.define ("Jx.GridPaging", {
 
 ,	doRefresh	:function (perm)
 	{
+		this.perm = perm;
 		this.fireEvent ("refresh", perm);
 	}
 });
