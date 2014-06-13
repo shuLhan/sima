@@ -22,6 +22,7 @@ Ext.define ("Jx.CardGridForm", {
 
 ,	statics		:
 	{
+//{{{ function: convert column to field.
 		columnToField : function (c)
 		{
 			var f = {};
@@ -48,6 +49,7 @@ Ext.define ("Jx.CardGridForm", {
 
 			return f;
 		}
+//}}}
 //{{{ store
 	,	createStore : function (self, opts)
 		{
@@ -69,7 +71,7 @@ Ext.define ("Jx.CardGridForm", {
 						fields.push (f);
 					}
 				} else {
-					f = self.self.columnToField (cc);
+					f = self.self.columnToField (c);
 					fields.push (f);
 				}
 			}

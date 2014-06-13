@@ -42,12 +42,14 @@ $in=array (
 ,	"js/jx/plugins/CrudButtons.js"
 ,	"js/jx/plugins/SearchField.js"
 ,	"js/jx/plugins/CopyButton.js"
+,	"js/jx/plugins/ImportButton.js"
 ,	"js/jx/Store.js"
 ,	"js/jx/ComboPaging.js"
 ,	"js/jx/Form.js"
 ,	"js/jx/GridPaging.js"
 ,	"js/jx/GridPagingRowEditor.js"
 ,	"js/jx/GridPagingFormEditor.js"
+,	"js/jx/CardGridForm.js"
 );
 
 genjs ($out, $in);

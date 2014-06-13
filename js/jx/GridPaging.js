@@ -32,6 +32,7 @@ Ext.define ("Jx.GridPaging", {
 	,	showSearchField			:true
 
 	,	pagingBar				:undefined
+	,	showPagingBar			:true
 	,	selectedData			:[]
 		// list of data details, for master-detail grid.
 	,	compDetails				:[]
@@ -46,7 +47,9 @@ Ext.define ("Jx.GridPaging", {
 		this.callParent (arguments);
 		this.initConfig (opts);
 
-		this.createPagingBar ();
+		if (opts.showPagingBar) {
+			this.createPagingBar ();
+		}
 
 		// Inject CRUD buttons to panel.
 		if (opts.showCrudButtons) {

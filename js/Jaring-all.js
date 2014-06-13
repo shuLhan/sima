@@ -474,7 +474,7 @@ Ext.define ("Jx.plugin.SearchField", {
 			,	triggerCls		:"x-form-clear-trigger"
 			,	onTriggerClick	:function ()
 				{
-					this.setRawValue('');
+					this.setRawValue ("");
 				}
 			});
 
@@ -637,6 +637,136 @@ Ext.define ("Jx.plugin.CopyButton", {
 	}
 //}}}
 });
+
+Ext.preg ("copybutton", Jx.plugin.CopyButton);
+/*
+	Copyright 2014 - Mhd Sulhan
+	Authors:
+		- mhd.sulhan (m.shulhan@gmail.com)
+*/
+
+/*
+	Plugins to add button menu import to grid.
+ */
+Ext.define ("Jx.plugin.ImportButton", {
+	extend	:"Ext.AbstractPlugin"
+,	alias	:"plugin.importbutton"
+
+,	config	:
+	{
+		// server script that will be executed
+		importUrl	:undefined
+	,	importForm	:undefined
+	}
+
+,	constructor	:function (config)
+	{
+		Ext.apply(this, config);
+		this.callParent (arguments);
+	}
+
+,	init	:function (cmp)
+	{
+		/* Get or create top toolbar */
+		var b		= undefined;
+		var tbar	= undefined;
+		var tbars	= cmp.getDockedItems ("toolbar[dock='top']");
+
+		if (tbars.length > 0) {
+			tbar = tbars[0];
+		}
+
+		if (undefined === tbar) {
+			tbar		= Ext.create ("Ext.toolbar.Toolbar", {
+				dock	:"top"
+			});
+			cmp.addDocked (tbar);
+		}
+
+		cmp.importButton	= Ext.create ("Ext.button.Button", {
+				text		:"Import"
+			,	itemId		:"import"
+			,	iconCls		:"import"
+			,	tooltip		:"Import data from file"
+			,	handler		:this._doImport
+			,	scope		:this
+			});
+
+		tbar.add (cmp.importButton);
+	}
+
+,	destroy	:function ()
+	{
+		Ext.destroy (this.cmp.importButton);
+
+		this.callParent (arguments);
+	}
+
+,	submitImport : function ()
+	{
+		this.importForm.getForm ().submit ({
+				scope	:this
+			,	success	:function (form, action)
+				{
+					Jx.msg.info (action.result.data);
+					this.cmp.doRefresh ();
+				}
+			,	failure	:function (form, action)
+				{
+					Jx.msg.info (action.result.data);
+				}
+			});
+	}
+
+//{{{ what this plugin do when button clicked
+,	_doImport : function ()
+	{
+		var file			= Ext.create ("Ext.form.field.File", {
+				fieldLabel	:"File"
+			,	buttonText	:"Select file ..."
+			,	name		:"import_file"
+			,	allowBlank	:false
+			});
+
+		this.importForm		= Ext.create ("Ext.form.Panel", {
+				layout		:"anchor"
+			,	bodyPadding	:5
+			,	url			:this.importUrl
+			,	defaults	:
+				{
+					anchor		:"100%"
+				}
+			,	items		:
+				[
+					file
+				]
+			,	buttons		:
+				[{
+					text		:"Import"
+				,	formBind	:true
+				,	disabled	:true
+				,	handler		:this.submitImport
+				,	scope		:this
+				}]
+			});
+
+		var win				= Ext.create ("Ext.window.Window", {
+				title		:"Import Data"
+			,	layout		:"fit"
+			,	modal		:true
+			,	autoShow	:true
+			,	draggable	:false
+			,	resizable	:false
+			,	items		:
+				[
+					this.importForm
+				]
+			});
+	}
+//}}}
+});
+
+Ext.preg ("importbutton", Jx.plugin.ImportButton);
 /*
 	Copyright 2014 - Mhd Sulhan
 	Authors:
@@ -1236,6 +1366,7 @@ Ext.define ("Jx.GridPaging", {
 	,	showSearchField			:true
 
 	,	pagingBar				:undefined
+	,	showPagingBar			:true
 	,	selectedData			:[]
 		// list of data details, for master-detail grid.
 	,	compDetails				:[]
@@ -1250,7 +1381,9 @@ Ext.define ("Jx.GridPaging", {
 		this.callParent (arguments);
 		this.initConfig (opts);
 
-		this.createPagingBar ();
+		if (opts.showPagingBar) {
+			this.createPagingBar ();
+		}
 
 		// Inject CRUD buttons to panel.
 		if (opts.showCrudButtons) {
@@ -1343,16 +1476,6 @@ Ext.define ("Jx.GridPaging", {
 	{
 		this.fireEvent ("refresh", perm);
 	}
-
-/*
-	beforeFormSave	:function, overridden by instance, return false to cancel.
-	afterFormSave	:function, overridden by instance.
-*/
-
-/*
-	beforeFormCancel	:function, overridden by instance, return false to cancel.
-	afterFormCancel		:function, overridden by instance.
-*/
 });
 /*
 	Copyright 2013 - x10c-lab.com
@@ -1647,5 +1770,207 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 ,	clearData	:function ()
 	{
 		this.grid.store.loadData ([], false);
+	}
+});
+/*
+	Copyright 2014 - Mhd Sulhan
+	Authors:
+		- mhd.sulhan (m.shulhan@gmail.com)
+*/
+
+Ext.define ("Jx.CardGridForm", {
+	extend		:"Ext.panel.Panel"
+,	alias		:"jx.cardgridform"
+,	layout		:"card"
+,	titleAlign	:"center"
+,	closable	:true
+,	config		:
+	{
+		itemId		:""
+	,	url			:""
+	,	store		:undefined
+	,	fields		:[]
+	,	grid		:undefined
+	,	form		:undefined
+	}
+
+,	statics		:
+	{
+//{{{ function: convert column to field.
+		columnToField : function (c)
+		{
+			var f = {};
+
+			if (undefined !== c.dataIndex) {
+				f.name = c.dataIndex;
+
+				if (undefined !== c.type) {
+					f.type = c.type;
+				} else if (undefined !== c.xtype) {
+					// use column xtype as field type
+					switch (c.xtype) {
+					case "datecolumn":
+						f.type = "date";
+						if (undefined !== c.dateFormat) {
+							f.dateFormat = c.dateFormat;
+						} else {
+							f.dateFormat = "c"
+						}
+						break;
+					}
+				}
+			}
+
+			return f;
+		}
+//}}}
+//{{{ store
+	,	createStore : function (self, opts)
+		{
+			if (undefined !== opts.store) {
+				return;
+			}
+
+			var fields	= [];
+			var nfield	= opts.fields.length;
+
+			for (var i = 0, c = undefined, f = undefined; i < nfield; i++) {
+				c = opts.fields[i];
+				f = {};
+
+				if (undefined !== c.columns) {
+					for (var k = 0, cc = undefined; k < c.columns.length; k++) {
+						cc	= c.columns[k];
+						f	= self.self.columnToField (cc);
+						fields.push (f);
+					}
+				} else {
+					f = self.self.columnToField (c);
+					fields.push (f);
+				}
+			}
+
+			self.store		= Ext.create ("Jx.StoreRest", {
+					url		: opts.url
+				,	fields	: fields
+				});
+		}
+//}}}
+//{{{ grid
+	,	createGrid : function (self, opts)
+		{
+			var barName		= "Grid";
+			var id			= ( opts.id
+							? opts.id + barName
+							: ( opts.itemId
+								? opts.itemId + barName
+								: "JxCardGridForm"+ barName));
+
+			/* Add row number to grid */
+			opts.fields.splice (0, 0, { xtype : "rownumberer" });
+
+			var cfg = {};
+
+			Ext.merge (cfg, {
+					itemId			: id
+				,	_parent			: self
+				,	store			: self.store
+				,	columns			: opts.fields
+				,	region			:"center"
+
+				,	doAdd	:function ()
+					{
+						self.form.setTitle ("Create new data");
+						self.form.getForm ().reset ();
+						self.getLayout ().setActiveItem (self.form);
+					}
+				,	doEdit	:function ()
+					{
+						self.form.setTitle ("Updating data");
+						self.form.getForm ().reset ();
+						self.form.loadRecord (this.selectedData[0]);
+						self.getLayout ().setActiveItem (self.form);
+					}
+				,	doDelete :function ()
+					{
+						self.form.getForm ().reset ();
+						self.form.loadRecord (this.selectedData[0]);
+						self.form.doSave ();
+					}
+				,	onSelectionChange :function (model, data)
+					{
+						if (data.length > 0) {
+							self.form.loadRecord (data[0]);
+						}
+					}
+				});
+
+			Ext.merge (cfg, opts.gridConfig);
+
+			self.grid = Ext.create ("Jx.GridPaging", cfg);
+
+			self.grid.on ("selectionchange", self.grid.onSelectionChange, self.grid);
+
+			self.add (self.grid);
+		}
+//}}}
+//{{{ form
+	,	createForm : function (self, opts)
+		{
+			var barName		= "Form";
+			var id			= ( opts.id
+							? opts.id + barName
+							: ( opts.itemId
+								? opts.itemId + barName
+								: "JxCardGridForm"+ barName));
+
+			var cfg = {};
+
+			Ext.merge (cfg, {
+					itemId				:id
+				,	_parent				:self
+				,	store				:self.store
+// replace original save and cancel handler
+				,	afterFormSave		:function (success)
+					{
+						if (success) {
+							self.getLayout ().setActiveItem (self.grid);
+						}
+					}
+				,	afterFormCancel		:function ()
+					{
+						self.getLayout ().setActiveItem (self.grid);
+					}
+				});
+
+			Ext.merge (cfg, opts.formConfig);
+
+			self.form	= Ext.create ("Jx.Form", cfg);
+
+			self.form.columnsToFields (opts.fields);
+
+			self.add (this.form);
+		}
+	}
+//}}}
+//{{{ constructor
+,	constructor	:function (cfg)
+	{
+		var opts = {};
+
+		Ext.merge (opts, this.config);
+		Ext.merge (opts, cfg);
+
+		this.callParent ([opts]);
+		this.initConfig (opts);
+
+		this.self.createStore (this, opts);
+		this.self.createGrid (this, opts);
+		this.self.createForm (this, opts);
+	}
+//}}}
+,	doRefresh : function (perm)
+	{
+		this.grid.doRefresh (perm);
 	}
 });
