@@ -67,6 +67,7 @@ require_once "../init.php";
 	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>UserProfile/layout.js"></script>
 	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>footer/layout.js"></script>
 	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>layout.js"></script>
+	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>app.js"></script>
 </head>
 <body>
     <div id="loading-mask" style=""></div>
