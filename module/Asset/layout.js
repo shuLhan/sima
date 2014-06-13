@@ -221,14 +221,13 @@ function JxAsset ()
 		,	collapsible	:true
 		});
 //}}}
-//{{{ card grid form
+//{{{ panel: asset
 	this.cardPanel		= Ext.create ("Jx.CardGridForm", {
 			itemId		:this.id
 		,	url			:this.dir
 		,	fields		:this.fields
 		,	closable	:false
 		,	region		:"center"
-		,	_parent		:this
 		,	formConfig	:
 			{
 				layout		:
