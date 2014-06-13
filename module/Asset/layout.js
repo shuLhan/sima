@@ -88,7 +88,7 @@ function JxAsset ()
 			,	hidden		:true
 			,	editor		:{}
 			},{
-				header		:"Detil"
+				header		:"Detail"
 			,	dataIndex	:"detail"
 			,	hidden		:true
 			,	editor		:
@@ -100,7 +100,7 @@ function JxAsset ()
 			header		:"Garansi"
 		,	columns		:
 			[{
-				header		:"Tanggal Pembelian"
+				header		:"Tanggal Beli"
 			,	dataIndex	:"warranty_date"
 			,	width		:140
 			,	xtype		:"datecolumn"
@@ -111,7 +111,7 @@ function JxAsset ()
 				,	format		:"d M Y"
 				}
 			},{
-				header		:"Lama Garansi"
+				header		:"Lama (tahun)"
 			,	dataIndex	:"warranty_length"
 			,	hidden		:true
 			,	editor		:
@@ -121,7 +121,7 @@ function JxAsset ()
 				,	allowDecimals	:false
 				}
 			},{
-				header		:"Info Garansi"
+				header		:"Informasi"
 			,	dataIndex	:"warranty_info"
 			,	hidden		:true
 			,	editor		:
@@ -177,13 +177,14 @@ function JxAsset ()
 			},{
 				header		:"Pengguna"
 			,	dataIndex	:"_user_id"
-			,	hidden		:true
+			,	renderer	:this.storeSystemUser.renderData ("id", "realname")
 			,	editor		:
 				{
 					xtype			:"combobox"
 				,	store			:this.storeSystemUser
 				,	valueField		:"id"
 				,	displayField	:"realname"
+				,	disabled		:true
 				}
 			},{
 				header		:"Lokasi"
@@ -195,12 +196,17 @@ function JxAsset ()
 				,	store			:Jx.app.store.Asset.Location
 				,	valueField		:"id"
 				,	displayField	:"name"
+				,	disabled		:true
 				}
 			},{
 				header		:"Detil Lokasi"
 			,	dataIndex	:"location_detail"
 			,	hidden		:true
-			,	editor		:{}
+			,	editor		:
+				{
+					xtype		:"textarea"
+				,	disabled	:true
+				}
 			},{
 				header		:"Info Perawatan"
 			,	dataIndex	:"maintenance_info"

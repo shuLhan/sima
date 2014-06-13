@@ -112,9 +112,6 @@ create table asset
 ,	price				float			default 0
 
 ,	status_id			integer			null
-,	_user_id			integer			null
-,	location_id			integer			null
-,	location_detail		varchar(255)	default ''
 ,	maintenance_info	varchar(255)	default ''
 
 ,	table_id			varchar(32)		default null

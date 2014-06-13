@@ -24,9 +24,6 @@ $fields = [
 ,	"company"
 ,	"price"
 ,	"status_id"
-,	"_user_id"
-,	"location_id"
-,	"location_detail"
 ,	"maintenance_info"
 ,	"table_id"
 ];
