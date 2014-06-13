@@ -139,6 +139,58 @@ Ext.define ("Jx.app.store.Asset.Location", {
 	}
 });
 //}}}
+//{{{ store: Asset
+Ext.define ("Jx.app.store.Asset", {
+	extend		:"Jx.StoreRest"
+,	fields		:
+	[
+		"id"
+	,	"type_id"
+	,	"merk"
+	,	"model"
+	,	"sn"
+	,	"barcode"
+	,	"service_tag"
+	,	"label"
+	,	"detail"
+	,	"warranty_date"
+	,	"warranty_length"
+	,	"warranty_info"
+	,	"procurement_id"
+	,	"company"
+	,	"price"
+	,	"status_id"
+	,	"_user_id"
+	,	"location_id"
+	,	"location_detail"
+	,	"maintenance_info"
+	,	"table_id"
+	]
+
+,	config		:
+	{
+		url			:""
+	,	autoDestroy	:false
+	,	storeId		:"Asset"
+	}
+
+,	constructor	:function (config)
+	{
+		var opts = {};
+
+		Ext.merge (opts, this.config);
+		Ext.merge (opts, config);
+
+		if ("" === opts.url) {
+			opts.url = Jx.generateModDir (this.storeId);
+		}
+
+		this.callParent ([opts]);
+	}
+});
+
+//}}}
+Jx.app.store.Asset				= Ext.create ("Jx.app.store.Asset");
 
 Jx.app.store.Asset.Type			= Ext.create ("Jx.app.store.Asset.Type");
 Jx.app.store.Asset.Procurement	= Ext.create ("Jx.app.store.Asset.Procurement");
