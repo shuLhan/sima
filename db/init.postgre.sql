@@ -80,7 +80,7 @@ create table jaring._menu
 ,	type		integer			default 1
 ,	label		varchar (64)	default ''
 ,	icon		varchar (32)	default ''
-,	image		varchar (32)	default ''
+,	image		varchar (256)	default ''
 ,	module		varchar (128)	default ''
 ,	description	varchar (128)	default ''
 ,	constraint	_menu_pk		primary key (id)
