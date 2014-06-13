@@ -310,19 +310,45 @@ class Jaring
 		$query	= "'%".$_GET["query"]."%'";
 		$start	= (int) $_GET["start"];
 		$limit	= (int) $_GET["limit"];
+		$freads		= Jaring::$_mod["db_table"]["read"];
+		$fsearch	= Jaring::$_mod["db_table"]["search"];
 
-		$qselect	= "	select	". implode (",", Jaring::$_mod["db_table"]["read"]);
+		$qselect	= "	select ". implode (",", $freads);
 		$qfrom		= " from ". Jaring::$_mod["db_table"]["name"];
-		$qwhere		= " where ";
+		$qwhere		= " where 1=1 ";
 		$qorder		= " order by ". implode (",", Jaring::$_mod["db_table"]["order"]);
 		$qlimit		= "	limit ". $start .",". $limit;
 
-		$fields = Jaring::$_mod["db_table"]["search"];
-		foreach ($fields as $k => $v) {
+		// get parameter name that has the same name with read fields,
+		// and use it as the filter
+		foreach ($freads as $v) {
+			if (! array_key_exists ($v, $_GET)) {
+				continue;
+			}
+
+			$qwhere .=" and $v = ";
+
+			if (is_numeric ($_GET[$v])) {
+				$qwhere .= $_GET[$v];
+			} else {
+				$qwhere .= "'". $_GET[$v] ."'";
+			}
+		}
+
+		// add filter by search field
+		if (count ($fsearch) > 0) {
+			$qwhere .=" and (";
+		}
+
+		foreach ($fsearch as $k => $v) {
 			if ($k > 0) {
 				$qwhere .= " or ";
 			}
 			$qwhere .= " $v like $query ";
+		}
+
+		if (count ($fsearch) > 0) {
+			$qwhere .= ")";
 		}
 
 		/* Get total rows */
@@ -336,6 +362,8 @@ class Jaring
 				. $qwhere
 				. $qorder
 				. $qlimit;
+
+		error_log ($qread);
 
 		Jaring::$_out["total"]		= (int) Jaring::dbExecute ($qtotal)[0]["total"];
 		Jaring::$_out["data"]		= Jaring::dbExecute ($qread);
@@ -429,7 +457,7 @@ class Jaring
 		Jaring::$_out['success']	= true;
 		Jaring::$_out['data']		= Jaring::$MSG_SUCCESS_UPDATE;
 	}
-//}}}
+//}}}z
 //{{{ db : prepare delete statement
 	private static function dbPrepareDelete ($table, $fields)
 	{
