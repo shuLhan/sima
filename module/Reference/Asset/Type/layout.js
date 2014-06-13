@@ -9,18 +9,9 @@ function JxReferenceAssetType ()
 	this.id		= "Reference_Asset_Type";
 	this.dir	= Jx.generateModDir (this.id);
 
-	this.store		= Ext.create ("Jx.StoreRest", {
-			url		:this.dir
-		,	fields	:
-			[
-				"id"
-			,	"name"
-			]
-		});
-
 	this.panel			= Ext.create ("Jx.GridPaging.FormEditor", {
 			itemId		:this.id
-		,	store		:this.store
+		,	store		:Jx.app.store.Asset.Type
 		,	panelConfig	:
 			{
 				title		:"Referensi > Tipe Aset"
@@ -43,7 +34,6 @@ function JxReferenceAssetType ()
 			,	editor		:
 				{
 					xtype		:"textfield"
-				,	vtype		:"alphanum"
 				,	allowBlank	:false
 				}
 			}]

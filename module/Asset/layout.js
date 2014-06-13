@@ -10,39 +10,6 @@ function JxAsset ()
 	this.id		= "Asset";
 	this.dir	= Jx.generateModDir (this.id);
 //{{{ stores
-	this.storeAssetType	= Ext.create ("Jx.StoreRest", {
-			url			:Jx.generateModDir ("Reference_Asset_Type")
-		,	fields		:
-			[{
-				name	:"id"
-			,	type	:"int"
-			},{
-				name	:"name"
-			}]
-		});
-
-	this.storeAssetProcurement	= Ext.create ("Jx.StoreRest", {
-			url					:Jx.generateModDir ("Reference_Asset_Procurement")
-		,	fields				:
-			[{
-				name	:"id"
-			,	type	:"int"
-			},{
-				name	:"name"
-			}]
-		});
-
-	this.storeAssetStatus	= Ext.create ("Jx.StoreRest", {
-			url				:Jx.generateModDir ("Reference_Asset_Status")
-		,	fields				:
-			[{
-				name	:"id"
-			,	type	:"int"
-			},{
-				name	:"name"
-			}]
-		});
-
 	this.storeSystemUser	= Ext.create ("Jx.StoreRest", {
 			url				:Jx.generateModDir ("System_User")
 		,	fields				:
@@ -51,17 +18,6 @@ function JxAsset ()
 			,	type	:"int"
 			},{
 				name	:"realname"
-			}]
-		});
-
-	this.storeAssetLocation	= Ext.create ("Jx.StoreRest", {
-			url				:Jx.generateModDir ("Reference_Asset_Location")
-		,	fields			:
-			[{
-				name	:"id"
-			,	type	:"int"
-			},{
-				name	:"name"
 			}]
 		});
 //}}}
@@ -91,11 +47,11 @@ function JxAsset ()
 				header		:"Type"
 			,	dataIndex	:"type_id"
 			,	type		:"int"
-			,	renderer	:this.storeAssetType.renderData ("id", "name")
+			,	renderer	:Jx.app.store.Asset.Type.renderData ("id", "name")
 			,	editor		:
 				{
 					xtype			:"combobox"
-				,	store			:this.storeAssetType
+				,	store			:Jx.app.store.Asset.Type
 				,	allowBlank		:false
 				,	valueField		:"id"
 				,	displayField	:"name"
@@ -180,12 +136,12 @@ function JxAsset ()
 			[{
 				header		:"Jenis"
 			,	dataIndex	:"procurement_id"
-			,	type		:"int"
+			,	renderer	:Jx.app.store.Asset.Procurement.renderData ("id", "name")
 			,	hidden		:true
 			,	editor		:
 				{
 					xtype			:"combobox"
-				,	store			:this.storeAssetProcurement
+				,	store			:Jx.app.store.Asset.Procurement
 				,	valueField		:"id"
 				,	displayField	:"name"
 				}
@@ -210,19 +166,17 @@ function JxAsset ()
 			[{
 				header		:"Status"
 			,	dataIndex	:"status_id"
-			,	type		:"int"
-			,	renderer	:this.storeAssetStatus.renderData ("id", "name")
+			,	renderer	:Jx.app.store.Asset.Status.renderData ("id", "name")
 			,	editor		:
 				{
 					xtype			:"combobox"
-				,	store			:this.storeAssetStatus
+				,	store			:Jx.app.store.Asset.Status
 				,	valueField		:"id"
 				,	displayField	:"name"
 				}
 			},{
 				header		:"Pengguna"
 			,	dataIndex	:"_user_id"
-			,	type		:"int"
 			,	hidden		:true
 			,	editor		:
 				{
@@ -234,12 +188,11 @@ function JxAsset ()
 			},{
 				header		:"Lokasi"
 			,	dataIndex	:"location_id"
-			,	type		:"int"
-			,	renderer	:this.storeAssetLocation.renderData ("id", "name")
+			,	renderer	:Jx.app.store.Asset.Location.renderData ("id", "name")
 			,	editor		:
 				{
 					xtype			:"combobox"
-				,	store			:this.storeAssetLocation
+				,	store			:Jx.app.store.Asset.Location
 				,	valueField		:"id"
 				,	displayField	:"name"
 				}
@@ -360,10 +313,10 @@ function JxAsset ()
 
 		Jx.chainStoreLoad (
 				[
-					this.storeAssetType
-				,	this.storeAssetProcurement
-				,	this.storeAssetStatus
-				,	this.storeAssetLocation
+					Jx.app.store.Asset.Type
+				,	Jx.app.store.Asset.Procurement
+				,	Jx.app.store.Asset.Status
+				,	Jx.app.store.Asset.Location
 				,	this.storeSystemUser
 				]
 			,	function ()

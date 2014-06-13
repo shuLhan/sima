@@ -12,39 +12,6 @@ function JxAssetBarcode ()
 	var idPanelPrint	= this.id + "_Print";
 
 //{{{ store
-	this.storeAssetType	= Ext.create ("Jx.StoreRest", {
-			url			:Jx.generateModDir ("Reference_Asset_Type")
-		,	fields		:
-			[{
-				name	:"id"
-			,	type	:"int"
-			},{
-				name	:"name"
-			}]
-		});
-
-	this.storeAssetProcurement	= Ext.create ("Jx.StoreRest", {
-			url					:Jx.generateModDir ("Reference_Asset_Procurement")
-		,	fields				:
-			[{
-				name	:"id"
-			,	type	:"int"
-			},{
-				name	:"name"
-			}]
-		});
-
-	this.storeAssetStatus	= Ext.create ("Jx.StoreRest", {
-			url				:Jx.generateModDir ("Reference_Asset_Status")
-		,	fields				:
-			[{
-				name	:"id"
-			,	type	:"int"
-			},{
-				name	:"name"
-			}]
-		});
-
 	this.storeSystemUser	= Ext.create ("Jx.StoreRest", {
 			url				:Jx.generateModDir ("System_User")
 		,	fields				:
@@ -53,17 +20,6 @@ function JxAssetBarcode ()
 			,	type	:"int"
 			},{
 				name	:"realname"
-			}]
-		});
-
-	this.storeAssetLocation	= Ext.create ("Jx.StoreRest", {
-			url				:Jx.generateModDir ("Reference_Asset_Location")
-		,	fields			:
-			[{
-				name	:"id"
-			,	type	:"int"
-			},{
-				name	:"name"
 			}]
 		});
 
@@ -132,7 +88,7 @@ function JxAssetBarcode ()
 			},{
 				header		:"Type"
 			,	dataIndex	:"type_id"
-			,	renderer	:this.storeAssetType.renderData ("id", "name")
+			,	renderer	:Jx.app.store.Asset.Type.renderData ("id", "name")
 			,	flex		:true
 			},{
 				header		:"Merk"
@@ -214,7 +170,7 @@ function JxAssetBarcode ()
 			},{
 				header		:"Type"
 			,	dataIndex	:"type_id"
-			,	renderer	:this.storeAssetType.renderData ("id", "name")
+			,	renderer	:Jx.app.store.Asset.Type.renderData ("id", "name")
 			,	flex		:true
 			},{
 				header		:"Print #"
@@ -251,10 +207,10 @@ function JxAssetBarcode ()
 
 		Jx.chainStoreLoad (
 				[
-					this.storeAssetType
-				,	this.storeAssetProcurement
-				,	this.storeAssetStatus
-				,	this.storeAssetLocation
+					Jx.app.store.Asset.Type
+				,	Jx.app.store.Asset.Procurement
+				,	Jx.app.store.Asset.Status
+				,	Jx.app.store.Asset.Location
 				,	this.storeSystemUser
 				,	this.storeAsset
 				]
