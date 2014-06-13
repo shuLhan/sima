@@ -363,8 +363,6 @@ class Jaring
 				. $qorder
 				. $qlimit;
 
-		error_log ($qread);
-
 		Jaring::$_out["total"]		= (int) Jaring::dbExecute ($qtotal)[0]["total"];
 		Jaring::$_out["data"]		= Jaring::dbExecute ($qread);
 		Jaring::$_out["success"]	= true;
@@ -457,7 +455,7 @@ class Jaring
 		Jaring::$_out['success']	= true;
 		Jaring::$_out['data']		= Jaring::$MSG_SUCCESS_UPDATE;
 	}
-//}}}z
+//}}}
 //{{{ db : prepare delete statement
 	private static function dbPrepareDelete ($table, $fields)
 	{
