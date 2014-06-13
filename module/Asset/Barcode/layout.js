@@ -3,7 +3,6 @@
 	Authors:
 		- mhd.sulhan (m.shulhan@gmail.com)
 */
-
 function JxAssetBarcode ()
 {
 	this.id				= "Asset_Barcode";
@@ -23,54 +22,26 @@ function JxAssetBarcode ()
 			}]
 		});
 
-	this.storeAsset		= Ext.create ("Jx.StoreRest", {
-			url			:Jx.generateModDir ("Asset")
-		,	fields		:
-			[
-				"id"
-			,	"type_id"
-			,	"merk"
-			,	"model"
-			,	"sn"
-			,	"barcode"
-			,	"service_tag"
-			,	"label"
-			,	"detail"
-			,	"warranty_date"
-			,	"warranty_length"
-			,	"warranty_info"
-			,	"procurement_id"
-			,	"company"
-			,	"price"
-			,	"status_id"
-			,	"_user_id"
-			,	"location_id"
-			,	"location_detail"
-			,	"maintenance_info"
-			,	"table_id"
-			,{
-				name			:"print_count"
-			,	type			:"int"
-			,	defaultValue	:"1"
-			}]
-		});
-
 	this.storePrint	= Ext.create ("Jx.Store", {
 			fields	:
 			[
 				"type_id"
 			,	"barcode"
 			,	"print_count"
-			]
+			,{
+				name			:"print_count"
+			,	type			:"int"
+			,	defaultValue	:"1"
+			}]
 		});
 //}}}
 
 //{{{ panel asset
 	this.panelAsset			= Ext.create ("Jx.GridPaging", {
 			itemId			:idPanelAsset
-		,	store			:this.storeAsset
-		,	region			:"center"
+		,	store			:Jx.app.store.Asset
 		,	showCrudButtons	:false
+		,	region			:"center"
 		,	viewConfig		:
 			{
 				plugins			:
@@ -80,24 +51,24 @@ function JxAssetBarcode ()
 				,	dropGroup		:idPanelPrint
 				}]
 			}
-		,	columns	:
+		,	columns			:
 			[{
-				header		:"Barcode"
-			,	dataIndex	:"barcode"
-			,	width		:130
+				header			:"Barcode"
+			,	dataIndex		:"barcode"
+			,	width			:130
 			},{
-				header		:"Type"
-			,	dataIndex	:"type_id"
-			,	renderer	:Jx.app.store.Asset.Type.renderData ("id", "name")
-			,	flex		:true
+				header			:"Type"
+			,	dataIndex		:"type_id"
+			,	renderer		:Jx.app.store.Asset.Type.renderData ("id", "name")
+			,	flex			:true
 			},{
-				header		:"Merk"
-			,	dataIndex	:"merk"
-			,	flex		:true
+				header			:"Merk"
+			,	dataIndex		:"merk"
+			,	flex			:true
 			},{
-				header		:"Model"
-			,	dataIndex	:"model"
-			,	flex		:true
+				header			:"Model"
+			,	dataIndex		:"model"
+			,	flex			:true
 			}]
 		});
 //}}}
@@ -157,6 +128,15 @@ function JxAssetBarcode ()
 				,	dragGroup	:idPanelPrint
 				,	dropGroup	:idPanelAsset
 				}]
+			,	listeners	:
+				{
+					drop		:function (node, data)
+					{
+						if (data.records.length > 0) {
+							data.records[0].set ("print_count", 1);
+						}
+					}
+				}
 			}
 		,	tbar	:
 			[
@@ -207,12 +187,12 @@ function JxAssetBarcode ()
 
 		Jx.chainStoreLoad (
 				[
-					Jx.app.store.Asset.Type
+					this.storeSystemUser
+				,	Jx.app.store.Asset.Type
 				,	Jx.app.store.Asset.Procurement
 				,	Jx.app.store.Asset.Status
 				,	Jx.app.store.Asset.Location
-				,	this.storeSystemUser
-				,	this.storeAsset
+				,	Jx.app.store.Asset
 				]
 			,	function ()
 				{
