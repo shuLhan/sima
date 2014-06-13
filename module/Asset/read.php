@@ -12,18 +12,24 @@ $limit	= (int) $_GET["limit"];
 
 $qselect	="
 select	A.*
-,		AA.*
+,		AA.cost
+,		AA.assign_date
+,		AA._user_id
+,		AA.location_id
+,		AA.location_detail
+,		AA.description
 ";
 
 $qfrom	="
 	from	asset A
-	left join (
-			select		*
-			from		asset_assign_log
-			order by	assign_date desc
-			limit		0,1
-		) AA
-		on A.id = AA.asset_id
+	left join asset_assign_log	AA
+		on AA.id = (
+			select	id
+			from	asset_assign_log
+			where	asset_id = A.id
+			order by assign_date desc
+			limit	0,1
+		)
 	left join asset_type		AT
 		on A.type_id			= AT.id
 	left join asset_procurement AP
