@@ -18,6 +18,7 @@ Ext.define ("Jx.CardGridForm", {
 	,	fields		:[]
 	,	grid		:undefined
 	,	form		:undefined
+	,	formConfig	:{}
 
 	,	closable	:true
 	}

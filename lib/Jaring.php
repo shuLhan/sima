@@ -409,6 +409,10 @@ class Jaring
 			unset ($bindv);
 		}
 
+		if (function_exists ("afterRequestCreate")) {
+			afterRequestCreate ($data);
+		}
+
 		Jaring::$_out['success']	= true;
 		Jaring::$_out['data']		= Jaring::$MSG_SUCCESS_CREATE;
 	}
@@ -487,6 +491,10 @@ class Jaring
 			Jaring::$_db_ps->closeCursor ();
 
 			unset ($bindv);
+		}
+
+		if (function_exists ("afterRequestDelete")) {
+			afterRequestDelete ($data);
 		}
 
 		Jaring::$_out['success']	= true;
