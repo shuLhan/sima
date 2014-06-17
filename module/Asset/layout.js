@@ -109,6 +109,7 @@ function JxAsset ()
 				{
 					xtype		:"datefield"
 				,	format		:"d M Y"
+				,	submitFormat:"Y-m-d"
 				}
 			},{
 				header		:"Lama (tahun)"
