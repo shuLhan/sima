@@ -11,17 +11,6 @@ function JxAssetBarcode ()
 	var idPanelPrint	= this.id + "_Print";
 
 //{{{ store
-	this.storeSystemUser	= Ext.create ("Jx.StoreRest", {
-			url				:Jx.generateModDir ("System_User")
-		,	fields				:
-			[{
-				name	:"id"
-			,	type	:"int"
-			},{
-				name	:"realname"
-			}]
-		});
-
 	this.storePrint	= Ext.create ("Jx.Store", {
 			fields	:
 			[
@@ -187,7 +176,7 @@ function JxAssetBarcode ()
 
 		Jx.chainStoreLoad (
 				[
-					this.storeSystemUser
+					Jx.app.store.System.User
 				,	Jx.app.store.Asset.Type
 				,	Jx.app.store.Asset.Procurement
 				,	Jx.app.store.Asset.Status
