@@ -9,18 +9,6 @@ function JxAssetAssign ()
 	this.id		= "Asset_Assign";
 	this.dir	= Jx.generateModDir (this.id);
 
-//{{{ stores
-	this.storeSystemUser	= Ext.create ("Jx.StoreRest", {
-			url				:Jx.generateModDir ("System_User")
-		,	fields				:
-			[{
-				name	:"id"
-			,	type	:"int"
-			},{
-				name	:"realname"
-			}]
-		});
-//}}}
 //{{{ fields
 	this.fields		= [{
 			header		:"ID"
@@ -49,6 +37,7 @@ function JxAssetAssign ()
 			{
 				xtype		:"datefield"
 			,	format		:"d M Y"
+			,	submitFormat:"Y-m-d"
 			}
 		},{
 			header		:"Cost"
@@ -62,11 +51,11 @@ function JxAssetAssign ()
 		},{
 			header		:"User"
 		,	dataIndex	:"_user_id"
-		,	renderer	:this.storeSystemUser.renderData ("id", "realname")
+		,	renderer	:Jx.app.store.System.User.renderData ("id", "realname")
 		,	editor		:
 			{
 				xtype			:"combobox"
-			,	store			:this.storeSystemUser
+			,	store			:Jx.app.store.System.User
 			,	valueField		:"id"
 			,	displayField	:"realname"
 			}
@@ -147,6 +136,7 @@ function JxAssetAssign ()
 		,	split			:true
 		,	collapsible		:true
 		,	fields			:this.fields
+		,	closable		:false
 		,	gridConfig		:
 			{
 				showCrudButtons	:true
@@ -190,7 +180,7 @@ function JxAssetAssign ()
 
 		Jx.chainStoreLoad (
 				[
-					this.storeSystemUser
+					Jx.app.store.System.User
 				,	Jx.app.store.Asset.Type
 				,	Jx.app.store.Asset.Procurement
 				,	Jx.app.store.Asset.Status
