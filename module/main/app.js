@@ -3,6 +3,41 @@
 	Authors:
 		- mhd.sulhan (m.shulhan@gmail.com)
 */
+//{{{ store: System User
+Ext.define ("Jx.app.store.System.User", {
+	extend		:"Jx.StoreRest"
+,	fields		:
+	[{
+		name		:"id"
+	,	type		:"int"
+	},{
+		name		:"realname"
+	,	type		:"string"
+	}]
+
+,	config		:
+	{
+		url			:""
+	,	storeId		:"System_User"
+	,	autoDestroy	:false
+	}
+
+,	constructor	:function (config)
+	{
+		var opts = {};
+
+		Ext.merge (opts, this.config);
+		Ext.merge (opts, config);
+
+		if ("" === opts.url) {
+			opts.url = Jx.generateModDir (this.storeId);
+		}
+
+		this.callParent ([opts]);
+	}
+});
+//}}}
+
 //{{{ store: Asset Type
 Ext.define ("Jx.app.store.Asset.Type", {
 	extend		:"Jx.StoreRest"
@@ -224,6 +259,7 @@ Ext.define ("Jx.app.store.Asset", {
 });
 
 //}}}
+Jx.app.store.System.User		= Ext.create ("Jx.app.store.System.User");
 
 Jx.app.store.Asset				= Ext.create ("Jx.app.store.Asset");
 
