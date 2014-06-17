@@ -9,18 +9,6 @@ function JxAssetMaintenance ()
 	this.id		= "Asset_Maintenance";
 	this.dir	= Jx.generateModDir (this.id);
 
-//{{{ stores
-	this.storeSystemUser	= Ext.create ("Jx.StoreRest", {
-			url				:Jx.generateModDir ("System_User")
-		,	fields				:
-			[{
-				name	:"id"
-			,	type	:"int"
-			},{
-				name	:"realname"
-			}]
-		});
-//}}}
 //{{{ fields
 	this.fields		= [{
 			header		:"ID"
@@ -124,6 +112,7 @@ function JxAssetMaintenance ()
 	this.panelAssetMaintenanceLog = Ext.create ("Jx.CardGridForm", {
 			title			:"Riwayat Pemeliharaan"
 		,	url				:this.dir
+		,	closable		:false
 		,	region			:"east"
 		,	width			:"50%"
 		,	split			:true
@@ -172,7 +161,7 @@ function JxAssetMaintenance ()
 
 		Jx.chainStoreLoad (
 				[
-					this.storeSystemUser
+					Jx.app.store.System.User
 				,	Jx.app.store.Asset.Type
 				,	Jx.app.store.Asset.Procurement
 				,	Jx.app.store.Asset.Status
