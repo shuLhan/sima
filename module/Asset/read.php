@@ -51,7 +51,8 @@ $qfrom	="
 		on AA.location_id		= AL.id
 	left join _user				U
 		on AA._user_id			= U.id
-	where
+	where A.status			= 1
+	and (
 		A.merk				like $query
 	or	A.model				like $query
 	or	A.sn				like $query
@@ -67,6 +68,7 @@ $qfrom	="
 	or	AST.name			like $query
 	or	AL.name				like $query
 	or	U.realname			like $query
+	)
 ";
 
 $qorder = " order by A.id desc ";
