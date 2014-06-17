@@ -9,7 +9,6 @@ Ext.define ("Jx.CardGridForm", {
 ,	alias		:"jx.cardgridform"
 ,	layout		:"card"
 ,	titleAlign	:"center"
-,	closable	:true
 ,	config		:
 	{
 		perm		:0
@@ -19,6 +18,8 @@ Ext.define ("Jx.CardGridForm", {
 	,	fields		:[]
 	,	grid		:undefined
 	,	form		:undefined
+
+	,	closable	:true
 	}
 
 ,	statics		:
