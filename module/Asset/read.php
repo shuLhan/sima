@@ -62,7 +62,6 @@ $qfrom	="
 	or	A.warranty_date		= '$qstr'
 	or	A.warranty_info		like $query
 	or	A.company			like $query
-	or	A.maintenance_info	like $query
 	or	AT.name				like $query
 	or	AP.name				like $query
 	or	AST.name			like $query
