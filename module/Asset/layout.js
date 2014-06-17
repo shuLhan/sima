@@ -165,17 +165,6 @@ function JxAsset ()
 			header		:"Penggunaan"
 		,	columns		:
 			[{
-				header		:"Status"
-			,	dataIndex	:"status_id"
-			,	renderer	:Jx.app.store.Asset.Status.renderData ("id", "name")
-			,	editor		:
-				{
-					xtype			:"combobox"
-				,	store			:Jx.app.store.Asset.Status
-				,	valueField		:"id"
-				,	displayField	:"name"
-				}
-			},{
 				header		:"Pengguna"
 			,	dataIndex	:"_user_id"
 			,	renderer	:this.storeSystemUser.renderData ("id", "realname")
@@ -185,7 +174,7 @@ function JxAsset ()
 				,	store			:this.storeSystemUser
 				,	valueField		:"id"
 				,	displayField	:"realname"
-				,	disabled		:true
+				,	readOnly		:true
 				}
 			},{
 				header		:"Lokasi"
@@ -197,7 +186,7 @@ function JxAsset ()
 				,	store			:Jx.app.store.Asset.Location
 				,	valueField		:"id"
 				,	displayField	:"name"
-				,	disabled		:true
+				,	readOnly		:true
 				}
 			},{
 				header		:"Detil Lokasi"
@@ -206,7 +195,30 @@ function JxAsset ()
 			,	editor		:
 				{
 					xtype		:"textarea"
-				,	disabled	:true
+				,	readOnly	:true
+				}
+			}]
+		},{
+			header	:"Pemeliharaan"
+		,	columns	:
+			[{
+				header		:"Status"
+			,	dataIndex	:"asset_status_id"
+			,	renderer	:Jx.app.store.Asset.Status.renderData ("id", "name")
+			,	editor		:
+				{
+					xtype			:"combobox"
+				,	store			:Jx.app.store.Asset.Status
+				,	valueField		:"id"
+				,	displayField	:"name"
+				,	readOnly		:true
+				}
+			},{
+				header		:"Biaya"
+			,	dataIndex	:"maintenance_cost"
+			,	editor		:
+				{
+					xtype		:"displayfield"
 				}
 			},{
 				header		:"Info Perawatan"
@@ -215,6 +227,7 @@ function JxAsset ()
 			,	editor		:
 				{
 					xtype		:"textarea"
+				,	readOnly	:true
 				}
 			}]
 		}];
@@ -239,12 +252,12 @@ function JxAsset ()
 			{
 				layout		:
 				{
-					type			:"column"
+					type		:"column"
 				}
 			,	defaults	:
 				{
-					margin		:10
-				,	width		:300
+					margin		:14
+				,	width		:340
 				}
 			,	listeners	:{
 					canceled: function ()

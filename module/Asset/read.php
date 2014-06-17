@@ -18,6 +18,9 @@ select	A.*
 ,		AA.location_id
 ,		AA.location_detail
 ,		AA.description
+,		AML.asset_status_id
+,		AML.cost			as maintenance_cost
+,		AML.maintenance_info
 ";
 
 $qfrom	="
@@ -30,12 +33,20 @@ $qfrom	="
 			order by assign_date desc
 			limit	0,1
 		)
+	left join asset_maintenance_log AML
+		on AML.id = (
+			select	id
+			from	asset_maintenance_log
+			where	asset_id = A.id
+			order by maintenance_date DESC
+			limit 0,1
+		)
 	left join asset_type		AT
 		on A.type_id			= AT.id
 	left join asset_procurement AP
 		on A.procurement_id 	= AP.id
 	left join asset_status		AST
-		on A.status_id			= AST.id
+		on AML.asset_status_id	= AST.id
 	left join asset_location	AL
 		on AA.location_id		= AL.id
 	left join _user				U

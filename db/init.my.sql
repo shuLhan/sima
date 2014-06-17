@@ -209,3 +209,19 @@ create table asset_assign_log
 ,	constraint asset_assign_log_pk		primary key (id)
 ,	constraint asset_assign_log_fk_01	foreign key (asset_id)	references asset (id)
 );
+
+/*
+	Log of all asset maintenance.
+ */
+create table asset_maintenance_log
+(
+	id					integer			not null AUTO_INCREMENT
+,	asset_id			integer			not null
+,	asset_status_id		integer			null
+,	cost				numeric(15,2)	default 0.00
+,	maintenance_date	date			null
+,	maintenance_info	varchar(1024)	default ''
+
+,	constraint asset_maintenance_log_pk		primary key (id)
+,	constraint asset_maintenance_log_fk_01	foreign key (asset_id) references asset (id)
+);

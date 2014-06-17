@@ -23,8 +23,6 @@ $fields = [
 ,	"procurement_id"
 ,	"company"
 ,	"price"
-,	"status_id"
-,	"maintenance_info"
 ,	"table_id"
 ];
 
@@ -40,8 +38,6 @@ Jaring::$_mod["db_table"]["search"]	= [
 ,	"label"
 ,	"detail"
 ,	"company"
-,	"location_detail"
-,	"maintenance_info"
 ];
 Jaring::$_mod["db_table"]["create"]	= array_slice ($fields, 1);
 Jaring::$_mod["db_table"]["update"]	= array_slice ($fields, 1);
