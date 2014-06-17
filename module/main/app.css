@@ -7,8 +7,8 @@ Authors:
 /*
 	Application style.
 */
-.ref		{ background: 0px 0px/16px 16px url("../../images/icons/reference.svg") no-repeat !important; }
-.asset		{ background: 0px 0px/16px 16px url("../../images/icons/asset.svg") no-repeat !important; }
-.barcode	{ background: 0px 0px/16px 16px url("../../images/icons/barcode.svg") no-repeat !important; }
-.assign		{ background: 0px 0px/16px 16px url("../../images/app/Asset/assign.svg") no-repeat !important; }
-.maintenance	{ background: 0px 0px/16px 16px url("../../images/app/Asset/maintenance.svg") no-repeat !important; }
+.ref			{ background: 0px 0px/16px 16px url("../../images/icons/reference.svg")			no-repeat !important; }
+.asset			{ background: 0px 0px/16px 16px url("../../images/app/Asset/asset.svg")			no-repeat !important; }
+.barcode		{ background: 0px 0px/16px 16px url("../../images/app/Asset/barcode.svg")		no-repeat !important; }
+.assign			{ background: 0px 0px/16px 16px url("../../images/app/Asset/assign.svg")		no-repeat !important; }
+.maintenance	{ background: 0px 0px/16px 16px url("../../images/app/Asset/maintenance.svg")	no-repeat !important; }

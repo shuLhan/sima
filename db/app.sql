@@ -35,21 +35,21 @@ insert into _group_menu (_group_id, _menu_id, permission) values (1	,13	,4);
 insert into _group_menu (_group_id, _menu_id, permission) values (1	,14	,4);
 
 insert into _menu (
-		id	,pid	,type	,label				,icon	,image	,module							,description
+	id	,pid	,type	,label			,icon		,image						,module		,description
 ) values (
-		20	,0		,0		,'Aset'				,'asset'	,''		,'Asset'						,''
+	20	,0		,0		,'Aset'			,'asset'	,''							,'Asset'	,''
 );
 
 insert into _menu (
-		id	,pid	,type	,label				,icon		,image					,module		,description
+	id	,pid	,type	,label			,icon		,image						,module		,description
 ) values (
-		21	,20		,3		,'Aset'				,'asset'	,'../icons/asset.svg'	,'Asset'	,''
+	21	,20		,3		,'Aset'			,'asset'	,'../app/Asset/asset.svg'	,'Asset'	,''
 );
 
 insert into _menu (
-		id	,pid	,type	,label				,icon		,image					,module				,description
+	id	,pid	,type	,label			,icon		,image						,module				,description
 ) values (
-		22	,20		,3		,'Barcode'			,'barcode'	,'../icons/barcode.svg'	,'Asset_Barcode'	,''
+	22	,20		,3		,'Barcode'		,'barcode'	,'../app/Asset/barcode.svg'	,'Asset_Barcode'	,''
 );
 
 insert into _menu (
