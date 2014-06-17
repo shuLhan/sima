@@ -233,8 +233,10 @@ create table asset_removal_log
 (
 	asset_id			integer			not null
 ,	asset_removal_id	integer			not null
-,	removal_info		varchar(1024)	default ''
 ,	removal_date		timestamp		default current_timestamp
+,	removal_cost		numeric(15,2)	default 0.00
+,	removal_info		varchar(1024)	default ''
 
+,	constraint asset_removal_log_pk		primary key (asset_id)
 ,	constraint asset_removal_log_fk_01	foreign key (asset_id) references asset (id)
 );
