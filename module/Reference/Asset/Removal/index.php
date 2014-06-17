@@ -1,0 +1,18 @@
+<?php
+/*
+	Copyright 2014 - Mhd Sulhan
+	Authors:
+		- mhd.sulhan (m.shulhan@gmail.com)
+*/
+
+require_once "../../../init.php";
+
+Jaring::$_mod["db_table"]["name"]	= "asset_removal";
+Jaring::$_mod["db_table"]["id"]		= ["id"];
+Jaring::$_mod["db_table"]["read"]	= ["id", "name"];
+Jaring::$_mod["db_table"]["search"]	= ["name"];
+Jaring::$_mod["db_table"]["create"]	= ["name"];
+Jaring::$_mod["db_table"]["update"]	= ["name"];
+Jaring::$_mod["db_table"]["order"]	= ["name"];
+
+Jaring::handleRequest ("crud");

@@ -139,6 +139,40 @@ Ext.define ("Jx.app.store.Asset.Location", {
 	}
 });
 //}}}
+//{{{ store: Asset Removal
+Ext.define ("Jx.app.store.Asset.Removal", {
+	extend		:"Jx.StoreRest"
+,	fields		:
+	[{
+		name		:"id"
+	,	type		:"int"
+	},{
+		name		:"name"
+	,	type		:"string"
+	}]
+
+,	config		:
+	{
+		url			:""
+	,	autoDestroy	:false
+	,	storeId		:"Reference_Asset_Removal"
+	}
+
+,	constructor	:function (config)
+	{
+		var opts = {};
+
+		Ext.merge (opts, this.config);
+		Ext.merge (opts, config);
+
+		if ("" === opts.url) {
+			opts.url = Jx.generateModDir (this.storeId);
+		}
+
+		this.callParent ([opts]);
+	}
+});
+//}}}
 //{{{ store: Asset
 Ext.define ("Jx.app.store.Asset", {
 	extend		:"Jx.StoreRest"
@@ -190,9 +224,11 @@ Ext.define ("Jx.app.store.Asset", {
 });
 
 //}}}
+
 Jx.app.store.Asset				= Ext.create ("Jx.app.store.Asset");
 
 Jx.app.store.Asset.Type			= Ext.create ("Jx.app.store.Asset.Type");
 Jx.app.store.Asset.Procurement	= Ext.create ("Jx.app.store.Asset.Procurement");
 Jx.app.store.Asset.Status		= Ext.create ("Jx.app.store.Asset.Status");
 Jx.app.store.Asset.Location		= Ext.create ("Jx.app.store.Asset.Location");
+Jx.app.store.Asset.Removal		= Ext.create ("Jx.app.store.Asset.Removal");

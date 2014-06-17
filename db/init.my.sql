@@ -161,6 +161,13 @@ create table asset_location
 
 insert into asset_location (id, name) values (0, "-");
 
+create table asset_removal
+(
+	id		integer			not null	AUTO_INCREMENT
+,	name	varchar(128)	not null
+,	constraint asset_removal_pk primary key (id)
+);
+
 create table asset
 (
 	id					integer			not null	AUTO_INCREMENT
@@ -181,13 +188,9 @@ create table asset
 ,	company				varchar(255)	default ''
 ,	price				float			default 0
 
-,	status_id			integer			null
-,	_user_id			integer			null
-,	location_id			integer			null
-,	location_detail		varchar(255)	default ''
-,	maintenance_info	varchar(255)	default ''
-
 ,	table_id			varchar(32)		default null
+
+,	status				smallint		default 1
 
 ,	constraint asset_pk	primary key (id)
 );
@@ -224,4 +227,14 @@ create table asset_maintenance_log
 
 ,	constraint asset_maintenance_log_pk		primary key (id)
 ,	constraint asset_maintenance_log_fk_01	foreign key (asset_id) references asset (id)
+);
+
+create table asset_removal_log
+(
+	asset_id			integer			not null
+,	asset_removal_id	integer			not null
+,	removal_info		varchar(1024)	default ''
+,	removal_date		timestamp		default current_timestamp
+
+,	constraint asset_removal_log_fk_01	foreign key (asset_id) references asset (id)
 );
