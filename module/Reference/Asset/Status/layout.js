@@ -47,4 +47,4 @@ function JxReferenceAssetStatus ()
 
 var Reference_Asset_Status = new JxReferenceAssetStatus ();
 
-//# sourceURL=module/Reference/Asset/Type/layout.js
+//# sourceURL=module/Reference/Asset/Status/layout.js
