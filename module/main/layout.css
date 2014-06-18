@@ -1,16 +1,16 @@
 /*
 	Header's icons
 */
-.account				{ background-image: url("../../images/icons/account.png") !important; }
-.profile				{ background-image: url("../../images/icons/profile.png") !important; }
-.change-password		{ background-image: url("../../images/icons/change-password.png") !important; }
-.logout					{ background-image: url("../../images/icons/logout.png") !important; }
+.account			{ background: 0px 0px/24px 24px url("../../images/icons/user.svg") no-repeat !important; }
+.profile			{ background: 0px 0px/16px 16px url("../../images/icons/profile.svg") no-repeat !important; }
+.change-password	{ background: 0px 0px/16px 16px url("../../images/icons/change-password.svg") no-repeat !important; }
+.logout				{ background: 0px 0px/16px 16px url("../../images/icons/logout.svg") no-repeat !important; }
 /*
 	Menu's icons
 */
-.home				{ background-image: url("../../images/icons/home.png") !important; }
-.dashboard			{ background-image: url("../../images/icons/dashboard.png") !important; }
-.sys				{ background-image: url("../../images/icons/sys.png") !important; }
+.home				{ background: 0px 0px/16px 16px url("../../images/icons/home.svg") no-repeat !important; }
+.dashboard			{ background: 0px 0px/16px 16px url("../../images/icons/dashboard.svg") no-repeat !important; }
+.sys				{ background: 0px 0px/16px 16px url("../../images/icons/sys.svg") no-repeat !important; }
 .user				{ background: 0px 0px/16px 16px url("../../images/icons/user.svg") no-repeat !important; }
 .group				{ background: 0px 0px/16px 16px url("../../images/icons/group.svg") no-repeat !important; }
 .menu				{ background: 0px 0px/16px 16px url("../../images/icons/menu.svg") no-repeat !important; }

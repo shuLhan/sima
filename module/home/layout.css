@@ -10,7 +10,7 @@ body {
 /*
 	Icons
 */
-.login	{ background-image	: url(../../images/icons/login.png) !important; }
+.login	{ background: 0px 0px/16px 16px url(../../images/icons/login.svg) no-repeat !important; }
 
 /*
 	ID
