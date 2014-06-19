@@ -1523,16 +1523,7 @@ Ext.define ("Jx.GridPaging.RowEditor", {
 
 ,	createRowEditor	:function (cfg)
 	{
-		var barName		= "RowEditor";
-		var id			= (
-							cfg.id
-							? cfg.id + barName
-							: (
-								cfg.itemId
-								? cfg.itemId + barName
-								: "JxForm"+ barName
-							)
-						);
+		var id = Jx.generateItemId (cfg, "JxForm", "RowEditor");
 
 		this.rowEditor			= Ext.create ("Ext.grid.plugin.RowEditing", {
 				pluginId		:id
