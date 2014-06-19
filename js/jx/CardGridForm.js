@@ -88,12 +88,7 @@ Ext.define ("Jx.CardGridForm", {
 //{{{ grid
 	,	createGrid : function (self, opts)
 		{
-			var barName		= "Grid";
-			var id			= ( opts.id
-							? opts.id + barName
-							: ( opts.itemId
-								? opts.itemId + barName
-								: "JxCardGridForm"+ barName));
+			var id = Jx.generateItemId (opts, "JxCardGridForm", "Grid");
 
 			/* Add row number to grid */
 			opts.fields.splice (0, 0, { xtype : "rownumberer" });
@@ -146,20 +141,14 @@ Ext.define ("Jx.CardGridForm", {
 //{{{ form
 	,	createForm : function (self, opts)
 		{
-			var barName		= "Form";
-			var id			= ( opts.id
-							? opts.id + barName
-							: ( opts.itemId
-								? opts.itemId + barName
-								: "JxCardGridForm"+ barName));
-
-			var cfg = {};
+			var id	= Jx.generateItemId (opts, "JxCardGridForm", "Form");
+			var cfg	= {};
 
 			Ext.merge (cfg, {
 					itemId				:id
 				,	_parent				:self
 				,	store				:self.store
-// replace original save and cancel handler
+					// replace original save and cancel handler
 				,	afterFormSave		:function (success)
 					{
 						if (success) {
@@ -174,7 +163,7 @@ Ext.define ("Jx.CardGridForm", {
 
 			Ext.merge (cfg, opts.formConfig);
 
-			self.form	= Ext.create ("Jx.Form", cfg);
+			self.form = Ext.create ("Jx.Form", cfg);
 
 			self.form.columnsToFields (opts.fields);
 

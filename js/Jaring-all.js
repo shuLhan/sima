@@ -148,6 +148,20 @@ Ext.apply (Jx, {
 		return _g_module_dir + id.replace (/_/g, "/") +"/";
 	}
 
+,	generateItemId	:function (config, prefix, name)
+	{
+		if (undefined === config) {
+			return prefix + name;
+		}
+		if (config.id) {
+			return config.id + name;
+		}
+		if (config.itemId) {
+			return config.itemId + name;
+		}
+		return prefix + name;
+	}
+
 ,	chainStoreLoad :function (stores, lastCall, idx)
 	{
 		if (idx === stores.length) {
@@ -1702,11 +1716,7 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 
 ,	constructor	:function (cfg)
 	{
-		var id			= ( cfg.id
-						? cfg.id
-						: ( cfg.itemId
-							? cfg.itemId
-							: "JxGridPagingFormEditor"));
+		var id = Jx.generateItemId (cfg, "JxGridPagingFormEditor", "");
 
 		var opts = Ext.merge ({
 								itemId: id
@@ -1714,7 +1724,6 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 			opts = Ext.merge (opts, cfg.panelConfig);
 
 		this.callParent ([opts]);
-		this.initConfig (opts);
 
 		this.createGrid (cfg);
 		this.createForm (cfg);
@@ -1722,12 +1731,7 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 
 ,	createGrid	:function (cfg)
 	{
-		var barName		= "Grid";
-		var id			= ( cfg.id
-						? cfg.id + barName
-						: ( cfg.itemId
-							? cfg.itemId + barName
-							: "JxGridPagingFormEditor"+ barName));
+		var id	= Jx.generateItemId (cfg.id, "JxGridPagingFormEditor", "Grid");
 
 		/* Add row number to grid */
 		cfg.columns.splice (0, 0, { xtype : "rownumberer" });
@@ -1747,12 +1751,7 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 
 ,	createForm	:function (cfg)
 	{
-		var barName		= "Form";
-		var id			= ( cfg.id
-						? cfg.id + barName
-						: ( cfg.itemId
-							? cfg.itemId + barName
-							: "JxGridPagingFormEditor"+ barName));
+		var id = Jx.generateItemId (cfg, "JxGridPagingFormEditor", "Form");
 
 		var opts	= Ext.merge ({
 							store	:cfg.store
@@ -1776,7 +1775,7 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 
 ,	clearData	:function ()
 	{
-		this.grid.store.loadData ([], false);
+		this.grid.clearData ();
 	}
 });
 /*
@@ -1869,12 +1868,7 @@ Ext.define ("Jx.CardGridForm", {
 //{{{ grid
 	,	createGrid : function (self, opts)
 		{
-			var barName		= "Grid";
-			var id			= ( opts.id
-							? opts.id + barName
-							: ( opts.itemId
-								? opts.itemId + barName
-								: "JxCardGridForm"+ barName));
+			var id = Jx.generateItemId (opts, "JxCardGridForm", "Grid");
 
 			/* Add row number to grid */
 			opts.fields.splice (0, 0, { xtype : "rownumberer" });
@@ -1927,20 +1921,14 @@ Ext.define ("Jx.CardGridForm", {
 //{{{ form
 	,	createForm : function (self, opts)
 		{
-			var barName		= "Form";
-			var id			= ( opts.id
-							? opts.id + barName
-							: ( opts.itemId
-								? opts.itemId + barName
-								: "JxCardGridForm"+ barName));
-
-			var cfg = {};
+			var id	= Jx.generateItemId (opts, "JxCardGridForm", "Form");
+			var cfg	= {};
 
 			Ext.merge (cfg, {
 					itemId				:id
 				,	_parent				:self
 				,	store				:self.store
-// replace original save and cancel handler
+					// replace original save and cancel handler
 				,	afterFormSave		:function (success)
 					{
 						if (success) {
@@ -1955,7 +1943,7 @@ Ext.define ("Jx.CardGridForm", {
 
 			Ext.merge (cfg, opts.formConfig);
 
-			self.form	= Ext.create ("Jx.Form", cfg);
+			self.form = Ext.create ("Jx.Form", cfg);
 
 			self.form.columnsToFields (opts.fields);
 

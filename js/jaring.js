@@ -148,6 +148,20 @@ Ext.apply (Jx, {
 		return _g_module_dir + id.replace (/_/g, "/") +"/";
 	}
 
+,	generateItemId	:function (config, prefix, name)
+	{
+		if (undefined === config) {
+			return prefix + name;
+		}
+		if (config.id) {
+			return config.id + name;
+		}
+		if (config.itemId) {
+			return config.itemId + name;
+		}
+		return prefix + name;
+	}
+
 ,	chainStoreLoad :function (stores, lastCall, idx)
 	{
 		if (idx === stores.length) {
