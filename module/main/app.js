@@ -3,6 +3,8 @@
 	Authors:
 		- mhd.sulhan (m.shulhan@gmail.com)
 */
+Ext.Loader.setPath ("Jx.app", "/module");
+
 //{{{ store: System User
 Ext.define ("Jx.app.store.System.User", {
 	extend		:"Jx.StoreRest"

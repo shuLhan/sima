@@ -78,32 +78,10 @@ function JxAssetRemoval ()
 		}];
 //}}}
 //{{{ panel: asset
-	this.panelAsset			= Ext.create ("Jx.GridPaging", {
-			store			:Jx.app.store.Asset
-		,	title			:"Aset"
-		,	region			:"center"
-		,	showCrudButtons	:false
-		,	columns			:
-			[{
-				header			:"Barcode"
-			,	dataIndex		:"barcode"
-			,	width			:130
-			},{
-				header			:"Type"
-			,	dataIndex		:"type_id"
-			,	renderer		:Jx.app.store.Asset.Type.renderData ("id", "name")
-			,	flex			:true
-			},{
-				header			:"Merk"
-			,	dataIndex		:"merk"
-			,	flex			:true
-			},{
-				header			:"Model"
-			,	dataIndex		:"model"
-			,	flex			:true
-			}]
-
-		,	onSelectionChange : function (model, data)
+	this.panelAsset				= Ext.create ("Jx.app.Asset.Viewer", {
+			itemId				:this.id +"_Asset"
+		,	region				:"center"
+		,	onSelectionChange	: function (model, data)
 			{
 				var id = 0;
 

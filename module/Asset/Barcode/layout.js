@@ -25,11 +25,9 @@ function JxAssetBarcode ()
 		});
 //}}}
 
-//{{{ panel asset
-	this.panelAsset			= Ext.create ("Jx.GridPaging", {
+//{{{ panel: asset
+	this.panelAsset			= Ext.create ("Jx.app.Asset.Viewer", {
 			itemId			:idPanelAsset
-		,	store			:Jx.app.store.Asset
-		,	showCrudButtons	:false
 		,	region			:"center"
 		,	viewConfig		:
 			{
@@ -40,25 +38,6 @@ function JxAssetBarcode ()
 				,	dropGroup		:idPanelPrint
 				}]
 			}
-		,	columns			:
-			[{
-				header			:"Barcode"
-			,	dataIndex		:"barcode"
-			,	width			:130
-			},{
-				header			:"Type"
-			,	dataIndex		:"type_id"
-			,	renderer		:Jx.app.store.Asset.Type.renderData ("id", "name")
-			,	flex			:true
-			},{
-				header			:"Merk"
-			,	dataIndex		:"merk"
-			,	flex			:true
-			},{
-				header			:"Model"
-			,	dataIndex		:"model"
-			,	flex			:true
-			}]
 		});
 //}}}
 
