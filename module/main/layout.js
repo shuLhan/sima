@@ -65,6 +65,7 @@ function JxMain ()
 		}
 	};
 
+//{{{ event handler: on menu click
 	this.onMenuClick = function (b, force)
 	{
 		var tab, tbar;
@@ -132,47 +133,46 @@ function JxMain ()
 			break;
 		}
 
-		// If not exist, add module to content area
-		Ext.Ajax.request ({
-			url		:_g_module_dir + b.module.replace (/_/g, "/") +"/layout.js"
-		,	failure	:function (response, opts)
-			{
-				Jx.msg.error ("Fail to load module!");
-				Jx.hideMask ();
-			}
-		,	success	:function (response, opts)
-			{
-				try {
-					window.execScript
-						? window.execScript (response.responseText)
-						: window.eval (response.responseText);
+		var script_url = _g_module_dir + b.module.replace (/_/g, "/") +"/layout.js";
 
+		Ext.Loader.loadScript ({
+				url		: script_url
+			,	onLoad	: function ()
+				{
 					var module = eval (b.module);
 
 					switch (_g_content_type) {
 					case 0:
 						main.content.removeAll (true);
-						main.content.add (module.panel);
+						if (undefined !== module.panel) {
+							main.content.add (module.panel);
+						} else {
+							main.content.add (module);
+						}
 						break;
 					case 1:
-						main.content.add (module.panel);
-						main.content.setActiveTab (module.panel);
+						if (undefined !== module.panel) {
+							main.content.add (module.panel);
+							main.content.setActiveTab (module.panel);
+						} else {
+							main.content.add (module);
+							main.content.setActiveTab (module);
+						}
 						main.content.doLayout ();
 						break;
 					}
 
 					module.doRefresh (b.permission);
 					Jx.hideMask ();
-				} catch (e) {
-					if (undefined !== console) {
-						console.log (e);
-					}
-					Jx.msg.error (e.message);
+				}
+			,	onError	: function ()
+				{
+					Jx.msg.error ("Fail to load module!");
 					Jx.hideMask ();
 				}
-			}
-		});
+			});
 	};
+//}}}
 
 	this.loadMenu	= function ()
 	{
