@@ -10,14 +10,7 @@
 */
 Ext.define ("Jx.GridPaging", {
 	extend			:"Ext.grid.Panel"
-,	alias			:"widget.jx.gridpaging"
-,	layout			:"fit"
-,	titleAlign		:"center"
-,	enableLocking	:true
-,	viewConfig		:
-	{
-		enableTextSelection	:true
-	}
+,	alias			:"widget.gridpaging"
 ,	config			:
 	{
 		perm					:0
@@ -33,17 +26,23 @@ Ext.define ("Jx.GridPaging", {
 	,	pagingBar				:undefined
 	,	showPagingBar			:true
 	,	selectedData			:[]
-		// list of data details, for master-detail grid.
-	,	compDetails				:[]
-	,	buttons					:[]
-	}
 
+		// grid properties
+	,	titleAlign		:"center"
+	,	viewConfig		:
+		{
+			enableTextSelection	:true
+		}
+	}
+//{{{ constructor
 ,	constructor		:function (config)
 	{
-		var	opts = Ext.merge ({}, this.config);
-			opts = Ext.merge (opts, config);
+		var	opts = {};
 
-		this.callParent (arguments);
+		Ext.merge (opts, this.config);
+		Ext.merge (opts, config);
+
+		this.callParent ([opts]);
 		this.initConfig (opts);
 
 		if (opts.showPagingBar) {
@@ -72,10 +71,8 @@ Ext.define ("Jx.GridPaging", {
 
 		this.on ("selectionchange", this._onSelectionChange, this);
 	}
-
-	/*
-		Add paging toolbar to the bottom of grid panel.
-	*/
+//}}}
+//{{{ Add paging toolbar to the bottom of grid panel.
 ,	createPagingBar	:function ()
 	{
 		var barName		= "PagingBar";
@@ -88,7 +85,7 @@ Ext.define ("Jx.GridPaging", {
 						);
 
 		this.pagingBar	= Ext.create ("Ext.toolbar.Paging", {
-				id			:id
+				itemId		:id
 			,	store		:this.store
 			,	displayInfo	:true
 			,	dock		:"bottom"
@@ -98,16 +95,18 @@ Ext.define ("Jx.GridPaging", {
 
 		this.addDocked (this.pagingBar);
 	}
-
+//}}}
+//{{{ function : remove all data in store.
 ,	clearData	:function ()
 	{
 		this.store.loadData ([], false);
 	}
-
+//}}}
 /*
 	beforeSelectionChange	:function, overridden by instance, return false to cancel.
 	afterSelectionChange	:function, overridden by instance.
 */
+//{{{ event handler : on row selected.
 ,	_onSelectionChange		:function (model, data, e)
 	{
 		var s	= (data.length <= 0);
@@ -123,7 +122,7 @@ Ext.define ("Jx.GridPaging", {
 
 		/* Refresh grid details */
 		if (data.length > 0) {
-			id	= data[0].get (this.getStore ().getIdProperty ());
+			id	= data[0].get (this.store.getIdProperty ());
 		}
 
 		if (this.onSelectionChange
@@ -136,10 +135,12 @@ Ext.define ("Jx.GridPaging", {
 			this.afterSelectionChange (model, data, e);
 		}
 	}
-
+//}}}
+//{{{ function : refresh this grid
 ,	doRefresh	:function (perm)
 	{
 		this.perm = perm;
 		this.fireEvent ("refresh", perm);
 	}
+//}}}
 });
