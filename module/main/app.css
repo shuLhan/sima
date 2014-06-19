@@ -13,3 +13,5 @@ Authors:
 .assign			{ background: 0px 0px/16px 16px url("../../images/app/Asset/assign.svg")		no-repeat !important; }
 .maintenance	{ background: 0px 0px/16px 16px url("../../images/app/Asset/maintenance.svg")	no-repeat !important; }
 .removal		{ background: 0px 0px/16px 16px url("../../images/app/Asset/removal.svg")		no-repeat !important; }
+
+.report			{ background: 0px 0px/16px 16px url("../../images/app/Report/report.svg")		no-repeat !important; }

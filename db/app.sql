@@ -83,3 +83,18 @@ insert into _group_menu (_group_id, _menu_id, permission) values (1	,22	,4);
 insert into _group_menu (_group_id, _menu_id, permission) values (1	,23	,4);
 insert into _group_menu (_group_id, _menu_id, permission) values (1	,24	,4);
 insert into _group_menu (_group_id, _menu_id, permission) values (1	,25	,4);
+
+insert into _menu (
+	id,	pid, type, label, icon, image, module, description
+) values (
+	30, 0, 0, 'Laporan', 'report', '../app/Report/report.svg', 'Report', ''
+);
+
+insert into _menu (
+	id,	pid, type, label, icon, image, module, description
+) values (
+	31, 30, 3, 'Pengadaan', 'report', '../app/Report/report.svg', 'Report_Procurement', ''
+);
+
+insert into _group_menu (_group_id, _menu_id, permission) values (1	,30	,4);
+insert into _group_menu (_group_id, _menu_id, permission) values (1	,31	,4);

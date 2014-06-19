@@ -41,7 +41,6 @@ Ext.define ("Jx.app.Asset.Viewer", {
 		Ext.merge (opts, config);
 
 		this.callParent ([opts]);
-		this.initConfig (opts);
 	}
 
 ,	doRefresh : function (perm)
@@ -50,3 +49,5 @@ Ext.define ("Jx.app.Asset.Viewer", {
 		this.callParent ([perm]);
 	}
 });
+
+//# sourceURL=/module/Asset/Viewer.js
