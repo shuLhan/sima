@@ -44,10 +44,6 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 					this.ownerCt.form.loadRecord (data[0]);
 				}
 			}
-		,	onItemDoubleClick	:function (view, record, itemEl, index, e)
-			{
-				this.ownerCt.grid._doEdit ();
-			}
 		}
 
 	,	form			:undefined
@@ -77,37 +73,35 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 
 ,	createGrid	:function (cfg)
 	{
-		var id	= Jx.generateItemId (cfg.id, "JxGridPagingFormEditor", "Grid");
+		var opts	= {};
+		var id		= Jx.generateItemId (cfg, "JxGridPagingFormEditor", "Grid");
 
-		/* Add row number to grid */
-		cfg.columns.splice (0, 0, { xtype : "rownumberer" });
-
-		var opts	= Ext.merge ({
-						itemId	: id
-					,	_parent	: this
-					}, this.gridConfig);
-			opts = Ext.merge (opts, cfg);
+		Ext.merge (opts, {
+							itemId	: id
+						,	_parent	: this
+						,	store	: cfg.store
+						,	columns	: cfg.columns
+						});
+		Ext.merge (opts, this.gridConfig);
 
 		this.grid = Ext.create ("Jx.GridPaging", opts);
-
-		this.grid.on ("itemdblclick", this.grid.onItemDoubleClick, this.grid);
 
 		this.add (this.grid);
 	}
 
 ,	createForm	:function (cfg)
 	{
-		var id = Jx.generateItemId (cfg, "JxGridPagingFormEditor", "Form");
+		var opts	= {};
+		var id		= Jx.generateItemId (cfg, "JxGridPagingFormEditor", "Form");
 
-		var opts	= Ext.merge ({
+		Ext.merge (opts, {
 							store	:cfg.store
 						,	itemId	:id
-					}
-					, this.formConfig);
+						});
+		Ext.merge (opts, this.formConfig);
+		Ext.merge (opts, cfg.formConfig);
 
-			opts	= Ext.merge (opts, cfg.formConfig);
-
-		this.form	= Ext.create ("Jx.Form", opts);
+		this.form = Ext.create ("Jx.Form", opts);
 
 		this.form.columnsToFields (cfg.columns);
 

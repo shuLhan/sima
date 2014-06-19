@@ -22,9 +22,11 @@ Ext.define ("Jx.GridPaging", {
 	,	plugSearchField			:undefined
 	,	plugSearchFieldConfig	:{}
 	,	showSearchField			:true
-
+		// paging bar
 	,	pagingBar				:undefined
 	,	showPagingBar			:true
+		// should row number displayed?
+	,	showRowNumber			:false
 	,	selectedData			:[]
 
 		// grid properties
@@ -41,6 +43,10 @@ Ext.define ("Jx.GridPaging", {
 
 		Ext.merge (opts, this.config);
 		Ext.merge (opts, config);
+
+		if (opts.showRowNumber) {
+			opts.columns.splice (0, 0, { xtype : "rownumberer" });
+		}
 
 		this.callParent ([opts]);
 		this.initConfig (opts);
@@ -75,14 +81,7 @@ Ext.define ("Jx.GridPaging", {
 //{{{ Add paging toolbar to the bottom of grid panel.
 ,	createPagingBar	:function ()
 	{
-		var barName		= "PagingBar";
-		var id			= (this.id
-								? this.id + barName
-								: (this.itemId
-									? this.itemId + barName
-									: "JxGridPaging" + barName
-								)
-						);
+		var id = Jx.generateItemId (this, "JxGridPaging", "PagingBar");
 
 		this.pagingBar	= Ext.create ("Ext.toolbar.Paging", {
 				itemId		:id

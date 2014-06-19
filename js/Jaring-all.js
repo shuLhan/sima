@@ -1065,42 +1065,33 @@ Ext.define ("Jx.Form", {
 			return;
 		}
 
-		this.buttonSave			= Ext.create ("Ext.button.Button", {
-					text		:"Save"
-			,       itemId		:"save"
-			,       iconCls		:"form-save"
-			,       formBind	:true
-			,       tooltip		:"Save record"
+		this.buttonSave		= Ext.create ("Ext.button.Button", {
+				text		:"Save"
+			,	itemId		:"save"
+			,	iconCls		:"form-save"
+			,	formBind	:true
+			,	tooltip		:"Save record"
 			});
 
-		this.buttonCancel		= Ext.create ("Ext.button.Button", {
-						text	:"Cancel"
-				,       itemId	:"cancel"
-				,       iconCls	:"form-cancel"
-				,       tooltip	:"Cancel record operation"
-				});
+		this.buttonCancel	= Ext.create ("Ext.button.Button", {
+				text		:"Cancel"
+			,	itemId		:"cancel"
+			,	iconCls		:"form-cancel"
+			,	tooltip		:"Cancel record operation"
+			});
 
 		this.buttonSave.setHandler (this.doSave, this);
 		this.buttonCancel.setHandler (this.doCancel, this);
 
-		var barName		= "ButtonBar";
-		var id			= (
-							cfg.id
-							? cfg.id + barName
-							: (
-								cfg.itemId
-								? cfg.itemId + barName
-								: "JxForm"+ barName
-							)
-						);
+		var id = Jx.generateItemId (cfg, "JxForm", "ButtonBar");
 
 		this.buttonBar	= Ext.create ("Ext.toolbar.Toolbar", {
-				id			:id
-			,	dock		:"bottom"
-			,	border		:true
-			,	shadow		:true
-			,	ui			:"footer"
-			,	items		:
+				itemId	:id
+			,	dock	:"bottom"
+			,	border	:true
+			,	shadow	:true
+			,	ui		:"footer"
+			,	items	:
 				[
 					this.buttonCancel
 				,	"-"
@@ -1376,9 +1367,11 @@ Ext.define ("Jx.GridPaging", {
 	,	plugSearchField			:undefined
 	,	plugSearchFieldConfig	:{}
 	,	showSearchField			:true
-
+		// paging bar
 	,	pagingBar				:undefined
 	,	showPagingBar			:true
+		// should row number displayed?
+	,	showRowNumber			:false
 	,	selectedData			:[]
 
 		// grid properties
@@ -1395,6 +1388,10 @@ Ext.define ("Jx.GridPaging", {
 
 		Ext.merge (opts, this.config);
 		Ext.merge (opts, config);
+
+		if (opts.showRowNumber) {
+			opts.columns.splice (0, 0, { xtype : "rownumberer" });
+		}
 
 		this.callParent ([opts]);
 		this.initConfig (opts);
@@ -1429,14 +1426,7 @@ Ext.define ("Jx.GridPaging", {
 //{{{ Add paging toolbar to the bottom of grid panel.
 ,	createPagingBar	:function ()
 	{
-		var barName		= "PagingBar";
-		var id			= (this.id
-								? this.id + barName
-								: (this.itemId
-									? this.itemId + barName
-									: "JxGridPaging" + barName
-								)
-						);
+		var id = Jx.generateItemId (this, "JxGridPaging", "PagingBar");
 
 		this.pagingBar	= Ext.create ("Ext.toolbar.Paging", {
 				itemId		:id
@@ -1689,10 +1679,6 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 					this.ownerCt.form.loadRecord (data[0]);
 				}
 			}
-		,	onItemDoubleClick	:function (view, record, itemEl, index, e)
-			{
-				this.ownerCt.grid._doEdit ();
-			}
 		}
 
 	,	form			:undefined
@@ -1722,37 +1708,35 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 
 ,	createGrid	:function (cfg)
 	{
-		var id	= Jx.generateItemId (cfg.id, "JxGridPagingFormEditor", "Grid");
+		var opts	= {};
+		var id		= Jx.generateItemId (cfg, "JxGridPagingFormEditor", "Grid");
 
-		/* Add row number to grid */
-		cfg.columns.splice (0, 0, { xtype : "rownumberer" });
-
-		var opts	= Ext.merge ({
-						itemId	: id
-					,	_parent	: this
-					}, this.gridConfig);
-			opts = Ext.merge (opts, cfg);
+		Ext.merge (opts, {
+							itemId	: id
+						,	_parent	: this
+						,	store	: cfg.store
+						,	columns	: cfg.columns
+						});
+		Ext.merge (opts, this.gridConfig);
 
 		this.grid = Ext.create ("Jx.GridPaging", opts);
-
-		this.grid.on ("itemdblclick", this.grid.onItemDoubleClick, this.grid);
 
 		this.add (this.grid);
 	}
 
 ,	createForm	:function (cfg)
 	{
-		var id = Jx.generateItemId (cfg, "JxGridPagingFormEditor", "Form");
+		var opts	= {};
+		var id		= Jx.generateItemId (cfg, "JxGridPagingFormEditor", "Form");
 
-		var opts	= Ext.merge ({
+		Ext.merge (opts, {
 							store	:cfg.store
 						,	itemId	:id
-					}
-					, this.formConfig);
+						});
+		Ext.merge (opts, this.formConfig);
+		Ext.merge (opts, cfg.formConfig);
 
-			opts	= Ext.merge (opts, cfg.formConfig);
-
-		this.form	= Ext.create ("Jx.Form", opts);
+		this.form = Ext.create ("Jx.Form", opts);
 
 		this.form.columnsToFields (cfg.columns);
 

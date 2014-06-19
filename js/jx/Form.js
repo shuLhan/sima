@@ -71,42 +71,33 @@ Ext.define ("Jx.Form", {
 			return;
 		}
 
-		this.buttonSave			= Ext.create ("Ext.button.Button", {
-					text		:"Save"
-			,       itemId		:"save"
-			,       iconCls		:"form-save"
-			,       formBind	:true
-			,       tooltip		:"Save record"
+		this.buttonSave		= Ext.create ("Ext.button.Button", {
+				text		:"Save"
+			,	itemId		:"save"
+			,	iconCls		:"form-save"
+			,	formBind	:true
+			,	tooltip		:"Save record"
 			});
 
-		this.buttonCancel		= Ext.create ("Ext.button.Button", {
-						text	:"Cancel"
-				,       itemId	:"cancel"
-				,       iconCls	:"form-cancel"
-				,       tooltip	:"Cancel record operation"
-				});
+		this.buttonCancel	= Ext.create ("Ext.button.Button", {
+				text		:"Cancel"
+			,	itemId		:"cancel"
+			,	iconCls		:"form-cancel"
+			,	tooltip		:"Cancel record operation"
+			});
 
 		this.buttonSave.setHandler (this.doSave, this);
 		this.buttonCancel.setHandler (this.doCancel, this);
 
-		var barName		= "ButtonBar";
-		var id			= (
-							cfg.id
-							? cfg.id + barName
-							: (
-								cfg.itemId
-								? cfg.itemId + barName
-								: "JxForm"+ barName
-							)
-						);
+		var id = Jx.generateItemId (cfg, "JxForm", "ButtonBar");
 
 		this.buttonBar	= Ext.create ("Ext.toolbar.Toolbar", {
-				id			:id
-			,	dock		:"bottom"
-			,	border		:true
-			,	shadow		:true
-			,	ui			:"footer"
-			,	items		:
+				itemId	:id
+			,	dock	:"bottom"
+			,	border	:true
+			,	shadow	:true
+			,	ui		:"footer"
+			,	items	:
 				[
 					this.buttonCancel
 				,	"-"
