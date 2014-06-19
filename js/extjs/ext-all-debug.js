@@ -6391,7 +6391,7 @@ Ext.Loader = new function() {
                     
                     
                     if (!Ext.isIE) {
-                        debugSourceURL = "\n//@ sourceURL=" + url;
+                        debugSourceURL = "\n//# sourceURL=" + url;
                     }
 
                     Ext.globalEval(xhr.responseText + debugSourceURL);
