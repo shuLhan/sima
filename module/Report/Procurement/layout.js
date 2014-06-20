@@ -51,8 +51,13 @@ Ext.define ("Jx.app.Report.Procurement", {
 	{
 		var self = this;
 
+		var store	= Ext.create ("Jx.app.store.Asset", {
+				url	: Jx.generateModDir (self.itemId)
+			});
+
 		self.grid				= Ext.create ("Jx.app.Asset.Viewer", {
 				region			:"center"
+			,	store			:store
 			,	showSearchField	:false
 			,	showPagingBar	:false
 			,	features		:
@@ -82,12 +87,6 @@ Ext.define ("Jx.app.Report.Procurement", {
 
 		self.grid.headerCt.insert (self.grid.columns.length, columns);
 		self.grid.getView ().refresh ();
-
-		// change store URL
-		var dir = Jx.generateModDir (self.itemId);
-
-		self.grid.store.url = dir;
-		self.grid.store.rebuildUrl ();
 	}
 
 ,	on_filter_click : function (b)
