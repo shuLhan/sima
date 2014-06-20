@@ -89,7 +89,7 @@ $rs		= Jaring::dbExecute ($qread);
 <html lang="en">
 <head>
 	<title>Laporan Pengadaan Aset</title>
-	<link rel="stylesheet" type="text/css" href="/module/Report/print.css" />
+	<link rel="stylesheet" type="text/css" href="/css/print.css" />
 </head>
 <body>
 	<h1>Laporan Pengadaan Aset</h1>
