@@ -21,15 +21,15 @@ Ext.define ("Jx.app.Asset.Viewer", {
 			header			:"Type"
 		,	dataIndex		:"type_id"
 		,	renderer		:Jx.app.store.Asset.Type.renderData ("id", "name")
-		,	flex			:true
+		,	width			:200
 		},{
 			header			:"Merk"
 		,	dataIndex		:"merk"
-		,	flex			:true
+		,	width			:200
 		},{
 			header			:"Model"
 		,	dataIndex		:"model"
-		,	flex			:true
+		,	width			:200
 		}]
 	}
 

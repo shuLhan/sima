@@ -28,6 +28,7 @@ Ext.define ("Jx.app.Report.Form", {
 		,	name			:"asset_type_id"
 		},{
 			xtype			:"fieldset"
+		,	itemId			:"filter_date"
 		,	title			:"Purchase Date"
 		,	layout			:"anchor"
 		,	defaults		:

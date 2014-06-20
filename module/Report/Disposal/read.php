@@ -4,14 +4,15 @@
 	Authors:
 	- mhd.sulhan (m.shulhan@gmail.com)
 */
-require_once ("../../init.php");
 
-Jaring::init ();
-Jaring::initDB ();
+$qstr	= $_GET["query"];
+$query	= "'%".$qstr."%'";
+$start	= (int) $_GET["start"];
+$limit	= (int) $_GET["limit"];
 
-$asset_type_id	= (int) $_POST["asset_type_id"];
-$date_from		= $_POST["date_from"];
-$date_to		= $_POST["date_to"];
+$asset_type_id	= (int) $_GET["asset_type_id"];
+$date_from		= $_GET["date_from"];
+$date_to		= $_GET["date_to"];
 
 $qselect	="
 select	A.*
@@ -24,7 +25,6 @@ select	A.*
 ,		AML.asset_status_id
 ,		AML.cost			as maintenance_cost
 ,		AML.maintenance_info
-,		AT.name				as asset_type_name
 ";
 
 $qfrom	="
@@ -59,6 +59,23 @@ $qfrom	="
 
 $qwhere ="
 	where A.status			= 1
+	and (
+		A.merk				like $query
+	or	A.model				like $query
+	or	A.sn				like $query
+	or	A.barcode			like $query
+	or	A.service_tag		like $query
+	or	A.label				like $query
+	or	A.detail			like $query
+	or	A.warranty_date		= '$qstr'
+	or	A.warranty_info		like $query
+	or	A.company			like $query
+	or	AT.name				like $query
+	or	AP.name				like $query
+	or	AST.name			like $query
+	or	AL.name				like $query
+	or	U.realname			like $query
+	)
 ";
 
 if (null !== $date_from) {
@@ -75,6 +92,12 @@ if (0 !== $asset_type_id) {
 }
 
 $qorder = " order by A.id desc ";
+$qlimit	= " limit $start,$limit ";
+
+/* Get total rows */
+$qtotal	=" select	COUNT(A.id) as total "
+		. $qfrom
+		. $qwhere;
 
 /* Get data */
 $qread	= $qselect
@@ -82,50 +105,6 @@ $qread	= $qselect
 		. $qwhere
 		. $qorder;
 
-$rs		= Jaring::dbExecute ($qread);
-
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<title>Laporan Pengadaan Aset</title>
-	<link rel="stylesheet" type="text/css" href="/css/print.css" />
-</head>
-<body>
-	<h1>Laporan Pengadaan Aset</h1>
-	<hr/>
-	<br/>
-	<p>
-	Pembelian dari tanggal <?= $date_from ?> sampai <?= $date_to ?>.
-	</p>
-	<br/>
-	<table>
-		<tr>
-			<th>Type</th>
-			<th>Merk</th>
-			<th>Model</th>
-			<th>Price</th>
-		</tr>
-	<?php
-		$sum = 0.0;
-
-		foreach ($rs as $d) {
-			$sum += $d["price"];
-
-			echo "
-				<tr>
-					<td>". $d["asset_type_name"] ."</td>
-					<td>". $d["merk"] ."</td>
-					<td>". $d["model"] ."</td>
-					<td class='money'>". $d["price"] ."</td>
-				</tr>
-			";
-		}
-	?>
-		<tr>
-			<td colspan="3" align="right">Total : </td>
-			<td class='money'><?= $sum ?></td>
-		</tr>
-	</table>
-</body>
-</html>
+Jaring::$_out["total"]		= (int) Jaring::dbExecute ($qtotal)[0]["total"];
+Jaring::$_out["data"]		= Jaring::dbExecute ($qread);
+Jaring::$_out["success"]	= true;

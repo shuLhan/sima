@@ -21,10 +21,11 @@ select	A.*
 ,		AA.location_id
 ,		AA.location_detail
 ,		AA.description
-,		AML.asset_status_id
-,		AML.cost			as maintenance_cost
-,		AML.maintenance_info
 ,		AT.name				as asset_type_name
+,		AR.name				as asset_removal_name
+,		DATE_FORMAT (ARL.removal_date, '%d %b %Y')	as removal_date
+,		ARL.removal_cost
+,		ARL.removal_info
 ";
 
 $qfrom	="
@@ -37,35 +38,23 @@ $qfrom	="
 			order by assign_date desc
 			limit	0,1
 		)
-	left join asset_maintenance_log AML
-		on AML.id = (
-			select	id
-			from	asset_maintenance_log
-			where	asset_id = A.id
-			order by maintenance_date DESC
-			limit 0,1
-		)
-	left join asset_type		AT
-		on A.type_id			= AT.id
-	left join asset_procurement AP
-		on A.procurement_id 	= AP.id
-	left join asset_status		AST
-		on AML.asset_status_id	= AST.id
-	left join asset_location	AL
-		on AA.location_id		= AL.id
-	left join _user				U
-		on AA._user_id			= U.id
+	left join asset_type		AT	on A.type_id			= AT.id
+	left join asset_procurement AP	on A.procurement_id 	= AP.id
+	left join asset_location	AL	on AA.location_id		= AL.id
+	left join _user				U	on AA._user_id			= U.id
+	left join asset_removal_log	ARL	on A.id					= ARL.asset_id
+	left join asset_removal		AR	on ARL.asset_removal_id	= AR.id
 ";
 
 $qwhere ="
-	where A.status			= 1
+	where A.status			= 0
 ";
 
 if (null !== $date_from) {
 	$qwhere .="
 		and (
-				A.warranty_date >= '$date_from'
-			and	A.warranty_date <= '$date_to'
+				ARL.removal_date >= '$date_from'
+			and	ARL.removal_date <= '$date_to'
 		)
 	";
 }
@@ -74,7 +63,7 @@ if (0 !== $asset_type_id) {
 	$qwhere .=" and A.type_id = ". $asset_type_id;
 }
 
-$qorder = " order by A.id desc ";
+$qorder = " order by ARL.removal_date DESC";
 
 /* Get data */
 $qread	= $qselect
@@ -88,15 +77,15 @@ $rs		= Jaring::dbExecute ($qread);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Laporan Pengadaan Aset</title>
+	<title>Laporan Penghapusan Aset</title>
 	<link rel="stylesheet" type="text/css" href="/css/print.css" />
 </head>
 <body>
-	<h1>Laporan Pengadaan Aset</h1>
+	<h1>Laporan Penghapusan Aset</h1>
 	<hr/>
 	<br/>
 	<p>
-	Pembelian dari tanggal <?= $date_from ?> sampai <?= $date_to ?>.
+	Penghapusan dari tanggal <?= $date_from ?> sampai <?= $date_to ?>.
 	</p>
 	<br/>
 	<table>
@@ -104,26 +93,30 @@ $rs		= Jaring::dbExecute ($qread);
 			<th>Type</th>
 			<th>Merk</th>
 			<th>Model</th>
-			<th>Price</th>
+			<th>Disposal Type</th>
+			<th>Disposal Date</th>
+			<th>Disposal Cost</th>
 		</tr>
 	<?php
 		$sum = 0.0;
 
 		foreach ($rs as $d) {
-			$sum += $d["price"];
+			$sum += (double) $d["removal_cost"];
 
 			echo "
 				<tr>
 					<td>". $d["asset_type_name"] ."</td>
 					<td>". $d["merk"] ."</td>
 					<td>". $d["model"] ."</td>
-					<td class='money'>". $d["price"] ."</td>
+					<td>". $d["asset_removal_name"] ."</td>
+					<td>". $d["removal_date"] ."</td>
+					<td class='money'>". $d["removal_cost"] ."</td>
 				</tr>
 			";
 		}
 	?>
 		<tr>
-			<td colspan="3" align="right">Total : </td>
+			<td colspan="5" align="right">Total : </td>
 			<td class='money'><?= $sum ?></td>
 		</tr>
 	</table>
