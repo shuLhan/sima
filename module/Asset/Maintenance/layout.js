@@ -69,11 +69,26 @@ function JxAssetMaintenance ()
 			}
 		}];
 //}}}
+//{{{
+	this.b_print	= Ext.create ("Ext.button.Button", {
+			text				:"Print Report"
+		,	iconCls				:"print"
+		,	disabled			:true
+		,	handler				:function ()
+			{
+				Asset_Maintenance.do_print ();
+			}
+		});
+//}}}
 
 //{{{ panel: asset
 	this.panelAsset				= Ext.create ("Jx.app.Asset.Viewer", {
 			itemId				:this.id +"_Asset"
 		,	region				:"center"
+		,	tbar				:
+			[
+				this.b_print
+			]
 		,	onSelectionChange	: function (model, data)
 			{
 				var id = 0;
@@ -82,6 +97,7 @@ function JxAssetMaintenance ()
 					id = data[0].get ("id");
 				}
 
+				Asset_Maintenance.b_print.setDisabled (data.length <= 0);
 				Asset_Maintenance.panelAssetMaintenanceLog.doReload (this.perm, id);
 			}
 		});
@@ -132,6 +148,37 @@ function JxAssetMaintenance ()
 			]
 		});
 //}}}
+
+//{{{
+	this.do_print = function ()
+	{
+		var id = this.panelAsset.selectedData[0].data.id;
+		var form = document.createElement('form');
+
+		form.target	= "asset_maintenance";
+		form.method	= "POST";
+		form.action	= this.dir +"print.php";
+
+		var postInput	= document.createElement ('input');
+		postInput.type	= "hidden";
+		postInput.name	= "id";
+		postInput.value	= id;
+
+		form.appendChild (postInput);
+		document.body.appendChild (form);
+
+		var print = window.open ("", form.target);
+
+		if (print) {
+			form.submit ();
+		} else {
+			Jx.msg.error ("You must allow popups for this function to work.");
+		}
+
+		document.body.removeChild (form);
+	};
+//}}}
+
 //{{{ refresh this module
 	this.doRefresh	= function (perm)
 	{

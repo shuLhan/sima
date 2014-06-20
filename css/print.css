@@ -18,9 +18,22 @@ body {
 	background	:#ffffff;
 	font-size	:12pt;
 	font-family	:"Times New Roman", serif;
-	width		:330mm;
+	width		:210mm;
 	padding		:0mm;
 	margin		:0mm;
+}
+h1 {
+	font-size	:20pt;
+	font-weight	:bold;
+	margin		:10px 0px;
+}
+h2 {
+	font-weight	:bold;
+	font-size	:16pt;
+	margin		:20px 0px;
+}
+table {
+	width		:100%;
 }
 th,td {
 	padding		:10px;
@@ -28,4 +41,22 @@ th,td {
 }
 th {
 	font-weight	:bold;
+}
+table.asset tr.col-header th {
+	text-align	:left;
+	width		:200px;
+}
+table.asset tr th[colspan="3"] {
+	border-left	:none;
+	border-right:none;
+	padding-top	:10px;
+}
+table.maintenance tr th:nth-child(1) {
+	width	:20%
+}
+table.maintenance tr th:nth-child(2) {
+	width	:60%
+}
+table.maintenance tr th:nth-child(3) {
+	width	:20%
 }
