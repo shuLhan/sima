@@ -69,7 +69,7 @@ function JxAssetMaintenance ()
 			}
 		}];
 //}}}
-//{{{
+//{{{ button: print
 	this.b_print	= Ext.create ("Ext.button.Button", {
 			text				:"Print Report"
 		,	iconCls				:"print"
@@ -80,7 +80,6 @@ function JxAssetMaintenance ()
 			}
 		});
 //}}}
-
 //{{{ panel: asset
 	this.panelAsset				= Ext.create ("Jx.app.Asset.Viewer", {
 			itemId				:this.id +"_Asset"
@@ -148,8 +147,7 @@ function JxAssetMaintenance ()
 			]
 		});
 //}}}
-
-//{{{
+//{{{ function: do print
 	this.do_print = function ()
 	{
 		var id = this.panelAsset.selectedData[0].data.id;
@@ -178,7 +176,6 @@ function JxAssetMaintenance ()
 		document.body.removeChild (form);
 	};
 //}}}
-
 //{{{ refresh this module
 	this.doRefresh	= function (perm)
 	{

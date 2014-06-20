@@ -88,33 +88,26 @@ function JxAssetAssign ()
 			}
 		}];
 //}}}
-
+//{{{ button: print
+	this.b_print	= Ext.create ("Ext.button.Button", {
+			text				:"Print Report"
+		,	iconCls				:"print"
+		,	disabled			:true
+		,	scope				:this
+		,	handler				:function ()
+			{
+				this.do_print ();
+			}
+		});
+//}}}
 //{{{ panel: asset
-	this.panelAsset			= Ext.create ("Jx.GridPaging", {
-			store			:Jx.app.store.Asset
-		,	title			:"Aset"
-		,	region			:"center"
-		,	showCrudButtons	:false
-		,	columns			:
-			[{
-				header			:"Barcode"
-			,	dataIndex		:"barcode"
-			,	width			:130
-			},{
-				header			:"Type"
-			,	dataIndex		:"type_id"
-			,	renderer		:Jx.app.store.Asset.Type.renderData ("id", "name")
-			,	flex			:true
-			},{
-				header			:"Merk"
-			,	dataIndex		:"merk"
-			,	flex			:true
-			},{
-				header			:"Model"
-			,	dataIndex		:"model"
-			,	flex			:true
-			}]
-
+	this.panelAsset		= Ext.create ("Jx.app.Asset.Viewer", {
+			itemId		:this.id +"_Asset"
+		,	region		:"center"
+		,	tbar		:
+			[
+				this.b_print
+			]
 		,	onSelectionChange : function (model, data)
 			{
 				var id = 0;
@@ -123,6 +116,7 @@ function JxAssetAssign ()
 					id = data[0].get ("id");
 				}
 
+				Asset_Assign.b_print.setDisabled (data.length <= 0);
 				Asset_Assign.panelAssetAssignLog.doReload (this.perm, id);
 			}
 		});
@@ -172,6 +166,35 @@ function JxAssetAssign ()
 			,	this.panelAssetAssignLog
 			]
 		});
+//}}}
+//{{{ function: do print
+	this.do_print = function ()
+	{
+		var id = this.panelAsset.selectedData[0].data.id;
+		var form = document.createElement('form');
+
+		form.target	= "asset_assignment";
+		form.method	= "POST";
+		form.action	= this.dir +"print.php";
+
+		var postInput	= document.createElement ('input');
+		postInput.type	= "hidden";
+		postInput.name	= "id";
+		postInput.value	= id;
+
+		form.appendChild (postInput);
+		document.body.appendChild (form);
+
+		var print = window.open ("", form.target);
+
+		if (print) {
+			form.submit ();
+		} else {
+			Jx.msg.error ("You must allow popups for this function to work.");
+		}
+
+		document.body.removeChild (form);
+	};
 //}}}
 //{{{ refresh this module
 	this.doRefresh	= function (perm)

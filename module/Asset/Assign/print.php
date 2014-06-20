@@ -62,20 +62,27 @@ function get_asset ($id)
 	return Jaring::dbExecute ($qread)[0];
 }
 
-function get_asset_maintenance_log ($id)
+function get_asset_assign_log ($id)
 {
 	$q	="
-		select	AML.*
-		from	asset_maintenance_log	AML
+		select	AA.cost
+		,		AA.assign_date
+		,		AA.location_detail
+		,		AA.description
+		,		AL.name				as location_name
+		,		U.realname			as user_name
+		from	asset_assign_log	AA
+			left join _user				U	on AA._user_id		= U.id
+			left join asset_location	AL	on AA.location_id	= AL.id
 		where	asset_id = $id
-		order	by maintenance_date		DESC
+		order	by assign_date		DESC
 	";
 
 	return Jaring::dbExecute ($q);
 }
 
-$asset		= get_asset ($id);
-$maint_log	= get_asset_maintenance_log ($id);
+$asset	= get_asset ($id);
+$logs	= get_asset_assign_log ($id);
 
 ?>
 <!DOCTYPE html>
@@ -130,7 +137,7 @@ $maint_log	= get_asset_maintenance_log ($id);
 		</tr>
 		<tr>
 			<th> Price </th>
-			<td class="money"><?= $asset["price"] ?></td>
+			<td class='money'><?= $asset["price"] ?></td>
 		</tr>
 
 		<tr>
@@ -144,50 +151,44 @@ $maint_log	= get_asset_maintenance_log ($id);
 			<th> Information </th>
 			<td><?= $asset["warranty_info"] ?></td>
 		</tr>
-
-		<tr>
-			<th colspan="3"> Assignment </th>
-		</tr>
-		<tr>
-			<th> User </th>
-			<td><?= $asset["assign_user_name"] ?></td>
-		</tr>
-		<tr>
-			<th> Location </th>
-			<td><?= $asset["assign_location_name"] ?></td>
-		</tr>
-		<tr>
-			<th> Detail </th>
-			<td><?= $asset["assign_location_detail"] ?></td>
-		</tr>
-		<tr>
-			<th> Description </th>
-			<td><?= $asset["assign_description"] ?></td>
-		</tr>
 	</table>
 
-	<h2> Riwayat Pemeliharaan </h2>
-	<table class="maintenance">
+	<h2> Riwayat Relokasi </h2>
+	<table class="assign">
 		<tr>
 			<th>Date</th>
-			<th>Information</th>
+			<th>User</th>
+			<th>Location</th>
 			<th>Cost</th>
 		</tr>
 		<?php
 			$sum = 0.0;
-			foreach ($maint_log as $aml) {
-				$sum += (double) $aml["cost"];
+			foreach ($logs as $log) {
+				$sum += (double) $log["cost"];
 				echo "
 					<tr>
-						<td>". $aml["maintenance_date"] ."</td>
-						<td>". $aml["maintenance_info"] ."</td>
-						<td class='money'>". $aml["cost"] ."</td>
+						<td rowspan='5'>". $log["assign_date"] ."</td>
+						<td>". $log["user_name"] ."</td>
+						<td>". $log["location_name"] ."</td>
+						<td rowspan='5' class='money'>". $log["cost"] ."</td>
+					</tr>
+					<tr>
+						<th colspan='2'>Location Detail</th>
+					</tr>
+					<tr>
+						<td colspan='2'>". $log["location_detail"] ."</td>
+					</tr>
+					<tr>
+						<th colspan='2'>Description</th>
+					</tr>
+					<tr>
+						<td colspan='2'>". $log["description"] ."</td>
 					</tr>
 				";
 			}
 		?>
 		<tr>
-			<th colspan="2"> Total </th>
+			<th colspan="3"> Total </th>
 			<td class="money"><?= $sum ?></td>
 		</tr>
 	</table>
