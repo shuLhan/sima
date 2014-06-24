@@ -129,23 +129,23 @@ $logs	= get_asset_assign_log ($id);
 		</tr>
 		<tr>
 			<th> Purchase Date </th>
-			<td><?= $asset["warranty_date"] ?></td>
+			<td><?= $asset["procurement_date"] ?></td>
 		</tr>
 		<tr>
 			<th> Company </th>
-			<td><?= $asset["company"] ?></td>
+			<td><?= $asset["procurement_company"] ?></td>
 		</tr>
 		<tr>
 			<th> Price </th>
-			<td class='money'><?= $asset["price"] ?></td>
+			<td class='money'><?= $asset["procurement_price"] ?></td>
 		</tr>
 
 		<tr>
 			<th colspan="3"> Warranty </th>
 		</tr>
 		<tr>
-			<th> Warranty Length </th>
-			<td><?= $asset["warranty_length"] ?> Year </td>
+			<th> Length </th>
+			<td><?= $asset["warranty_length"] ?> month </td>
 		</tr>
 		<tr>
 			<th> Information </th>

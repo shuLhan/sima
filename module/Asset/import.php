@@ -18,17 +18,14 @@ $fields = [
 ,	"service_tag"
 ,	"label"
 ,	"detail"
-,	"warranty_date"
+
 ,	"warranty_length"
 ,	"warranty_info"
+
 ,	"procurement_id"
-,	"company"
-,	"price"
-,	"status_id"
-,	"_user_id"
-,	"location_id"
-,	"location_detail"
-,	"maintenance_info"
+,	"procurement_date"
+,	"procurement_company"
+,	"procurement_price"
 ];
 
 Jaring::initDB ();
@@ -57,6 +54,7 @@ while (! feof ($f)) {
 	$data[] = $row;
 	$c++;
 
+	// insert per $nchunk row
 	if (0 === ($c % $nchunk)) {
 		Jaring::$_db->beginTransaction ();
 

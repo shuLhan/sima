@@ -17,12 +17,12 @@ $fields = [
 ,	"service_tag"
 ,	"label"
 ,	"detail"
-,	"warranty_date"
 ,	"warranty_length"
 ,	"warranty_info"
 ,	"procurement_id"
-,	"company"
-,	"price"
+,	"procurement_date"
+,	"procurement_company"
+,	"procurement_price"
 ,	"table_id"
 ];
 
@@ -37,7 +37,7 @@ Jaring::$_mod["db_table"]["search"]	= [
 ,	"service_tag"
 ,	"label"
 ,	"detail"
-,	"company"
+,	"procurement_company"
 ];
 Jaring::$_mod["db_table"]["create"]	= array_slice ($fields, 1);
 Jaring::$_mod["db_table"]["update"]	= array_slice ($fields, 1);

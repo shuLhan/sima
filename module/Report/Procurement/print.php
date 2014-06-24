@@ -64,8 +64,8 @@ $qwhere ="
 if (null !== $date_from) {
 	$qwhere .="
 		and (
-				A.warranty_date >= '$date_from'
-			and	A.warranty_date <= '$date_to'
+				A.procurement_date >= '$date_from'
+			and	A.procurement_date <= '$date_to'
 		)
 	";
 }
@@ -110,14 +110,14 @@ $rs		= Jaring::dbExecute ($qread);
 		$sum = 0.0;
 
 		foreach ($rs as $d) {
-			$sum += $d["price"];
+			$sum += $d["procurement_price"];
 
 			echo "
 				<tr>
 					<td>". $d["asset_type_name"] ."</td>
 					<td>". $d["merk"] ."</td>
 					<td>". $d["model"] ."</td>
-					<td class='money'>". $d["price"] ."</td>
+					<td class='money'>". $d["procurement_price"] ."</td>
 				</tr>
 			";
 		}

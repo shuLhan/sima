@@ -180,13 +180,13 @@ create table asset
 ,	label				varchar(255)	default ''
 ,	detail				varchar(255)	default ''
 
-,	warranty_date		date			null
 ,	warranty_length		integer			default 0
 ,	warranty_info		varchar(255)	default ''
 
 ,	procurement_id		integer			null
-,	company				varchar(255)	default ''
-,	price				float			default 0
+,	procurement_date	date			null
+,	procurement_company	varchar(255)	default ''
+,	procurement_price	float			default 0
 
 ,	table_id			varchar(32)		default null
 

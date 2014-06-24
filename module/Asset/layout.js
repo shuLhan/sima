@@ -71,7 +71,7 @@ function JxAsset ()
 			,	hidden		:true
 			,	editor		:{}
 			},{
-				header		:"Label Tag"
+				header		:"Label"
 			,	dataIndex	:"label"
 			,	hidden		:true
 			,	editor		:{}
@@ -85,22 +85,11 @@ function JxAsset ()
 				}
 			}]
 		},{
-			header		:"Garansi"
+			header		:"Warranty"
+		,	hidden		:true
 		,	columns		:
 			[{
-				header		:"Tanggal Beli"
-			,	dataIndex	:"warranty_date"
-			,	width		:140
-			,	xtype		:"datecolumn"
-			,	format		:"d M Y"
-			,	editor		:
-				{
-					xtype		:"datefield"
-				,	format		:"d M Y"
-				,	submitFormat:"Y-m-d"
-				}
-			},{
-				header		:"Lama (tahun)"
+				header		:"Length (month)"
 			,	dataIndex	:"warranty_length"
 			,	hidden		:true
 			,	editor		:
@@ -110,7 +99,7 @@ function JxAsset ()
 				,	allowDecimals	:false
 				}
 			},{
-				header		:"Informasi"
+				header		:"Information"
 			,	dataIndex	:"warranty_info"
 			,	hidden		:true
 			,	editor		:
@@ -119,11 +108,10 @@ function JxAsset ()
 				}
 			}]
 		},{
-			header		:"Pengadaan"
-		,	hidden		:true
+			header		:"Procurement"
 		,	columns		:
 			[{
-				header		:"Jenis"
+				header		:"Type"
 			,	dataIndex	:"procurement_id"
 			,	renderer	:Jx.app.store.Asset.Procurement.renderData ("id", "name")
 			,	hidden		:true
@@ -135,13 +123,25 @@ function JxAsset ()
 				,	displayField	:"name"
 				}
 			},{
-				header		:"Perusahaan / Toko"
-			,	dataIndex	:"company"
+				header		:"Purchase date"
+			,	dataIndex	:"procurement_date"
+			,	width		:140
+			,	xtype		:"datecolumn"
+			,	format		:"d M Y"
+			,	editor		:
+				{
+					xtype		:"datefield"
+				,	format		:"d M Y"
+				,	submitFormat:"Y-m-d"
+				}
+			},{
+				header		:"Company / Store"
+			,	dataIndex	:"procurement_company"
 			,	hidden		:true
 			,	editor		:{}
 			},{
-				header		:"Harga"
-			,	dataIndex	:"price"
+				header		:"Price"
+			,	dataIndex	:"procurement_price"
 			,	hidden		:true
 			,	editor		:
 				{
@@ -150,10 +150,10 @@ function JxAsset ()
 				}
 			}]
 		},{
-			header		:"Penggunaan"
+			header		:"Assignment"
 		,	columns		:
 			[{
-				header		:"Pengguna"
+				header		:"User"
 			,	dataIndex	:"_user_id"
 			,	renderer	:Jx.app.store.System.User.renderData ("id", "realname")
 			,	editor		:
@@ -165,7 +165,7 @@ function JxAsset ()
 				,	readOnly		:true
 				}
 			},{
-				header		:"Lokasi"
+				header		:"Location"
 			,	dataIndex	:"location_id"
 			,	renderer	:Jx.app.store.Asset.Location.renderData ("id", "name")
 			,	editor		:
@@ -177,7 +177,7 @@ function JxAsset ()
 				,	readOnly		:true
 				}
 			},{
-				header		:"Detil Lokasi"
+				header		:"Location detail"
 			,	dataIndex	:"location_detail"
 			,	hidden		:true
 			,	editor		:
@@ -187,7 +187,7 @@ function JxAsset ()
 				}
 			}]
 		},{
-			header	:"Pemeliharaan"
+			header	:"Maintenance"
 		,	columns	:
 			[{
 				header		:"Status"
@@ -202,14 +202,14 @@ function JxAsset ()
 				,	readOnly		:true
 				}
 			},{
-				header		:"Biaya"
+				header		:"Cost"
 			,	dataIndex	:"maintenance_cost"
 			,	editor		:
 				{
 					xtype		:"displayfield"
 				}
 			},{
-				header		:"Info Perawatan"
+				header		:"Information"
 			,	dataIndex	:"maintenance_info"
 			,	hidden		:true
 			,	editor		:

@@ -80,7 +80,7 @@ Ext.define ("Jx.app.Report.Procurement", {
 		// additional columns
 		var columns = [{
 				header		:"Price"
-			,	dataIndex	:"price"
+			,	dataIndex	:"procurement_price"
 			,	width		:120
 			,	summaryType	:"sum"
 			}];

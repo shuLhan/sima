@@ -60,9 +60,9 @@ $qfrom	="
 	or	A.service_tag		like $query
 	or	A.label				like $query
 	or	A.detail			like $query
-	or	A.warranty_date		= '$qstr'
 	or	A.warranty_info		like $query
-	or	A.company			like $query
+	or	A.procurement_date		= '$qstr'
+	or	A.procurement_company	like $query
 	or	AT.name				like $query
 	or	AP.name				like $query
 	or	AST.name			like $query
