@@ -55,10 +55,12 @@ Ext.define ("Jx.app.System.Profile", {
 			fieldLabel		:"Email"
 		,	name			:"email"
 		,	xtype			:"textfield"
+		,	vtype			:"email"
 		},{
 			fieldLabel		:"Website"
 		,	name			:"website"
 		,	xtype			:"textfield"
+		,	vtype			:"url"
 		}]
 	},{
 		xtype		:"fieldset"
