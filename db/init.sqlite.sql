@@ -76,6 +76,23 @@ create table _media_table
 );
 
 /*
+	Identity of user/company that use the application.
+ */
+create table _profile
+(
+	name		varchar(64)		default ''
+,	address		varchar(512)	default ''
+,	phone_1		varchar(64)		default ''
+,	phone_2		varchar(64)		default ''
+,	phone_3		varchar(64)		default ''
+,	fax			varchar(64)		default ''
+,	email		varchar(64)		default ''
+,	website		varchar(64)		default ''
+,	logo_type	varchar(256)	default ''
+,	logo		blob
+);
+
+/*
  * Application specific tables.
  */
 create table asset_type

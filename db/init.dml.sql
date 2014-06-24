@@ -32,7 +32,7 @@ values (1001	,1000	,3	,'User'				,'user'			,'../icons/user.svg'	,'System_User'		
 insert into _menu (id, pid, type, label, icon, image, module, description)
 values (1002	,1000	,3	,'Group'			,'group'		,'../icons/group.svg'	,'System_Group'			,'');
 insert into _menu (id, pid, type, label, icon, image, module, description)
-values (1003	,1000	,0	,'User Group'		,'user'				,''						,'System_Group_User'	,'');
+values (1003	,1000	,0	,'User Group'		,'user'			,''						,'System_Group_User'	,'');
 insert into _menu (id, pid, type, label, icon, image, module, description)
 values (1004	,1000	,0	,'User Non Group'	,'user'			,''						,'System_Group_UserNon'	,'');
 insert into _menu (id, pid, type, label, icon, image, module, description)
@@ -43,6 +43,8 @@ insert into _menu (id, pid, type, label, icon, image, module, description)
 values (1007	,1000	,3	,'Media'			,'media'		,'../icons/media.svg'	,'System_Media'			,'');
 insert into _menu (id, pid, type, label, icon, image, module, description)
 values (1008	,1000	,0	,'Media Table'		,'media'		,'../icons/media.svg'	,'System_Media_Table'	,'');
+insert into _menu (id, pid, type, label, icon, image, module, description)
+values (1009	,1000	,3	,'Profile'			,'profile'		,'../icons/profile.svg'	,'System_Profile'		,'');
 
 /*
 	Group -> Menu
@@ -58,3 +60,9 @@ insert into _group_menu (_group_id, _menu_id, permission) values (1		,1005	,4);
 insert into _group_menu (_group_id, _menu_id, permission) values (1		,1006	,4);
 insert into _group_menu (_group_id, _menu_id, permission) values (1		,1007	,4);
 insert into _group_menu (_group_id, _menu_id, permission) values (1		,1008	,4);
+insert into _group_menu (_group_id, _menu_id, permission) values (1		,1009	,4);
+
+/*
+	Empty profile.
+ */
+insert into _profile (name) values ("Jaring");
