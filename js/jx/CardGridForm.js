@@ -169,8 +169,8 @@ Ext.define ("Jx.CardGridForm", {
 
 			self.add (this.form);
 		}
-	}
 //}}}
+	}
 //{{{ constructor
 ,	constructor	:function (cfg)
 	{
