@@ -351,12 +351,12 @@ class Jaring
 			$qwhere .= ")";
 		}
 
-		/* Get total rows */
+		// Get total rows
 		$qtotal	=" select	COUNT(". Jaring::$_mod["db_table"]["id"][0] .") as total "
 				. $qfrom
 				. $qwhere;
 
-		/* Get data */
+		// Get data
 		$qread	= $qselect
 				. $qfrom
 				. $qwhere

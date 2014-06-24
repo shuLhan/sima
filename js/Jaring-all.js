@@ -993,16 +993,16 @@ Ext.define ("Jx.ComboPaging", {
 	}
 });
 /*
-	Copyright 2013 - x10c-lab.com
+	Copyright 2014 - Mhd Sulhan
 	Authors:
-		- mhd.sulhan (sulhan@x10c-lab.com)
-		- agus sugianto (agus@x10c-lab.com)
+	- mhd.sulhan (m.shulhan@gmail.com)
 
 	Custom form panel with capabilities to use store to sync data.
 
 	- createButtonBar
-		+ true		:create buttom bar with addition button, save and cancel (default).
-		+ false		:no buttom bar created.
+		+ true		:create button bar at the bottom with additional button
+					 save and cancel (default).
+		+ false		:no button bar created.
 
 	- syncUseStore
 		+ true		:sync data using store.
@@ -1010,7 +1010,7 @@ Ext.define ("Jx.ComboPaging", {
 */
 Ext.define ("Jx.Form", {
 	extend			:"Ext.form.Panel"
-,	alias			:"jx.form"
+,	alias			:"widget.jx.form"
 ,	config			:
 	{
 		autoScroll		:true
@@ -1044,11 +1044,10 @@ Ext.define ("Jx.Form", {
 
 ,	constructor	:function (cfg)
 	{
-		this.callParent (arguments);
-
 		var opts = Ext.merge ({}, this.config);
 			opts = Ext.merge (opts, cfg);
 
+		this.callParent ([opts]);
 		this.initConfig (opts);
 
 		this.doCreateButtonBar (opts);
