@@ -1122,6 +1122,7 @@ Ext.define ("Jx.Form", {
 						{
 							anchor			:"100%"
 						,	msgTarget		:"side"
+						,	labelAlign		:"right"
 						}
 					});
 				Ext.merge (cfg, c.fsConfig);
@@ -1924,8 +1925,8 @@ Ext.define ("Jx.CardGridForm", {
 
 			self.add (this.form);
 		}
-	}
 //}}}
+	}
 //{{{ constructor
 ,	constructor	:function (cfg)
 	{

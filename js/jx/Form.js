@@ -128,6 +128,7 @@ Ext.define ("Jx.Form", {
 						{
 							anchor			:"100%"
 						,	msgTarget		:"side"
+						,	labelAlign		:"right"
 						}
 					});
 				Ext.merge (cfg, c.fsConfig);
