@@ -85,29 +85,6 @@ function JxAsset ()
 				}
 			}]
 		},{
-			header		:"Warranty"
-		,	hidden		:true
-		,	columns		:
-			[{
-				header		:"Length (month)"
-			,	dataIndex	:"warranty_length"
-			,	hidden		:true
-			,	editor		:
-				{
-					xtype			:"numberfield"
-				,	minValue		:0
-				,	allowDecimals	:false
-				}
-			},{
-				header		:"Information"
-			,	dataIndex	:"warranty_info"
-			,	hidden		:true
-			,	editor		:
-				{
-					xtype		:"textarea"
-				}
-			}]
-		},{
 			header		:"Procurement"
 		,	columns		:
 			[{
@@ -150,7 +127,34 @@ function JxAsset ()
 				}
 			}]
 		},{
+			header		:"Warranty"
+		,	hidden		:true
+		,	columns		:
+			[{
+				header		:"Length (month)"
+			,	dataIndex	:"warranty_length"
+			,	hidden		:true
+			,	editor		:
+				{
+					xtype			:"numberfield"
+				,	minValue		:0
+				,	allowDecimals	:false
+				}
+			},{
+				header		:"Information"
+			,	dataIndex	:"warranty_info"
+			,	hidden		:true
+			,	editor		:
+				{
+					xtype		:"textarea"
+				}
+			}]
+		},{
 			header		:"Assignment"
+		,	fsConfig	:
+			{
+				hidden		:true
+			}
 		,	columns		:
 			[{
 				header		:"User"
@@ -188,6 +192,10 @@ function JxAsset ()
 			}]
 		},{
 			header	:"Maintenance"
+		,	fsConfig:
+			{
+				hidden	:true
+			}
 		,	columns	:
 			[{
 				header		:"Status"
