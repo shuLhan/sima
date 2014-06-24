@@ -366,6 +366,10 @@ class Jaring
 		Jaring::$_out["total"]		= (int) Jaring::dbExecute ($qtotal)[0]["total"];
 		Jaring::$_out["data"]		= Jaring::dbExecute ($qread);
 		Jaring::$_out["success"]	= true;
+
+		if (function_exists ("afterRequestRead")) {
+			afterRequestRead (Jaring::$_out["data"]);
+		}
 	}
 //}}}
 //{{{ db : prepare insert query
