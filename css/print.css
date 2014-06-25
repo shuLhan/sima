@@ -26,6 +26,7 @@ h1 {
 	font-size	:20pt;
 	font-weight	:bold;
 	margin		:10px 0px;
+	text-align	:center;
 }
 h2 {
 	font-weight	:bold;
@@ -76,4 +77,30 @@ table.assign td:nth-child(4) {
 .money {
 	text-align	:right;
 	font-family	:monospace;
+}
+.profile {
+	width			:100%;
+	text-align		:center;
+	padding-bottom	:10px;
+	margin-bottom	:20px;
+	border-bottom	:1px silver solid;
+}
+.profile > div {
+	padding		:10px 0px 0px;
+}
+.profile_logo {
+	float		:left;
+}
+.profile_logo img {
+	width		:80px;
+}
+.profile_name {
+	font-size	:24pt;
+	font-weight	:bold;
+}
+.profile_address {
+	font-size	:9pt;
+}
+.profile_contact {
+	font-size	:9pt;
 }

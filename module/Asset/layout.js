@@ -278,7 +278,7 @@ function JxAsset ()
 
 			,	afterSelectionChange : function (model, data)
 				{
-					var id = 0;
+					var id = "";
 
 					if (data.length > 0) {
 						id = data[0].get ("table_id");
@@ -337,7 +337,7 @@ function JxAsset ()
 			,	function ()
 				{
 					self.perm = perm;
-					self.mediaViewer.doRefresh (perm, 0);
+					self.mediaViewer.doRefresh (perm, "");
 					self.cardPanel.doRefresh (perm);
 				}
 			,	0);

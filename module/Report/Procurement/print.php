@@ -5,13 +5,12 @@
 	- mhd.sulhan (m.shulhan@gmail.com)
 */
 require_once ("../../init.php");
-
-Jaring::init ();
-Jaring::initDB ();
+require_once ("../init.php");
 
 $asset_type_id	= (int) $_POST["asset_type_id"];
 $date_from		= $_POST["date_from"];
 $date_to		= $_POST["date_to"];
+$title			= "Laporan Pengadaan Aset";
 
 $qselect	="
 select	A.*
@@ -88,11 +87,12 @@ $rs		= Jaring::dbExecute ($qread);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Laporan Pengadaan Aset</title>
+	<title><?= $title ?></title>
 	<link rel="stylesheet" type="text/css" href="/css/print.css" />
 </head>
 <body>
-	<h1>Laporan Pengadaan Aset</h1>
+	<?php render_profile (); ?>
+	<h1><?= $title ?></h1>
 	<hr/>
 	<br/>
 	<p>

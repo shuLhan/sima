@@ -77,6 +77,7 @@ Ext.define ("Jx.app.Report.Disposal", {
 		self.grid				= Ext.create ("Jx.GridPaging", {
 				region			:"center"
 			,	store			:store
+			,	showCrudButtons	:false
 			,	showSearchField	:false
 			,	showPagingBar	:false
 			,	features		:

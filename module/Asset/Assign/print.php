@@ -4,154 +4,25 @@
 	Authors:
 	- mhd.sulhan (m.shulhan@gmail.com)
 */
-require_once ("../../init.php");
+require_once "../../init.php";
+require_once "../../Report/init.php";
 
-Jaring::init ();
-Jaring::initDB ();
-
-$id = $_POST["id"];
-
-function get_asset ($id)
-{
-	$qselect	="
-		select	A.*
-		,		AT.name				as asset_type_name
-		,		AA.cost				as assign_cost
-		,		AA.assign_date
-		,		AA._user_id			as assign_user_id
-		,		U.realname			as assign_user_name
-		,		AA.location_id		as assign_location_id
-		,		AL.name				as assign_location_name
-		,		AA.location_detail	as assign_location_detail
-		,		AA.description		as assign_description
-		,		AP.name				as procurement_name
-	";
-
-	$qfrom	="
-		from asset A
-		left join asset_assign_log	AA
-			on AA.id = (
-				select	id
-				from	asset_assign_log
-				where	asset_id = A.id
-				order by assign_date desc
-				limit	0,1
-			)
-		left join asset_type		AT	on A.type_id			= AT.id
-		left join asset_procurement AP	on A.procurement_id 	= AP.id
-		left join asset_location	AL	on AA.location_id		= AL.id
-		left join _user				U	on AA._user_id			= U.id
-	";
-
-	$qwhere ="
-		where A.status = 1
-	";
-
-	if (0 !== $id) {
-		$qwhere .=" and A.id = ". $id;
-	}
-
-	$qorder = " order by A.id desc ";
-
-	/* Get data */
-	$qread	= $qselect
-			. $qfrom
-			. $qwhere
-			. $qorder;
-
-	return Jaring::dbExecute ($qread)[0];
-}
-
-function get_asset_assign_log ($id)
-{
-	$q	="
-		select	AA.cost
-		,		AA.assign_date
-		,		AA.location_detail
-		,		AA.description
-		,		AL.name				as location_name
-		,		U.realname			as user_name
-		from	asset_assign_log	AA
-			left join _user				U	on AA._user_id		= U.id
-			left join asset_location	AL	on AA.location_id	= AL.id
-		where	asset_id = $id
-		order	by assign_date		DESC
-	";
-
-	return Jaring::dbExecute ($q);
-}
-
-$asset	= get_asset ($id);
-$logs	= get_asset_assign_log ($id);
-
+$asset_id	= $_POST["id"];
+$logs		= get_asset_assign_log ($asset_id);
+$title		= "Laporan Relokasi Aset";
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Laporan Pengadaan Aset</title>
+	<title><?= $title ?></title>
 	<link rel="stylesheet" type="text/css" href="/css/print.css" />
 </head>
 <body>
-	<h1>Laporan Pemeliharaan Aset</h1>
-	<h2>Data Aset</h2>
-	<table class="asset">
-		<tr>
-			<th> Type </th>
-			<td><?= $asset["asset_type_name"] ?></td>
-		</tr>
-		<tr>
-			<th> Merk </th>
-			<td><?= $asset["merk"] ?></td>
-		</tr>
-		<tr>
-			<th> Model </th>
-			<td><?= $asset["model"] ?> </td>
-		</tr>
-		<tr>
-			<th> Serial Number </th>
-			<td><?= $asset["sn"] ?></td>
-		</tr>
-		<tr>
-			<th> Label </th>
-			<td><?= $asset["label"] ?></td>
-		</tr>
-		<tr>
-			<th> Detail </th>
-			<td><?= $asset["detail"] ?></td>
-		</tr>
+	<?php render_profile (); ?>
 
-		<tr>
-			<th colspan="3"> Procurement </th>
-		</tr>
-		<tr>
-			<th> Type </th>
-			<td><?= $asset["procurement_name"] ?></td>
-		</tr>
-		<tr>
-			<th> Purchase Date </th>
-			<td><?= $asset["procurement_date"] ?></td>
-		</tr>
-		<tr>
-			<th> Company </th>
-			<td><?= $asset["procurement_company"] ?></td>
-		</tr>
-		<tr>
-			<th> Price </th>
-			<td class='money'><?= $asset["procurement_price"] ?></td>
-		</tr>
+	<h1><?= $title ?></h1>
 
-		<tr>
-			<th colspan="3"> Warranty </th>
-		</tr>
-		<tr>
-			<th> Length </th>
-			<td><?= $asset["warranty_length"] ?> month </td>
-		</tr>
-		<tr>
-			<th> Information </th>
-			<td><?= $asset["warranty_info"] ?></td>
-		</tr>
-	</table>
+	<?php render_asset ($asset_id, false); ?>
 
 	<h2> Riwayat Relokasi </h2>
 	<table class="assign">
