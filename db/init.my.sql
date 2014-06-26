@@ -120,6 +120,8 @@ create table jaring._media_table
 (
 	table_id	varchar(32)		not null
 ,	_media_id	integer			not null
+
+,	constraint _media_table_pk primary key (table_id, _media_id)
 );
 
 /*
