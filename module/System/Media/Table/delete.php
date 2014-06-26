@@ -4,12 +4,14 @@
 	Authors:
 		- mhd.sulhan (m.shulhan@gmail.com)
 */
+$data = $data[0];
+
 //{{{ delete all file
 $q	="	select	M.path
 		from	_media			M
 		,		_media_table	MT
 		where	M.id		= MT._media_id
-		and		MT.table_id	= ". $data["table_id"]
+		and		MT.table_id	= '". $data["table_id"] ."'"
 	;
 
 $rs = Jaring::dbExecute ($q);
@@ -37,9 +39,8 @@ Jaring::$_db_ps->closeCursor ();
 //}}}
 
 //{{{ delete data from media
-$q	=" delete from _media where id = ". $bindv[1];
-
-Jaring::dbExecute ($q);
+$q =" delete from _media where id = ". $data["_media_id"];
+Jaring::dbExecute ($q, null, false);
 //}}}
 
 Jaring::$_out['success']	= true;
