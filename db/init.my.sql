@@ -73,7 +73,7 @@ create table jaring._menu
 ,	label		varchar (64)	default ''
 ,	icon		varchar (32)	default ''
 ,	image		varchar (32)	default ''
-,	module		varchar (128)	default ''
+,	module		varchar (256)	default ''
 ,	description	varchar (128)	default ''
 ,	constraint	_menu_pk		primary key (id)
 );
@@ -120,6 +120,8 @@ create table jaring._media_table
 (
 	table_id	varchar(32)		not null
 ,	_media_id	integer			not null
+
+,	constraint _media_table_pk primary key (table_id, _media_id)
 );
 
 /*
