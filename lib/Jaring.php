@@ -179,6 +179,17 @@ class Jaring
 			$q	.= ";";
 			self::$_db->exec ($q);
 		}
+
+		$f_sql = APP_PATH ."/db/app.sql";
+		if (file_exists ($f_sql)) {
+			$f_sql_v	= file_get_contents($f_sql);
+			$queries	= explode (";", $f_sql_v);
+
+			foreach ($queries as $q) {
+				$q	.= ";";
+				self::$_db->exec ($q);
+			}
+		}
 	}
 //}}}
 //{{{ get database connection
