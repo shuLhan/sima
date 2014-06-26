@@ -149,16 +149,12 @@ create table asset_type
 ,	constraint asset_type_pk primary key (id)
 );
 
-insert into asset_type (id, name) values (0, '-');
-
 create table asset_procurement
 (
 	id		integer			not null	AUTO_INCREMENT
 ,	name	varchar(128)	not null
 ,	constraint asset_procurement_pk	primary key (id)
 );
-
-insert into asset_procurement (id, name) values (0, "-");
 
 create table asset_status
 (
@@ -167,16 +163,12 @@ create table asset_status
 ,	constraint asset_status_pk primary key (id)
 );
 
-insert into asset_status (id, name) values (0, "-");
-
 create table asset_location
 (
 	id		integer			not null	AUTO_INCREMENT
 ,	name	varchar(128)	not null
 ,	constraint asset_location_pk primary key (id)
 );
-
-insert into asset_location (id, name) values (0, "-");
 
 create table asset_removal
 (

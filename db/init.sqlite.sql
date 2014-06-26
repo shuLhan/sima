@@ -123,6 +123,13 @@ create table asset_location
 ,	constraint asset_location_pk primary key (id)
 );
 
+create table asset_removal
+(
+	id		integer			not null
+,	name	varchar(128)	not null
+,	constraint asset_removal_pk primary key (id)
+);
+
 create table asset
 (
 	id					integer			not null
@@ -135,18 +142,17 @@ create table asset
 ,	label				varchar(255)	default ''
 ,	detail				varchar(255)	default ''
 
-,	warranty_date		date			null
 ,	warranty_length		integer			default 0
 ,	warranty_info		varchar(255)	default ''
 
 ,	procurement_id		integer			null
-,	company				varchar(255)	default ''
-,	price				float			default 0
-
-,	status_id			integer			null
-,	maintenance_info	varchar(255)	default ''
+,	procurement_date	date			null
+,	procurement_company	varchar(255)	default ''
+,	procurement_price	float			default 0
 
 ,	table_id			varchar(32)		default null
+
+,	status				smallint		default 1
 
 ,	constraint asset_pk	primary key (id)
 );
@@ -156,12 +162,43 @@ create table asset
  */
 create table asset_assign_log
 (
-	asset_id		integer			not null
+	id				integer			not null
+,	asset_id		integer			not null
 ,	cost			numeric(15,2)	default 0.00
 ,	assign_date		date			null
 ,	_user_id		integer			null
 ,	location_id		integer			null
 ,	location_detail	varchar(1024)	default ''
 ,	description		varchar(1024)	default ''
-,	constraint asset_assign_log_fk_01 foreign key (asset_id)	references asset (id)
+
+,	constraint asset_assign_log_pk		primary key (id)
+,	constraint asset_assign_log_fk_01	foreign key (asset_id)	references asset (id)
+);
+
+/*
+	Log of all asset maintenance.
+ */
+create table asset_maintenance_log
+(
+	id					integer			not null AUTO_INCREMENT
+,	asset_id			integer			not null
+,	asset_status_id		integer			null
+,	cost				numeric(15,2)	default 0.00
+,	maintenance_date	date			null
+,	maintenance_info	varchar(1024)	default ''
+
+,	constraint asset_maintenance_log_pk		primary key (id)
+,	constraint asset_maintenance_log_fk_01	foreign key (asset_id) references asset (id)
+);
+
+create table asset_removal_log
+(
+	asset_id			integer			not null
+,	asset_removal_id	integer			not null
+,	removal_date		timestamp		default current_timestamp
+,	removal_cost		numeric(15,2)	default 0.00
+,	removal_info		varchar(1024)	default ''
+
+,	constraint asset_removal_log_pk		primary key (asset_id)
+,	constraint asset_removal_log_fk_01	foreign key (asset_id) references asset (id)
 );

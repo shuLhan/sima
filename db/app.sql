@@ -105,3 +105,22 @@ insert into _menu (
 insert into _group_menu (_group_id, _menu_id, permission) values (1	,30	,4);
 insert into _group_menu (_group_id, _menu_id, permission) values (1	,31	,4);
 insert into _group_menu (_group_id, _menu_id, permission) values (1	,32	,4);
+
+insert into asset_type (id, name) values (0, '-');
+insert into asset_type (name) values ("PC");
+insert into asset_type (name) values ("Laptop");
+
+insert into asset_procurement (id, name) values (0, "-");
+insert into asset_procurement (name) values ("Pembelian");
+insert into asset_procurement (name) values ("Hibah");
+
+insert into asset_status (id, name) values (0, "-");
+insert into asset_status (name) values ("Baik");
+insert into asset_status (name) values ("Rusak");
+
+insert into asset_location (id, name) values (0, "-");
+insert into asset_location (name) values ("Kantor Pusat");
+
+insert into asset_removal (id, name) values (0, "-");
+insert into asset_removal (name) values ("Dimusnahkan");
+insert into asset_removal (name) values ("Dijual");
