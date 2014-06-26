@@ -94,13 +94,16 @@ function JxLogin ()
 
 	this.doLogin = function ()
 	{
+		Jx.showMask ();
 		this.panel.submit ({
 			success	:function (form, action)
 			{
+				Jx.hideMask ();
 				location.href = _g_root;
 			}
 		,	failure	:function (form, action)
 			{
+				Jx.hideMask ();
 				Jx.msg.error (action.result.data);
 			}
 		});
