@@ -71,6 +71,7 @@ class Jaring
 							,	"read"		=> []
 							,	"search"	=> []
 							,	"create"	=> []
+							,	"generate_id" => null
 							,	"update"	=> []
 							,	"order"		=> []
 							]
@@ -403,6 +404,22 @@ class Jaring
 		Jaring::$_db_ps = Jaring::$_db->prepare ($q);
 	}
 //}}}
+
+//{{{ db : generate ID for each data
+	public static function db_prepare_id (&$data)
+	{
+		if (! isset (Jaring::$_mod["db_table"]["generate_id"])) {
+			return;
+		}
+
+		$id = Jaring::$_mod["db_table"]["generate_id"];
+
+		foreach ($data as &$d) {
+			$d[$id] = round (microtime (true) * 1000);
+		}
+	}
+//}}}
+
 //{{{ crud -> db : handle create request
 	private static function handleRequestCreate ($data)
 	{
@@ -410,6 +427,7 @@ class Jaring
 		$fields	= Jaring::$_mod["db_table"]["create"];
 
 		Jaring::dbPrepareInsert ($table, $fields);
+		Jaring::db_prepare_id ($data);
 
 		foreach ($data as $d) {
 			$bindv = [];
