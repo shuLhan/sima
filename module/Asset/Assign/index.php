@@ -26,8 +26,9 @@ Jaring::$_mod["db_table"]["search"]	= [
 										"location_detail"
 									,	"description"
 									];
-Jaring::$_mod["db_table"]["create"]	= array_slice ($fields, 1);
+Jaring::$_mod["db_table"]["create"]	= $fields;
 Jaring::$_mod["db_table"]["update"]	= array_slice ($fields, 1);
 Jaring::$_mod["db_table"]["order"]	= ["assign_date DESC"];
+Jaring::$_mod["db_table"]["generate_id"] = "id";
 
 Jaring::handleRequest ("crud");

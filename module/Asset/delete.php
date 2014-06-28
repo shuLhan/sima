@@ -35,7 +35,7 @@ foreach ($data as $k => $v) {
 			)
 		";
 
-	Jaring::dbExecute ($q);
+	Jaring::dbExecute ($q, null, false);
 	//}}}
 
 	//{{{ delete data from _media_table

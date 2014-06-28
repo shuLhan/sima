@@ -146,43 +146,43 @@ create table _profile
  */
 create table asset_type
 (
-	id		integer			not null	AUTO_INCREMENT
+	id		bigint unsigned	not null
 ,	name	varchar(128)	not null
 ,	constraint asset_type_pk primary key (id)
 );
 
 create table asset_procurement
 (
-	id		integer			not null	AUTO_INCREMENT
+	id		bigint unsigned	not null
 ,	name	varchar(128)	not null
 ,	constraint asset_procurement_pk	primary key (id)
 );
 
 create table asset_status
 (
-	id		integer			not null	AUTO_INCREMENT
+	id		bigint unsigned	not null
 ,	name	varchar(128)	not null
 ,	constraint asset_status_pk primary key (id)
 );
 
 create table asset_location
 (
-	id		integer			not null	AUTO_INCREMENT
+	id		bigint unsigned	not null
 ,	name	varchar(128)	not null
 ,	constraint asset_location_pk primary key (id)
 );
 
 create table asset_removal
 (
-	id		integer			not null	AUTO_INCREMENT
+	id		bigint unsigned	not null
 ,	name	varchar(128)	not null
 ,	constraint asset_removal_pk primary key (id)
 );
 
 create table asset
 (
-	id					integer			not null	AUTO_INCREMENT
-,	type_id				integer			not null
+	id					bigint unsigned	not null
+,	type_id				bigint unsigned	not null
 ,	merk				varchar(255)	default ''
 ,	model				varchar(255)	default ''
 ,	sn					varchar(255)	default ''
@@ -194,7 +194,7 @@ create table asset
 ,	warranty_length		integer			default 0
 ,	warranty_info		varchar(255)	default ''
 
-,	procurement_id		integer			null
+,	procurement_id		bigint unsigned	default 0
 ,	procurement_date	date			null
 ,	procurement_company	varchar(255)	default ''
 ,	procurement_price	float			default 0
@@ -211,12 +211,12 @@ create table asset
  */
 create table asset_assign_log
 (
-	id				integer			not null AUTO_INCREMENT
-,	asset_id		integer			not null
+	id				bigint unsigned	not null
+,	asset_id		bigint unsigned	not null
 ,	cost			numeric(15,2)	default 0.00
 ,	assign_date		date			null
-,	_user_id		integer			null
-,	location_id		integer			null
+,	_user_id		bigint unsigned	null
+,	location_id		bigint unsigned	null
 ,	location_detail	varchar(1024)	default ''
 ,	description		varchar(1024)	default ''
 
@@ -229,9 +229,9 @@ create table asset_assign_log
  */
 create table asset_maintenance_log
 (
-	id					integer			not null AUTO_INCREMENT
-,	asset_id			integer			not null
-,	asset_status_id		integer			null
+	id					bigint unsigned	not null
+,	asset_id			bigint unsigned	not null
+,	asset_status_id		bigint unsigned	null
 ,	cost				numeric(15,2)	default 0.00
 ,	maintenance_date	date			null
 ,	maintenance_info	varchar(1024)	default ''
@@ -242,8 +242,8 @@ create table asset_maintenance_log
 
 create table asset_removal_log
 (
-	asset_id			integer			not null
-,	asset_removal_id	integer			not null
+	asset_id			bigint unsigned	not null
+,	asset_removal_id	bigint unsigned	not null
 ,	removal_date		timestamp		default current_timestamp
 ,	removal_cost		numeric(15,2)	default 0.00
 ,	removal_info		varchar(1024)	default ''

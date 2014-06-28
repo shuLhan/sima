@@ -39,8 +39,9 @@ Jaring::$_mod["db_table"]["search"]	= [
 ,	"detail"
 ,	"procurement_company"
 ];
-Jaring::$_mod["db_table"]["create"]	= array_slice ($fields, 1);
+Jaring::$_mod["db_table"]["create"]	= $fields;
 Jaring::$_mod["db_table"]["update"]	= array_slice ($fields, 1);
 Jaring::$_mod["db_table"]["order"]	= ["id"];
+Jaring::$_mod["db_table"]["generate_id"] = "id";
 
 Jaring::handleRequest ("crud");
