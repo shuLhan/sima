@@ -9,13 +9,13 @@ insert into _group (id, pid, name, type) values (1, 0, 'Administrator', 0);	-- 1
 	Password: hash of sha256
 */
 
-insert into _user (name, realname, password) values ('admin', 'Administrator', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918');	-- 1
+insert into _user (id, name, realname, password) values (1, 'admin', 'Administrator', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918');	-- 1
 
 /*
 	User -> Group
 */
 
-insert into _user_group (_user_id, _group_id) values (1, 1);
+insert into _user_group (id, _user_id, _group_id) values (1, 1, 1);
 
 /*
 	Menu

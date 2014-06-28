@@ -106,6 +106,117 @@ insert into _group_menu (_group_id, _menu_id, permission) values (1	,30	,4);
 insert into _group_menu (_group_id, _menu_id, permission) values (1	,31	,4);
 insert into _group_menu (_group_id, _menu_id, permission) values (1	,32	,4);
 
+/*
+	Application tables.
+ */
+create table asset_type
+(
+	id		bigint unsigned	not null
+,	name	varchar(128)	not null
+,	constraint asset_type_pk primary key (id)
+);
+
+create table asset_procurement
+(
+	id		bigint unsigned	not null
+,	name	varchar(128)	not null
+,	constraint asset_procurement_pk	primary key (id)
+);
+
+create table asset_status
+(
+	id		bigint unsigned	not null
+,	name	varchar(128)	not null
+,	constraint asset_status_pk primary key (id)
+);
+
+create table asset_location
+(
+	id		bigint unsigned	not null
+,	name	varchar(128)	not null
+,	constraint asset_location_pk primary key (id)
+);
+
+create table asset_removal
+(
+	id		bigint unsigned	not null
+,	name	varchar(128)	not null
+,	constraint asset_removal_pk primary key (id)
+);
+
+create table asset
+(
+	id					bigint unsigned	not null
+,	type_id				bigint unsigned	not null
+,	merk				varchar(255)	default ''
+,	model				varchar(255)	default ''
+,	sn					varchar(255)	default ''
+,	barcode				varchar(255)	default ''
+,	service_tag			varchar(255)	default ''
+,	label				varchar(255)	default ''
+,	detail				varchar(255)	default ''
+
+,	warranty_length		integer			default 0
+,	warranty_info		varchar(255)	default ''
+
+,	procurement_id		bigint unsigned	default 0
+,	procurement_date	date			null
+,	procurement_company	varchar(255)	default ''
+,	procurement_price	float			default 0
+
+,	table_id			varchar(32)		default null
+
+,	status				smallint		default 1
+
+,	constraint asset_pk	primary key (id)
+);
+
+/*
+	Log of all asset assignment
+ */
+create table asset_assign_log
+(
+	id				bigint unsigned	not null
+,	asset_id		bigint unsigned	not null
+,	cost			numeric(15,2)	default 0.00
+,	assign_date		date			null
+,	_user_id		bigint unsigned	null
+,	location_id		bigint unsigned	null
+,	location_detail	varchar(1024)	default ''
+,	description		varchar(1024)	default ''
+
+,	constraint asset_assign_log_pk		primary key (id)
+,	constraint asset_assign_log_fk_01	foreign key (asset_id)	references asset (id)
+);
+
+/*
+	Log of all asset maintenance.
+ */
+create table asset_maintenance_log
+(
+	id					bigint unsigned	not null
+,	asset_id			bigint unsigned	not null
+,	asset_status_id		bigint unsigned	null
+,	cost				numeric(15,2)	default 0.00
+,	maintenance_date	date			null
+,	maintenance_info	varchar(1024)	default ''
+
+,	constraint asset_maintenance_log_pk		primary key (id)
+,	constraint asset_maintenance_log_fk_01	foreign key (asset_id) references asset (id)
+);
+
+create table asset_removal_log
+(
+	asset_id			bigint unsigned	not null
+,	asset_removal_id	bigint unsigned	not null
+,	removal_date		timestamp		default current_timestamp
+,	removal_cost		numeric(15,2)	default 0.00
+,	removal_info		varchar(1024)	default ''
+
+,	constraint asset_removal_log_pk		primary key (asset_id)
+,	constraint asset_removal_log_fk_01	foreign key (asset_id) references asset (id)
+);
+
 insert into asset_type (id, name) values (0, '-');
 insert into asset_type (name) values ("PC");
 insert into asset_type (name) values ("Laptop");
