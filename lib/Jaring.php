@@ -163,7 +163,7 @@ class Jaring
 		self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 		/* Populate new database file. */
-		$f_sql		= APP_PATH ."/db/init.sqlite.sql";
+		$f_sql		= APP_PATH ."/db/init.ddl.sql";
 		$f_sql_v	= file_get_contents($f_sql);
 		$queries	= explode (";", $f_sql_v);
 

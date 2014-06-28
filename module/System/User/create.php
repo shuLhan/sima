@@ -1,15 +1,17 @@
 <?php
 	$q	="	insert into _user ("
-		."		name"
+		."		id"
+		."	,	name"
 		."	,	realname"
 		."	,	password"
-		."	) values ( ? , ? , ? )";
+		."	) values ( ? , ? , ? , ? )";
 
 	$ps = Jaring::$_db->prepare ($q);
 
 	foreach ($data as $user) {
 		$ps->execute (array (
-				$user['name']
+				Jaring::generate_id ()
+			,	$user['name']
 			,	$user['realname']
 			,	hash ("sha256", $user['password'])
 			)
