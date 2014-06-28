@@ -405,6 +405,13 @@ class Jaring
 	}
 //}}}
 
+//{{{ db : generate uniq id using timestamp + millisecond
+	public static function generate_id ()
+	{
+		return round (microtime (true) * 1000);
+	}
+//}}}
+
 //{{{ db : generate ID for each data
 	public static function db_prepare_id (&$data)
 	{
@@ -415,7 +422,7 @@ class Jaring
 		$id = Jaring::$_mod["db_table"]["generate_id"];
 
 		foreach ($data as &$d) {
-			$d[$id] = round (microtime (true) * 1000);
+			$d[$id] = self::generate_id ();
 		}
 	}
 //}}}
