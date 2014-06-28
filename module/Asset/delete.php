@@ -49,6 +49,18 @@ foreach ($data as $k => $v) {
 	Jaring::$_db_ps->execute ($bindv);
 	Jaring::$_db_ps->closeCursor ();
 	//}}}
+
+	//{{{ delete assignment log
+	$q = "delete from asset_assign_log where asset_id = ". $v["id"];
+
+	Jaring::dbExecute ($q, null, false);
+	//}}}
+
+	//{{{ delete maintenance log
+	$q = "delete from asset_maintenance_log where asset_id = ". $v["id"];
+
+	Jaring::dbExecute ($q, null, false);
+	//}}}
 }
 
 Jaring::handleRequestDelete ($data);
