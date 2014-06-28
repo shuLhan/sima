@@ -206,7 +206,7 @@ class Jaring
 	{
 		$ckey = 'user_id';
 		if (isset ($_COOKIE[$ckey])) {
-			self::$_c_uid = (int) $_COOKIE[$ckey];
+			self::$_c_uid = $_COOKIE[$ckey];
 		}
 
 		$ckey = 'user_name';
