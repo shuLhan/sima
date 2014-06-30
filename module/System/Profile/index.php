@@ -2,7 +2,8 @@
 require_once "../../init.php";
 
 $fields = [
-	"name"
+	"id"
+,	"name"
 ,	"address"
 ,	"phone_1"
 ,	"phone_2"
@@ -13,10 +14,10 @@ $fields = [
 ];
 
 Jaring::$_mod["db_table"]["name"]	= "_profile";
-Jaring::$_mod["db_table"]["id"]		= ["name"];
+Jaring::$_mod["db_table"]["id"]		= ["id"];
 Jaring::$_mod["db_table"]["read"]	= $fields;
 Jaring::$_mod["db_table"]["order"]	= ["name"];
 Jaring::$_mod["db_table"]["create"]	= $fields;
-Jaring::$_mod["db_table"]["update"]	= $fields;
+Jaring::$_mod["db_table"]["update"]	= array_slice ($fields, 1);
 
 Jaring::handleRequest ("crud");

@@ -20,6 +20,11 @@ Ext.define ("Jx.app.System.Profile", {
 		}
 	,	items		:
 		[{
+			fieldLabel		:"ID"
+		,	name			:"id"
+		,	xtype			:"textfield"
+		,	hidden			:true
+		},{
 			fieldLabel		:"Name/Company"
 		,	name			:"name"
 		,	xtype			:"textfield"
@@ -114,7 +119,8 @@ Ext.define ("Jx.app.System.Profile", {
 				url		: Jx.generateModDir (this.itemId)
 			,	fields	:
 				[
-					"name"
+					"id"
+				,	"name"
 				,	"address"
 				,	"phone_1"
 				,	"phone_2"
