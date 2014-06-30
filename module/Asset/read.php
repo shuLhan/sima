@@ -70,8 +70,6 @@ function get_user_group ($gids)
 // get current user group id.
 $gid = get_gid (Jaring::$_c_uid);
 
-error_log ($gid);
-
 // get all descendant groups of this user group.
 $gids = get_descendant_group ($gid);
 // get all user in child groups.
