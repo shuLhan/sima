@@ -91,7 +91,11 @@ select	A.*
 ,		AA.location_detail
 ,		AA.description
 ,		AML.asset_status_id
-,		AML.cost			as maintenance_cost
+,	(
+		select	sum(cost)
+		from	asset_maintenance_log
+		where	asset_id		= A.id
+	)	as maintenance_cost
 ,		AML.maintenance_info
 ";
 

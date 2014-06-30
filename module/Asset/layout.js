@@ -102,7 +102,7 @@ function JxAsset ()
 			},{
 				header		:"Purchase date"
 			,	dataIndex	:"procurement_date"
-			,	width		:140
+			,	width		:110
 			,	xtype		:"datecolumn"
 			,	format		:"d M Y"
 			,	editor		:
@@ -119,7 +119,6 @@ function JxAsset ()
 			},{
 				header		:"Price"
 			,	dataIndex	:"procurement_price"
-			,	hidden		:true
 			,	editor		:
 				{
 					xtype		:"numberfield"
