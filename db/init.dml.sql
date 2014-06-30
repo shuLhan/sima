@@ -65,4 +65,4 @@ insert into _group_menu (_group_id, _menu_id, permission) values (1		,1009	,4);
 /*
 	Empty profile.
  */
-insert into _profile (name) values ("Jaring");
+insert into _profile (id, name) values (1, "Jaring");
