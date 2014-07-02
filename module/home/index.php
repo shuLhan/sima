@@ -31,7 +31,7 @@ if (Jaring::$_c_uid != 0) {
 
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ext-all.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ext-theme-neptune.js"></script>
-	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jaring.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/Jaring-all.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="<?= $_SERVER['REQUEST_URI'] ?>layout.css" />
 	<script type="text/javascript" src="<?= $_SERVER['REQUEST_URI'] ?>layout.js"></script>

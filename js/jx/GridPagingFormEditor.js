@@ -12,7 +12,10 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 	{
 		panelConfig	:
 		{
-			layout		:"border"
+			layout		:
+			{
+				type		:"border"
+			}
 		,	titleAlign	:"center"
 		}
 	,	grid		:undefined
@@ -58,17 +61,22 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 
 ,	constructor	:function (cfg)
 	{
+		this.createGrid (cfg);
+		this.createForm (cfg);
+
 		var id = Jx.generateItemId (cfg, "JxGridPagingFormEditor", "");
 
 		var opts = Ext.merge ({
-								itemId: id
+								itemId	: id
+							,	items	:
+								[
+									this.grid
+								,	this.form
+								]
 							}, this.panelConfig);
 			opts = Ext.merge (opts, cfg.panelConfig);
 
 		this.callParent ([opts]);
-
-		this.createGrid (cfg);
-		this.createForm (cfg);
 	}
 
 ,	createGrid	:function (cfg)
@@ -85,8 +93,6 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 		Ext.merge (opts, this.gridConfig);
 
 		this.grid = Ext.create ("Jx.GridPaging", opts);
-
-		this.add (this.grid);
 	}
 
 ,	createForm	:function (cfg)
@@ -104,8 +110,6 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 		this.form = Ext.create ("Jx.Form", opts);
 
 		this.form.columnsToFields (cfg.columns);
-
-		this.add (this.form);
 	}
 
 ,	doRefresh : function (perm)

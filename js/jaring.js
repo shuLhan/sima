@@ -6,14 +6,14 @@
 
 Ext.QuickTips.init();
 
-/*
-	Various fixes for ExtJS bugs.
-*/
+//
+//	Various fixes for ExtJS bugs.
+//
 
-/* Tooltip windows too small */
+// Tooltip windows too small
 delete Ext.tip.Tip.prototype.minWidth;
 
-/* Row editor is not sending "edit" event when column locked is true */
+// Row editor is not sending "edit" event when column locked is true
 Ext.override (Ext.grid.locking.View, {
 	focus: function() {
 		var p = this.getSelectionModel().getCurrentPosition(),
@@ -23,14 +23,12 @@ Ext.override (Ext.grid.locking.View, {
     }
 });
 
-/*
-	Default properties for Ext components.
-*/
+//
+//	Default properties for Ext components.
+//
 
-/*
-	Ext.data.Store.
-	- Add function renderData to store, to render column using store.
-*/
+//	Ext.data.Store.
+//	- Add function renderData to store, to render column using store.
 Ext.override (Ext.data.Store, {
 	renderData	:function (valueField, displayField)
 		{
@@ -52,9 +50,7 @@ Ext.override (Ext.Loader, {
 ,	enabled			:true
 });
 
-/*
-	Register our application.
-*/
+//	Register our application.
 Ext.application ({
 	name		:"Jx"
 ,	appFolder	:_g_root +"js/jx"
@@ -140,9 +136,7 @@ Ext.apply (Jx, {
 		}
 	}
 
-	/*
-		@return: module directory.
-	*/
+	//	@return: module directory.
 ,	generateModDir	:function (id)
 	{
 		return _g_module_dir + id.replace (/_/g, "/") +"/";

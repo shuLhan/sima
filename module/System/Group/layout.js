@@ -49,6 +49,7 @@ function JxSystemGroup_User ()
 		,	displayField	:"_user_realname"
 		,	allowBlank		:false
 		,	editable		:false
+		,	typeAhead		:false
 		});
 
 	this.panel				= Ext.create ("Jx.GridPaging.FormEditor", {
