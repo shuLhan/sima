@@ -65,7 +65,7 @@ function getSystemMenu ($gid, $pid, $depth)
 	return $rs;
 }
 
-	$gid = (int) $_GET["_group_id"];
+	$gid = $_GET["_group_id"];
 
 	if ($gid <= 0) {
 		throw new Exception ("Invalid group ID : ". $gid ."!");

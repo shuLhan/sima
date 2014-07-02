@@ -17,7 +17,7 @@
 create table _group
 (
 	id			bigint 			not null
-,	pid			integer			default 0
+,	pid			bigint			default 0
 ,	name		varchar (128)	not null
 ,	type		integer			default 1
 ,	constraint	_group_pk		primary key (id)

@@ -34,7 +34,7 @@ Ext.override (Ext.data.Store, {
 		{
 			var store = this;
 			return function (v) {
-				var i = store.find (valueField, v);
+				var i = store.find (valueField, v, 0, false, false, true);
 				if (i < 0) {
 					return v;
 				}
