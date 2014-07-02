@@ -102,10 +102,7 @@ function JxMainHome (jx_main, id)
 		});
 
 	this.panel	= Ext.create ("Ext.panel.Panel", {
-			region		:"center"
-		,	bodyCls		:"panel-background"
-		,	padding		:"0 5 0 5"
-		,	autoScroll	:true
+			autoScroll	:true
 		,	items		:[]
 		});
 

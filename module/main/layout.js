@@ -3,7 +3,6 @@
 	Authors:
 		- mhd.sulhan (m.shulhan@gmail.com)
 */
-
 var main;
 
 function JxMain ()
@@ -30,6 +29,19 @@ function JxMain ()
 	this.contentHome		= new JxMainHome (this, this.contentHomeId);
 	this.contentDashboard	= new JxMainDashboard (this, this.contentDashboardId);
 	this.footer				= new JxMainFooter (this, this.footerId);
+	this.container			= Ext.create ("Ext.container.Container", {
+			region	:"center"
+		,	margin	:"5 0 0 0"
+		,	padding	:"0 5 0 5"
+		,	plain	:true
+		,	layout	:"fit"
+		,	bodyCls	:"panel-background"
+		,	items	:
+			[
+				this.contentHome.panel
+			,	this.contentDashboard.panel
+			]
+		});
 
 	// Main interface
 	this.main			= Ext.create ("Ext.container.Viewport", {
@@ -38,15 +50,10 @@ function JxMain ()
 		,	items		:
 			[
 				this.header.panel
-			,	this.contentHome.panel
-			,	this.contentDashboard.panel
+			,	this.container
 			,	this.footer.panel
 			]
 		});
-
-	/*
-		Functions
-	*/
 
 	this.onTabChange	= function (tabp, newc, oldc, e)
 	{
@@ -185,7 +192,7 @@ function JxMain ()
 					return;
 				}
 
-				/* Add tab with toolbar to menu */
+				// Add tab with toolbar to menu
 				for (var i = 0; i < r.length; i++) {
 					var tab, tbar;
 
@@ -200,7 +207,7 @@ function JxMain ()
 						break;
 					}
 
-					/* Inject "click" event to each button menu */
+					// Inject "click" event to each button menu
 					for (var m = 0; tbar !== undefined && m < tbar.items.items.length; m++) {
 						var b = tbar.items.items[m];
 
@@ -297,30 +304,19 @@ function JxMain ()
 		switch (_g_content_type) {
 		case 0:
 			this.content		= Ext.create ("Ext.panel.Panel", {
-					region		:"center"
-				,	margin		:"5 0 0 0"
-				,	padding		:"0 5 0 5"
-				,	plain		:true
-				,	layout		:"fit"
-				,	bodyCls		:"panel-background"
-				,	hidden		:true
+					hidden		:true
 				});
 			break;
 		case 1:
 			this.content		= Ext.create ("Ext.tab.Panel", {
-					region		:"center"
-				,	margin		:"5 0 0 0"
-				,	padding		:"0 5 0 5"
-				,	plain		:true
-				,	bodyCls		:"panel-background"
-				,	hidden		:true
+					hidden		:true
 				,	items		:[]
 				});
 			break;
 		}
 
 		this.main.add (this.menu);
-		this.main.add (this.content);
+		this.container.add (this.content);
 
 		this.loadMenu ();
 		this.contentHome.init ();
