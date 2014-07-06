@@ -26,7 +26,7 @@ if (Jaring::$_c_uid != 0) {
 		var _g_ext			="<?= Jaring::$_ext ?>";
 	</script>
 
-	<link rel="stylesheet" type="text/css" href="<?= Jaring::$_path ?>js/extjs/resources/css/ext-all-neptune.css" />
+	<link rel="stylesheet" type="text/css" href="<?= Jaring::$_path ?>js/extjs/resources/ext-theme-neptune/ext-theme-neptune-all.css" />
 	<link rel="stylesheet" type="text/css" href="<?= Jaring::$_path ?>css/jaring.css" />
 
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/extjs/ext-all.js"></script>
