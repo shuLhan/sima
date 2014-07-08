@@ -2,8 +2,7 @@
 
 require_once "../../../init.php";
 
-Jaring::init ();
-Jaring::initDB ();
+Jaring::db_init ();
 
 $q = "select logo_type, logo from _profile";
 

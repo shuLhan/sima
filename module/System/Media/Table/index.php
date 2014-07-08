@@ -27,4 +27,4 @@ Jaring::$_mod["db_table"]["order"]		= ["MT._media_id"];
 Jaring::$_mod["db_table"]["create"]		= array_slice ($fields, 0, 2);
 Jaring::$_mod["db_table"]["update"]		= $fields;
 
-Jaring::handleRequest ("action");
+Jaring::request_handle ("action");

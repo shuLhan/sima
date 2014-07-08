@@ -8,7 +8,7 @@
 	$table	= "_media";
 	$fields	= [ "name", "extension", "size", "mime", "path" ];
 
-	Jaring::dbPrepareInsert ($table, $fields);
+	Jaring::db_prepare_insert ($table, $fields);
 
 	$pi = pathinfo ($_FILES["content"]["name"]);
 
@@ -34,7 +34,7 @@
 			,	$id
 			];
 
-	Jaring::dbPrepareInsert ($table, $fields);
+	Jaring::db_prepare_insert ($table, $fields);
 	Jaring::$_db_ps->execute ($bindv);
 	Jaring::$_db_ps->closeCursor ();
 

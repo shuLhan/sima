@@ -11,10 +11,7 @@ function JxMainDashboard (jx_main, id)
 	this._parent	= jx_main;
 
 	this.panel	= Ext.create ("Ext.panel.Panel", {
-			region		:"center"
-		,	padding		:"0 5 0 5"
-		,	layout		:"fit"
-		,	bodyCls		:"panel-background"
+			layout		:"fit"
 		,	hidden		:true
 		});
 }

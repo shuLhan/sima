@@ -20,5 +20,17 @@ Jaring::$_mod["db_table"]["order"]	= ["id", "pid"];
 Jaring::$_mod["db_table"]["create"]	= $fields;
 Jaring::$_mod["db_table"]["update"]	= $fields;
 
+// delete menu linked in group-menu
+function request_delete_before ($data)
+{
+	$q	=" delete from _group_menu where _menu_id = ? ";
+	$ps	= Jaring::$_db->prepare ($q);
 
-Jaring::handleRequest ();
+	foreach ($data as $d) {
+		$ps->bindValue (1, $d["id"], PDO::PARAM_INT);
+		$ps->execute ();
+		$ps->closeCursor ();
+	}
+}
+
+Jaring::request_handle ("crud");

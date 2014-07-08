@@ -84,14 +84,14 @@ class Jaring
 						];
 	/*
 		Cookies values.
-		Variables that will be instantiated when calling getCookiesValue.
+		Variables that will be instantiated when calling cookies_get.
 	*/
 	public static $_c_uid			= 0;
 	public static $_c_username		= 'Anonymous';
 //}}}
 
-//{{{ check user access to module
-	public static function checkAccess ($mod, $uid, $access)
+//{{{ db : check user access to module
+	public static function check_user_access ($mod, $uid, $access)
 	{
 		$q	="
 				select	GM.permission
@@ -111,13 +111,13 @@ class Jaring
 			";
 
 		try {
-			Jaring::$_db_ps = Jaring::$_db->prepare($q);
-			Jaring::$_db_ps->execute ();
-			$rs = Jaring::$_db_ps->fetchAll (PDO::FETCH_ASSOC);
-			Jaring::$_db_ps->closeCursor ();
+			self::$_db_ps = self::$_db->prepare($q);
+			self::$_db_ps->execute ();
+			$rs = self::$_db_ps->fetchAll (PDO::FETCH_ASSOC);
+			self::$_db_ps->closeCursor ();
 
 			if (count ($rs) <= 0) {
-				throw new Exception (Jaring::$MSG_ACCESS_FAIL);
+				throw new Exception (self::$MSG_ACCESS_FAIL);
 			}
 			if (((int) $rs[0]["permission"]) >= $access) {
 				return true;
@@ -126,22 +126,11 @@ class Jaring
 			throw $e;
 		}
 
-		throw new Exception (Jaring::$MSG_ACCESS_FAIL);
+		throw new Exception (self::$MSG_ACCESS_FAIL);
 	}
 //}}}
-//{{{ initialize database
-	public static function initDB ()
-	{
-		if (stristr(self::$_db_url, "sqlite") !== FALSE) {
-			self::initSqliteDb ();
-		} else {
-			self::$_db = new SafePDO (self::$_db_url, self::$_db_user, self::$_db_pass);
-			self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		}
-	}
-//}}}
-//{{{ initialize sqlite database
-	public static function initSqliteDb ()
+//{{{ db : initialize sqlite database.
+	public static function db_init_sqlite ()
 	{
 		/* Check if sqlite is file or memory. */
 		$a = explode(":", self::$_db_url);
@@ -193,16 +182,27 @@ class Jaring
 		}
 	}
 //}}}
-//{{{ get database connection
-	public static function getConnection ()
+//{{{ db : initialize database.
+	public static function db_init ()
 	{
-		if (self::_db == null) {
-			self::initDB ();
+		if (stristr(self::$_db_url, "sqlite") !== FALSE) {
+			self::db_init_sqlite ();
+		} else {
+			self::$_db = new SafePDO (self::$_db_url, self::$_db_user, self::$_db_pass);
+			self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		}
 	}
 //}}}
-//{{{ get cookies value
-	public static function getCookiesValue ()
+//{{{ db : get connection.
+	public static function db_get_connection ()
+	{
+		if (self::_db == null) {
+			self::db_init ();
+		}
+	}
+//}}}
+//{{{ cookie : get value
+	public static function cookies_get ()
 	{
 		$ckey = 'user_id';
 		if (isset ($_COOKIE[$ckey])) {
@@ -215,14 +215,17 @@ class Jaring
 		}
 	}
 //}}}
-//{{{ check if user has cookie
-	public static function checkCookies ()
+//{{{ cookie : check if user has cookie.
+	public static function cookies_check ()
 	{
-		$m_home	= Jaring::$_path . Jaring::$_path_mod ."/home/";
+		$m_home	= self::$_path . self::$_path_mod ."/home/";
+		$p_home	= strpos ($_SERVER['REQUEST_URI'], $m_home);
 
-		if (Jaring::$_c_uid === 0 && strpos ($_SERVER['REQUEST_URI'], $m_home)) {
-			header ("Location:". $m_home);
-			die ();
+		if (0 === self::$_c_uid) {
+			if (false === $p_home) {
+				header ("Location:". $m_home);
+				exit ();
+			}
 		}
 	}
 //}}}
@@ -253,32 +256,33 @@ class Jaring
 		self::$_db_pool_min		= $app_conf['db.pool.min'];
 		self::$_db_pool_max		= $app_conf['db.pool.max'];
 
-		Jaring::getCookiesValue ();
+		self::cookies_get ();
 	}
 //}}}
+
 //{{{ db : execute query
 	/*
 		q		: query.
 		bindv	: array of binding value, if query containt '?'.
 		fetch	: should we fetch after execute? delete statement MUST set to false
 	*/
-	public static function dbExecute ($q, $bindv = null, $fetch = true)
+	public static function db_execute ($q, $bindv = null, $fetch = true)
 	{
 		$rs = [];
 		$s = true;
 
-		Jaring::$_db_ps = Jaring::$_db->prepare ($q);
+		self::$_db_ps = self::$_db->prepare ($q);
 
 		if (null !== $bindv) {
-			$s = Jaring::$_db_ps->execute ($bindv);
+			$s = self::$_db_ps->execute ($bindv);
 		} else {
-			$s = Jaring::$_db_ps->execute ();
+			$s = self::$_db_ps->execute ();
 		}
 
 		if ($s && $fetch) {
-			$rs = Jaring::$_db_ps->fetchAll (PDO::FETCH_ASSOC);
+			$rs = self::$_db_ps->fetchAll (PDO::FETCH_ASSOC);
 
-			Jaring::$_db_ps->closeCursor ();
+			self::$_db_ps->closeCursor ();
 		}
 
 		return $rs;
@@ -305,9 +309,9 @@ class Jaring
 		$q	="
 			select	$id
 			from	$table
-			where ". Jaring::db_prepare_fields ($fields);
+			where ". self::db_prepare_fields ($fields);
 
-		$rs = Jaring::dbExecute ($q, $bindv);
+		$rs = self::db_execute ($q, $bindv);
 
 		if (count ($rs) > 0) {
 			return $rs[0][$id];
@@ -316,19 +320,83 @@ class Jaring
 		return 0;
 	}
 //}}}
+//{{{ db : generate uniq id using timestamp + millisecond
+	public static function db_generate_id ()
+	{
+		return round (microtime (true) * 1000);
+	}
+//}}}
+//{{{ db : generate ID for each data
+	public static function db_prepare_id (&$data)
+	{
+		if (! isset (self::$_mod["db_table"]["generate_id"])) {
+			return;
+		}
+
+		$id = self::$_mod["db_table"]["generate_id"];
+
+		foreach ($data as &$d) {
+			$d[$id] = self::db_generate_id ();
+		}
+	}
+//}}}
+//{{{ db : prepare insert query
+	public static function db_prepare_insert ($table, $fields)
+	{
+		$qbind	= "";
+
+		$nfield	= count ($fields);
+		for ($i = 0; $i < $nfield; $i++) {
+			if ($i > 0) {
+				$qbind .= ",";
+			}
+			$qbind .= "?";
+		}
+
+		$q	=" insert into $table "
+			." (". implode (",", $fields) .")"
+			." values ( $qbind )";
+
+		self::$_db_ps = self::$_db->prepare ($q);
+	}
+//}}}
+//{{{ db : prepare statement for updating data
+	private static function db_prepare_update ($table, $fields, $ids)
+	{
+		$qupdate=" update $table ";
+		$qset	=" set ". self::db_prepare_fields ($fields, ",");
+		$qwhere	=" where ". self::db_prepare_fields ($ids);
+
+		$q	= $qupdate
+			. $qset
+			. $qwhere;
+
+		self::$_db_ps = self::$_db->prepare ($q);
+	}
+//}}}
+//{{{ db : prepare delete statement
+	private static function db_prepare_delete ($table, $fields)
+	{
+		$qdelete=" delete from $table";
+		$qwhere	=" where ". self::db_prepare_fields ($fields);
+
+		self::$_db_ps	= self::$_db->prepare ($qdelete . $qwhere);
+	}
+//}}}
+
 //{{{ crud -> db : handle read request
-	private static function handleRequestRead ()
+	private static function request_read ()
 	{
 		$query	= "'%".$_GET["query"]."%'";
 		$start	= (int) $_GET["start"];
 		$limit	= (int) $_GET["limit"];
-		$freads		= Jaring::$_mod["db_table"]["read"];
-		$fsearch	= Jaring::$_mod["db_table"]["search"];
+		$freads		= self::$_mod["db_table"]["read"];
+		$fsearch	= self::$_mod["db_table"]["search"];
 
 		$qselect	= "	select ". implode (",", $freads);
-		$qfrom		= " from ". Jaring::$_mod["db_table"]["name"];
+		$qfrom		= " from ". self::$_mod["db_table"]["name"];
 		$qwhere		= " where 1=1 ";
-		$qorder		= " order by ". implode (",", Jaring::$_mod["db_table"]["order"]);
+		$qorder		= " order by ". implode (",", self::$_mod["db_table"]["order"]);
 		$qlimit		= "	limit ". $start .",". $limit;
 
 		// get parameter name that has the same name with read fields,
@@ -364,7 +432,7 @@ class Jaring
 		}
 
 		// Get total rows
-		$qtotal	=" select	COUNT(". Jaring::$_mod["db_table"]["id"][0] .") as total "
+		$qtotal	=" select	COUNT(". self::$_mod["db_table"]["id"][0] .") as total "
 				. $qfrom
 				. $qwhere;
 
@@ -375,110 +443,61 @@ class Jaring
 				. $qorder
 				. $qlimit;
 
-		Jaring::$_out["total"]		= (int) Jaring::dbExecute ($qtotal)[0]["total"];
-		Jaring::$_out["data"]		= Jaring::dbExecute ($qread);
-		Jaring::$_out["success"]	= true;
+		self::$_out["total"]		= (int) self::db_execute ($qtotal)[0]["total"];
+		self::$_out["data"]		= self::db_execute ($qread);
+		self::$_out["success"]	= true;
 
-		if (function_exists ("afterRequestRead")) {
-			afterRequestRead (Jaring::$_out["data"]);
+		if (function_exists ("request_read_after")) {
+			request_read_after (self::$_out["data"]);
 		}
 	}
 //}}}
-//{{{ db : prepare insert query
-	public static function dbPrepareInsert ($table, $fields)
-	{
-		$qbind	= "";
-
-		$nfield	= count ($fields);
-		for ($i = 0; $i < $nfield; $i++) {
-			if ($i > 0) {
-				$qbind .= ",";
-			}
-			$qbind .= "?";
-		}
-
-		$q	=" insert into $table "
-			." (". implode (",", $fields) .")"
-			." values ( $qbind )";
-
-		Jaring::$_db_ps = Jaring::$_db->prepare ($q);
-	}
-//}}}
-
-//{{{ db : generate uniq id using timestamp + millisecond
-	public static function generate_id ()
-	{
-		return round (microtime (true) * 1000);
-	}
-//}}}
-
-//{{{ db : generate ID for each data
-	public static function db_prepare_id (&$data)
-	{
-		if (! isset (Jaring::$_mod["db_table"]["generate_id"])) {
-			return;
-		}
-
-		$id = Jaring::$_mod["db_table"]["generate_id"];
-
-		foreach ($data as &$d) {
-			$d[$id] = self::generate_id ();
-		}
-	}
-//}}}
-
 //{{{ crud -> db : handle create request
-	private static function handleRequestCreate ($data)
+	private static function request_create ($data)
 	{
-		$table	= Jaring::$_mod["db_table"]["name"];
-		$fields	= Jaring::$_mod["db_table"]["create"];
+		$table	= self::$_mod["db_table"]["name"];
+		$fields	= self::$_mod["db_table"]["create"];
 
-		Jaring::dbPrepareInsert ($table, $fields);
-		Jaring::db_prepare_id ($data);
+		if (function_exists ("request_create_before")) {
+			request_create_before ($data);
+		}
+
+		self::db_prepare_insert ($table, $fields);
+		self::db_prepare_id ($data);
 
 		foreach ($data as $d) {
 			$bindv = [];
 
-			foreach (Jaring::$_mod["db_table"]["create"] as $field) {
+			foreach (self::$_mod["db_table"]["create"] as $field) {
 				array_push ($bindv, $d[$field]);
 			}
 
-			Jaring::$_db_ps->execute ($bindv);
-			Jaring::$_db_ps->closeCursor ();
+			self::$_db_ps->execute ($bindv);
+			self::$_db_ps->closeCursor ();
 
 			unset ($bindv);
 		}
 
-		if (function_exists ("afterRequestCreate")) {
-			afterRequestCreate ($data);
+		if (function_exists ("request_create_after")) {
+			request_create_after ($data);
 		}
 
-		Jaring::$_out['success']	= true;
-		Jaring::$_out['data']		= Jaring::$MSG_SUCCESS_CREATE;
-	}
-//}}}
-//{{{ db : prepare statement for updating data
-	private static function dbPrepareUpdate ($table, $fields, $ids)
-	{
-		$qupdate=" update $table ";
-		$qset	=" set ". Jaring::db_prepare_fields ($fields, ",");
-		$qwhere	=" where ". Jaring::db_prepare_fields ($ids);
-
-		$q	= $qupdate
-			. $qset
-			. $qwhere;
-
-		Jaring::$_db_ps = Jaring::$_db->prepare ($q);
+		self::$_out['success']	= true;
+		self::$_out['data']		= self::$MSG_SUCCESS_CREATE;
 	}
 //}}}
 //{{{ crud -> db : handle update request
-	private static function handleRequestUpdate ($data)
+	private static function request_update ($data)
 	{
-		$table	= Jaring::$_mod["db_table"]["name"];
-		$fields	= Jaring::$_mod["db_table"]["update"];
-		$ids	= Jaring::$_mod["db_table"]["id"];
+		$table	= self::$_mod["db_table"]["name"];
+		$fields	= self::$_mod["db_table"]["update"];
+		$ids	= self::$_mod["db_table"]["id"];
 
-		Jaring::dbPrepareUpdate ($table, $fields, $ids);
+		if (function_exists ("request_update_before")) {
+			request_update_before ($data);
+		}
+
+		self::db_prepare_update ($table, $fields, $ids);
 
 		foreach ($data as $d) {
 			$bindv = [];
@@ -490,59 +509,51 @@ class Jaring
 				array_push ($bindv, $d[$field]);
 			}
 
-			Jaring::$_db_ps->execute ($bindv);
-			Jaring::$_db_ps->closeCursor ();
+			self::$_db_ps->execute ($bindv);
+			self::$_db_ps->closeCursor ();
 
 			unset ($bindv);
 		}
 
-		Jaring::$_out['success']	= true;
-		Jaring::$_out['data']		= Jaring::$MSG_SUCCESS_UPDATE;
-	}
-//}}}
-//{{{ db : prepare delete statement
-	private static function dbPrepareDelete ($table, $fields)
-	{
-		$qdelete=" delete from $table";
-		$qwhere	=" where ". Jaring::db_prepare_fields ($fields);
-
-		Jaring::$_db_ps	= Jaring::$_db->prepare ($qdelete . $qwhere);
+		self::$_out['success']	= true;
+		self::$_out['data']		= self::$MSG_SUCCESS_UPDATE;
 	}
 //}}}
 //{{{ crud -> db : handle delete request
-	private static function handleRequestDelete ($data)
+	private static function request_delete ($data)
 	{
-		if (function_exists ("beforeRequestDelete")) {
-			beforeRequestDelete ($data);
+		if (function_exists ("request_delete_before")) {
+			request_delete_before ($data);
 		}
 
-		Jaring::dbPrepareDelete (Jaring::$_mod["db_table"]["name"]
-								,Jaring::$_mod["db_table"]["id"]
+		self::db_prepare_delete (self::$_mod["db_table"]["name"]
+								,self::$_mod["db_table"]["id"]
 								);
 
 		foreach ($data as $d) {
 			$bindv = [];
 
-			foreach (Jaring::$_mod["db_table"]["id"] as $field) {
+			foreach (self::$_mod["db_table"]["id"] as $field) {
 				array_push ($bindv, $d[$field]);
 			}
 
-			Jaring::$_db_ps->execute ($bindv);
-			Jaring::$_db_ps->closeCursor ();
+			self::$_db_ps->execute ($bindv);
+			self::$_db_ps->closeCursor ();
 
 			unset ($bindv);
 		}
 
-		if (function_exists ("afterRequestDelete")) {
-			afterRequestDelete ($data);
+		if (function_exists ("request_delete_after")) {
+			request_delete_after ($data);
 		}
 
-		Jaring::$_out['success']	= true;
-		Jaring::$_out['data']		= Jaring::$MSG_SUCCESS_DESTROY;
+		self::$_out['success']	= true;
+		self::$_out['data']		= self::$MSG_SUCCESS_DESTROY;
 	}
 //}}}
-//{{{ util : get module name based on request URI.
-	public static function getModuleName ($uri)
+
+//{{{ crud : get module name based on request URI.
+	public static function get_module_name ($uri)
 	{
 		return trim (
 					str_replace (
@@ -561,48 +572,47 @@ class Jaring
 	}
 //}}}
 //{{{ crud : get access code based on HTTP method
-	public static function getCrudAccess ($method)
+	public static function request_get_crud_access ($method)
 	{
 		switch ($method) {
 		case "GET":
-			return Jaring::$ACCESS_READ;
+			return self::$ACCESS_READ;
 		case "POST":
-			return Jaring::$ACCESS_CREATE;
+			return self::$ACCESS_CREATE;
 		case "PUT":
-			return Jaring::$ACCESS_UPDATE;
+			return self::$ACCESS_UPDATE;
 		case "DELETE":
-			return Jaring::$ACCESS_DELETE;
+			return self::$ACCESS_DELETE;
 		default:
-			throw new Exception (Jaring::$MSG_REQUEST_INVALID
-								. $method);
+			throw new Exception (self::$MSG_REQUEST_INVALID . $method);
 		}
 	}
 //}}}
 //{{{ crud : get access code based on GET/POST parameter.
-	public static function getActionAccess ($action)
+	public static function request_get_action_access ($action)
 	{
 		switch ($action) {
 		case "read":
-			return Jaring::$ACCESS_READ;
+			return self::$ACCESS_READ;
 		case "create":
-			return Jaring::$ACCESS_CREATE;
+			return self::$ACCESS_CREATE;
 		case "update":
-			return Jaring::$ACCESS_UPDATE;
+			return self::$ACCESS_UPDATE;
 		case "destroy":
-			return Jaring::$ACCESS_DELETE;
+			return self::$ACCESS_DELETE;
 		default:
-			throw new Exception (Jaring::$MSG_REQUEST_INVALID
+			throw new Exception (self::$MSG_REQUEST_INVALID
 								. $action);
 		}
 	}
 //}}}
 //{{{ crud : get user access.
-	public static function getAccess ($mode)
+	public static function request_get_access ($mode)
 	{
-		$access	= Jaring::$ACCESS_NO;
+		$access	= self::$ACCESS_NO;
 
 		if ("crud" === $mode) {
-			$access = Jaring::getCrudAccess ($_SERVER["REQUEST_METHOD"]);
+			$access = self::request_get_crud_access($_SERVER["REQUEST_METHOD"]);
 		} else {
 			$action	= "read";
 
@@ -612,56 +622,56 @@ class Jaring
 				$action = $_POST["action"];
 			}
 
-			$access = Jaring::getActionAccess ($action);
+			$access = self::request_get_action_access ($action);
 		}
 
 		return $access;
 	}
 //}}}
 //{{{ crud : route request.
-	public static function switchRequest ($path, $access, $data)
+	public static function request_switch ($path, $access, $data)
 	{
 		switch ($access) {
-		case Jaring::$ACCESS_READ:
+		case self::$ACCESS_READ:
 			$path .= "read.php";
 			if (file_exists ($path)) {
 				require_once $path;
 			} else {
-				Jaring::handleRequestRead ();
+				self::request_read ();
 			}
 			break;
 
-		case Jaring::$ACCESS_CREATE:
+		case self::$ACCESS_CREATE:
 			$path .= "create.php";
 			if (file_exists ($path)) {
 				require_once $path;
 			} else {
-				Jaring::handleRequestCreate ($data);
+				self::request_create ($data);
 			}
 			break;
 
-		case Jaring::$ACCESS_UPDATE:
+		case self::$ACCESS_UPDATE:
 			$path .= "update.php";
 			if (file_exists ($path)) {
 				require_once $path;
 			} else {
-				Jaring::handleRequestUpdate ($data);
+				self::request_update ($data);
 			}
 			break;
 
-		case Jaring::$ACCESS_DELETE:
+		case self::$ACCESS_DELETE:
 			$path .= "delete.php";
 			if (file_exists ($path)) {
 				require_once $path;
 			} else {
-				Jaring::handleRequestDelete ($data);
+				self::request_delete ($data);
 			}
 			break;
 		}
 	}
 //}}}
 //{{{ crud : main.
-	public static function handleRequest ($mode = "crud")
+	public static function request_handle ($mode = "crud")
 	{
 		$i		= 1;
 		$q		= "";
@@ -669,14 +679,14 @@ class Jaring
 
 		$uri	= explode ("?", $_SERVER["REQUEST_URI"])[0];
 		$path	= APP_PATH.$uri;
-		$module	= Jaring::getModuleName ($uri);
+		$module	= self::get_module_name ($uri);
 
 		try {
-			Jaring::initDB ();
+			self::db_init ();
 
-			$access = Jaring::getAccess ($mode);
+			$access = self::request_get_access ($mode);
 
-			Jaring::checkAccess ($module, Jaring::$_c_uid, $access);
+			self::check_user_access ($module, self::$_c_uid, $access);
 
 			if ("crud" === $mode) {
 				$data = json_decode (file_get_contents('php://input'), true);
@@ -689,13 +699,13 @@ class Jaring
 				$data = array($data);
 			}
 
-			Jaring::switchRequest ($path, $access, $data);
+			self::request_switch ($path, $access, $data);
 		} catch (Exception $e) {
-			Jaring::$_out['data'] = addslashes ($e->getMessage ());
+			self::$_out['data'] = addslashes ($e->getMessage ());
 		}
 
 		header('Content-Type: application/json');
-		echo json_encode (Jaring::$_out, JSON_NUMERIC_CHECK);
+		echo json_encode (self::$_out, JSON_NUMERIC_CHECK);
 	}
 //}}}
 }

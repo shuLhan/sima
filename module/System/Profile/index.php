@@ -20,4 +20,4 @@ Jaring::$_mod["db_table"]["order"]	= ["name"];
 Jaring::$_mod["db_table"]["create"]	= $fields;
 Jaring::$_mod["db_table"]["update"]	= array_slice ($fields, 1);
 
-Jaring::handleRequest ("crud");
+Jaring::request_handle ("crud");

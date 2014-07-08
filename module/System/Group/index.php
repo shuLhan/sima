@@ -7,4 +7,4 @@ Jaring::$_mod["db_table"]["create"]	= ["id", "pid", "name"];
 Jaring::$_mod["db_table"]["update"]	= ["pid", "name"];
 Jaring::$_mod["db_table"]["generate_id"] = "id";
 
-Jaring::handleRequest ();
+Jaring::request_handle ("crud");

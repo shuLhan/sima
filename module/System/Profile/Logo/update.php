@@ -7,8 +7,7 @@
 require_once "../../../init.php";
 
 try {
-	Jaring::init ();
-	Jaring::initDB ();
+	Jaring::db_init ();
 
 	if (UPLOAD_ERR_OK === $_FILES["logo"]["error"]) {
 		$q = "update _profile set logo_type = ? , logo = ?";

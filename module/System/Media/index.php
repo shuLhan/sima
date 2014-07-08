@@ -27,7 +27,7 @@ Jaring::$_mod["db_table"]["update"]	= array_slice ($fields, 1);
 Jaring::$_mod["db_table"]["generate_id"] = "id";
 
 //{{{ before delete request executed
-function beforeRequestDelete ($data)
+function request_delete_before ($data)
 {
 	foreach ($data as $d) {
 		// delete file
@@ -35,7 +35,7 @@ function beforeRequestDelete ($data)
 				from ". Jaring::$_mod["db_table"]["name"] ."
 				where id = ". $d["id"];
 
-		$rs = Jaring::dbExecute ($q);
+		$rs = Jaring::db_execute ($q);
 
 		if (count ($rs) > 0) {
 			$f = APP_PATH . $rs[0]["path"];
@@ -45,11 +45,11 @@ function beforeRequestDelete ($data)
 		}
 
 		// delete link to media table.
-		$q	="	delete from _media_table where _media_id = ". $d["id"];
+		$q	= "delete from _media_table where _media_id = ". $d["id"];
 
-		Jaring::dbExecute ($q, null, false);
+		Jaring::db_execute ($q, null, false);
 	}
 }
 //}}}
 
-Jaring::handleRequest ("action");
+Jaring::request_handle ("action");
