@@ -33,7 +33,7 @@ Jaring::$_mod["db_table"]["create"]	= array_slice ($fields, 4);
 Jaring::$_mod["db_table"]["update"]	= array_slice ($fields, 4);
 Jaring::$_mod["db_table"]["order"]	= ["removal_date DESC"];
 
-function afterRequestCreate ($data)
+function request_create_after ($data)
 {
 	$q = "update asset set status = 0 where id = ?";
 
@@ -51,7 +51,7 @@ function afterRequestCreate ($data)
 	}
 }
 
-function afterRequestDelete ($data)
+function request_delete_after ($data)
 {
 	$q = "update asset set status = 1 where id = ?";
 
@@ -69,4 +69,4 @@ function afterRequestDelete ($data)
 	}
 }
 
-Jaring::handleRequest ("crud");
+Jaring::request_handle ("crud");

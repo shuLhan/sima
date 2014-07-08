@@ -28,4 +28,4 @@ Jaring::$_mod["db_table"]["update"]	= array_slice ($fields, 1);
 Jaring::$_mod["db_table"]["order"]	= ["maintenance_date DESC"];
 Jaring::$_mod["db_table"]["generate_id"] = "id";
 
-Jaring::handleRequest ("crud");
+Jaring::request_handle ("crud");

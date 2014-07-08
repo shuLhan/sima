@@ -4,7 +4,6 @@
 	Authors:
 		- mhd.sulhan (m.shulhan@gmail.com)
 */
-
 require_once "../../../init.php";
 
 Jaring::$_mod["db_table"]["name"]	= "asset_removal";
@@ -16,4 +15,4 @@ Jaring::$_mod["db_table"]["update"]	= ["name"];
 Jaring::$_mod["db_table"]["order"]	= ["name"];
 Jaring::$_mod["db_table"]["generate_id"] = "id";
 
-Jaring::handleRequest ("crud");
+Jaring::request_handle ("crud");

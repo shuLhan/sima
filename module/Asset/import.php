@@ -28,9 +28,9 @@ $fields = [
 ,	"procurement_price"
 ];
 
-Jaring::initDB ();
+Jaring::db_init ();
 
-Jaring::dbPrepareInsert ($table, $fields);
+Jaring::db_prepare_insert ($table, $fields);
 
 $import_file	= $_FILES["import_file"]["tmp_name"];
 $nchunk			= 1000;

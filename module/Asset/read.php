@@ -19,7 +19,7 @@ function get_gid ($id)
 		limit	0,1
 	";
 
-	$rs = Jaring::dbExecute ($q);
+	$rs = Jaring::db_execute ($q);
 
 	return $rs[0]["_group_id"];
 }
@@ -29,7 +29,7 @@ function get_descendant_group ($gid)
 	$o = null;
 	$q = " select id from _group where pid in ($gid)";
 
-	$rs = Jaring::dbExecute ($q);
+	$rs = Jaring::db_execute ($q);
 
 	foreach ($rs as $k => $v) {
 		if ($k > 0) {
@@ -54,7 +54,7 @@ function get_user_group ($gids)
 {
 	$o = null;
 	$q =" select _user_id from _user_group where _group_id in ($gids) ";
-	$rs = Jaring::dbExecute ($q);
+	$rs = Jaring::db_execute ($q);
 
 	foreach ($rs as $k => $v) {
 		if ($k > 0) {
@@ -161,6 +161,6 @@ $qread	= $qselect
 		. $qorder
 		. $qlimit;
 
-Jaring::$_out["total"]		= (int) Jaring::dbExecute ($qtotal)[0]["total"];
-Jaring::$_out["data"]		= Jaring::dbExecute ($qread);
+Jaring::$_out["total"]		= (int) Jaring::db_execute ($qtotal)[0]["total"];
+Jaring::$_out["data"]		= Jaring::db_execute ($qread);
 Jaring::$_out["success"]	= true;
