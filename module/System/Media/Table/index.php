@@ -26,5 +26,6 @@ Jaring::$_mod["db_table"]["search"]		= ["M.name", "M.extension", "M.mime", "M.de
 Jaring::$_mod["db_table"]["order"]		= ["MT._media_id"];
 Jaring::$_mod["db_table"]["create"]		= array_slice ($fields, 0, 2);
 Jaring::$_mod["db_table"]["update"]		= $fields;
+Jaring::$_mod["db_table"]["generate_id"]= "id";
 
 Jaring::request_handle ("action");
