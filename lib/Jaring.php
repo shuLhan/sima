@@ -458,6 +458,10 @@ class Jaring
 		$table	= self::$_mod["db_table"]["name"];
 		$fields	= self::$_mod["db_table"]["create"];
 
+		if (function_exists ("request_create_before")) {
+			request_create_before ($data);
+		}
+
 		self::db_prepare_insert ($table, $fields);
 		self::db_prepare_id ($data);
 
@@ -488,6 +492,10 @@ class Jaring
 		$table	= self::$_mod["db_table"]["name"];
 		$fields	= self::$_mod["db_table"]["update"];
 		$ids	= self::$_mod["db_table"]["id"];
+
+		if (function_exists ("request_update_before")) {
+			request_update_before ($data);
+		}
 
 		self::db_prepare_update ($table, $fields, $ids);
 

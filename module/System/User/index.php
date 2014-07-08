@@ -1,6 +1,13 @@
 <?php
 require_once "../../init.php";
 
+$fields	= [
+	"id"
+,	"name"
+,	"realname"
+,	"password"
+];
+
 Jaring::$_mod["db_table"]["name"]	= "_user";
 Jaring::$_mod["db_table"]["id"]		= ["id"];
 Jaring::$_mod["db_table"]["read"]	= [
@@ -10,8 +17,11 @@ Jaring::$_mod["db_table"]["read"]	= [
 									,	"password as password_old"
 									,	"'' as password"
 									];
+Jaring::$_mod["db_table"]["create"]	= $fields;
+Jaring::$_mod["db_table"]["update"]	= array_slice ($fields, 1);
 Jaring::$_mod["db_table"]["search"]	= ["name", "realname"];
 Jaring::$_mod["db_table"]["order"]	= ["name"];
+Jaring::$_mod["db_table"]["generate_id"] = "id";
 
 function request_read_after ($data)
 {
@@ -42,6 +52,24 @@ function request_read_after ($data)
 	}
 
 	Jaring::$_out["data"] = $data;
+}
+
+function request_create_before (&$data)
+{
+	foreach ($data as &$d) {
+		$d["password"] = hash ("sha256", $d["password"]);
+	}
+}
+
+function request_update_before (&$data)
+{
+	foreach ($data as &$d) {
+		if (empty ($d["password"])) {
+			$d["password"] = $d['password_old'];
+		} else {
+			$d["password"] = hash ("sha256", $d['password']);
+		}
+	}
 }
 
 Jaring::request_handle ("crud");
