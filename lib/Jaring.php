@@ -361,7 +361,7 @@ class Jaring
 	}
 //}}}
 //{{{ db : prepare statement for updating data
-	private static function db_prepare_update ($table, $fields, $ids)
+	public static function db_prepare_update ($table, $fields, $ids)
 	{
 		$qupdate=" update $table ";
 		$qset	=" set ". self::db_prepare_fields ($fields, ",");
@@ -375,7 +375,7 @@ class Jaring
 	}
 //}}}
 //{{{ db : prepare delete statement
-	private static function db_prepare_delete ($table, $fields)
+	public static function db_prepare_delete ($table, $fields)
 	{
 		$qdelete=" delete from $table";
 		$qwhere	=" where ". self::db_prepare_fields ($fields);
@@ -385,7 +385,7 @@ class Jaring
 //}}}
 
 //{{{ crud -> db : handle read request
-	private static function request_read ()
+	public static function request_read ()
 	{
 		$query	= "'%".$_GET["query"]."%'";
 		$start	= (int) $_GET["start"];
@@ -453,7 +453,7 @@ class Jaring
 	}
 //}}}
 //{{{ crud -> db : handle create request
-	private static function request_create ($data)
+	public static function request_create ($data)
 	{
 		$table	= self::$_mod["db_table"]["name"];
 		$fields	= self::$_mod["db_table"]["create"];
@@ -487,7 +487,7 @@ class Jaring
 	}
 //}}}
 //{{{ crud -> db : handle update request
-	private static function request_update ($data)
+	public static function request_update ($data)
 	{
 		$table	= self::$_mod["db_table"]["name"];
 		$fields	= self::$_mod["db_table"]["update"];
@@ -520,7 +520,7 @@ class Jaring
 	}
 //}}}
 //{{{ crud -> db : handle delete request
-	private static function request_delete ($data)
+	public static function request_delete ($data)
 	{
 		if (function_exists ("request_delete_before")) {
 			request_delete_before ($data);
