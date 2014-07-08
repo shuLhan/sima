@@ -12,7 +12,7 @@ $q	="	select	M.path
 		and		MT.table_id	= ". $data["table_id"]
 	;
 
-$rs = Jaring::dbExecute ($q);
+$rs = Jaring::db_execute ($q);
 
 foreach ($rs as $k => $v) {
 	$f = APP_PATH ."/". $v["path"];
@@ -31,7 +31,7 @@ $bindv[]	= $data["_media_id"];
 $table		= "_media_table";
 $fids		= ["table_id", "_media_id"];
 
-Jaring::dbPrepareDelete ($table, $fids);
+Jaring::db_prepare_delete ($table, $fids);
 Jaring::$_db_ps->execute ($bindv);
 Jaring::$_db_ps->closeCursor ();
 //}}}
@@ -39,7 +39,7 @@ Jaring::$_db_ps->closeCursor ();
 //{{{ delete data from media
 $q	=" delete from _media where id = ". $bindv[1];
 
-Jaring::dbExecute ($q);
+Jaring::db_execute ($q);
 //}}}
 
 Jaring::$_out['success']	= true;

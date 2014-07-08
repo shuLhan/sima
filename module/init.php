@@ -6,4 +6,4 @@ function __autoload($class_name) {
 }
 
 Jaring::init ();
-Jaring::checkCookies ();
+Jaring::cookies_check ();

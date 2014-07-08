@@ -13,7 +13,7 @@ Jaring::$_mod["db_table"]["read"]	= [
 Jaring::$_mod["db_table"]["search"]	= ["name", "realname"];
 Jaring::$_mod["db_table"]["order"]	= ["name"];
 
-function afterRequestRead ($data)
+function request_read_after ($data)
 {
 	$q ="
 		select	G.name
@@ -44,4 +44,4 @@ function afterRequestRead ($data)
 	Jaring::$_out["data"] = $data;
 }
 
-Jaring::handleRequest ("crud");
+Jaring::request_handle ("crud");

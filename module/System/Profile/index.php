@@ -19,4 +19,4 @@ Jaring::$_mod["db_table"]["order"]	= ["name"];
 Jaring::$_mod["db_table"]["create"]	= $fields;
 Jaring::$_mod["db_table"]["update"]	= $fields;
 
-Jaring::handleRequest ("crud");
+Jaring::request_handle ("crud");

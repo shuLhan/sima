@@ -1,4 +1,9 @@
 <?php
+/*
+	Copyright 2014 - Mhd Sulhan
+	Authors:
+		- mhd.sulhan (m.shulhan@gmail.com)
+*/
 	$q	="	select		COUNT(A.id) as total"
 		."	from		_user_group	A"
 		."	,			_user		B"
@@ -8,7 +13,7 @@
 		."	or			B.realname	like ?)";
 
 	$ps = Jaring::$_db->prepare ($q);
-	$ps->bindValue (1, $_GET['_group_id'], PDO::PARAM_INT);
+	$ps->bindValue (1, $_GET['_group_id']);
 	$ps->bindValue (2, "%". $_GET["query"] ."%", PDO::PARAM_STR);
 	$ps->bindValue (3, "%". $_GET["query"] ."%", PDO::PARAM_STR);
 	$ps->execute ();
@@ -36,7 +41,7 @@
 		."	limit		". (int) $_GET["start"] .",". (int) $_GET["limit"];
 
 	$ps = Jaring::$_db->prepare ($q);
-	$ps->bindValue (1, $_GET['_group_id'], PDO::PARAM_INT);
+	$ps->bindValue (1, $_GET['_group_id']);
 	$ps->bindValue (2, "%". $_GET["query"] ."%", PDO::PARAM_STR);
 	$ps->bindValue (3, "%". $_GET["query"] ."%", PDO::PARAM_STR);
 	$ps->execute ();

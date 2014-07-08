@@ -1,3 +1,3 @@
 <?php
 require_once "../../init.php";
-Jaring::handleRequest ();
+Jaring::request_handle ("crud");

@@ -11,7 +11,7 @@ $r = array (
 );
 
 try {
-	Jaring::initDB ();
+	Jaring::db_init ();
 } catch (Exception $e) {
 	$r['data'] = $e->getMessage ();
 

@@ -1,6 +1,6 @@
 <?php
 
-function getGroup ($pid, $depth)
+function get_group ($pid, $depth)
 {
 	$q	="
 			select		A.id
@@ -33,7 +33,7 @@ function getGroup ($pid, $depth)
 		$m["index"] 	= $index++;
 		$m["depth"]		= $depth;
 
-		$c = getGroup ($id, $depth + 1);
+		$c = get_group ($id, $depth + 1);
 
 		if (count ($c) <= 0) {
 			$m["leaf"]			= true;
@@ -48,7 +48,7 @@ function getGroup ($pid, $depth)
 	return $rs;
 }
 
-$data = getGroup (0, 0);
+$data = get_group (0, 0);
 
 Jaring::$_out["success"]	= true;
 Jaring::$_out["children"]	= $data;
