@@ -83,6 +83,7 @@ Ext.define ("Jx.app.System.Profile", {
 		,	url			:Jx.generateModDir ("System_Profile_Logo") + "read.php"
 		,	width		:300
 		,	height		:300
+		,	margin		:"0 0 10 0"
 		},{
 			xtype		:"button"
 		,	itemId		:"logo_change"
