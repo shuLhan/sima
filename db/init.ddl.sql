@@ -124,7 +124,8 @@ create table _media_table
  */
 create table _profile
 (
-	name		varchar (64)	default ''
+	id			bigint			default 1
+,	name		varchar (64)	default ''
 ,	address		varchar (512)	default ''
 ,	phone_1		varchar (64)	default ''
 ,	phone_2		varchar (64)	default ''
