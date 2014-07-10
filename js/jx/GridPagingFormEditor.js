@@ -61,22 +61,23 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 
 ,	constructor	:function (cfg)
 	{
-		this.createGrid (cfg);
-		this.createForm (cfg);
+		Ext.merge (this, this.config);
+		Ext.merge (this, cfg);
+		Ext.merge (this, this.panelConfig);
 
-		var id = Jx.generateItemId (cfg, "JxGridPagingFormEditor", "");
+		this.createGrid (this);
+		this.createForm (this);
 
-		var opts = Ext.merge ({
-								itemId	: id
-							,	items	:
-								[
-									this.grid
-								,	this.form
-								]
-							}, this.panelConfig);
-			opts = Ext.merge (opts, cfg.panelConfig);
+		if (undefined === this.itemId && undefined === this.id) {
+			this.itemId = Jx.generateItemId (this, "JxGridPagingFormEditor", "");
+		}
 
-		this.callParent ([opts]);
+		this.items	= [
+						this.grid
+					,	this.form
+					];
+
+		this.callParent ();
 	}
 
 ,	createGrid	:function (cfg)
