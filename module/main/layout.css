@@ -18,6 +18,7 @@
 .sys				{ background: 0px 0px/16px 16px url("/images/icons/sys.svg") no-repeat !important; }
 .user				{ background: 0px 0px/16px 16px url("/images/icons/user.svg") no-repeat !important; }
 .group				{ background: 0px 0px/16px 16px url("/images/icons/group.svg") no-repeat !important; }
+.menu_access		{ background: 0px 0px/16px 16px url("/images/icons/menu_access.svg") no-repeat !important; }
 .menu				{ background: 0px 0px/16px 16px url("/images/icons/menu.svg") no-repeat !important; }
 .media				{ background: 0px 0px/16px 16px url("/images/icons/media.svg") no-repeat !important; }
 /*

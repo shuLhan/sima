@@ -41,7 +41,7 @@ values (1003	,1000	,0	,'User Group'		,'user'			,''						,'System_Group_User'	,''
 insert into _menu (id, pid, type, label, icon, image, module, description)
 values (1004	,1000	,0	,'User Non Group'	,'user'			,''						,'System_Group_UserNon'	,'');
 insert into _menu (id, pid, type, label, icon, image, module, description)
-values (1005	,1000	,3	,'Menu Access'		,'menu'			,'icons/menu.svg'		,'System_Menu_Access'	,'');
+values (1005	,1000	,3	,'Menu Access'		,'menu_access'	,'icons/menu_access.svg','System_Menu_Access'	,'');
 insert into _menu (id, pid, type, label, icon, image, module, description)
 values (1006	,1000	,3	,'Menu'				,'menu'			,'icons/menu.svg'		,'System_Menu'			,'');
 insert into _menu (id, pid, type, label, icon, image, module, description)
