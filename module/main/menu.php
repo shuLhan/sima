@@ -1,4 +1,9 @@
 <?php
+/*
+	Copyright 2014 Mhd Sulhan
+	Authors:
+		- mhd.sulhan (m.shulhan@gmail.com)
+*/
 require_once "../json_begin.php";
 
 function getMenu ($uid, $pid)

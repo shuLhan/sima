@@ -1,6 +1,10 @@
 #!/usr/bin/php
 <?php
-
+/*
+	Copyright 2014 Mhd Sulhan
+	Authors:
+		- mhd.sulhan (m.shulhan@gmail.com)
+*/
 function genjs ($out, $in)
 {
 	$fout = fopen ($out, "wb");

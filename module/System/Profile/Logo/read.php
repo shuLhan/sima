@@ -1,4 +1,9 @@
 <?php
+/*
+	Copyright 2014 Mhd Sulhan
+	Authors:
+		- mhd.sulhan (m.shulhan@gmail.com)
+*/
 $no_cookies = true;
 require_once "../../../init.php";
 

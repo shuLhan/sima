@@ -1,3 +1,8 @@
+/*
+	Copyright 2014 Mhd Sulhan
+	Authors:
+		- mhd.sulhan (m.shulhan@gmail.com)
+*/
 -- drop table _group_menu;
 -- drop table _menu;
 -- drop table _user_group;
