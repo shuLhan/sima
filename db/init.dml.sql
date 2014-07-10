@@ -33,23 +33,23 @@ values (2		,0		,0	,'Dashboard'		,'dashboard'	,''						,'main_dashboard'		,'');
 insert into _menu (id, pid, type, label, icon, image, module, description)
 values (1000	,0		,0	,'System'			,'sys'			,''						,'System'				,'');
 insert into _menu (id, pid, type, label, icon, image, module, description)
-values (1001	,1000	,3	,'User'				,'user'			,'../icons/user.svg'	,'System_User'			,'');
+values (1001	,1000	,3	,'User'				,'user'			,'icons/user.svg'		,'System_User'			,'');
 insert into _menu (id, pid, type, label, icon, image, module, description)
-values (1002	,1000	,3	,'Group'			,'group'		,'../icons/group.svg'	,'System_Group'			,'');
+values (1002	,1000	,3	,'Group'			,'group'		,'icons/group.svg'		,'System_Group'			,'');
 insert into _menu (id, pid, type, label, icon, image, module, description)
 values (1003	,1000	,0	,'User Group'		,'user'			,''						,'System_Group_User'	,'');
 insert into _menu (id, pid, type, label, icon, image, module, description)
 values (1004	,1000	,0	,'User Non Group'	,'user'			,''						,'System_Group_UserNon'	,'');
 insert into _menu (id, pid, type, label, icon, image, module, description)
-values (1005	,1000	,3	,'Menu Access'		,'menu'			,'../icons/menu.svg'	,'System_Menu_Access'	,'');
+values (1005	,1000	,3	,'Menu Access'		,'menu'			,'icons/menu.svg'		,'System_Menu_Access'	,'');
 insert into _menu (id, pid, type, label, icon, image, module, description)
-values (1006	,1000	,3	,'Menu'				,'menu'			,'../icons/menu.svg'	,'System_Menu'			,'');
+values (1006	,1000	,3	,'Menu'				,'menu'			,'icons/menu.svg'		,'System_Menu'			,'');
 insert into _menu (id, pid, type, label, icon, image, module, description)
-values (1007	,1000	,3	,'Media'			,'media'		,'../icons/media.svg'	,'System_Media'			,'');
+values (1007	,1000	,3	,'Media'			,'media'		,'icons/media.svg'		,'System_Media'			,'');
 insert into _menu (id, pid, type, label, icon, image, module, description)
-values (1008	,1000	,0	,'Media Table'		,'media'		,'../icons/media.svg'	,'System_Media_Table'	,'');
+values (1008	,1000	,0	,'Media Table'		,'media'		,'icons/media.svg'		,'System_Media_Table'	,'');
 insert into _menu (id, pid, type, label, icon, image, module, description)
-values (1009	,1000	,3	,'Profile'			,'profile'		,'../icons/profile.svg'	,'System_Profile'		,'');
+values (1009	,1000	,3	,'Profile'			,'profile'		,'icons/profile.svg'	,'System_Profile'		,'');
 
 /*
 	Group -> Menu
