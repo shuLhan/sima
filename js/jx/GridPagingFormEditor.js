@@ -17,6 +17,7 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 				type		:"border"
 			}
 		,	titleAlign	:"center"
+		,	closable	:true
 		}
 	,	grid		:undefined
 	,	gridConfig	:
