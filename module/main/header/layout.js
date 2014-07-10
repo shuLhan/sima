@@ -11,9 +11,11 @@ function JxMainHeader (jx_main, id)
 	this._parent		= jx_main;
 	this.userProfile	= undefined;
 
-	this.appLogo		= Ext.create ("Ext.container.Container", {
+	this.appLogo		= Ext.create ("Ext.Component", {
 				id		:this.id +"_logo"
-			,	html	:"<img style='height:36px;' src='../../images/logo.png'></img>"
+			,	html	:"<img src='"
+							+ Jx.generateModDir ("System_Profile_Logo")
+							+"read.php' />"
 		});
 
 	this.appTitle		= Ext.create ("Ext.Component", {

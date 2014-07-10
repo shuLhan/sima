@@ -1,5 +1,5 @@
 <?php
-
+$no_cookies = true;
 require_once "../../../init.php";
 
 Jaring::db_init ();

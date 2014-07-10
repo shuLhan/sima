@@ -3,12 +3,11 @@ function JxLogin ()
 	this.id				= "Login";
 
 	this.logo			= Ext.create ("Ext.Component", {
-			height		:130
-		,	html		:"<img src='../../images/logo.png' />"
-		,	margin		:'10'
-		,	width		:"100%"
-		,	style		:"vertical-align:center; text-align:center;"
-	});
+			id			:this.id +"_logo"
+		,	html		:"<img src='"
+							+ Jx.generateModDir ("System_Profile_Logo")
+							+"read.php' />"
+		});
 
 	this.username		= Ext.create ("Ext.form.field.Text", {
 			fieldLabel	:"Username"

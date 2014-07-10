@@ -73,7 +73,11 @@
 }
 
 #main_header_logo {
-	margin: 0px 16px 0px 16px;
+	margin		: 10px 10px 0px 10px;
+}
+
+#main_header_logo img {
+	height		: 42px;
 }
 
 #main_header_text {

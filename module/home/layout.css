@@ -15,6 +15,16 @@ body {
 /*
 	ID
 */
+#Login_logo {
+	margin			:10px;
+	vertical-align	:center;
+	text-align		:center;
+}
+
+#Login_logo img {
+	height			:160px;
+}
+
 #poweredby {
     position			: absolute;
     bottom				: 20px;
