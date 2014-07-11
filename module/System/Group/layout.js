@@ -55,14 +55,11 @@ function JxSystemGroup_User ()
 	this.panel				= Ext.create ("Jx.GridPaging.FormEditor", {
 			itemId			:this.id
 		,	store			:this.store
-		,	panelConfig		:
-			{
-				region			:"east"
-			,	split			:true
-			,	width			:"50%"
-			,	title			:"Users of Group"
-			,	closable		:false
-			}
+		,	region			:"east"
+		,	split			:true
+		,	width			:"50%"
+		,	title			:"Users of Group"
+		,	closable		:false
 		,	formConfig		:
 			{
 				region			:"south"
