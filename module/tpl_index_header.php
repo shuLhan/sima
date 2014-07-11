@@ -55,6 +55,7 @@ require_once "init.php";
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/ComboPaging.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/Form.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/GridPaging.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/GridTree.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/GridPagingRowEditor.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/GridPagingFormEditor.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/Store.js"></script>

@@ -51,6 +51,7 @@ $in=array (
 ,	"js/jx/ComboPaging.js"
 ,	"js/jx/Form.js"
 ,	"js/jx/GridPaging.js"
+,	"js/jx/GridTree.js"
 ,	"js/jx/GridPagingRowEditor.js"
 ,	"js/jx/GridPagingFormEditor.js"
 ,	"js/jx/CardGridForm.js"
