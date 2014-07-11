@@ -3,110 +3,89 @@
 	Authors:
 		- mhd.sulhan (m.shulhan@gmail.com)
 */
-
-function JxSystemMenu ()
-{
-	this.id		= "System_Menu";
-	this.dir	= Jx.generateModDir (this.id);
-
-	this.store			= Ext.create ("Jx.StoreRest", {
-			url			:this.dir
-		,	idProperty	:""
-		,	fields		:
-			[
-				"id"
-			,	"pid"
-			,	"type"
-			,	"label"
-			,	"icon"
-			,	"image"
-			,	"module"
-			,	"description"
-			]
-		});
-
-	this.panel			= Ext.create ("Jx.GridPaging.FormEditor", {
-			itemId		:this.id
-		,	store		:this.store
-		,	panelConfig	:
-			{
-				title		:"System Menu"
-			,	closable	:true
-			}
-		,	columns		:
-			[{
-				header		:"ID"
-			,	dataIndex	:"id"
-			,	editor		:
-				{
-					xtype			:"numberfield"
-				,	minValue		:0
-				,	allowDecimals	:false
-				}
-			},{
-				header		:"PID"
-			,	dataIndex	:"pid"
-			,	editor		:
-				{
-					xtype			:"numberfield"
-				,	minValue		:0
-				,	allowDecimals	:false
-				}
-			},{
-				header		:"Type"
-			,	dataIndex	:"type"
-			,	editor		:
-				{
-					xtype			:"numberfield"
-				,	minValue		:0
-				,	maxValue		:3
-				,	allowDecimals	:false
-				}
-			},{
-				header		:"Label"
-			,	dataIndex	:"label"
-			,	width		:200
-			,	editor		:
-				{
-				}
-			},{
-				header		:"Icon"
-			,	dataIndex	:"icon"
-			,	width		:140
-			,	editor		:
-				{
-				}
-			},{
-				header		:"Image"
-			,	dataIndex	:"image"
-			,	width		:200
-			,	editor		:
-				{
-				}
-			},{
-				header		:"Module"
-			,	dataIndex	:"module"
-			,	width		:200
-			,	editor		:
-				{
-				}
-			},{
-				header		:"Description"
-			,	dataIndex	:"description"
-			,	width		:300
-			,	editor		:
-				{
-					xtype		:"textarea"
-				}
-			}]
-		});
-
-	this.doRefresh	= function (perm)
+Ext.define ("Jx.app.System.Menu", {
+	extend	:"Jx.GridPaging.FormEditor"
+,	config	:
 	{
-		this.panel.doRefresh (perm);
-	};
-}
+		itemId	:"System_Menu"
+	,	title	:"System Menu"
+	,	store	: Ext.create ("Jx.StoreRest"
+		,	{
+				url			:Jx.generateModDir ("System_Menu")
+			,	idProperty	:""
+			,	fields		:
+				[
+					"id"
+				,	"pid"
+				,	"type"
+				,	"label"
+				,	"icon"
+				,	"image"
+				,	"module"
+				,	"description"
+				]
+			})
+	,	columns		:
+		[{
+			header		:"ID"
+		,	dataIndex	:"id"
+		,	editor		:
+			{
+				xtype			:"numberfield"
+			,	minValue		:0
+			,	allowDecimals	:false
+			}
+		},{
+			header		:"PID"
+		,	dataIndex	:"pid"
+		,	editor		:
+			{
+				xtype			:"numberfield"
+			,	minValue		:0
+			,	allowDecimals	:false
+			}
+		},{
+			header		:"Type"
+		,	dataIndex	:"type"
+		,	editor		:
+			{
+				xtype			:"numberfield"
+			,	minValue		:0
+			,	maxValue		:3
+			,	allowDecimals	:false
+			}
+		},{
+			header		:"Label"
+		,	dataIndex	:"label"
+		,	width		:200
+		,	editor		:{}
+		},{
+			header		:"Icon"
+		,	dataIndex	:"icon"
+		,	width		:140
+		,	editor		:{}
+		},{
+			header		:"Image"
+		,	dataIndex	:"image"
+		,	width		:200
+		,	editor		:{}
+		},{
+			header		:"Module"
+		,	dataIndex	:"module"
+		,	width		:200
+		,	editor		:{}
+		},{
+			header		:"Description"
+		,	dataIndex	:"description"
+		,	width		:300
+		,	editor		:
+			{
+				xtype		:"textarea"
+			}
+		}]
+	}
+});
 
-var System_Menu = new JxSystemMenu ();
+var System_Menu = Ext.create ("Jx.app.System.Menu");
 
 //# sourceURL=module/System/Menu/layout.js
