@@ -15,7 +15,8 @@ Ext.define ("Jx.app.System.Menu", {
 			,	idProperty	:""
 			,	fields		:
 				[
-					"id"
+					"_profile_id"
+				,	"id"
 				,	"pid"
 				,	"type"
 				,	"label"
@@ -25,8 +26,17 @@ Ext.define ("Jx.app.System.Menu", {
 				,	"description"
 				]
 			})
+
 	,	columns		:
 		[{
+			header		:"Profile ID"
+		,	dataIndex	:"_profile_id"
+		,	hidden		:true
+		,	editor		:
+			{
+				itemId		:"_profile_id"
+			}
+		},{
 			header		:"ID"
 		,	dataIndex	:"id"
 		,	editor		:
