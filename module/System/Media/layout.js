@@ -14,7 +14,8 @@ Ext.define ("Jx.app.System.Media", {
 			url			:Jx.generateModDir ("System_Media")
 		,	fields		:
 			[
-				"id"
+				"_profile_id"
+			,	"id"
 			,	"name"
 			,	"extension"
 			,	"size"
@@ -29,6 +30,14 @@ Ext.define ("Jx.app.System.Media", {
 		}
 	,	columns		:
 		[{
+			header		:"Profile ID"
+		,	dataIndex	:"_profile_id"
+		,	hidden		:true
+		,	editor		:
+			{
+				hidden		:true
+			}
+		},{
 			header		:"ID"
 		,	dataIndex	:"id"
 		,	hidden		:true

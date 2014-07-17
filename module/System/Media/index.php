@@ -8,7 +8,8 @@
 require_once "../../init.php";
 
 $fields = [
-			"id"
+			"_profile_id"
+		,	"id"
 		,	"name"
 		,	"extension"
 		,	"size"
@@ -18,13 +19,11 @@ $fields = [
 		];
 
 Jaring::$_mod["db_table"]["name"]	= "_media";
-Jaring::$_mod["db_table"]["id"]		= ["id"];
 Jaring::$_mod["db_table"]["read"]	= $fields;
 Jaring::$_mod["db_table"]["search"]	= ["name", "extension", "mime", "description"];
 Jaring::$_mod["db_table"]["order"]	= ["id"];
 Jaring::$_mod["db_table"]["create"]	= $fields;
-Jaring::$_mod["db_table"]["update"]	= array_slice ($fields, 1);
-Jaring::$_mod["db_table"]["generate_id"] = "id";
+Jaring::$_mod["db_table"]["update"]	= array_slice ($fields, 2);
 
 //{{{ before delete request executed
 function request_delete_before ($data)
@@ -49,6 +48,8 @@ function request_delete_before ($data)
 
 		Jaring::db_execute ($q, null, false);
 	}
+
+	return true;
 }
 //}}}
 
