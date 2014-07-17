@@ -35,6 +35,7 @@ class Jaring
 	public static $MSG_SUCCESS_DESTROY	= 'Data has been deleted.';
 	public static $MSG_ACCESS_FAIL		= "You don't have sufficient privilege.";
 	public static $MSG_REQUEST_INVALID	= "Invalid request ";
+	public static $MSG_DATA_LOCK		= "This data has been locked, and can not be deleted.";
 	public static $MOD_INIT				= '/init';
 
 	public static $ACCESS_NO		= 0;
@@ -66,14 +67,15 @@ class Jaring
 	//	Module configuration. Set by each modules index.
 	public static $_mod	= [
 							"db_table"	=> [
-								"name"		=> ""
-							,	"id"		=> ["id"]
-							,	"read"		=> []
-							,	"search"	=> []
-							,	"create"	=> []
-							,	"generate_id" => null
-							,	"update"	=> []
-							,	"order"		=> []
+								"name"			=> ""
+							,	"profiled"		=> true
+							,	"id"			=> ["id"]
+							,	"generate_id"	=> "id"
+							,	"read"			=> []
+							,	"search"		=> []
+							,	"order"			=> []
+							,	"create"		=> []
+							,	"update"		=> []
 							]
 						];
 
@@ -88,6 +90,7 @@ class Jaring
 	*/
 	public static $_c_uid			= 0;
 	public static $_c_username		= 'Anonymous';
+	public static $_c_profile_id	= 0;
 //}}}
 
 //{{{ db : check user access to module
@@ -213,6 +216,11 @@ class Jaring
 		if (isset ($_COOKIE[$ckey])) {
 			self::$_c_username = $_COOKIE[$ckey];
 		}
+
+		$ckey = 'profile_id';
+		if (isset ($_COOKIE[$ckey])) {
+			self::$_c_profile_id = $_COOKIE[$ckey];
+		}
 	}
 //}}}
 //{{{ cookie : check if user has cookie.
@@ -329,14 +337,24 @@ class Jaring
 //{{{ db : generate ID for each data
 	public static function db_prepare_id (&$data)
 	{
+		if (self::$_mod["db_table"]["profiled"]) {
+			foreach ($data as &$d) {
+				$d["_profile_id"] = self::$_c_profile_id;
+			}
+		}
+
 		if (! isset (self::$_mod["db_table"]["generate_id"])) {
 			return;
 		}
 
 		$id = self::$_mod["db_table"]["generate_id"];
 
-		foreach ($data as &$d) {
-			$d[$id] = self::db_generate_id ();
+		if (null !== $id) {
+			foreach ($data as &$d) {
+				if (empty ($d[$id])) {
+					$d[$id] = self::db_generate_id ();
+				}
+			}
 		}
 	}
 //}}}
@@ -384,12 +402,25 @@ class Jaring
 	}
 //}}}
 
+//{{{ crud -> db : check system profile id, throw exception if id = 1.
+	public static function request_check_system_profile ($data)
+	{
+		// Disallow user to delete data where profile id = 1.
+		if (self::$_mod["db_table"]["profiled"]) {
+			foreach ($data as $d) {
+				if ($d["_profile_id"] === 1) {
+					throw new Exception (self::$MSG_DATA_LOCK);
+				}
+			}
+		}
+	}
+//}}}
 //{{{ crud -> db : handle read request
 	public static function request_read ()
 	{
-		$query	= "'%".$_GET["query"]."%'";
-		$start	= (int) $_GET["start"];
-		$limit	= (int) $_GET["limit"];
+		$query		= "'%".$_GET["query"]."%'";
+		$start		= (int) $_GET["start"];
+		$limit		= (int) $_GET["limit"];
 		$freads		= self::$_mod["db_table"]["read"];
 		$fsearch	= self::$_mod["db_table"]["search"];
 
@@ -398,6 +429,11 @@ class Jaring
 		$qwhere		= " where 1=1 ";
 		$qorder		= " order by ". implode (",", self::$_mod["db_table"]["order"]);
 		$qlimit		= "	limit ". $start .",". $limit;
+
+		// check if table is profiled.
+		if (Jaring::$_mod["db_table"]["profiled"]) {
+			$qwhere	.= " and _profile_id = ". Jaring::$_c_profile_id;
+		}
 
 		// get parameter name that has the same name with read fields,
 		// and use it as the filter
@@ -443,7 +479,7 @@ class Jaring
 				. $qorder
 				. $qlimit;
 
-		self::$_out["total"]		= (int) self::db_execute ($qtotal)[0]["total"];
+		self::$_out["total"]	= (int) self::db_execute ($qtotal)[0]["total"];
 		self::$_out["data"]		= self::db_execute ($qread);
 		self::$_out["success"]	= true;
 
@@ -515,8 +551,15 @@ class Jaring
 			unset ($bindv);
 		}
 
-		self::$_out['success']	= true;
-		self::$_out['data']		= self::$MSG_SUCCESS_UPDATE;
+		if (function_exists ("request_update_after")) {
+			self::$_out["success"] = request_update_after ($data);
+		} else {
+			self::$_out["success"] = true;
+		}
+
+		if (self::$_out["success"] === true) {
+			self::$_out['data']	= self::$MSG_SUCCESS_UPDATE;
+		}
 	}
 //}}}
 //{{{ crud -> db : handle delete request
@@ -524,6 +567,8 @@ class Jaring
 	{
 		if (function_exists ("request_delete_before")) {
 			request_delete_before ($data);
+		} else {
+			request_check_system_profile ($data);
 		}
 
 		self::db_prepare_delete (self::$_mod["db_table"]["name"]
@@ -552,6 +597,41 @@ class Jaring
 	}
 //}}}
 
+//{{{ crud : check file upload error code.
+	// return true on upload ok.
+	// return false on error.
+	public static function request_upload_check_err ($f)
+	{
+		switch ($_FILES[$f]["error"]) {
+		case UPLOAD_ERR_OK:
+			return true;
+		case UPLOAD_ERR_INI_SIZE:
+			$msg = "The uploaded file exceeds the upload_max_filesize directive in php.ini.";
+			break;
+		case UPLOAD_ERR_FORM_SIZE:
+			$msg = "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.";
+			break;
+		case UPLOAD_ERR_PARTIAL:
+			$msg = "The uploaded file was only partially uploaded.";
+			break;
+		case UPLOAD_ERR_NO_FILE:
+			$msg = "No file was uploaded.";
+			return false;
+		case UPLOAD_ERR_NO_TMP_DIR:
+			$msg = "Missing a temporary folder.";
+			break;
+		case UPLOAD_ERR_CANT_WRITE:
+			$msg = "Failed to write file to disk.";
+			break;
+		case UPLOAD_ERR_EXTENSION:
+			$msg = "A PHP extension stopped the file upload.";
+			break;
+		}
+
+		self::$_out["data"] = $msg;
+		return false;
+	}
+//}}}
 //{{{ crud : get module name based on request URI.
 	public static function get_module_name ($uri)
 	{
@@ -694,9 +774,14 @@ class Jaring
 				$data = $_POST;
 			}
 
-			/* Convert json object to array */
+			// Convert json object to array
 			if (null !== $data && ! is_array (current ($data))) {
 				$data = array($data);
+			}
+
+			// push _profile_id to field ids.
+			if (self::$_mod["db_table"]["profiled"]) {
+				self::$_mod["db_table"]["id"][] = "_profile_id";
 			}
 
 			self::request_switch ($path, $access, $data);
