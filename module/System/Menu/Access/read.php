@@ -34,12 +34,7 @@ function get_system_menu ($gid, $pid, $depth)
 	";
 
 	$ps = Jaring::$_db->prepare ($q);
-	$i	= 1;
-	$ps->bindValue ($i++, $gid, PDO::PARAM_INT);
-	$ps->bindValue ($i++, $gid, PDO::PARAM_INT);
-	$ps->bindValue ($i++, $pid, PDO::PARAM_INT);
-	$ps->bindValue ($i++, $pid, PDO::PARAM_INT);
-	$ps->execute ();
+	$ps->execute (array ($gid, $gid, $pid, $pid));
 	$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
 	$ps->closeCursor ();
 
