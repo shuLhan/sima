@@ -35,7 +35,7 @@ class Jaring
 	public static $MSG_SUCCESS_DESTROY	= "Data has been deleted.";
 	public static $MSG_ACCESS_FAIL		= "You don't have sufficient privilege.";
 	public static $MSG_REQUEST_INVALID	= "Invalid request ";
-	public static $MSG_DATA_LOCK		= "This data has been locked, and can not be deleted.";
+	public static $MSG_DATA_LOCK		= "This data has been locked, it can not be deleted.";
 	public static $MOD_INIT				= "/init";
 
 	public static $ACCESS_NO		= 0;
