@@ -24,13 +24,11 @@ try {
 		and		B._group_id		= C._group_id
 		and		C._user_id		= ?
 		and		A.pid			= ?
+		and		C._profile_id	= ?
 		";
 
 	$ps = Jaring::$_db->prepare ($q);
-	$i	= 1;
-	$ps->bindValue ($i++, Jaring::$_c_uid);
-	$ps->bindValue ($i++, $pid, PDO::PARAM_INT);
-	$ps->execute ();
+	$ps->execute (array (Jaring::$_c_uid, $pid, Jaring::$_c_profile_id);
 	$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
 
 	foreach ($rs as &$m) {

@@ -20,11 +20,12 @@ try {
 		and		B._group_id		= C._group_id
 		and		B.permission	> 0
 		and		C._user_id		= ?
+		and		C._profile_id	= ?
 		order by A.pid, A.id asc
 		";
 
 	$ps = Jaring::$_db->prepare ($q);
-	$ps->execute (array (Jaring::$_c_uid));
+	$ps->execute (array (Jaring::$_c_uid, Jaring::$_c_profile_id));
 	$rs_parents = $ps->fetchAll (PDO::FETCH_ASSOC);
 	$ps->closeCursor ();
 	$ps	= null;

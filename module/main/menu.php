@@ -21,13 +21,14 @@ function getMenu ($uid, $pid)
 		."	and		A.id				= B._menu_id"
 		."	and		B._group_id			= C._group_id"
 		."	and		C._user_id			= ?"
+		."	and		C._profile_id		= ?"
 		."	and		B.permission		> 0"
 		."	and		A.type				in (1,3)"
 		."	group by A.id"
 		."	order by A.id";
 
 	$ps = Jaring::$_db->prepare ($q);
-	$ps->execute (array ($pid, $uid));
+	$ps->execute (array ($pid, $uid, Jaring::$_c_profile_id));
 	$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
 	$ps->closeCursor ();
 
@@ -59,11 +60,12 @@ try {
 		."	and		A.id			= B._menu_id"
 		."	and		B._group_id		= C._group_id"
 		."	and		C._user_id		= ?"
+		."	and		C._profile_id	= ?"
 		."	and		B.permission	> 0"
 		."	order by A.id";
 
 	$ps = Jaring::$_db->prepare ($q);
-	$ps->execute (array (Jaring::$_c_uid));
+	$ps->execute (array (Jaring::$_c_uid, Jaring::$_c_profile_id));
 	$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
 	$ps->closeCursor ();
 
