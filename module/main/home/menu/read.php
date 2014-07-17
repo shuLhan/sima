@@ -28,7 +28,7 @@ try {
 		";
 
 	$ps = Jaring::$_db->prepare ($q);
-	$ps->execute (array (Jaring::$_c_uid, $pid, Jaring::$_c_profile_id);
+	$ps->execute (array (Jaring::$_c_uid, $pid, Jaring::$_c_profile_id));
 	$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
 
 	foreach ($rs as &$m) {
