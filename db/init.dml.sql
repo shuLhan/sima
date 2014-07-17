@@ -48,6 +48,7 @@ values
 ,	(1	,1008	,1000	,0	,'Media Table'		,'media'		,'icons/media.svg'		,'System_Media_Table'	,'')
 ,	(1	,1009	,1000	,3	,'Profile'			,'profile'		,'icons/profile.svg'	,'System_Profile'		,'');
 ,	(1	,1010	,1000	,0	,'Profile User'		,'user'			,'icons/user.svg'		,'System_Profile_User'	,'');
+,	(1	,1011	,1000	,0	,'Profile User Non'	,'user'			,'icons/user.svg'		,'System_Profile_UserNon'	,'');
 
 /*
 	Group -> Menu
@@ -67,3 +68,4 @@ values
 ,	(1	,1008	,4)
 ,	(1	,1009	,4);
 ,	(1	,1010	,4);
+,	(1	,1011	,4);

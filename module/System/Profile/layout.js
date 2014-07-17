@@ -21,6 +21,17 @@ function Jx_System_Profile ()
 						]
 					});
 
+	this.storeUserNon	= Ext.create ("Jx.StoreRest",
+					{
+						url			:Jx.generateModDir ("System_Profile_UserNon")
+					,	fields		:
+						[
+							"_profile_id"
+						,	"id"
+						,	"name"
+						,	"realname"
+						]
+					});
 	this.panel			= Ext.create ("Jx.CardGridForm",
 	{
 		itemId			:this.id
@@ -28,6 +39,7 @@ function Jx_System_Profile ()
 	,	url				:this.dir
 	,	profile_id		:undefined
 	,	f_profile_id	:undefined
+	,	f_user_id		:undefined
 	,	logo_image		:undefined
 	,	gridConfig		:
 		{
@@ -36,12 +48,14 @@ function Jx_System_Profile ()
 				if (this.selectedData.length > 0) {
 					System_Profile.logo_image_refresh (this.selectedData[0].get ("id"));
 				}
+				System_Profile.f_user_id.hide ();
 			}
 		,	afterAdd : function ()
 			{
 				System_Profile.profile_id = new Date().getTime ();
 				System_Profile.f_profile_id.setValue (System_Profile.profile_id);
 				System_Profile.logo_image_refresh (System_Profile.profile_id);
+				System_Profile.f_user_id.show ();
 			}
 		}
 	,	formConfig	:
@@ -96,7 +110,8 @@ function Jx_System_Profile ()
 			,	editor		:
 				{
 					xtype			:"combo"
-				,	store			:this.storeUser
+				,	itemId			:"_user_id"
+				,	store			:this.storeUserNon
 				,	valueField		:"id"
 				,	displayField	:"realname"
 				,	allowBlank		:false
@@ -214,7 +229,13 @@ function Jx_System_Profile ()
 	});
 
 	this.f_profile_id = this.panel.form.down ("#profile_id");
+	this.f_user_id = this.panel.form.down ("#_user_id");
 	this.logo_image = this.panel.form.down ("#logo_image");
+
+	if (_g_profile_id !== 1) {
+		this.panel.grid.buttonAdd.hide ();
+		this.panel.grid.buttonDelete.hide ();
+	}
 
 	this.logo_image_refresh = function (id)
 	{
@@ -230,6 +251,7 @@ function Jx_System_Profile ()
 		Jx.chainStoreLoad (
 			[
 				this.storeUser
+			,	this.storeUserNon
 			]
 		,	function ()
 			{
