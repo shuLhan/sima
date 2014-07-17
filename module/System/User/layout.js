@@ -15,7 +15,8 @@ Ext.define ("Jx.app.System.User", {
 			url		:Jx.generateModDir ("System_User")
 		,	fields	:
 			[
-				"id"
+				"_profile_id"
+			,	"id"
 			,	"name"
 			,	"realname"
 			,	"password"
@@ -24,6 +25,14 @@ Ext.define ("Jx.app.System.User", {
 		})
 	,	columns		:
 		[{
+			header		:"Profile ID"
+		,	dataIndex	:"_profile_id"
+		,	hidden		:true
+		,	editor		:
+			{
+				hidden		:true
+			}
+		},{
 			header		:"ID"
 		,	dataIndex	:"id"
 		,	hidden		:true
