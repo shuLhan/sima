@@ -15,7 +15,7 @@ function JxMainHeader (jx_main, id)
 				id		:this.id +"_logo"
 			,	html	:"<img src='"
 							+ Jx.generateModDir ("System_Profile_Logo")
-							+"read.php' />"
+							+"read.php?_profile_id="+ _g_profile_id +"' />"
 		});
 
 	this.appTitle		= Ext.create ("Ext.Component", {
