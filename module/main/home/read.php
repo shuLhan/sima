@@ -14,8 +14,7 @@ try {
 		from	_menu		A
 		,		_group_menu	B
 		,		_user_group	C
-		where	A._profile_id	= ?
-		and		A.pid			= 0
+		where	A.pid			= 0
 		and		A.id			> 2
 		and		A.id			= B._menu_id
 		and		B._group_id		= C._group_id
@@ -25,7 +24,7 @@ try {
 		";
 
 	$ps = Jaring::$_db->prepare ($q);
-	$ps->execute (array (Jaring::$_c_profile_id, Jaring::$_c_uid));
+	$ps->execute (array (Jaring::$_c_uid));
 	$rs_parents = $ps->fetchAll (PDO::FETCH_ASSOC);
 	$ps->closeCursor ();
 	$ps	= null;
