@@ -7,17 +7,20 @@
 function get_group ($pid, $depth)
 {
 	$q	="
-			select		A.id
+			select		A._profile_id
+			,			A.id
 			,			A.pid
 			,			A.name
 			,			A.name		as text
 			from		_group		A
-			where		A.pid		= ?
+			where		A._profile_id	= ?
+			and			A.pid			= ?
 			order by	A.id
 		";
 
 	$ps	= Jaring::$_db->prepare ($q);
 	$i	= 1;
+	$ps->bindValue ($i++, Jaring::$_c_profile_id, PDO::PARAM_INT);
 	$ps->bindValue ($i++, $pid, PDO::PARAM_INT);
 	$ps->execute ();
 	$rs	= $ps->fetchAll (PDO::FETCH_ASSOC);

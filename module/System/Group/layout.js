@@ -140,6 +140,9 @@ function JxSystemGroup_Group ()
 			url			:this.dir
 		,	fields		:
 			[{
+				name	:"_profile_id"
+			,	type	:"int"
+			},{
 				name	:"id"
 			,	type	:"int"
 			},{
@@ -168,6 +171,14 @@ function JxSystemGroup_Group ()
 			}
 		,	columns		:
 			[{
+				header		:"Profile ID"
+			,	dataIndex	:"_profile_id"
+			,	hidden		:true
+			,	editor		:
+				{
+					hidden		:true
+				}
+			},{
 				header			:"ID"
 			,	dataIndex		:"id"
 			,	hidden			:true

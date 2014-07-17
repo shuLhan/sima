@@ -4,15 +4,17 @@
 	Authors:
 		- mhd.sulhan (m.shulhan@gmail.com)
 */
-	$gid = $_GET['_group_id'];
+$query	= "%". $_GET["query"] ."%";
+$start	= (int) $_GET["start"];
+$limit	= (int) $_GET["limit"];
+$gid	= $_GET['_group_id'];
 
-	if ($gid <= 0) {
-		throw new Exception ("Invalid group ID (". $gid .") !");
-	}
+if ($gid <= 0) {
+	throw new Exception ("Invalid group ID (". $gid .") !");
+}
 
-	$q	="
-		select		COUNT(id) as total
-		from		_user
+$qfrom	= " from _user ";
+$qwhere	= "
 		where		id not in (
 			 select	_user_id
 			 from	_user_group
@@ -21,51 +23,29 @@
 		and			(
 				name		like ?
 			or	realname	like ?
-		)
-	";
+		)";
+$qorder	= " order by realname ";
+$qlimit	= " limit $start , $limit ";
+$qbind	= array (
+			$gid
+		,	$query
+		,	$query
+		);
 
-	$ps = Jaring::$_db->prepare ($q);
-	$i	= 1;
-	$ps->bindValue ($i++, $gid, PDO::PARAM_INT);
-	$ps->bindValue ($i++, "%". $_GET["query"] ."%", PDO::PARAM_STR);
-	$ps->bindValue ($i++, "%". $_GET["query"] ."%", PDO::PARAM_STR);
-	$ps->execute ();
+// Query total.
+$qtotal	= " select	COUNT(id) as total "
+		. $qfrom
+		. $qwhere;
 
-	$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
-	$ps->closeCursor ();
+// Query data.
+$q	="
+	select		id			as _user_id
+	,			realname	as _user_realname"
+	. $qfrom
+	. $qwhere
+	. $qorder
+	. $qlimit;
 
-	if (count ($rs) > 0) {
-		$t = (int) $rs[0]["total"];
-	}
-
-	// Get data
-	$q	="
-		select		id			as _user_id
-		,			realname	as _user_realname
-		from		_user
-		where		id not in (
-			 select	_user_id
-			 from	_user_group
-			 where	_group_id = ?
-		)
-		and			(
-				name		like ?
-			or	realname	like ?
-		)
-		order by	realname
-		limit		? , ?
-	";
-
-	$ps = Jaring::$_db->prepare ($q);
-	$i	= 1;
-	$ps->bindValue ($i++, $gid, PDO::PARAM_INT);
-	$ps->bindValue ($i++, "%". $_GET["query"] ."%", PDO::PARAM_STR);
-	$ps->bindValue ($i++, "%". $_GET["query"] ."%", PDO::PARAM_STR);
-	$ps->bindValue ($i++, (int) $_GET['start'], PDO::PARAM_INT);
-	$ps->bindValue ($i++, (int) $_GET['limit'], PDO::PARAM_INT);
-	$ps->execute ();
-	$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
-
-	Jaring::$_out['success']	= true;
-	Jaring::$_out['data']		= $rs;
-	Jaring::$_out['total']		= $t;
+Jaring::$_out['total']		= Jaring::db_execute ($qtotal, $qbind)[0]["total"];
+Jaring::$_out['data']		= Jaring::db_execute ($q, $qbind);
+Jaring::$_out['success']	= true;
