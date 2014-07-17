@@ -34,7 +34,7 @@ Ext.define ("Jx.app.System.Menu", {
 		,	hidden		:true
 		,	editor		:
 			{
-				itemId		:"_profile_id"
+				hidden		:true
 			}
 		},{
 			header		:"ID"
