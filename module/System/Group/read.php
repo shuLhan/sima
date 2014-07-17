@@ -19,10 +19,7 @@ function get_group ($pid, $depth)
 		";
 
 	$ps	= Jaring::$_db->prepare ($q);
-	$i	= 1;
-	$ps->bindValue ($i++, Jaring::$_c_profile_id, PDO::PARAM_INT);
-	$ps->bindValue ($i++, $pid, PDO::PARAM_INT);
-	$ps->execute ();
+	$ps->execute (array (Jaring::$_c_profile_id, $pid));
 	$rs	= $ps->fetchAll (PDO::FETCH_ASSOC);
 	$ps->closeCursor ();
 

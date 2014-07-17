@@ -27,6 +27,10 @@ $qbind	= array (
 		,	$query
 		);
 
+if (Jaring::$_c_profile_id !== 1) {
+	$qwhere .=" and B._profile_id = ". Jaring::$_c_profile_id;
+}
+
 // query total.
 $qtotal	=" select COUNT(A.id) as total "
 		. $qfrom

@@ -32,6 +32,10 @@ $qbind	= array (
 		,	$query
 		);
 
+if (Jaring::$_c_profile_id !== 1) {
+	$qwhere .=" and _profile_id = ". Jaring::$_c_profile_id;
+}
+
 // Query total.
 $qtotal	= " select	COUNT(id) as total "
 		. $qfrom
