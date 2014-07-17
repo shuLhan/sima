@@ -59,6 +59,7 @@ Ext.application ({
 
 Ext.apply (Jx, {
 	pageSize	:_g_paging_size
+,	store		:{}
 ,	msg			:
 	{
 		el				:""
@@ -1917,7 +1918,7 @@ Ext.define ("Jx.CardGridForm", {
 			return f;
 		}
 //}}}
-//{{{ store
+//{{{ function: create store.
 	,	createStore : function (self, opts)
 		{
 			if (undefined !== opts.store) {
@@ -1934,12 +1935,18 @@ Ext.define ("Jx.CardGridForm", {
 				if (undefined !== c.columns) {
 					for (var k = 0, cc = undefined; k < c.columns.length; k++) {
 						cc	= c.columns[k];
-						f	= self.self.columnToField (cc);
-						fields.push (f);
+						f	= Jx.CardGridForm.columnToField (cc);
+
+						if (! Ext.Object.isEmpty (f)) {
+							fields.push (f);
+						}
 					}
 				} else {
-					f = self.self.columnToField (c);
-					fields.push (f);
+					f = Jx.CardGridForm.columnToField (c);
+
+					if (! Ext.Object.isEmpty (f)) {
+						fields.push (f);
+					}
 				}
 			}
 
@@ -1964,7 +1971,6 @@ Ext.define ("Jx.CardGridForm", {
 				,	_parent			: self
 				,	store			: self.store
 				,	columns			: opts.fields
-				,	region			:"center"
 
 				,	doAdd	:function ()
 					{
@@ -2038,17 +2044,20 @@ Ext.define ("Jx.CardGridForm", {
 //{{{ constructor
 ,	constructor	:function (cfg)
 	{
-		var opts = {};
+		var opts = Ext.merge ({}, this.config);
 
-		Ext.merge (opts, this.config);
 		Ext.merge (opts, cfg);
+
+		if (undefined === opts.id && undefined === opts.itemId) {
+			opts.itemId = Jx.generateItemId (opts, "JxGridPagingFormEditor", "");
+		}
 
 		this.callParent ([opts]);
 		this.initConfig (opts);
 
-		this.self.createStore (this, opts);
-		this.self.createGrid (this, opts);
-		this.self.createForm (this, opts);
+		Jx.CardGridForm.createStore (this, opts);
+		Jx.CardGridForm.createGrid (this, opts);
+		Jx.CardGridForm.createForm (this, opts);
 	}
 //}}}
 ,	doRefresh : function (perm)

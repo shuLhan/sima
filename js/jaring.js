@@ -59,6 +59,7 @@ Ext.application ({
 
 Ext.apply (Jx, {
 	pageSize	:_g_paging_size
+,	store		:{}
 ,	msg			:
 	{
 		el				:""
