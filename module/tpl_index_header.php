@@ -25,6 +25,7 @@ require_once "init.php";
 		var _g_content_type	= <?= Jaring::$_content_type ?>;
 		var _g_c_username	="<?= Jaring::$_c_username ?>";
 		var _g_menu_mode	= <?= Jaring::$_menu_mode ?>;
+		var _g_profile_id	= <?= Jaring::$_c_profile_id ?>;
 	</script>
 
 	<link rel="stylesheet" type="text/css" href="<?= Jaring::$_path ?>js/extjs/resources/ext-theme-neptune/ext-theme-neptune-all.css" />

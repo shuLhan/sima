@@ -14,12 +14,16 @@ try {
 		throw new Exception ("Invalid username or password!");
 	}
 
-	$q	="	select	id"
-		."	,		realname"
-		."	,		status"
-		."	from	_user"
-		."	where	name		= ? "
-		."	and		password	= ? ";
+	// check if username and password is exist in database.
+	$q	="
+		select	id
+		,		realname
+		,		status
+		,		_profile_id
+		from	_user
+		where	name		= ?
+		and		password	= ?
+		";
 
 	$ps = Jaring::$_db->prepare ($q);
 	$ps->execute (array ($data['username'], hash ("sha256", $data['password'])));
@@ -31,19 +35,24 @@ try {
 	}
 
 	if ($rs[0]['status'] == 0) {
-		throw new Exception ("User has not been activated, please contact Administrator.");
+		throw new Exception ("User is not active, please contact Administrator.");
 	}
 
-	$q	="	update	_user"
-		."	set		last_login	= ". time ()
-		."	where	id			= ?";
+	// Update last login timestamp.
+	$q	="
+		update	_user
+		set		last_login	= ". time () ."
+		where	id			= ?
+		";
 
 	$ps = Jaring::$_db->prepare ($q);
-	$ps->bindValue (1, (int) $rs[0]['id'], PDO::PARAM_INT);
+	$ps->bindValue (1, $rs[0]['id']);
 	$ps->execute ();
 
+	// Set cookies values.
 	setcookie ("user.id", $rs[0]['id'], 0, Jaring::$_path);
 	setcookie ("user.name", $rs[0]['realname'], 0, Jaring::$_path);
+	setcookie ("profile_id", $rs[0]["_profile_id"], 0, Jaring::$_path);
 
 	$r['success']	= true;
 	$r['data']		= "Logging in ...";

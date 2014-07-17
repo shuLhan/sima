@@ -11,7 +11,7 @@ function JxLogin ()
 			id			:this.id +"_logo"
 		,	html		:"<img src='"
 							+ Jx.generateModDir ("System_Profile_Logo")
-							+"read.php' />"
+							+"read.php?_profile_id=1' />"
 		});
 
 	this.username		= Ext.create ("Ext.form.field.Text", {
