@@ -34,7 +34,8 @@ $qtotal	=" select COUNT(A.id) as total "
 
 // query data.
 $q	="
-	select		A.id
+	select		A._profile_id
+	,			A.id
 	,			A._user_id
 	,			A._group_id
 	,			B.name			as _user_name

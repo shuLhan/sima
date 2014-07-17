@@ -19,7 +19,8 @@ function JxSystemGroup_User ()
 			}
 		,	fields		:
 			[
-				"id"
+				"_profile_id"
+			,	"id"
 			,	"_user_id"
 			,	"_user_name"
 			,	"_user_realname"
@@ -74,6 +75,14 @@ function JxSystemGroup_User ()
 			}
 		,	columns			:
 			[{
+				header			:"Profile ID"
+			,	dataIndex		:"_profile_id"
+			,	hidden			:true
+			,	editor			:
+				{
+					hidden			:true
+				}
+			},{
 				header			:"ID"
 			,	dataIndex		:"id"
 			,	hidden			:true

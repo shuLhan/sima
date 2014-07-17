@@ -71,12 +71,14 @@ create table _group
 */
 create table _user_group
 (
-	id			bigint	not null
+	_profile_id	bigint	not null
+,	id			bigint	not null
 ,	_user_id	bigint 	not null
 ,	_group_id	bigint  not null
 ,	constraint	_user_group_pk		primary key (id)
-,	constraint	_user_group_fk_01	foreign key (_user_id)	references _user (id)
-,	constraint	_user_group_fk_02	foreign key (_group_id)	references _group (id)
+,	constraint	_user_group_fk_00	foreign key (_profile_id)	references _profile (id)
+,	constraint	_user_group_fk_01	foreign key (_user_id)		references _user (id)
+,	constraint	_user_group_fk_02	foreign key (_group_id)		references _group (id)
 );
 
 /*

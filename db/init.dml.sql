@@ -27,7 +27,7 @@ values (1			,1	,0		,'Administrator'	,0);
 /*
 	User -> Group
 */
-insert into _user_group (id, _user_id, _group_id) values (1, 1, 1);
+insert into _user_group (_profile_id, id, _user_id, _group_id) values (1, 1, 1, 1);
 
 /*
 	Menu
