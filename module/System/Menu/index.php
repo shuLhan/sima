@@ -26,6 +26,7 @@ Jaring::$_mod["db_table"]["create"]	= $fields;
 Jaring::$_mod["db_table"]["update"]	= $fields;
 
 Jaring::$_mod["db_table"]["generate_id"]	= null;
+Jaring::$_mod["db_table"]["profiled"]		= false;
 
 // delete menu linked in group-menu
 function request_delete_before ($data)
