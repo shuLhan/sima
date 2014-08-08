@@ -70,7 +70,7 @@ $qread	= $qselect
 		. $qwhere
 		. $qorder;
 
-$rs		= Jaring::dbExecute ($qread);
+$rs		= Jaring::db_execute ($qread);
 
 ?>
 <!DOCTYPE html>

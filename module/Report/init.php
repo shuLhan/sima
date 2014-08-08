@@ -4,7 +4,7 @@
 	Authors:
 	- mhd.sulhan (m.shulhan@gmail.com)
 */
-Jaring::initDB ();
+Jaring::db_init ();
 
 function get_asset ($id)
 {
@@ -54,7 +54,7 @@ function get_asset ($id)
 			. $qwhere
 			. $qorder;
 
-	return Jaring::dbExecute ($qread)[0];
+	return Jaring::db_execute ($qread)[0];
 }
 
 function get_asset_assign_log ($id)
@@ -73,7 +73,7 @@ function get_asset_assign_log ($id)
 		order	by assign_date		DESC
 	";
 
-	return Jaring::dbExecute ($q);
+	return Jaring::db_execute ($q);
 }
 
 function get_asset_maintenance_log ($id)
@@ -85,7 +85,7 @@ function get_asset_maintenance_log ($id)
 		order	by maintenance_date		DESC
 	";
 
-	return Jaring::dbExecute ($q);
+	return Jaring::db_execute ($q);
 }
 
 function get_company_profile ()
@@ -95,7 +95,7 @@ function get_company_profile ()
 		from	_profile
 	";
 
-	return Jaring::dbExecute ($q)[0];
+	return Jaring::db_execute ($q)[0];
 }
 
 function get_company_profile_logo ()
