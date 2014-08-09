@@ -6,9 +6,9 @@
 */
 require_once "../tpl_index_header.php";
 ?>
-	<!-- allow to add custom css/javascript here. -->
+	<!-- Add custom css/javascript here. -->
 </head>
 <body>
-	<a id="poweredby" href="http://www.sencha.com" target="_blank" alt="Powered by Ext JS"><div></div></a>
+	<a id="poweredby" href="https://github.com/shuLhan/librextjs" target="_blank" alt="Powered by Librextjs"><div></div></a>
 </body>
 </html>
