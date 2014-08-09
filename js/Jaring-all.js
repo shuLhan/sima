@@ -50,6 +50,12 @@ Ext.override (Ext.Loader, {
 ,	enabled			:true
 });
 
+// set default label align to right.
+Ext.override (Ext.form.field.Base, {
+	labelAlign		:"right"
+,	labelSeparator	:" : "
+});
+
 //	Register our application.
 Ext.application ({
 	name		:"Jx"

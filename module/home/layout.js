@@ -18,7 +18,6 @@ function JxLogin ()
 			fieldLabel	:"Username"
 		,	itemId		:"username"
 		,	name		:"username"
-		,	labelAlign	:"right"
 		});
 
 	this.password		= Ext.create ("Ext.form.field.Text", {
@@ -26,7 +25,6 @@ function JxLogin ()
 		,	itemId		:"password"
 		,	name		:"password"
 		,	inputType	:"password"
-		,	labelAlign	:"right"
 		,	listeners	:
 			{
 				scope		:this
@@ -40,12 +38,12 @@ function JxLogin ()
 		});
 
 	this.buttonLogin	= Ext.create ("Ext.button.Button", {
-			text			:"Log In"
-		,	itemId			:"login"
-		,	iconCls			:"login"
-		,	formBind		:true
-		,	scope			:this
-		,	handler			:function (b)
+			text		:"Log In"
+		,	itemId		:"login"
+		,	iconCls		:"login"
+		,	formBind	:true
+		,	scope		:this
+		,	handler		:function (b)
 			{
 				this.doLogin ();
 			}
@@ -82,7 +80,7 @@ function JxLogin ()
 
 	this.win		= Ext.create ("Ext.window.Window", {
 		id			:this.id
-	,	title		:".:: " + _g_title + " ::."
+	,	title		:_g_title
 	,	titleAlign	:"center"
 	,	autoShow	:true
 	,	draggable	:false
