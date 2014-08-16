@@ -33,7 +33,7 @@ body {
 #poweredby {
     position			: absolute;
     bottom				: 20px;
-    right				: 20px;
+    right				: 40px;
     z-index				: 15000;
     /* IE 5-7 */
     filter				: alpha(opacity=70);
@@ -47,8 +47,8 @@ body {
 
 #poweredby div {
     position			: relative;
-    width				: 150px;
+    width				: 170px;
     height				: 25px;
-    background-image	: url(../../images/home/powered-by-ext-js.png);
+    background-image	: url(../../images/home/powered-by-librextjs.png);
     background-repeat	: no-repeat;
 }
