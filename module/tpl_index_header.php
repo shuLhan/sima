@@ -13,7 +13,7 @@ require_once "init.php";
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title><?= Jaring::$_title ?></title>
 
-	<link rel="shortcut icon" href="<?= Jaring::$_path ?>images/favicon.ico"/>
+	<link rel="icon" type="image/png" href="<?= Jaring::$_path ?>images/logo32.png"/>
 
 	<script>
 		var _g_root			="<?= Jaring::$_path ?>";

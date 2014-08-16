@@ -86,6 +86,7 @@ function JxLogin ()
 	,	draggable	:false
 	,	closable	:false
 	,	resizable	:false
+	,	shadow		:false
 	,	defaultFocus:"username"
 	,	items		:
 		[
