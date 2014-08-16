@@ -18,6 +18,7 @@ function JxLogin ()
 			fieldLabel	:"Username"
 		,	itemId		:"username"
 		,	name		:"username"
+		,	allowBlank	:false
 		});
 
 	this.password		= Ext.create ("Ext.form.field.Text", {
@@ -25,13 +26,16 @@ function JxLogin ()
 		,	itemId		:"password"
 		,	name		:"password"
 		,	inputType	:"password"
+		,	allowBlank	:false
 		,	listeners	:
 			{
 				scope		:this
 			,	specialkey	:function (f, e)
 				{
 					if (e.ENTER === e.getKey ()) {
-						this.doLogin ();
+						if (this.panel.isValid ()) {
+							this.doLogin ();
+						}
 					}
 				}
 			}
@@ -58,7 +62,6 @@ function JxLogin ()
 			{
 				labelStyle		:"font-weight:bold"
 			,	vtype			:"alphanum"
-			,	allowBlank		:false
 			}
 		,	items			:
 			[
