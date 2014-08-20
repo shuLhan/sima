@@ -592,7 +592,7 @@ class Jaring
 				return;
 			}
 		} else {
-			request_check_system_profile ($data);
+			self::request_check_system_profile ($data);
 		}
 
 		self::db_prepare_delete (self::$_mod["db_table"]["name"]
