@@ -1,10 +1,15 @@
 /*
+	Copyright 2014 Mhd Sulhan
+	Authors:
+		- mhd.sulhan (m.shulhan@gmail.com)
+*/
+/*
 	Elements
 */
 body {
-	background-image	:url(../../images/home/wallpaper.jpg) !important;
-	background-repeat	:no-repeat !important;
-	background-size		:cover !important;
+	background-color	:#1C4F6F !important;
+	background-image	:url(../../images/home/wallpaper.png) !important;
+	background-repeat	:repeat !important;
 }
 
 /*
@@ -15,10 +20,20 @@ body {
 /*
 	ID
 */
+#Login_logo {
+	margin			:10px;
+	vertical-align	:center;
+	text-align		:center;
+}
+
+#Login_logo img {
+	height			:160px;
+}
+
 #poweredby {
     position			: absolute;
     bottom				: 20px;
-    right				: 20px;
+    right				: 40px;
     z-index				: 15000;
     /* IE 5-7 */
     filter				: alpha(opacity=70);
@@ -32,8 +47,8 @@ body {
 
 #poweredby div {
     position			: relative;
-    width				: 150px;
+    width				: 170px;
     height				: 25px;
-    background-image	: url(../../images/home/powered-by-ext-js.png);
+    background-image	: url(../../images/home/powered-by-librextjs.png);
     background-repeat	: no-repeat;
 }

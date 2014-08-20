@@ -50,6 +50,12 @@ Ext.override (Ext.Loader, {
 ,	enabled			:true
 });
 
+// set default label align to right.
+Ext.override (Ext.form.field.Base, {
+	labelAlign		:"right"
+,	labelSeparator	:" : "
+});
+
 //	Register our application.
 Ext.application ({
 	name		:"Jx"
@@ -59,6 +65,7 @@ Ext.application ({
 
 Ext.apply (Jx, {
 	pageSize	:_g_paging_size
+,	store		:{}
 ,	msg			:
 	{
 		el				:""
@@ -1129,7 +1136,11 @@ Ext.define ("Jx.Form", {
 						if (undefined == cc.editor.fieldLabel) {
 							cc.editor.fieldLabel = cc.header || cc.text;
 						}
-						cc.editor.name = cc.dataIndex;
+						if (undefined === cc.name) {
+							cc.editor.name = cc.dataIndex;
+						} else {
+							cc.editor.name = cc.name;
+						}
 
 						fs.add (cc.editor);
 					}
@@ -1140,7 +1151,11 @@ Ext.define ("Jx.Form", {
 				if (undefined == c.editor.fieldLabel) {
 					c.editor.fieldLabel	= c.header || c.text;
 				}
-				c.editor.name		= c.dataIndex;
+				if (undefined === c.name) {
+					c.editor.name = c.dataIndex;
+				} else {
+					c.editor.name = c.name;
+				}
 
 				this.add (c.editor);
 			}
@@ -1483,6 +1498,102 @@ Ext.define ("Jx.GridPaging", {
 //}}}
 });
 /*
+	Copyright 2014 - Mhd Sulhan
+	Authors:
+		- mhd.sulhan (m.shulhan@gmail.com)
+
+	Grid display column in tree.
+*/
+Ext.define ("Jx.GridTree", {
+	extend		:"Ext.tree.Panel"
+,	alias		:"widget.jx.gridtree"
+,	titleAlign	:"center"
+,	useArrows	:true
+,	rootVisible	:false
+,	config		:
+	{
+		perm					:0
+	,	selectedData			:[]
+		// crud buttons.
+	,	plugCrudButtons			:undefined
+	,	plugCrudButtonsConfig	:{}
+	,	showCrudButtons			:true
+		// search bar
+	,	plugSearchField			:undefined
+	,	plugSearchFieldConfig	:{}
+	,	showSearchField			:true
+	}
+
+//{{{ constructor
+,	constructor		:function (config)
+	{
+		Ext.merge (this, config);
+
+		this.callParent ();
+
+		// Inject CRUD buttons to panel.
+		if (this.showCrudButtons) {
+			this.plugCrudButtons	= Ext.create ("Jx.plugin.CrudButtons"
+									, this.plugCrudButtonsConfig
+									);
+			this.addPlugin (this.plugCrudButtons);
+		}
+
+		// Inject search field.
+		if (this.showSearchField) {
+			this.plugSearchField	= Ext.create ("Jx.plugin.SearchField"
+									, this.plugSearchFieldConfig
+									);
+
+			this.addPlugin (this.plugSearchField);
+		}
+
+		// Register events.
+		this.addEvents ("refresh");
+
+		this.on ("selectionchange", this._onSelectionChange, this);
+	}
+//}}}
+//{{{ function : remove all data in store.
+,	clearData	:function ()
+	{
+		this.store.loadData ([], false);
+	}
+//}}}
+//{{{ event handler : on row selected.
+,	_onSelectionChange		:function (model, data, e)
+	{
+		var s	= (data.length <= 0);
+		var id	= 0;
+
+		if (this.beforeSelectionChange && typeof (this.beforeSelectionChange) === "function") {
+			if (this.beforeSelectionChange (model, data, e) === false) {
+				return false;
+			}
+		}
+
+		this.selectedData = data;
+
+		if (this.onSelectionChange
+		&& typeof (this.onSelectionChange) === "function") {
+			this.onSelectionChange (model, data, e);
+		}
+
+		if (this.afterSelectionChange
+		&& typeof (this.afterSelectionChange) === "function") {
+			this.afterSelectionChange (model, data, e);
+		}
+	}
+//}}}
+//{{{ function : refresh this grid
+,	doRefresh	:function (perm)
+	{
+		this.perm = perm;
+		this.fireEvent ("refresh", perm);
+	}
+//}}}
+});
+/*
 	Copyright 2013 - x10c-lab.com
 	Authors:
 		- mhd.sulhan (sulhan@x10c-lab.com)
@@ -1636,15 +1747,18 @@ Ext.define ("Jx.GridPaging.RowEditor", {
 */
 Ext.define ("Jx.GridPaging.FormEditor", {
 	extend		:"Ext.panel.Panel"
-,	alias		:"jx.gridpaging.formeditor"
+,	alias		:"widget.jx.gridpaging.formeditor"
 ,	config		:
 	{
-		panelConfig	:
+		layout		:
 		{
-			layout		:"border"
-		,	titleAlign	:"center"
+			type		:"border"
 		}
+	,	titleAlign	:"center"
+	,	closable	:true
+
 	,	grid		:undefined
+	,	isTree		:false
 	,	gridConfig	:
 		{
 			region		:"center"
@@ -1687,22 +1801,26 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 
 ,	constructor	:function (cfg)
 	{
-		this.createGrid (cfg);
-		this.createForm (cfg);
+		var opts = Ext.merge ({}, this.config);
 
-		var id = Jx.generateItemId (cfg, "JxGridPagingFormEditor", "");
+		Ext.merge (opts, cfg);
 
-		var opts = Ext.merge ({
-								itemId: id
-							,	items	:
-								[
-									this.grid
-								,	this.form
-								]
-							}, this.panelConfig);
-			opts = Ext.merge (opts, cfg.panelConfig);
+		if (undefined === opts.id && undefined === opts.itemId) {
+			opts.itemId = Jx.generateItemId (opts, "JxGridPagingFormEditor", "");
+		}
 
-		this.callParent ([opts]);
+		this.createGrid (opts);
+		this.createForm (opts);
+
+		opts.items	= [
+						opts.grid
+					,	opts.form
+					];
+
+		Ext.merge (this, opts);
+		Ext.merge (this, opts.panelConfig);
+
+		this.callParent ();
 	}
 
 ,	createGrid	:function (cfg)
@@ -1716,9 +1834,13 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 						,	store	: cfg.store
 						,	columns	: cfg.columns
 						});
-		Ext.merge (opts, this.gridConfig);
+		Ext.merge (opts, cfg.gridConfig);
 
-		this.grid = Ext.create ("Jx.GridPaging", opts);
+		if (cfg.isTree) {
+			cfg.grid = Ext.create ("Jx.GridTree", opts);
+		} else {
+			cfg.grid = Ext.create ("Jx.GridPaging", opts);
+		}
 	}
 
 ,	createForm	:function (cfg)
@@ -1730,12 +1852,11 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 							store	:cfg.store
 						,	itemId	:id
 						});
-		Ext.merge (opts, this.formConfig);
 		Ext.merge (opts, cfg.formConfig);
 
-		this.form = Ext.create ("Jx.Form", opts);
+		cfg.form = Ext.create ("Jx.Form", opts);
 
-		this.form.columnsToFields (cfg.columns);
+		cfg.form.columnsToFields (cfg.columns);
 	}
 
 ,	doRefresh : function (perm)
@@ -1803,7 +1924,7 @@ Ext.define ("Jx.CardGridForm", {
 			return f;
 		}
 //}}}
-//{{{ store
+//{{{ function: create store.
 	,	createStore : function (self, opts)
 		{
 			if (undefined !== opts.store) {
@@ -1820,12 +1941,18 @@ Ext.define ("Jx.CardGridForm", {
 				if (undefined !== c.columns) {
 					for (var k = 0, cc = undefined; k < c.columns.length; k++) {
 						cc	= c.columns[k];
-						f	= self.self.columnToField (cc);
-						fields.push (f);
+						f	= Jx.CardGridForm.columnToField (cc);
+
+						if (! Ext.Object.isEmpty (f)) {
+							fields.push (f);
+						}
 					}
 				} else {
-					f = self.self.columnToField (c);
-					fields.push (f);
+					f = Jx.CardGridForm.columnToField (c);
+
+					if (! Ext.Object.isEmpty (f)) {
+						fields.push (f);
+					}
 				}
 			}
 
@@ -1850,7 +1977,6 @@ Ext.define ("Jx.CardGridForm", {
 				,	_parent			: self
 				,	store			: self.store
 				,	columns			: opts.fields
-				,	region			:"center"
 
 				,	doAdd	:function ()
 					{
@@ -1924,17 +2050,20 @@ Ext.define ("Jx.CardGridForm", {
 //{{{ constructor
 ,	constructor	:function (cfg)
 	{
-		var opts = {};
+		var opts = Ext.merge ({}, this.config);
 
-		Ext.merge (opts, this.config);
 		Ext.merge (opts, cfg);
+
+		if (undefined === opts.id && undefined === opts.itemId) {
+			opts.itemId = Jx.generateItemId (opts, "JxGridPagingFormEditor", "");
+		}
 
 		this.callParent ([opts]);
 		this.initConfig (opts);
 
-		this.self.createStore (this, opts);
-		this.self.createGrid (this, opts);
-		this.self.createForm (this, opts);
+		Jx.CardGridForm.createStore (this, opts);
+		Jx.CardGridForm.createGrid (this, opts);
+		Jx.CardGridForm.createForm (this, opts);
 	}
 //}}}
 ,	doRefresh : function (perm)

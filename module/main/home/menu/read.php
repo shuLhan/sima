@@ -1,4 +1,9 @@
 <?php
+/*
+	Copyright 2014 Mhd Sulhan
+	Authors:
+		- mhd.sulhan (m.shulhan@gmail.com)
+*/
 require_once "../../../json_begin.php";
 
 try {
@@ -14,18 +19,16 @@ try {
 		from	_menu		A
 		,		_group_menu	B
 		,		_user_group	C
-		where	A.type		in (2,3)
-		and		A.id		= B._menu_id
-		and		B._group_id	= C._group_id
-		and		C._user_id	= ?
-		and		A.pid		= ?
+		where	A.type			in (2,3)
+		and		A.id			= B._menu_id
+		and		B._group_id		= C._group_id
+		and		C._user_id		= ?
+		and		A.pid			= ?
+		and		C._profile_id	= ?
 		";
 
 	$ps = Jaring::$_db->prepare ($q);
-	$i	= 1;
-	$ps->bindValue ($i++, Jaring::$_c_uid, PDO::PARAM_INT);
-	$ps->bindValue ($i++, $pid, PDO::PARAM_INT);
-	$ps->execute ();
+	$ps->execute (array (Jaring::$_c_uid, $pid, Jaring::$_c_profile_id));
 	$rs = $ps->fetchAll (PDO::FETCH_ASSOC);
 
 	foreach ($rs as &$m) {

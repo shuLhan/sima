@@ -1,20 +1,24 @@
+/*
+	Copyright 2014 Mhd Sulhan
+	Authors:
+		- mhd.sulhan (m.shulhan@gmail.com)
+*/
 function JxLogin ()
 {
 	this.id				= "Login";
 
 	this.logo			= Ext.create ("Ext.Component", {
-			height		:130
-		,	html		:"<img src='../../images/logo.png' />"
-		,	margin		:'10'
-		,	width		:"100%"
-		,	style		:"vertical-align:center; text-align:center;"
-	});
+			id			:this.id +"_logo"
+		,	html		:"<img src='"
+							+ Jx.generateModDir ("System_Profile_Logo")
+							+"read.php?_profile_id=1' />"
+		});
 
 	this.username		= Ext.create ("Ext.form.field.Text", {
 			fieldLabel	:"Username"
 		,	itemId		:"username"
 		,	name		:"username"
-		,	labelAlign	:"right"
+		,	allowBlank	:false
 		});
 
 	this.password		= Ext.create ("Ext.form.field.Text", {
@@ -22,26 +26,28 @@ function JxLogin ()
 		,	itemId		:"password"
 		,	name		:"password"
 		,	inputType	:"password"
-		,	labelAlign	:"right"
+		,	allowBlank	:false
 		,	listeners	:
 			{
 				scope		:this
 			,	specialkey	:function (f, e)
 				{
 					if (e.ENTER === e.getKey ()) {
-						this.doLogin ();
+						if (this.panel.isValid ()) {
+							this.doLogin ();
+						}
 					}
 				}
 			}
 		});
 
 	this.buttonLogin	= Ext.create ("Ext.button.Button", {
-			text			:"Log In"
-		,	itemId			:"login"
-		,	iconCls			:"login"
-		,	formBind		:true
-		,	scope			:this
-		,	handler			:function (b)
+			text		:"Log In"
+		,	itemId		:"login"
+		,	iconCls		:"login"
+		,	formBind	:true
+		,	scope		:this
+		,	handler		:function (b)
 			{
 				this.doLogin ();
 			}
@@ -56,7 +62,6 @@ function JxLogin ()
 			{
 				labelStyle		:"font-weight:bold"
 			,	vtype			:"alphanum"
-			,	allowBlank		:false
 			}
 		,	items			:
 			[
@@ -78,12 +83,13 @@ function JxLogin ()
 
 	this.win		= Ext.create ("Ext.window.Window", {
 		id			:this.id
-	,	title		:".:: " + _g_title + " ::."
+	,	title		:_g_title
 	,	titleAlign	:"center"
 	,	autoShow	:true
 	,	draggable	:false
 	,	closable	:false
 	,	resizable	:false
+	,	shadow		:false
 	,	defaultFocus:"username"
 	,	items		:
 		[

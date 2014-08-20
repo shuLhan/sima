@@ -13,7 +13,7 @@ require_once "init.php";
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title><?= Jaring::$_title ?></title>
 
-	<link rel="shortcut icon" href="<?= Jaring::$_path ?>images/favicon.ico"/>
+	<link rel="icon" type="image/png" href="<?= Jaring::$_path ?>images/logo32.png"/>
 
 	<script>
 		var _g_root			="<?= Jaring::$_path ?>";
@@ -25,6 +25,7 @@ require_once "init.php";
 		var _g_content_type	= <?= Jaring::$_content_type ?>;
 		var _g_c_username	="<?= Jaring::$_c_username ?>";
 		var _g_menu_mode	= <?= Jaring::$_menu_mode ?>;
+		var _g_profile_id	= <?= Jaring::$_c_profile_id ?>;
 	</script>
 
 	<link rel="stylesheet" type="text/css" href="<?= Jaring::$_path ?>js/extjs/resources/ext-theme-neptune/ext-theme-neptune-all.css" />
@@ -55,6 +56,7 @@ require_once "init.php";
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/ComboPaging.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/Form.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/GridPaging.js"></script>
+	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/GridTree.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/GridPagingRowEditor.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/GridPagingFormEditor.js"></script>
 	<script type="text/javascript" src="<?= Jaring::$_path ?>js/jx/Store.js"></script>

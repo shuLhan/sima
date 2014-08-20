@@ -8,23 +8,24 @@
 							,Jaring::$_mod["db_table"]["create"]);
 
 	$pi = pathinfo ($_FILES["content"]["name"]);
+	$fupath = Jaring::$_media_dir . sha1_file ($_FILES["content"]["tmp_name"]);
 
 	$bindv		= [];
-
-	$bindv[0]	= Jaring::db_generate_id ();
-	$bindv[1]	= ("" === $_POST["name"]
+	$bindv[]	= Jaring::$_c_profile_id;
+	$bindv[]	= Jaring::db_generate_id ();
+	$bindv[]	= ("" === $_POST["name"]
 					? $pi["filename"]
 					: $_POST["name"]);
-	$bindv[2]	= $pi["extension"];
-	$bindv[3]	= $_FILES["content"]["size"];
-	$bindv[4]	= $_FILES["content"]["type"];
-	$bindv[5]	= $_POST["description"];
-	$bindv[6]	= Jaring::$_media_dir . sha1_file ($_FILES["content"]["tmp_name"]);
+	$bindv[]	= $pi["extension"];
+	$bindv[]	= $_FILES["content"]["size"];
+	$bindv[]	= $_FILES["content"]["type"];
+	$bindv[]	= $_POST["description"];
+	$bindv[]	= $fupath;
 
 	Jaring::$_db_ps->execute ($bindv);
 	Jaring::$_db_ps->closeCursor ();
 
-	move_uploaded_file ($_FILES["content"]["tmp_name"], APP_PATH ."/". $bindv[6]);
+	move_uploaded_file ($_FILES["content"]["tmp_name"], APP_PATH ."/". $fupath);
 
 	Jaring::$_out["success"]	= true;
 	Jaring::$_out["data"]		= Jaring::$MSG_SUCCESS_CREATE;

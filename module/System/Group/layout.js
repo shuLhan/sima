@@ -19,7 +19,8 @@ function JxSystemGroup_User ()
 			}
 		,	fields		:
 			[
-				"id"
+				"_profile_id"
+			,	"id"
 			,	"_user_id"
 			,	"_user_name"
 			,	"_user_realname"
@@ -55,13 +56,11 @@ function JxSystemGroup_User ()
 	this.panel				= Ext.create ("Jx.GridPaging.FormEditor", {
 			itemId			:this.id
 		,	store			:this.store
-		,	panelConfig		:
-			{
-				region			:"east"
-			,	split			:true
-			,	width			:"50%"
-			,	title			:"Users of Group"
-			}
+		,	region			:"east"
+		,	split			:true
+		,	width			:"50%"
+		,	title			:"Users of Group"
+		,	closable		:false
 		,	formConfig		:
 			{
 				region			:"south"
@@ -76,6 +75,14 @@ function JxSystemGroup_User ()
 			}
 		,	columns			:
 			[{
+				header			:"Profile ID"
+			,	dataIndex		:"_profile_id"
+			,	hidden			:true
+			,	editor			:
+				{
+					hidden			:true
+				}
+			},{
 				header			:"ID"
 			,	dataIndex		:"id"
 			,	hidden			:true
@@ -142,6 +149,9 @@ function JxSystemGroup_Group ()
 			url			:this.dir
 		,	fields		:
 			[{
+				name	:"_profile_id"
+			,	type	:"int"
+			},{
 				name	:"id"
 			,	type	:"int"
 			},{
@@ -156,106 +166,69 @@ function JxSystemGroup_Group ()
 			}]
 		});
 
-	this.form				= Ext.create ("Jx.Form", {
-			itemId			:this.id +"_Form"
-		,	store			:self.store
-		,	syncUseStore	:false
-		,	hidden			:true
-		,	region			:"south"
-		,	split			:true
-		,	layout			:"anchor"
-		,	defaults		:
+	this.panel			= Ext.create ("Jx.GridPaging.FormEditor", {
+			itemId		:this.id +"_Group"
+		,	region		:"center"
+		,	title		:"Group of User"
+		,	isTree		:true
+		,	store		:this.store
+		,	closable	:false
+		,	formConfig	:
 			{
-				labelAlign		:"right"
-			,	anchor			:"100%"
+				region			:"south"
+			,	syncUseStore	:false
 			}
-		,	items			:
+		,	columns		:
 			[{
-				name			:"id"
-			,	hidden			:true
+				header		:"Profile ID"
+			,	dataIndex	:"_profile_id"
+			,	hidden		:true
+			,	editor		:
+				{
+					hidden		:true
+				}
 			},{
-				fieldLabel		:"Parent Group"
-			,	name			:"pid"
-			,	xtype			:"treecombo"
-			,	rootVisible		:false
-			,	selectChildren	:false
-			,	canSelectFolders:true
-			,	store			:self.store
-			,	valueField		:"id"
-			,	displayField	:"text"
-			,	allowBlank		:false
-			,	editable		:false
-			},{
-				fieldLabel		:"Group name"
-			,	name			:"name"
-			,	allowBlank		:false
-			}]
-		});
-
-	this.grid				= Ext.create ("Ext.tree.Panel", {
-			itemId			:this.id +"_Grid"
-		,	region			:"center"
-		,	useArrows		:true
-		,	rootVisible		:false
-		,	store			:this.store
-		,	plugins			:
-			[
-				Ext.create ("Jx.plugin.CrudButtons")
-			]
-		,	columns			:
-			[{
 				header			:"ID"
 			,	dataIndex		:"id"
 			,	hidden			:true
+			,	editor			:
+				{
+					hidden			:true
+				}
 			},{
 				header			:"Parent Group"
 			,	dataIndex		:"pid"
 			,	hidden			:true
+			,	editor			:
+				{
+					xtype			:"treecombo"
+				,	rootVisible		:false
+				,	selectChildren	:false
+				,	canSelectFolders:true
+				,	store			:this.store
+				,	valueField		:"id"
+				,	displayField	:"text"
+				,	allowBlank		:false
+				,	editable		:false
+				}
 			},{
 				header			:"Group name"
 			,	xtype			:"treecolumn"
 			,	dataIndex		:"text"
+			,	name			:"name"
 			,	flex			:1
+			,	editor			:
+				{
+					allowBlank		:false
+				}
 			}]
-		,	doAdd		:function ()
-			{
-				self.form.setTitle ("Create new data");
-				self.form.getForm ().reset ();
-				self.form.show ();
-			}
-		,	doEdit		:function ()
-			{
-				self.form.setTitle ("Updating data");
-				self.form.getForm ().reset ();
-				self.form.loadRecord (this.selectedData[0]);
-				self.form.show ();
-			}
-		,	doDelete	:function ()
-			{
-				self.form.getForm ().reset ();
-				self.form.loadRecord (this.selectedData[0]);
-				self.form.doSave ();
-			}
-		});
-
-	this.panel	= Ext.create ("Ext.panel.Panel", {
-			itemId		:this.id +"_Group"
-		,	region		:"center"
-		,	title		:"Group of User"
-		,	titleAlign	:"center"
-		,	layout		:"border"
-		,	items		:
-			[
-				this.grid
-			,	this.form
-			]
 		});
 
 	this.doRefresh	= function (perm)
 	{
-		this.perm		= perm;
-		this.grid.perm	= perm;
-		this.grid.fireEvent ("refresh", perm);
+		this.perm				= perm;
+		this.panel.grid.perm	= perm;
+		this.panel.grid.fireEvent ("refresh", perm);
 	};
 }
 
@@ -287,7 +260,7 @@ function JxSystemGroup ()
 
 		var id = data[0].get ("id");
 
-		this.Groups.form.loadRecord (data[0]);
+		this.Groups.panel.form.loadRecord (data[0]);
 
 		this.Users.doRefresh (this.perm, id);
 	}
@@ -299,7 +272,7 @@ function JxSystemGroup ()
 		this.Users.doRefresh (perm, 0);
 	};
 
-	this.Groups.grid.on ("selectionchange", this.onGroupSelect, this);
+	this.Groups.panel.grid.on ("selectionchange", this.onGroupSelect, this);
 };
 
 var System_Group = new JxSystemGroup ();

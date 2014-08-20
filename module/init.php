@@ -1,4 +1,9 @@
 <?php
+/*
+	Copyright 2014 Mhd Sulhan
+	Authors:
+		- mhd.sulhan (m.shulhan@gmail.com)
+*/
 define ("APP_PATH", realpath (dirname (__FILE__) ."/../") ."/");
 
 function __autoload($class_name) {
@@ -6,4 +11,6 @@ function __autoload($class_name) {
 }
 
 Jaring::init ();
-Jaring::cookies_check ();
+if (! isset ($no_cookies)) {
+	Jaring::cookies_check ();
+}

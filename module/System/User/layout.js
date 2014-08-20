@@ -9,20 +9,36 @@ Ext.define ("Jx.app.System.User", {
 ,	config	:
 	{
 		itemId		:"System_User"
-	,	panelConfig	:
+	,	title		:"System User"
+	,	store		: Ext.create ("Jx.StoreRest",
 		{
-			title		:"System User"
-		,	closable	:true
-		}
+			url		:Jx.generateModDir ("System_User")
+		,	fields	:
+			[
+				"_profile_id"
+			,	"id"
+			,	"name"
+			,	"realname"
+			,	"password"
+			,	"password_old"
+			]
+		})
 	,	columns		:
 		[{
+			header		:"Profile ID"
+		,	dataIndex	:"_profile_id"
+		,	hidden		:true
+		,	editor		:
+			{
+				hidden		:true
+			}
+		},{
 			header		:"ID"
 		,	dataIndex	:"id"
 		,	hidden		:true
 		,	editor		:
 			{
-				xtype		:"textfield"
-			,	hidden		:true
+				hidden		:true
 			}
 		},{
 			header		:"User ID"
@@ -30,8 +46,7 @@ Ext.define ("Jx.app.System.User", {
 		,	flex		:1
 		,	editor		:
 			{
-				xtype		:"textfield"
-			,	vtype		:"alphanum"
+				vtype		:"alphanum"
 			,	allowBlank	:false
 			}
 		},{
@@ -40,8 +55,7 @@ Ext.define ("Jx.app.System.User", {
 		,	flex		:1
 		,	editor		:
 			{
-				xtype		:"textfield"
-			,	allowBlank	:false
+				allowBlank	:false
 			}
 		},{
 			header		:"Current Password"
@@ -53,35 +67,10 @@ Ext.define ("Jx.app.System.User", {
 		,	hidden		:true
 		,	editor		:
 			{
-				xtype		:"textfield"
-			,	vtype		:"alphanum"
+				vtype		:"alphanum"
 			,	inputType	:"password"
 			}
 		}]
-	}
-
-,	constructor : function (config)
-	{
-		var opts	= {};
-		var dir		= Jx.generateModDir (this.config.itemId);
-		var store	= Ext.create ("Jx.StoreRest", {
-				url		:dir
-			,	fields	:
-				[
-					"id"
-				,	"name"
-				,	"realname"
-				,	"password"
-				,	"password_old"
-				]
-			});
-
-		Ext.merge (opts, {
-				store	: store
-			});
-		Ext.merge (opts, this.config);
-
-		this.callParent ([opts]);
 	}
 });
 

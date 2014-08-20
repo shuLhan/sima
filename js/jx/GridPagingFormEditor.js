@@ -7,18 +7,18 @@
 */
 Ext.define ("Jx.GridPaging.FormEditor", {
 	extend		:"Ext.panel.Panel"
-,	alias		:"jx.gridpaging.formeditor"
+,	alias		:"widget.jx.gridpaging.formeditor"
 ,	config		:
 	{
-		panelConfig	:
+		layout		:
 		{
-			layout		:
-			{
-				type		:"border"
-			}
-		,	titleAlign	:"center"
+			type		:"border"
 		}
+	,	titleAlign	:"center"
+	,	closable	:true
+
 	,	grid		:undefined
+	,	isTree		:false
 	,	gridConfig	:
 		{
 			region		:"center"
@@ -61,22 +61,26 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 
 ,	constructor	:function (cfg)
 	{
-		this.createGrid (cfg);
-		this.createForm (cfg);
+		var opts = Ext.merge ({}, this.config);
 
-		var id = Jx.generateItemId (cfg, "JxGridPagingFormEditor", "");
+		Ext.merge (opts, cfg);
 
-		var opts = Ext.merge ({
-								itemId	: id
-							,	items	:
-								[
-									this.grid
-								,	this.form
-								]
-							}, this.panelConfig);
-			opts = Ext.merge (opts, cfg.panelConfig);
+		if (undefined === opts.id && undefined === opts.itemId) {
+			opts.itemId = Jx.generateItemId (opts, "JxGridPagingFormEditor", "");
+		}
 
-		this.callParent ([opts]);
+		this.createGrid (opts);
+		this.createForm (opts);
+
+		opts.items	= [
+						opts.grid
+					,	opts.form
+					];
+
+		Ext.merge (this, opts);
+		Ext.merge (this, opts.panelConfig);
+
+		this.callParent ();
 	}
 
 ,	createGrid	:function (cfg)
@@ -90,9 +94,13 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 						,	store	: cfg.store
 						,	columns	: cfg.columns
 						});
-		Ext.merge (opts, this.gridConfig);
+		Ext.merge (opts, cfg.gridConfig);
 
-		this.grid = Ext.create ("Jx.GridPaging", opts);
+		if (cfg.isTree) {
+			cfg.grid = Ext.create ("Jx.GridTree", opts);
+		} else {
+			cfg.grid = Ext.create ("Jx.GridPaging", opts);
+		}
 	}
 
 ,	createForm	:function (cfg)
@@ -104,12 +112,11 @@ Ext.define ("Jx.GridPaging.FormEditor", {
 							store	:cfg.store
 						,	itemId	:id
 						});
-		Ext.merge (opts, this.formConfig);
 		Ext.merge (opts, cfg.formConfig);
 
-		this.form = Ext.create ("Jx.Form", opts);
+		cfg.form = Ext.create ("Jx.Form", opts);
 
-		this.form.columnsToFields (cfg.columns);
+		cfg.form.columnsToFields (cfg.columns);
 	}
 
 ,	doRefresh : function (perm)

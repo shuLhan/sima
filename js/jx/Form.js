@@ -141,7 +141,11 @@ Ext.define ("Jx.Form", {
 						if (undefined == cc.editor.fieldLabel) {
 							cc.editor.fieldLabel = cc.header || cc.text;
 						}
-						cc.editor.name = cc.dataIndex;
+						if (undefined === cc.name) {
+							cc.editor.name = cc.dataIndex;
+						} else {
+							cc.editor.name = cc.name;
+						}
 
 						fs.add (cc.editor);
 					}
@@ -152,7 +156,11 @@ Ext.define ("Jx.Form", {
 				if (undefined == c.editor.fieldLabel) {
 					c.editor.fieldLabel	= c.header || c.text;
 				}
-				c.editor.name		= c.dataIndex;
+				if (undefined === c.name) {
+					c.editor.name = c.dataIndex;
+				} else {
+					c.editor.name = c.name;
+				}
 
 				this.add (c.editor);
 			}

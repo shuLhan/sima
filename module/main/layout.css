@@ -1,53 +1,59 @@
 /*
+	Copyright 2014 Mhd Sulhan
+	Authors:
+		- mhd.sulhan (m.shulhan@gmail.com)
+*/
+/*
 	Header's icons
 */
-.account			{ background: 0px 0px/24px 24px url("../../images/icons/user.svg") no-repeat !important; }
-.profile			{ background: 0px 0px/16px 16px url("../../images/icons/profile.svg") no-repeat !important; }
-.change-password	{ background: 0px 0px/16px 16px url("../../images/icons/change-password.svg") no-repeat !important; }
-.logout				{ background: 0px 0px/16px 16px url("../../images/icons/logout.svg") no-repeat !important; }
+.account			{ background: 0px 0px/24px 24px url("/images/icons/user.svg") no-repeat !important; }
+.profile			{ background: 0px 0px/16px 16px url("/images/icons/profile.svg") no-repeat !important; }
+.change-password	{ background: 0px 0px/16px 16px url("/images/icons/change-password.svg") no-repeat !important; }
+.logout				{ background: 0px 0px/16px 16px url("/images/icons/logout.svg") no-repeat !important; }
 /*
 	Menu's icons
 */
-.home				{ background: 0px 0px/16px 16px url("../../images/icons/home.svg") no-repeat !important; }
-.dashboard			{ background: 0px 0px/16px 16px url("../../images/icons/dashboard.svg") no-repeat !important; }
-.sys				{ background: 0px 0px/16px 16px url("../../images/icons/sys.svg") no-repeat !important; }
-.user				{ background: 0px 0px/16px 16px url("../../images/icons/user.svg") no-repeat !important; }
-.group				{ background: 0px 0px/16px 16px url("../../images/icons/group.svg") no-repeat !important; }
-.menu				{ background: 0px 0px/16px 16px url("../../images/icons/menu.svg") no-repeat !important; }
-.media				{ background: 0px 0px/16px 16px url("../../images/icons/media.svg") no-repeat !important; }
+.home				{ background: 0px 0px/16px 16px url("/images/icons/home.svg") no-repeat !important; }
+.dashboard			{ background: 0px 0px/16px 16px url("/images/icons/dashboard.svg") no-repeat !important; }
+.sys				{ background: 0px 0px/16px 16px url("/images/icons/sys.svg") no-repeat !important; }
+.user				{ background: 0px 0px/16px 16px url("/images/icons/user.svg") no-repeat !important; }
+.group				{ background: 0px 0px/16px 16px url("/images/icons/group.svg") no-repeat !important; }
+.menu_access		{ background: 0px 0px/16px 16px url("/images/icons/menu_access.svg") no-repeat !important; }
+.menu				{ background: 0px 0px/16px 16px url("/images/icons/menu.svg") no-repeat !important; }
+.media				{ background: 0px 0px/16px 16px url("/images/icons/media.svg") no-repeat !important; }
 /*
 	Button's icons
 */
-.add					{ background-image: url("../../images/icons/add.png") !important; }
-.edit					{ background-image: url("../../images/icons/edit.png") !important; }
-.delete					{ background-image: url("../../images/icons/delete.png") !important; }
-.refresh				{ background-image: url("../../images/icons/refresh.png") !important; }
-.save					{ background-image: url("../../images/icons/save.png") !important; }
-.cancel					{ background-image: url("../../images/icons/cancel.png") !important; }
-.add-multiple			{ background-image: url("../../images/icons/add-multiple.png") !important; }
-.delete-row				{ background-image: url("../../images/icons/delete-row.png") !important; }
-.print					{ background-image: url("../../images/icons/print.png") !important; }
-.copy					{ background: 0px 0px/16px 16px url("../../images/icons/copy.svg") !important; }
-.import					{ background: 0px 0px/16px 16px url("../../images/icons/import.svg") !important; }
+.add					{ background-image: url("/images/icons/add.png") !important; }
+.edit					{ background-image: url("/images/icons/edit.png") !important; }
+.delete					{ background-image: url("/images/icons/delete.png") !important; }
+.refresh				{ background-image: url("/images/icons/refresh.png") !important; }
+.save					{ background-image: url("/images/icons/save.png") !important; }
+.cancel					{ background-image: url("/images/icons/cancel.png") !important; }
+.add-multiple			{ background-image: url("/images/icons/add-multiple.png") !important; }
+.delete-row				{ background-image: url("/images/icons/delete-row.png") !important; }
+.print					{ background-image: url("/images/icons/print.png") !important; }
+.copy					{ background: 0px 0px/16px 16px url("/images/icons/copy.svg") !important; }
+.import					{ background: 0px 0px/16px 16px url("/images/icons/import.svg") !important; }
 /*
 	Form's icons
 */
-.form-add				{ background-image: url("../../images/icons/form-add.png") !important; }
-.form-edit				{ background-image: url("../../images/icons/form-edit.png") !important; }
-.form-save				{ background-image: url("../../images/icons/check.png") !important; }
-.form-cancel			{ background-image: url("../../images/icons/delete.png") !important; }
-.form-search			{ background-image: url("../../images/icons/form-search.png") !important; }
-.form-browse			{ background-image: url("../../images/icons/form-browse.png") !important; }
-.form-clear				{ background-image: url("../../images/icons/form-clear.png") !important; }
-.form-upload			{ background-image: url("../../images/icons/form-upload.png") !important; }
-.form-edit-history		{ background-image: url("../../images/icons/form-edit-history.png") !important; }
-.form-add-multiple		{ background-image: url("../../images/icons/form-add-multiple.png") !important; }
+.form-add				{ background-image: url("/images/icons/form-add.png") !important; }
+.form-edit				{ background-image: url("/images/icons/form-edit.png") !important; }
+.form-save				{ background-image: url("/images/icons/check.png") !important; }
+.form-cancel			{ background-image: url("/images/icons/delete.png") !important; }
+.form-search			{ background-image: url("/images/icons/form-search.png") !important; }
+.form-browse			{ background-image: url("/images/icons/form-browse.png") !important; }
+.form-clear				{ background-image: url("/images/icons/form-clear.png") !important; }
+.form-upload			{ background-image: url("/images/icons/form-upload.png") !important; }
+.form-edit-history		{ background-image: url("/images/icons/form-edit-history.png") !important; }
+.form-add-multiple		{ background-image: url("/images/icons/form-add-multiple.png") !important; }
 /*
 	Panel's icons
 */
-.panel-add				{ background-image: url("../../images/icons/panel-add.png") !important; }
-.panel-next				{ background-image: url("../../images/icons/panel-next.png") !important; }
-.panel-prev				{ background-image: url("../../images/icons/panel-prev.png") !important; }
+.panel-add				{ background-image: url("/images/icons/panel-add.png") !important; }
+.panel-next				{ background-image: url("/images/icons/panel-next.png") !important; }
+.panel-prev				{ background-image: url("/images/icons/panel-prev.png") !important; }
 
 
 /*
@@ -73,7 +79,11 @@
 }
 
 #main_header_logo {
-	margin: 0px 16px 0px 16px;
+	margin		: 10px 10px 0px 10px;
+}
+
+#main_header_logo img {
+	height		: 42px;
 }
 
 #main_header_text {
@@ -137,7 +147,7 @@
 	Home menus
 */
 .panel-background {
-	background		: url(../../images/background.gif) repeat;
+	background		: url(/images/background.gif) repeat;
 }
 #home-menus {
     text-shadow	: #fff 0px 1px 0px;
@@ -282,7 +292,7 @@
 	StatusBar - visual
 */
 .x-statusbar .x-status-busy {
-    background-image	: url("../../images/statusbar/loading.gif");
+    background-image	: url("/images/statusbar/loading.gif");
 }
 .x-statusbar .x-status-text-panel {
     border-color		: #99bbe8 #fff #fff #99bbe8;
@@ -295,10 +305,10 @@
     color				: #777;
 }
 #word-status .x-status-busy {
-    background-image	: url("../../images/statusbar/saving.gif");
+    background-image	: url("/images/statusbar/saving.gif");
 }
 #word-status .x-status-saved {
-    background-image	: url("../../images/statusbar/saved.png");
+    background-image	: url("/images/statusbar/saved.png");
 }
 
 /*
@@ -306,10 +316,10 @@
 */
 .x-statusbar .x-status-error {
     color				: #C33;
-    background-image	: url("../../images/statusbar/exclamation.gif");
+    background-image	: url("/images/statusbar/exclamation.gif");
 }
 .x-statusbar .x-status-valid {
-    background-image	: url("../../images/statusbar/accept.png");
+    background-image	: url("/images/statusbar/accept.png");
 }
 .x-status-error-list {
     border-color		: #C33;
@@ -326,7 +336,7 @@
 	background-position	: 50% -2px;
 	margin-left			: 1px;
 	background-color	: transparent;
-	background-image	: url("../../images/checkbox/unchecked.png");
+	background-image	: url("/images/checkbox/unchecked.png");
 	background-position	: -1px -1px;
 	background-repeat	: no-repeat;
 	height				: 14px;
@@ -334,5 +344,5 @@
 	display				: inline-block;
 }
 .x-boundlist-selected .x-combo-checker {
-	background-image	: url("../../images/checkbox/checked.png");
+	background-image	: url("/images/checkbox/checked.png");
 }
