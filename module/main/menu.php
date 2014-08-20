@@ -78,13 +78,14 @@ try {
 
 			if (count ($menu_items) > 0) {
 				$tbar_layout['overflowHandler'] = "Menu";
-			}
-			$tbar = array (
-				'layout'	=> $tbar_layout
-			,	'items'		=> $menu_items
-			);
 
-			$menu['tbar']	= $tbar;
+				$tbar = array (
+					'layout'	=> $tbar_layout
+				,	'items'		=> $menu_items
+				);
+
+				$menu['tbar']	= $tbar;
+			}
 
 			break;
 		case 1:
