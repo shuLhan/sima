@@ -274,7 +274,9 @@ Ext.define ("Jx.Form", {
 				}
 			,	failure	:function (form, action)
 				{
-					this.store.rejectChanges ();
+					if (undefined !== this.store.rejectChanges) {
+						this.store.rejectChanges ();
+					}
 					this.afterSaveFailure (action);
 				}
 			,	clientValidation	:false
