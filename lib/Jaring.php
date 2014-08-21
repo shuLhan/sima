@@ -184,6 +184,15 @@ class Jaring
 				self::$_db->exec ($q);
 			}
 		}
+
+		/* insert logo */
+		$fp = fopen (APP_PATH ."/images/logo.svg", "rb");
+		$q	= " update _profile set logo_type = 'image/svg+xml', logo = ? where id = 1 ";
+
+		self::$_db_ps = self::$_db->prepare ($q);
+		$i = 1;
+		self::$_db_ps->bindParam ($i++, $fp, PDO::PARAM_LOB);
+		self::$_db_ps->execute ();
 	}
 //}}}
 //{{{ db : initialize database.
@@ -413,7 +422,7 @@ class Jaring
 		// Disallow user to delete data where profile id = 1.
 		if (self::$_mod["db_table"]["profiled"]) {
 			foreach ($data as $d) {
-				if ($d[$f_pid] === 1) {
+				if ($d[$f_pid] === 1 || $d[$f_pid] === "1") {
 					throw new Exception (self::$MSG_DATA_LOCK);
 				}
 			}
