@@ -79,8 +79,22 @@ function request_update_before (&$data)
 function request_delete_before ($data)
 {
 	foreach ($data as $d) {
-		if ($d["id"] === 1) {
+		$user_id = $d["id"];
+
+		if ($user_id === 1 || $user_id === "1") {
 			throw new Exception (Jaring::$MSG_DATA_LOCK);
+		}
+
+		$q = "
+			select	count(_user_id) as n
+			from	_profile_admin
+			where	_user_id = $user_id
+			";
+
+		$rs = Jaring::db_execute ($q, null);
+
+		if ((int) $rs[0]["n"] > 0) {
+			throw new Exception (Jaring::$MSG_ADMIN_PROFILE);
 		}
 	}
 

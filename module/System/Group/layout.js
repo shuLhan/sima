@@ -5,6 +5,7 @@
 */
 var SystemGroupUser;
 
+//{{{ System Group -> User panel
 function JxSystemGroup_User ()
 {
 	var self	= this;
@@ -109,19 +110,22 @@ function JxSystemGroup_User ()
 			,	flex			:1
 			}]
 
+		,	gridConfig	:
+			{
 			/* Disable combo _user_id before deletion */
-		,	beforeDelete : function ()
-			{
-				self.fUserId.allowBlank		= true;
-				self.fUserId.editable		= true;
-				self.fUserId.submitValue	= false;
-				return true;
-			}
-		,	afterDelete : function ()
-			{
-				self.fUserId.allowBlank		= false;
-				self.fUserId.forceSelection	= true;
-				self.fUserId.submitValue	= true;
+				beforeDelete : function ()
+				{
+					self.fUserId.allowBlank		= true;
+					self.fUserId.editable		= true;
+					self.fUserId.submitValue	= false;
+					return true;
+				}
+			,	afterDelete : function ()
+				{
+					self.fUserId.allowBlank		= false;
+					self.fUserId.forceSelection	= true;
+					self.fUserId.submitValue	= true;
+				}
 			}
 		});
 
@@ -138,7 +142,8 @@ function JxSystemGroup_User ()
 		this.panel.doRefresh (perm);
 	};
 }
-
+//}}}
+//{{{ System Group -> Group panel.
 function JxSystemGroup_Group ()
 {
 	var self	= this;
@@ -165,6 +170,17 @@ function JxSystemGroup_Group ()
 			,	type	:"string"
 			}]
 		});
+
+	this.f_pid	= Ext.create ("Ext.ux.TreeCombo", {
+					rootVisible		:false
+				,	selectChildren	:false
+				,	canSelectFolders:true
+				,	store			:this.store
+				,	valueField		:"id"
+				,	displayField	:"text"
+				,	allowBlank		:false
+				,	editable		:false
+				});
 
 	this.panel			= Ext.create ("Jx.GridPaging.FormEditor", {
 			itemId		:this.id +"_Group"
@@ -199,18 +215,7 @@ function JxSystemGroup_Group ()
 				header			:"Parent Group"
 			,	dataIndex		:"pid"
 			,	hidden			:true
-			,	editor			:
-				{
-					xtype			:"treecombo"
-				,	rootVisible		:false
-				,	selectChildren	:false
-				,	canSelectFolders:true
-				,	store			:this.store
-				,	valueField		:"id"
-				,	displayField	:"text"
-				,	allowBlank		:false
-				,	editable		:false
-				}
+			,	editor			:this.f_pid
 			},{
 				header			:"Group name"
 			,	xtype			:"treecolumn"
@@ -222,6 +227,23 @@ function JxSystemGroup_Group ()
 					allowBlank		:false
 				}
 			}]
+		,	gridConfig	:
+			{
+				/* Disable combo parent id before deletion */
+				beforeDelete : function ()
+				{
+					self.f_pid.allowBlank	= true;
+					self.f_pid.editable		= true;
+					self.f_pid.submitValue	= false;
+					return true;
+				}
+			,	afterDelete : function ()
+				{
+					self.f_pid.allowBlank		= false;
+					self.f_pid.forceSelection	= true;
+					self.f_pid.submitValue		= true;
+				}
+			}
 		});
 
 	this.doRefresh	= function (perm)
@@ -231,7 +253,7 @@ function JxSystemGroup_Group ()
 		this.panel.grid.fireEvent ("refresh", perm);
 	};
 }
-
+//}}}
 function JxSystemGroup ()
 {
 	this.id		= "System_Group";

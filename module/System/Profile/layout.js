@@ -69,6 +69,7 @@ function Jx_System_Profile ()
 		,	fieldDefaults	:
 			{
 				labelAlign		:"right"
+			,	labelWidth		:120
 			,	width			:340
 			}
 		,	listeners	:

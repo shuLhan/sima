@@ -8,7 +8,6 @@ require_once "../../init.php";
 
 $fields = [
 	"id"
-,	"_user_id"
 ,	"name"
 ,	"address"
 ,	"phone_1"
@@ -20,8 +19,8 @@ $fields = [
 ];
 
 Jaring::$_mod["db_table"]["name"]		= "_profile";
-Jaring::$_mod["db_table"]["profile_id"]	= "id";
-Jaring::$_mod["db_table"]["read"]		= $fields;
+Jaring::$_mod["db_table"]["profiled"]	= false;
+Jaring::$_mod["db_table"]["read"]		= array_merge ($fields, ["_user_id"]);
 Jaring::$_mod["db_table"]["search"]		= ["name", "address", "email", "website"];
 Jaring::$_mod["db_table"]["order"]		= ["id"];
 Jaring::$_mod["db_table"]["create"]		= $fields;
@@ -52,9 +51,7 @@ function update_logo ()
 	Jaring::$_db_ps->bindParam ($i++, $fp, PDO::PARAM_LOB);
 	Jaring::$_db_ps->bindParam ($i++, $id);
 
-	Jaring::$_db->beginTransaction ();
 	Jaring::$_db_ps->execute ();
-	Jaring::$_db->commit ();
 
 	return true;
 }
@@ -70,6 +67,14 @@ function request_create_after ($data)
 	$profile_id = $data[0]["id"];
 	$user_id	= $data[0]["_user_id"];
 	$gid		= Jaring::db_generate_id ();
+
+	// insert profile's admin
+	$q	= "
+		insert into _profile_admin (_profile_id, _user_id)
+		values ($profile_id, $user_id)
+		";
+
+	Jaring::db_execute ($q, null, false);
 
 	// update user profile id.
 	$q = "
@@ -146,8 +151,26 @@ function request_delete_before ($data)
 
 		Jaring::db_execute ($q, null, false);
 
-		// delete user.
+		// set admin of profile back to be owned by super admin.
+		$q = "
+			update	_user
+			set		_profile_id = 1
+			where	id			= (
+				select	_user_id
+				from	_profile_admin
+				where	_profile_id = $profile_id
+			)
+			";
+
+		Jaring::db_execute ($q, null, false);
+
+		// delete users.
 		$q =" delete from _user where _profile_id = $profile_id";
+
+		Jaring::db_execute ($q, null, false);
+
+		// delete profile admin
+		$q =" delete from _profile_admin where _profile_id = $profile_id ";
 
 		Jaring::db_execute ($q, null, false);
 	}

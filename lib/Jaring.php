@@ -36,6 +36,7 @@ class Jaring
 	public static $MSG_ACCESS_FAIL		= "You don't have sufficient privilege.";
 	public static $MSG_REQUEST_INVALID	= "Invalid request ";
 	public static $MSG_DATA_LOCK		= "This data has been locked, it can not be deleted.";
+	public static $MSG_ADMIN_PROFILE	= "This user is administrator of profile and can not be deleted.";
 	public static $MOD_INIT				= "/init";
 
 	public static $ACCESS_NO		= 0;
@@ -184,6 +185,15 @@ class Jaring
 				self::$_db->exec ($q);
 			}
 		}
+
+		/* insert logo */
+		$fp = fopen (APP_PATH ."/images/logo.svg", "rb");
+		$q	= " update _profile set logo_type = 'image/svg+xml', logo = ? where id = 1 ";
+
+		self::$_db_ps = self::$_db->prepare ($q);
+		$i = 1;
+		self::$_db_ps->bindParam ($i++, $fp, PDO::PARAM_LOB);
+		self::$_db_ps->execute ();
 	}
 //}}}
 //{{{ db : initialize database.
@@ -338,11 +348,11 @@ class Jaring
 //{{{ db : generate ID for each data
 	public static function db_prepare_id (&$data)
 	{
-		$f_pid = Jaring::$_mod["db_table"]["profile_id"];
+		$f_profile_id = Jaring::$_mod["db_table"]["profile_id"];
 
 		if (self::$_mod["db_table"]["profiled"]) {
 			foreach ($data as &$d) {
-				$d[$f_pid] = self::$_c_profile_id;
+				$d[$f_profile_id] = self::$_c_profile_id;
 			}
 		}
 
@@ -408,12 +418,12 @@ class Jaring
 //{{{ crud -> db : check system profile id, throw exception if id = 1.
 	public static function request_check_system_profile ($data)
 	{
-		$f_pid = Jaring::$_mod["db_table"]["profile_id"];
+		$f_profile_id = Jaring::$_mod["db_table"]["profile_id"];
 
 		// Disallow user to delete data where profile id = 1.
 		if (self::$_mod["db_table"]["profiled"]) {
 			foreach ($data as $d) {
-				if ($d[$f_pid] === 1) {
+				if ($d[$f_profile_id] === 1 || $d[$f_profile_id] === "1") {
 					throw new Exception (self::$MSG_DATA_LOCK);
 				}
 			}
@@ -429,7 +439,7 @@ class Jaring
 		$freads		= self::$_mod["db_table"]["read"];
 		$fsearch	= self::$_mod["db_table"]["search"];
 
-		$f_pid		= Jaring::$_mod["db_table"]["profile_id"];
+		$f_profile_id		= Jaring::$_mod["db_table"]["profile_id"];
 		$qselect	= "	select ". implode (",", $freads);
 		$qfrom		= " from ". self::$_mod["db_table"]["name"];
 		$qwhere		= " where 1=1 ";
@@ -439,7 +449,7 @@ class Jaring
 		// check if table is profiled.
 		if (Jaring::$_mod["db_table"]["profiled"]
 		&&  Jaring::$_c_profile_id !== "1") {
-			$qwhere	.= " and $f_pid = ". Jaring::$_c_profile_id;
+			$qwhere	.= " and $f_profile_id = ". Jaring::$_c_profile_id;
 		}
 
 		// get parameter name that has the same name with read fields,
@@ -785,7 +795,7 @@ class Jaring
 		$q		= "";
 		$t		= 0;
 
-		$f_pid	= Jaring::$_mod["db_table"]["profile_id"];
+		$f_profile_id	= Jaring::$_mod["db_table"]["profile_id"];
 		$uri	= explode ("?", $_SERVER["REQUEST_URI"])[0];
 		$path	= APP_PATH.$uri;
 		$module	= self::get_module_name ($uri);
@@ -810,11 +820,14 @@ class Jaring
 
 			// push _profile_id to field ids.
 			if (self::$_mod["db_table"]["profiled"]) {
-				self::$_mod["db_table"]["id"][] = $f_pid;
+				self::$_mod["db_table"]["id"][] = $f_profile_id;
 			}
 
+			self::$_db->beginTransaction ();
 			self::request_switch ($path, $access, $data);
+			self::$_db->commit ();
 		} catch (Exception $e) {
+			self::$_db->rollback ();
 			self::$_out["data"] = addslashes ($e->getMessage ());
 		}
 
