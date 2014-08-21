@@ -18,7 +18,6 @@
 create table _profile
 (
 	id			bigint			not null
-,	_user_id	bigint			not null
 ,	name		varchar (64)	default ''
 ,	address		varchar (512)	default ''
 ,	phone_1		varchar (64)	default ''
@@ -29,6 +28,7 @@ create table _profile
 ,	website		varchar (64)	default ''
 ,	logo_type	varchar (256)	default ''
 ,	logo		blob
+,	constraint	_profile_pk		primary key (id)
 );
 
 /*
@@ -44,8 +44,16 @@ create table _user
 ,	password	varchar (256)	not null
 ,	status		int				default 1
 ,	last_login	timestamp		default current_timestamp
-,	constraint	_user_pk			primary key (id)
-,	constraint	_user_profile_fk	foreign key (_profile_id) references _profile (id)
+,	constraint	_user_pk				primary key (id)
+,	constraint	_user__profile_fk_00	foreign key (_profile_id) references _profile (id)
+);
+
+create table _profile_admin
+(
+	_profile_id	bigint not null
+,	_user_id	bigint not null
+,	constraint _profile_admin_fk_00	foreign key (_profile_id)	references _profile (id)
+,	constraint _profile_admin_fk_01	foreign key (_user_id)		references _user (id)
 );
 
 /*
@@ -62,8 +70,8 @@ create table _group
 ,	pid			bigint			default 0
 ,	name		varchar (128)	not null
 ,	type		integer			default 1
-,	constraint	_group_pk			primary key (id)
-,	constraint	_group_profile_fk	foreign key (_profile_id) references _profile (id)
+,	constraint	_group_pk				primary key (id)
+,	constraint	_group__profile_fk_00	foreign key (_profile_id) references _profile (id)
 );
 
 /*
@@ -75,10 +83,10 @@ create table _user_group
 ,	id			bigint	not null
 ,	_user_id	bigint 	not null
 ,	_group_id	bigint  not null
-,	constraint	_user_group_pk		primary key (id)
-,	constraint	_user_group_fk_00	foreign key (_profile_id)	references _profile (id)
-,	constraint	_user_group_fk_01	foreign key (_user_id)		references _user (id)
-,	constraint	_user_group_fk_02	foreign key (_group_id)		references _group (id)
+,	constraint	_user__group_pk		primary key (id)
+,	constraint	_user__group_fk_00	foreign key (_profile_id)	references _profile (id)
+,	constraint	_user__group_fk_01	foreign key (_user_id)		references _user (id)
+,	constraint	_user__group_fk_02	foreign key (_group_id)		references _group (id)
 );
 
 /*
@@ -101,8 +109,8 @@ create table _menu
 ,	image		varchar (32)	default ''
 ,	module		varchar (256)	default ''
 ,	description	varchar (128)	default ''
-,	constraint	_menu_pk			primary key (id)
-,	constraint	_menu_profile_fk	foreign key (_profile_id) references _profile (id)
+,	constraint	_menu_pk				primary key (id)
+,	constraint	_menu__profile_fk_00	foreign key (_profile_id) references _profile (id)
 );
 
 /*
@@ -120,9 +128,9 @@ create table _group_menu
 	_group_id	bigint 			not null
 ,	_menu_id	integer			not null
 ,	permission	integer			not null default 0
-,	constraint	_group_menu_pk		primary key (_group_id, _menu_id)
-,	constraint	_group_menu_fk_01	foreign key (_group_id)	references _group (id)
-,	constraint	_group_menu_fk_02	foreign key (_menu_id)	references _menu (id)
+,	constraint	_group__menu_pk		primary key (_group_id, _menu_id)
+,	constraint	_group__menu_fk_00	foreign key (_group_id)	references _group (id)
+,	constraint	_group__menu_fk_01	foreign key (_menu_id)	references _menu (id)
 );
 
 /*
@@ -138,8 +146,8 @@ create table _media
 ,	mime		varchar (128)	default ''
 ,	description	varchar (255)	default ''
 ,	path		varchar (1024)	not null
-,	constraint	_media_pk			primary key (id)
-,	constraint	_media_profile_fk	foreign key (_profile_id) references _profile (id)
+,	constraint	_media_pk				primary key (id)
+,	constraint	_media__profile_fk_00	foreign key (_profile_id) references _profile (id)
 );
 
 /*
@@ -150,5 +158,6 @@ create table _media_table
 	table_id	varchar (32)	not null
 ,	_media_id	bigint 			not null
 
-,	constraint _media_table_pk primary key (table_id, _media_id)
+,	constraint _media_table_pk				primary key (table_id, _media_id)
+,	constraint _media_table__media_fk_00	foreign key (_media_id) references _media (id)
 );

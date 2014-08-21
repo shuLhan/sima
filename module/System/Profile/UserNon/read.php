@@ -17,7 +17,7 @@ $q	="
 	and		G.id			= 1
 	and		U.id			not in (
 				select	_user_id
-				from	_profile
+				from	_profile_admin
 			)
 	";
 

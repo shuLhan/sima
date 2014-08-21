@@ -7,7 +7,7 @@
 /*
 	Default profile.
  */
-insert into _profile (id, _user_id, name) values (1, 1, "Jaring");
+insert into _profile (id, name) values (1, "Jaring");
 
 /*
 	User
@@ -16,6 +16,11 @@ insert into _profile (id, _user_id, name) values (1, 1, "Jaring");
 insert into
 _user	(_profile_id	,id	,name		,realname			,password)
 values	(1				,1	,'admin'	,'Administrator'	,'8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918');
+
+/*
+	Profile -> Admin
+*/
+insert into _profile_admin values (1, 1);
 
 /*
 	Group
