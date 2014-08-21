@@ -7,10 +7,46 @@
 
 require_once "../init.php";
 
+function asset_assign ($data)
+{
+	$uid = Jaring::$_c_uid;
+	$q = "
+		insert into asset_assign_log (
+			id
+		,	asset_id
+		,	_user_id
+		,	assign_date
+		) values (
+			?
+		,	?
+		,	$uid
+		,	?
+		)
+	";
+
+	Jaring::$_db_ps = Jaring::$_db->prepare ($q);
+
+	foreach ($data as $v) {
+		$bindv = [];
+
+		$i = 0;
+		$bindv[$i++] = Jaring::db_generate_id () + mt_rand ();
+		$bindv[$i++] = $v[0];
+		$bindv[$i++] = date ("Y-m-d");
+
+		Jaring::$_db_ps->execute ($bindv);
+		Jaring::$_db_ps->closeCursor ();
+
+		unset ($bindv);
+	}
+}
+
+
 $table = "asset";
 
 $fields = [
-	"type_id"
+	"id"
+,	"type_id"
 ,	"merk"
 ,	"model"
 ,	"sn"
@@ -51,32 +87,38 @@ while (! feof ($f)) {
 		continue;
 	}
 
+	// set id
+	array_unshift ($row, Jaring::db_generate_id () + mt_rand ());
+
+	// set barcode if empty
+	if ($row[5] === "") {
+		$row[5] = uniqid ();
+	}
+
 	$data[] = $row;
 	$c++;
 
 	// insert per $nchunk row
 	if (0 === ($c % $nchunk)) {
 		Jaring::$_db->beginTransaction ();
-
 		foreach ($data as $d) {
 			Jaring::$_db->execute ($d);
 			Jaring::$_db->closeCursor ();
 		}
-
+		asset_assign ($data);
 		Jaring::$_db->commit ();
 
-		$data = [];
+		unset ($data);
 	}
 }
 
 if (count ($data) > 0) {
 	Jaring::$_db->beginTransaction ();
-
 	foreach ($data as $d) {
 		Jaring::$_db_ps->execute ($d);
 		Jaring::$_db_ps->closeCursor ();
 	}
-
+	asset_assign ($data);
 	Jaring::$_db->commit ();
 }
 

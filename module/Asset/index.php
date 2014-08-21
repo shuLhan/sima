@@ -68,7 +68,7 @@ function request_create_after ($data)
 			?
 		,	?
 		,	$uid
-		,	NOW()
+		,	?
 		)
 	";
 
@@ -77,8 +77,10 @@ function request_create_after ($data)
 	foreach ($data as $v) {
 		$bindv = [];
 
-		$bindv[0] = Jaring::db_generate_id ();
-		$bindv[1] = $v["id"];
+		$i = 0;
+		$bindv[$i++] = Jaring::db_generate_id ();
+		$bindv[$i++] = $v["id"];
+		$bindv[$i++] = date ("Y-m-d");
 
 		Jaring::$_db_ps->execute ($bindv);
 		Jaring::$_db_ps->closeCursor ();
@@ -88,6 +90,7 @@ function request_create_after ($data)
 }
 //}}}
 
+//{{{ request delete before
 function request_delete_before ($data)
 {
 	foreach ($data as $k => $v) {
@@ -143,5 +146,6 @@ function request_delete_before ($data)
 		Jaring::db_execute ($q, null, false);
 	}
 }
+//}}}
 
 Jaring::request_handle ("crud");
