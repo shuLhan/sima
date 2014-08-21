@@ -27,7 +27,7 @@ $qbind	= array (
 		,	$query
 		);
 
-if (Jaring::$_c_profile_id !== 1) {
+if (Jaring::$_c_profile_id !== "1") {
 	$qwhere .=" and B._profile_id = ". Jaring::$_c_profile_id;
 }
 

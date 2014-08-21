@@ -14,7 +14,7 @@ function request_delete_before ($data)
 {
 	// Disallow user to delete group super admin
 	foreach ($data as $d) {
-		if ($d["id"] === 1) {
+		if ($d["id"] === "1") {
 			throw new Exception (Jaring::$MSG_DATA_LOCK);
 		}
 	}
