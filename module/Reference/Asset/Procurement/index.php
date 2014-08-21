@@ -13,6 +13,7 @@ Jaring::$_mod["db_table"]["search"]	= ["name"];
 Jaring::$_mod["db_table"]["create"]	= ["id", "name"];
 Jaring::$_mod["db_table"]["update"]	= ["name"];
 Jaring::$_mod["db_table"]["order"]	= ["name"];
-Jaring::$_mod["db_table"]["generate_id"] = "id";
+Jaring::$_mod["db_table"]["generate_id"]	= "id";
+Jaring::$_mod["db_table"]["profiled"]		= false;
 
 Jaring::request_handle ("crud");

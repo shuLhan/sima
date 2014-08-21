@@ -32,6 +32,7 @@ Jaring::$_mod["db_table"]["search"]	= [
 Jaring::$_mod["db_table"]["create"]	= array_slice ($fields, 4);
 Jaring::$_mod["db_table"]["update"]	= array_slice ($fields, 4);
 Jaring::$_mod["db_table"]["order"]	= ["removal_date DESC"];
+Jaring::$_mod["db_table"]["profiled"]	= false;
 
 function request_create_after ($data)
 {

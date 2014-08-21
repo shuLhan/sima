@@ -11,7 +11,7 @@
 insert into _menu
 (_profile_id,id	,pid,type	,label				,icon			,image						,module							,description)
 values
-(1			,10	,0	,0		,'Referensi'		,'ref'			,''							,'Reference'					,'')
+ (1			,10	,0	,0		,'Referensi'		,'ref'			,''							,'Reference'					,'')
 ,(1			,11	,10	,3		,'Tipe Aset'		,'ref'			,'icons/reference.svg'		,'Reference_Asset_Type'			,'')
 ,(1			,12	,10	,3		,'Pengadaan Aset'	,'ref'			,'icons/reference.svg'		,'Reference_Asset_Procurement'	,'')
 ,(1			,13	,10	,3		,'Status Aset'		,'ref'			,'icons/reference.svg'		,'Reference_Asset_Status'		,'')
@@ -30,7 +30,7 @@ values
 insert into _group_menu
 (_group_id, _menu_id, permission)
 values
-(1	,10	,4)
+ (1	,10	,4)
 ,(1	,11	,4)
 ,(1	,12	,4)
 ,(1	,13	,4)
@@ -157,21 +157,31 @@ create table asset_removal_log
 ,	constraint asset_removal_log_fk_01	foreign key (asset_id) references asset (id)
 );
 
-insert into asset_type (id, name) values (0, '-');
-insert into asset_type (id, name) values (1, "PC");
-insert into asset_type (id, name) values (2, "Laptop");
+insert into asset_type (id, name)
+values
+ (0	,'-')
+,(1	,"PC")
+,(2	,"Laptop");
 
-insert into asset_procurement (id, name) values (0, "-");
-insert into asset_procurement (id, name) values (1, "Pembelian");
-insert into asset_procurement (id, name) values (2, "Hibah");
+insert into asset_procurement (id, name)
+values
+ (0	,"-")
+,(1	,"Pembelian")
+,(2	,"Hibah");
 
-insert into asset_status (id, name) values (0, "-");
-insert into asset_status (id, name) values (1, "Baik");
-insert into asset_status (id, name) values (2, "Rusak");
+insert into asset_status (id ,name)
+values
+ (0	,"-")
+,(1	,"Baik")
+,(2	,"Rusak");
 
-insert into asset_location (id, name) values (0, "-");
-insert into asset_location (id, name) values (1, "Kantor Pusat");
+insert into asset_location (id, name)
+values
+ (0, "-")
+,(1, "Kantor Pusat");
 
-insert into asset_removal (id, name) values (0, "-");
-insert into asset_removal (id, name) values (1, "Dimusnahkan");
-insert into asset_removal (id, name) values (2, "Dijual");
+insert into asset_removal (id, name)
+values
+ (0, "-")
+,(1, "Dimusnahkan")
+,(2, "Dijual");
