@@ -13,6 +13,7 @@ Ext.define ("Jx.plugin.CopyButton", {
 
 ,	config	:
 	{
+		generate_id		:"id"
 	}
 
 ,	constructor	:function (config)
@@ -111,8 +112,13 @@ Ext.define ("Jx.plugin.CopyButton", {
 		var store = this.cmp.getStore ();
 
 		// add n copy of model to store
-		for (var i = 0; i < ncopy; i++) {
+		for (var i = 1; i <= ncopy; i++) {
 			var copy = data[0].copy ();
+			var id = copy.data[this.generate_id];
+
+			if (this.generate_id != false) {
+				copy.data[this.generate_id] = id + i;
+			}
 
 			store.add (copy);
 		}
