@@ -103,7 +103,7 @@ function JxAssetMaintenance ()
 //}}}
 //{{{ panel: asset maintenance log
 	this.panelAssetMaintenanceLog = Ext.create ("Jx.CardGridForm", {
-			title			:"Riwayat Pemeliharaan"
+			title			:"History of Maintenance"
 		,	url				:this.dir
 		,	closable		:false
 		,	region			:"east"
@@ -138,7 +138,7 @@ function JxAssetMaintenance ()
 //{{{ panel: main
 	this.panel			= Ext.create ("Ext.container.Container", {
 			layout		:"border"
-		,	title		:"Pemeliharaan Aset"
+		,	title		:"Asset Maintenance"
 		,	closable	:true
 		,	items		:
 			[

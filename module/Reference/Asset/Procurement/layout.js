@@ -14,7 +14,7 @@ function JxReferenceAssetProcurement ()
 		,	store		:Jx.app.store.Asset.Procurement
 		,	panelConfig	:
 			{
-				title		:"Referensi > Pengadaan Aset"
+				title		:"Reference > Asset Procurement"
 			,	closable	:true
 			}
 		,	columns		:

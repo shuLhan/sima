@@ -9,7 +9,7 @@ require_once "../../Report/init.php";
 
 $asset_id	= $_POST["id"];
 $logs		= get_asset_assign_log ($asset_id);
-$title		= "Laporan Relokasi Aset";
+$title		= "Asset Relocation Report";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +24,7 @@ $title		= "Laporan Relokasi Aset";
 
 	<?php render_asset ($asset_id, false); ?>
 
-	<h2> Riwayat Relokasi </h2>
+	<h2> History of Relocation </h2>
 	<table class="assign">
 		<tr>
 			<th>Date</th>

@@ -15,7 +15,7 @@ Ext.define ("Jx.app.Report.Disposal", {
 		// panel properties
 	,	itemId		:"Report_Disposal"
 	,	layout		:"border"
-	,	title		:"Laporan Penghapusan Aset"
+	,	title		:"Asset Disposal Report"
 	,	closable	:true
 	}
 //{{{ constructor

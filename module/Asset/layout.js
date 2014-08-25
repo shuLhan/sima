@@ -310,7 +310,7 @@ function JxAsset ()
 //{{{ main panel
 	this.panel			= Ext.create ("Ext.container.Container", {
 			itemId		:this.id
-		,	title		:"Aset"
+		,	title		:"Asset"
 		,	closable	:true
 		,	layout		:"border"
 		,	items		:

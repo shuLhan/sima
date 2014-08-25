@@ -14,7 +14,7 @@ function JxReferenceAssetStatus ()
 		,	store		:Jx.app.store.Asset.Status
 		,	panelConfig	:
 			{
-				title		:"Referensi > Status Aset"
+				title		:"Reference > Asset Status"
 			,	closable	:true
 			}
 		,	columns		:

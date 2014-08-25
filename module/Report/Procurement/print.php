@@ -10,7 +10,7 @@ require_once ("../init.php");
 $asset_type_id	= (int) $_POST["asset_type_id"];
 $date_from		= $_POST["date_from"];
 $date_to		= $_POST["date_to"];
-$title			= "Laporan Pengadaan Aset";
+$title			= "Asset Procurement Report";
 
 $qselect	="
 select	A.*
@@ -96,7 +96,7 @@ $rs		= Jaring::db_execute ($qread);
 	<hr/>
 	<br/>
 	<p>
-	Pembelian dari tanggal <?= $date_from ?> sampai <?= $date_to ?>.
+	Asset procured from <?= $date_from ?> umtil <?= $date_to ?>.
 	</p>
 	<br/>
 	<table>

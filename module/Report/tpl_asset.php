@@ -5,7 +5,7 @@
 	- mhd.sulhan (m.shulhan@gmail.com)
 */
 ?>
-<h2>Data Aset</h2>
+<h2>Asset Data</h2>
 
 <table class="asset">
 	<tr>

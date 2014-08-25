@@ -95,7 +95,7 @@ function JxAssetRemoval ()
 //}}}
 //{{{ panel: asset removal log
 	this.panelAssetRemovalLog = Ext.create ("Jx.CardGridForm", {
-			title			:"Riwayat Penghapusan"
+			title			:"History of Disposal"
 		,	url				:this.dir
 		,	region			:"east"
 		,	width			:"50%"
@@ -131,7 +131,7 @@ function JxAssetRemoval ()
 //{{{ panel: main
 	this.panel			= Ext.create ("Ext.container.Container", {
 			layout		:"border"
-		,	title		:"Penghapusan Aset"
+		,	title		:"Asset Disposal"
 		,	closable	:true
 		,	items		:
 			[

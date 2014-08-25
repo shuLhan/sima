@@ -10,7 +10,7 @@ require_once ("../init.php");
 $asset_type_id	= (int) $_POST["asset_type_id"];
 $date_from		= $_POST["date_from"];
 $date_to		= $_POST["date_to"];
-$title			= "Laporan Penghapusan Aset";
+$title			= "Asset Disposal Report";
 
 $qselect	="
 select	A.*
@@ -86,7 +86,7 @@ $rs		= Jaring::db_execute ($qread);
 	<hr/>
 	<br/>
 	<p>
-	Penghapusan dari tanggal <?= $date_from ?> sampai <?= $date_to ?>.
+	Asset disposed from <?= $date_from ?> until <?= $date_to ?>.
 	</p>
 	<br/>
 	<table>

@@ -14,7 +14,7 @@ function JxReferenceAssetLocation ()
 		,	store		:Jx.app.store.Asset.Location
 		,	panelConfig	:
 			{
-				title		:"Referensi > Lokasi Aset"
+				title		:"Reference > Asset Location"
 			,	closable	:true
 			}
 		,	columns		:

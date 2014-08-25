@@ -10,7 +10,7 @@ require_once "../../Report/init.php";
 $asset_id	= $_POST["id"];
 
 $maint_log	= get_asset_maintenance_log ($asset_id);
-$title		= "Laporan Pemeliharaan Aset";
+$title		= "Asset Maintenance Report";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,7 +25,7 @@ $title		= "Laporan Pemeliharaan Aset";
 
 	<?php render_asset ($asset_id); ?>
 
-	<h2> Riwayat Pemeliharaan </h2>
+	<h2> History of Maintenance </h2>
 	<table class="maintenance">
 		<tr>
 			<th>Date</th>

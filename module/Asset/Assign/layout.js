@@ -123,7 +123,7 @@ function JxAssetAssign ()
 //}}}
 //{{{ panel: assign log
 	this.panelAssetAssignLog = Ext.create ("Jx.CardGridForm", {
-			title			:"Riwayat Relokasi"
+			title			:"History of Relocation"
 		,	url				:this.dir
 		,	region			:"east"
 		,	width			:"50%"
@@ -158,7 +158,7 @@ function JxAssetAssign ()
 //{{{ panel: main
 	this.panel			= Ext.create ("Ext.container.Container", {
 			layout		:"border"
-		,	title		:"Relokasi Aset"
+		,	title		:"Asset Relocation"
 		,	closable	:true
 		,	items		:
 			[

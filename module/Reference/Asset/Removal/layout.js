@@ -14,7 +14,7 @@ function JxReferenceAssetRemoval ()
 		,	store		:Jx.app.store.Asset.Removal
 		,	panelConfig	:
 			{
-				title		:"Referensi > Penghapusan Aset"
+				title		:"Reference > Asset Disposal"
 			,	closable	:true
 			}
 		,	columns		:

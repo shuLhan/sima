@@ -14,7 +14,7 @@ function JxReferenceAssetType ()
 		,	store		:Jx.app.store.Asset.Type
 		,	panelConfig	:
 			{
-				title		:"Referensi > Tipe Aset"
+				title		:"Reference > Asset Type"
 			,	closable	:true
 			}
 		,	columns		:

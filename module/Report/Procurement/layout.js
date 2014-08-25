@@ -15,7 +15,7 @@ Ext.define ("Jx.app.Report.Procurement", {
 		// panel properties
 	,	itemId		:"Report_Procurement"
 	,	layout		:"border"
-	,	title		:"Laporan Pengadaan Aset"
+	,	title		:"Asset Procurement Report"
 	,	closable	:true
 	}
 
