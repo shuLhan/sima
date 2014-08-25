@@ -39,6 +39,22 @@ function JxAssetBarcode ()
 				}]
 			}
 		});
+
+	var cols = Ext.Array.clone (this.panelAsset.columns);
+
+	cols.push ({
+			xtype		:"actioncolumn"
+		,	iconCls		:"add"
+		,	width		:30
+		,	handler		:function (view, rowidx, colidx, item, e, record)
+			{
+				Asset_Barcode.panelAsset.store.remove (record);
+				record.set ("print_count", 1);
+				Asset_Barcode.storePrint.add (record);
+			}
+		});
+
+	this.panelAsset.reconfigure (this.panelAsset.store, cols);
 //}}}
 
 //{{{ print barcode
@@ -83,7 +99,7 @@ function JxAssetBarcode ()
 		,	store		:this.storePrint
 		,	region		:"east"
 		,	split		:true
-		,	width		:"50%"
+		,	width		:"40%"
 		,	plugins		:
 			[{
 				ptype		:"cellediting"
@@ -112,6 +128,15 @@ function JxAssetBarcode ()
 			]
 		,	columns	:
 			[{
+				xtype		:"actioncolumn"
+			,	iconCls		:"delete"
+			,	width		:30
+			,	handler		:function (view, rowidx, colidx, item, e, record)
+				{
+					Asset_Barcode.panelAsset.store.add (record);
+					Asset_Barcode.storePrint.remove (record);
+				}
+			},{
 				header		:"Barcode"
 			,	dataIndex	:"barcode"
 			,	width		:130
