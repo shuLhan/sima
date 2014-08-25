@@ -86,7 +86,7 @@ table.assign td:nth-child(4) {
 	border-bottom	:1px silver solid;
 }
 .profile > div {
-	padding		:10px 0px 0px;
+	padding		:10px 0px 4px;
 }
 .profile_logo {
 	float		:left;

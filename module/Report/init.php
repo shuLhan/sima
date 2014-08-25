@@ -100,7 +100,7 @@ function get_company_profile ()
 
 function get_company_profile_logo ()
 {
-	return "/module/System/Profile/Logo/read.php?_dc=". time ();
+	return "/module/System/Profile/Logo/read.php?_profile_id=". Jaring::$_c_profile_id ."&_dc=". time ();
 }
 
 function render_profile ()
