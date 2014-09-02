@@ -83,7 +83,7 @@ class Jaring
 							]
 						,	"db_rel"	=> [
 								"tables"		=> []
-							,	"links"			=> []
+							,	"conditions"		=> []
 							,	"read"			=> []
 							]
 						];
@@ -356,11 +356,11 @@ class Jaring
 //{{{ db : generate ID for each data
 	public static function db_prepare_id (&$data)
 	{
-		$f_profile_id = Jaring::$_mod["db_table"]["profile_id"];
+		$fprofid = Jaring::$_mod["db_table"]["profile_id"];
 
 		if (self::$_mod["db_table"]["profiled"]) {
 			foreach ($data as &$d) {
-				$d[$f_profile_id] = self::$_c_profile_id;
+				$d[$fprofid] = self::$_c_profile_id;
 			}
 		}
 
@@ -426,12 +426,12 @@ class Jaring
 //{{{ crud -> db : check system profile id, throw exception if id = 1.
 	public static function request_check_system_profile ($data)
 	{
-		$f_profile_id = Jaring::$_mod["db_table"]["profile_id"];
+		$fprofid = Jaring::$_mod["db_table"]["profile_id"];
 
 		// Disallow user to delete data where profile id = 1.
 		if (self::$_mod["db_table"]["profiled"]) {
 			foreach ($data as $d) {
-				if ($d[$f_profile_id] === 1 || $d[$f_profile_id] === "1") {
+				if ($d[$fprofid] === 1 || $d[$fprofid] === "1") {
 					throw new Exception (self::$MSG_DATA_LOCK);
 				}
 			}
@@ -444,23 +444,26 @@ class Jaring
 		$query		= "'%".$_GET["query"]."%'";
 		$start		= (int) $_GET["start"];
 		$limit		= (int) $_GET["limit"];
+		$tname		= self::$_mod["db_table"]["name"];
 		$freads		= self::$_mod["db_table"]["read"];
 		$fsearch	= self::$_mod["db_table"]["search"];
 
-		$f_profile_id		= Jaring::$_mod["db_table"]["profile_id"];
+		$fprofid	= Jaring::$_mod["db_table"]["profile_id"];
 		$qselect	= "	select ". implode (",", $freads);
-		$qfrom		= " from ". self::$_mod["db_table"]["name"];
+		$qfrom		= " from ". $tname;
 		$qwhere		= " where 1=1 ";
-		$qorder		= " order by ". implode (",", self::$_mod["db_table"]["order"]);
+		$qorder		= " order by ";
 		$qlimit		= "	limit ". $start .",". $limit;
 
 		// populate relationship.
 		if (count (self::$_mod["db_rel"]["tables"]) > 0) {
-			$qselect	.= "," . implode (",", self::$_mod["db_rel"]["read"]);
+			if (count (self::$_mod["db_rel"]["read"])) {
+				$qselect .= "," . implode (",", self::$_mod["db_rel"]["read"]);
+			}
 
 			$qfrom		.= "," . implode (",", self::$_mod["db_rel"]["tables"]);
 
-			foreach (self::$_mod["db_rel"]["links"] as $k => $v) {
+			foreach (self::$_mod["db_rel"]["conditions"] as $k => $v) {
 				$qwhere .= " and ". $k ."=". $v;
 			}
 		}
@@ -468,7 +471,7 @@ class Jaring
 		// check if table is profiled.
 		if (Jaring::$_mod["db_table"]["profiled"]
 		&&  Jaring::$_c_profile_id !== "1") {
-			$qwhere	.= " and $f_profile_id = ". Jaring::$_c_profile_id;
+			$qwhere	.= " and $tname.$fprofid = ". Jaring::$_c_profile_id;
 		}
 
 		// get parameter name that has the same name with read fields,
@@ -478,7 +481,7 @@ class Jaring
 				continue;
 			}
 
-			$qwhere .=" and $v = ";
+			$qwhere .=" and $tname.$v = ";
 
 			if (is_numeric ($_GET[$v])) {
 				$qwhere .= $_GET[$v];
@@ -496,15 +499,23 @@ class Jaring
 			if ($k > 0) {
 				$qwhere .= " or ";
 			}
-			$qwhere .= " $v like $query ";
+			$qwhere .= " $tname.$v like $query ";
 		}
 
 		if (count ($fsearch) > 0) {
 			$qwhere .= ")";
 		}
 
+		// add order by
+		foreach (self::$_mod["db_table"]["order"] as $k => $v) {
+			if ($k > 0) {
+				$qwhere .= ",";
+			}
+			$qorder .= " $tname.$v ";
+		}
+
 		// Get total rows
-		$qtotal	=" select	COUNT(". self::$_mod["db_table"]["id"][0] .") as total "
+		$qtotal	=" select	COUNT($tname.". self::$_mod["db_table"]["id"][0] .") as total "
 				. $qfrom
 				. $qwhere;
 
@@ -814,7 +825,7 @@ class Jaring
 		$q		= "";
 		$t		= 0;
 
-		$f_profile_id	= Jaring::$_mod["db_table"]["profile_id"];
+		$fprofid	= Jaring::$_mod["db_table"]["profile_id"];
 		$uri	= explode ("?", $_SERVER["REQUEST_URI"])[0];
 		$path	= APP_PATH.$uri;
 		$module	= self::get_module_name ($uri);
@@ -839,7 +850,7 @@ class Jaring
 
 			// push _profile_id to field ids.
 			if (self::$_mod["db_table"]["profiled"]) {
-				self::$_mod["db_table"]["id"][] = $f_profile_id;
+				self::$_mod["db_table"]["id"][] = $fprofid;
 			}
 
 			self::$_db->beginTransaction ();
