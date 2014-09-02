@@ -50,8 +50,8 @@ try {
 	$ps->execute ();
 
 	// Set cookies values.
-	setcookie ("user.id", $rs[0]['id'], 0, Jaring::$_path);
-	setcookie ("user.name", $rs[0]['realname'], 0, Jaring::$_path);
+	setcookie ("user_id", $rs[0]['id'], 0, Jaring::$_path);
+	setcookie ("user_name", $rs[0]['realname'], 0, Jaring::$_path);
 	setcookie ("profile_id", $rs[0]["_profile_id"], 0, Jaring::$_path);
 
 	$r['success']	= true;
