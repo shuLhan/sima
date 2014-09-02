@@ -20,12 +20,18 @@ $fields = [
 
 Jaring::$_mod["db_table"]["name"]		= "_profile";
 Jaring::$_mod["db_table"]["profiled"]	= false;
-Jaring::$_mod["db_table"]["read"]		= array_merge ($fields, ["_user_id"]);
+Jaring::$_mod["db_table"]["read"]		= $fields;
 Jaring::$_mod["db_table"]["search"]		= ["name", "address", "email", "website"];
 Jaring::$_mod["db_table"]["order"]		= ["id"];
 Jaring::$_mod["db_table"]["create"]		= $fields;
 Jaring::$_mod["db_table"]["update"]		= array_slice ($fields, 1);
 Jaring::$_mod["db_table"]["generate_id"]= null;
+
+Jaring::$_mod["db_rel"]["tables"]		= ["_profile_admin"];
+Jaring::$_mod["db_rel"]["links"]		= [
+											"_profile.id" => "_profile_admin._profile_id"
+										];
+Jaring::$_mod["db_rel"]["read"]			= ["_user_id"];
 
 function update_logo ()
 {
