@@ -28,7 +28,7 @@ Jaring::$_mod["db_rel"]["read"]			=
 
 Jaring::$_mod["db_rel"]["conditions"]	=
 	[
-		"_user_group._user_id"	=> "_user.id"
+		"_user_group._user_id = _user.id"
 	];
 
 Jaring::$_mod["db_rel"]["search"]		=

@@ -30,7 +30,7 @@ Jaring::$_mod["db_table"]["generate_id"]= null;
 Jaring::$_mod["db_rel"]["tables"]		= ["_profile_admin"];
 Jaring::$_mod["db_rel"]["conditions"]	=
 [
-	"_profile.id" => "_profile_admin._profile_id"
+	"_profile.id = _profile_admin._profile_id"
 ];
 Jaring::$_mod["db_rel"]["read"]			= ["_user_id"];
 

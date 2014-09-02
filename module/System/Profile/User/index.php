@@ -10,10 +10,10 @@ Jaring::$_mod["db_table"]["name"]		= "_user";
 Jaring::$_mod["db_table"]["profiled"]	= false;
 Jaring::$_mod["db_table"]["read"] 		=
 [
-	"_user._profile_id"
-,	"_user.id"
-,	"_user.name"
-,	"_user.realname"
+	"_profile_id"
+,	"id"
+,	"name"
+,	"realname"
 ];
 Jaring::$_mod["db_table"]["order"] 		= ["id"];
 
@@ -25,9 +25,9 @@ Jaring::$_mod["db_rel"]["tables"]		=
 
 Jaring::$_mod["db_rel"]["conditions"]	=
 [
-	"_user.id"				=> "_user_group.id"
-,	"_user_group._group_id"	=> "_group.id"
-,	"_group.id"				=> "1"
+	"_user.id				= _user_group._user_id"
+,	"_user_group._group_id	= _group.id"
+,	"_group.id				= 1"
 ];
 
 Jaring::request_handle ("crud");
