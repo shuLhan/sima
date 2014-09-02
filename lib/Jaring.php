@@ -52,6 +52,8 @@ class Jaring
 	public static $_path			= "/";
 	public static $_path_mod		= "module";
 	public static $_mod_init		= "";
+	public static $_mod_home		= "/module/home/";
+	public static $_mod_main		= "/module/main/";
 	public static $_content_type	= 0;
 	public static $_menu_mode		= 1;
 	public static $_paging_size		= 50;
@@ -237,12 +239,11 @@ class Jaring
 //{{{ cookie : check if user has cookie.
 	public static function cookies_check ()
 	{
-		$m_home	= self::$_path . self::$_path_mod ."/home/";
-		$p_home	= strpos ($_SERVER["REQUEST_URI"], $m_home);
+		$p_home	= strpos ($_SERVER["REQUEST_URI"], self::$_mod_home);
 
 		if (0 === self::$_c_uid) {
 			if (false === $p_home) {
-				header ("Location:". $m_home);
+				header ("Location:". self::$_mod_home);
 				exit ();
 			}
 		}
@@ -265,6 +266,8 @@ class Jaring
 		self::$_path			= $app_conf["app.path"];
 		self::$_path_mod		= $app_conf["app.module.dir"];
 		self::$_mod_init		= self::$_path . self::$_path_mod . self::$MOD_INIT . self::$_ext;
+		self::$_mod_home		= self::$_path . self::$_path_mod . "/home/";
+		self::$_mod_main		= self::$_path . self::$_path_mod . "/main/";
 		self::$_content_type	= $app_conf["app.content.type"];
 		self::$_menu_mode		= $app_conf["app.menu.mode"];
 		self::$_paging_size		= $app_conf["app.paging.size"];
