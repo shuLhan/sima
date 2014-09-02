@@ -83,8 +83,10 @@ class Jaring
 							]
 						,	"db_rel"	=> [
 								"tables"		=> []
-							,	"conditions"		=> []
+							,	"conditions"	=> []
 							,	"read"			=> []
+							,	"search"		=> []
+							,	"order"			=> []
 							]
 						];
 
@@ -447,28 +449,25 @@ class Jaring
 		$tname		= self::$_mod["db_table"]["name"];
 		$freads		= self::$_mod["db_table"]["read"];
 		$fsearch	= self::$_mod["db_table"]["search"];
+		$forder		= self::$_mod["db_table"]["order"];
 
 		$fprofid	= Jaring::$_mod["db_table"]["profile_id"];
-		$qselect	= "	select ". implode (",", $freads);
-		$qfrom		= " from ". $tname;
-		$qwhere		= " where 1=1 ";
-		$qorder		= " order by ";
-		$qlimit		= "	limit ". $start .",". $limit;
+		$qselect	= "\n select ";
+		$qfrom		= "\n from ". $tname;
+		$qwhere		= "\n where 1=1 ";
+		$qorder		= "";
+		$qlimit		= "\n limit ". $start .",". $limit;
 
-		// populate relationship.
-		if (count (self::$_mod["db_rel"]["tables"]) > 0) {
-			if (count (self::$_mod["db_rel"]["read"])) {
-				$qselect .= "," . implode (",", self::$_mod["db_rel"]["read"]);
+		// generate select
+		foreach ($freads as $k => $v) {
+			if ($k > 0) {
+				$qselect .= ",";
 			}
 
-			$qfrom		.= "," . implode (",", self::$_mod["db_rel"]["tables"]);
-
-			foreach (self::$_mod["db_rel"]["conditions"] as $k => $v) {
-				$qwhere .= " and ". $k ."=". $v;
-			}
+			$qselect .= "$tname.$v";
 		}
 
-		// check if table is profiled.
+		// if table is profiled, then filter by profile id
 		if (Jaring::$_mod["db_table"]["profiled"]
 		&&  Jaring::$_c_profile_id !== "1") {
 			$qwhere	.= " and $tname.$fprofid = ". Jaring::$_c_profile_id;
@@ -507,11 +506,61 @@ class Jaring
 		}
 
 		// add order by
-		foreach (self::$_mod["db_table"]["order"] as $k => $v) {
-			if ($k > 0) {
-				$qwhere .= ",";
+		if (count ($forder) > 0) {
+			$qorder	= "\n order by ";
+
+			foreach (self::$_mod["db_table"]["order"] as $k => $v) {
+				if ($k > 0) {
+					$qwhere .= ",";
+				}
+				$qorder .= " $tname.$v ";
 			}
-			$qorder .= " $tname.$v ";
+		}
+
+		// populate relationship.
+		if (count (self::$_mod["db_rel"]["tables"]) > 0) {
+			// generate relationship tables.
+			$qfrom .= "," . implode (",", self::$_mod["db_rel"]["tables"]);
+
+			// generate relationship fields.
+			$a = self::$_mod["db_rel"]["read"];
+
+			if (count ($a) > 0) {
+				$qselect .= "," . implode (",", $a);
+			}
+
+			// generate relationship conditions.
+			foreach (self::$_mod["db_rel"]["conditions"] as $k => $v) {
+				$qwhere .= " and ". $k ."=". $v;
+			}
+
+			// generate relationship search.
+			$a = self::$_mod["db_rel"]["search"];
+
+			if (count ($a) > 0) {
+				$qwhere .=" and ( ";
+
+				foreach ($a as $k => $v) {
+					if ($k > 0) {
+						$qwhere .=" or ";
+					}
+					$qwhere .= " $v like $query ";
+				}
+
+				$qwhere .=" ) ";
+			}
+
+			// generate order by
+			$a = self::$_mod["db_rel"]["order"];
+			if (count ($a) > 0) {
+				if (strlen ($qorder) <= 0) {
+					$qorder = " order by ";
+				} else {
+					$qorder .= ",";
+				}
+
+				$qorder .= implode (",", $a);
+			}
 		}
 
 		// Get total rows
@@ -525,6 +574,8 @@ class Jaring
 				. $qwhere
 				. $qorder
 				. $qlimit;
+
+		error_log ($qread);
 
 		self::$_out["total"]	= (int) self::db_execute ($qtotal)[0]["total"];
 		self::$_out["data"]		= self::db_execute ($qread);
