@@ -331,23 +331,6 @@ class Jaring
 		return $s;
 	}
 //}}}
-//{{{ db : get last inserted row id
-	public static function get_last_insert_id ($table, $id, $fields, $bindv)
-	{
-		$q	="
-			select	$id
-			from	$table
-			where ". self::db_prepare_fields ($fields);
-
-		$rs = self::db_execute ($q, $bindv);
-
-		if (count ($rs) > 0) {
-			return $rs[0][$id];
-		}
-
-		return 0;
-	}
-//}}}
 //{{{ db : generate uniq id using timestamp + millisecond
 	public static function db_generate_id ()
 	{
