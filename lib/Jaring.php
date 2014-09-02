@@ -81,6 +81,11 @@ class Jaring
 							,	"create"		=> []
 							,	"update"		=> []
 							]
+						,	"db_rel"	=> [
+								"tables"		=> []
+							,	"links"			=> []
+							,	"read"			=> []
+							]
 						];
 
 	public static $_out	= [
@@ -394,7 +399,7 @@ class Jaring
 		self::$_db_ps = self::$_db->prepare ($q);
 	}
 //}}}
-//{{{ db : prepare statement for updating data
+//{{{ db : prepare update query
 	public static function db_prepare_update ($table, $fields, $ids)
 	{
 		$qupdate=" update $table ";
@@ -448,6 +453,17 @@ class Jaring
 		$qwhere		= " where 1=1 ";
 		$qorder		= " order by ". implode (",", self::$_mod["db_table"]["order"]);
 		$qlimit		= "	limit ". $start .",". $limit;
+
+		// populate relationship.
+		if (count (self::$_mod["db_rel"]["tables"]) > 0) {
+			$qselect	.= "," . implode (",", self::$_mod["db_rel"]["read"]);
+
+			$qfrom		.= "," . implode (",", self::$_mod["db_rel"]["tables"]);
+
+			foreach (self::$_mod["db_rel"]["links"] as $k => $v) {
+				$qwhere .= " and ". $k ."=". $v;
+			}
+		}
 
 		// check if table is profiled.
 		if (Jaring::$_mod["db_table"]["profiled"]
