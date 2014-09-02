@@ -423,7 +423,10 @@ class Jaring
 	}
 //}}}
 //{{{ crud -> db : request read : populate relationship.
-	public static function request_read_populate_relationship (&$qselect, &$qfrom, &$qwhere, &$qorder)
+	public static function request_read_populate_relationship (&$qselect, &$qfrom
+															, &$qwhere
+															, &$qorder
+															, $query)
 	{
 		// populate relationship.
 		if (count (self::$_mod["db_rel"]["tables"]) <= 0) {
@@ -442,14 +445,16 @@ class Jaring
 
 		// generate relationship: where conditions.
 		foreach (self::$_mod["db_rel"]["conditions"] as $k => $v) {
-			$qwhere .= " and ". $k ."=". $v;
+			if ($v !== "") {
+				$qwhere .= " and ". $v;
+			}
 		}
 
 		// generate relationship: where search.
 		$a = self::$_mod["db_rel"]["search"];
 		if (count ($a) > 0) {
 			$qwhere .=" and (";
-			$qwhere .= implode_with_circumfix (" or ", $a, "", " like $query ");
+			$qwhere .= self::implode_with_circumfix (" or ", $a, "", " like $query ");
 			$qwhere .=")";
 		}
 
@@ -478,11 +483,11 @@ class Jaring
 		$forder		= self::$_mod["db_table"]["order"];
 
 		$fprofid	= self::$_mod["db_table"]["profile_id"];
-		$qselect	= "\n select ";
-		$qfrom		= "\n from ". $tname;
-		$qwhere		= "\n where 1=1 ";
+		$qselect	= " select ";
+		$qfrom		= " from ". $tname;
+		$qwhere		= " where 1=1 ";
 		$qorder		= "";
-		$qlimit		= "\n limit ". $start .",". $limit;
+		$qlimit		= " limit ". $start .",". $limit;
 
 		// if table is profiled, then filter by profile id
 		if (self::$_mod["db_table"]["profiled"]
@@ -520,12 +525,11 @@ class Jaring
 
 		// generate order by.
 		if (count ($forder) > 0) {
-			$qorder	= "\n order by ";
-
+			$qorder	= " order by ";
 			$qorder .= self::implode_with_circumfix (",", $forder, $tname.".", "");
 		}
 
-		self::request_read_populate_relationship ($qselect, $qfrom, $qwhere, $qorder);
+		self::request_read_populate_relationship ($qselect, $qfrom, $qwhere, $qorder, $query);
 
 		// Get total rows
 		$qtotal	=" select COUNT($tname." . self::$_mod["db_table"]["id"][0] .") as total "
