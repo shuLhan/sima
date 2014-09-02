@@ -575,8 +575,6 @@ class Jaring
 				. $qorder
 				. $qlimit;
 
-		error_log ($qread);
-
 		self::$_out["total"]	= (int) self::db_execute ($qtotal)[0]["total"];
 		self::$_out["data"]		= self::db_execute ($qread);
 		self::$_out["success"]	= true;

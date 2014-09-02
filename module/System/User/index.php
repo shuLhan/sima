@@ -22,7 +22,6 @@ Jaring::$_mod["db_table"]["read"]	=
 									,	"name"
 									,	"realname"
 									,	"password as password_old"
-									,	"'' as password"
 									];
 Jaring::$_mod["db_table"]["search"]	= ["name", "realname"];
 Jaring::$_mod["db_table"]["order"]	= ["name"];
@@ -31,7 +30,6 @@ Jaring::$_mod["db_table"]["update"]	= array_slice ($fields, 2);
 
 function request_read_after (&$data)
 {
-	// add user's group name to result set.
 	$q	="
 		select	G.name
 		from	_group		G
@@ -49,6 +47,10 @@ function request_read_after (&$data)
 
 		Jaring::$_db_ps->closeCursor ();
 
+		// add empty password.
+		$d["password"] = "";
+
+		// add user's group name to result set.
 		$d["group_name"] = implode (",", $rs);
 	}
 }
