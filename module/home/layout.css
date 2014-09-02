@@ -8,14 +8,14 @@
 */
 body {
 	background-color	:#1C4F6F !important;
-	background-image	:url(../../images/home/wallpaper.png) !important;
+	background-image	:url(/images/home/wallpaper.png) !important;
 	background-repeat	:repeat !important;
 }
 
 /*
 	Icons
 */
-.login	{ background: 0px 0px/16px 16px url(../../images/icons/login.svg) no-repeat !important; }
+.login	{ background: 0px 0px/16px 16px url(/images/icons/login.svg) no-repeat !important; }
 
 /*
 	ID
@@ -49,6 +49,6 @@ body {
     position			: relative;
     width				: 170px;
     height				: 25px;
-    background-image	: url(../../images/home/powered-by-librextjs.png);
+    background-image	: url(/images/home/powered-by-librextjs.png);
     background-repeat	: no-repeat;
 }
