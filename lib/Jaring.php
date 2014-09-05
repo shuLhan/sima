@@ -157,7 +157,7 @@ class Jaring
 		$a = explode(":", self::$_db_url);
 
 		if (count ($a) === 2) {
-			// sqlite is file based
+			// sqlite is file based, recreate db url using app. path.
 			$a[1] = $f_db	= APP_PATH . $a[1];
 			self::$_db_url	= implode (":", $a);
 
@@ -240,33 +240,37 @@ class Jaring
 //{{{ init
 	public static function init ()
 	{
-		$f_app_conf	= APP_PATH ."/app.conf";
+		try {
+			$f_app_conf	= APP_PATH ."/app.conf";
 
-		if (!file_exists($f_app_conf)) {
-			$f_app_conf = APP_PATH . "/app.default.conf";
+			if (!file_exists($f_app_conf)) {
+				$f_app_conf = APP_PATH . "/app.default.conf";
+			}
+
+			$app_conf = parse_ini_file ($f_app_conf);
+
+			self::$_title			= $app_conf["app.title"];
+			self::$_name			= $app_conf["app.name"];
+			self::$_ext				= $app_conf["app.extension"];
+			self::$_path			= $app_conf["app.path"];
+			self::$_path_mod		= $app_conf["app.module.dir"];
+			self::$_mod_init		= self::$_path . self::$_path_mod . self::$MOD_INIT . self::$_ext;
+			self::$_mod_home		= self::$_path . self::$_path_mod . "/home/";
+			self::$_mod_main		= self::$_path . self::$_path_mod . "/main/";
+			self::$_content_type	= $app_conf["app.content.type"];
+			self::$_menu_mode		= $app_conf["app.menu.mode"];
+			self::$_paging_size		= $app_conf["app.paging.size"];
+			self::$_media_dir		= "/". $app_conf["app.media.dir"] ."/";
+			self::$_db_url			= $app_conf["db.url"];
+			self::$_db_user			= $app_conf["db.username"];
+			self::$_db_pass			= $app_conf["db.password"];
+			self::$_db_pool_min		= $app_conf["db.pool.min"];
+			self::$_db_pool_max		= $app_conf["db.pool.max"];
+
+			self::cookies_get ();
+		} catch (Exception $e) {
+			error_log ($e);
 		}
-
-		$app_conf = parse_ini_file ($f_app_conf);
-
-		self::$_title			= $app_conf["app.title"];
-		self::$_name			= $app_conf["app.name"];
-		self::$_ext				= $app_conf["app.extension"];
-		self::$_path			= $app_conf["app.path"];
-		self::$_path_mod		= $app_conf["app.module.dir"];
-		self::$_mod_init		= self::$_path . self::$_path_mod . self::$MOD_INIT . self::$_ext;
-		self::$_mod_home		= self::$_path . self::$_path_mod . "/home/";
-		self::$_mod_main		= self::$_path . self::$_path_mod . "/main/";
-		self::$_content_type	= $app_conf["app.content.type"];
-		self::$_menu_mode		= $app_conf["app.menu.mode"];
-		self::$_paging_size		= $app_conf["app.paging.size"];
-		self::$_media_dir		= "/". $app_conf["app.media.dir"] ."/";
-		self::$_db_url			= $app_conf["db.url"];
-		self::$_db_user			= $app_conf["db.username"];
-		self::$_db_pass			= $app_conf["db.password"];
-		self::$_db_pool_min		= $app_conf["db.pool.min"];
-		self::$_db_pool_max		= $app_conf["db.pool.max"];
-
-		self::cookies_get ();
 	}
 //}}}
 
@@ -281,7 +285,6 @@ class Jaring
 		$queries	= explode (";", $f_sql_v);
 
 		foreach ($queries as $q) {
-			$q	.= ";";
 			self::$_db->exec ($q);
 		}
 
