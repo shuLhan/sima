@@ -25,9 +25,11 @@ insert into _profile_admin values (1, 1);
 /*
 	Group
 */
-insert into
-_group (_profile_id	,id	,pid	,name				,type)
-values (1			,1	,0		,'Administrator'	,0);
+insert into _group
+(_profile_id	,id	,pid	,name				,type)
+values
+ (1				,1	,0		,'Administrator'	,0)
+,(1				,2	,1		,'User'				,0);
 
 /*
 	User -> Group
