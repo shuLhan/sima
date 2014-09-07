@@ -285,7 +285,12 @@ class Jaring
 		$queries	= explode (";", $f_sql_v);
 
 		foreach ($queries as $q) {
-			self::$_db->exec ($q);
+			try {
+				self::$_db->exec ($q);
+			} catch (Exception $e) {
+				error_log ($q);
+				throw $e;
+			}
 		}
 
 		return true;
@@ -884,7 +889,6 @@ class Jaring
 			self::request_switch ($path, $access, $data);
 			self::$_db->commit ();
 		} catch (Exception $e) {
-			self::$_db->rollback ();
 			self::$_out["data"] = addslashes ($e->getMessage ());
 		}
 
