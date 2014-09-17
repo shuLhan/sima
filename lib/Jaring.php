@@ -585,7 +585,9 @@ class Jaring
 			$bindv = [];
 
 			foreach (self::$_mod["db_table"]["create"] as $field) {
-				array_push ($bindv, $d[$field]);
+				if (array_key_exists ($field, $d)) {
+					array_push ($bindv, $d[$field]);
+				}
 			}
 
 			self::$_db_ps->execute ($bindv);
@@ -627,7 +629,9 @@ class Jaring
 			$bindv = [];
 
 			foreach ($fields as $field) {
-				array_push ($bindv, $d[$field]);
+				if (array_key_exists ($field, $d)) {
+					array_push ($bindv, $d[$field]);
+				}
 			}
 			foreach ($ids as $field) {
 				array_push ($bindv, $d[$field]);
