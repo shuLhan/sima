@@ -6,7 +6,7 @@
 */
 	// insert into media table
 	$table	= "_media";
-	$fields	= [ "id", "name", "extension", "size", "mime", "path" ];
+	$fields	= ["_profile_id", "id", "name", "extension", "size", "mime", "path" ];
 	$fupath	= Jaring::$_media_dir . sha1_file ($_FILES["content"]["tmp_name"]);
 
 	Jaring::db_prepare_insert ($table, $fields);
@@ -14,6 +14,7 @@
 	$pi = pathinfo ($_FILES["content"]["name"]);
 
 	$bindv		= [];
+	$bindv[]	= Jaring::$_c_profile_id;
 	$bindv[]	= Jaring::db_generate_id ();
 	$bindv[]	= $pi["filename"];
 	$bindv[]	= $pi["extension"];
@@ -27,7 +28,7 @@
 	move_uploaded_file ($_FILES["content"]["tmp_name"], APP_PATH ."/". $fupath);
 
 	// link media id into table _media_table
-	$id		= $bindv[0];
+	$id		= $bindv[1];
 
 	$table	= "_media_table";
 	$fields	= [ "table_id", "_media_id" ];
