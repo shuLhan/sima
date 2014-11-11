@@ -22,7 +22,18 @@ select	A.*
 ,		AA.description
 ,		AT.name				as asset_type_name
 ,		AR.name				as asset_removal_name
-,		DATE_FORMAT (ARL.removal_date, '%d %b %Y')	as removal_date
+";
+
+switch (Jaring::$_db_class) {
+case "sqlite":
+	$qselect .= ", strftime ('%d-%m-%Y', ARL.removal_date)	as removal_date ";
+	break;
+case "postgresql":
+	$qselect .= ", DATE_FORMAT (ARL.removal_date, '%d %b %Y')	as removal_date ";
+	break;
+}
+
+$qselect .= "
 ,		ARL.removal_cost
 ,		ARL.removal_info
 ";
