@@ -52,6 +52,8 @@ class Jaring
 	public static $_path			= "/";
 	public static $_path_mod		= "module";
 	public static $_mod_init		= "";
+	public static $_mod_home		= "/module/home/";
+	public static $_mod_main		= "/module/main/";
 	public static $_content_type	= 0;
 	public static $_menu_mode		= 1;
 	public static $_paging_size		= 50;
@@ -79,6 +81,13 @@ class Jaring
 							,	"create"		=> []
 							,	"update"		=> []
 							]
+						,	"db_rel"	=> [
+								"tables"		=> []
+							,	"conditions"	=> []
+							,	"read"			=> []
+							,	"search"		=> []
+							,	"order"			=> []
+							]
 						];
 
 	public static $_out	= [
@@ -86,15 +95,29 @@ class Jaring
 						,	"data"		=> ""
 						,	"total"		=> 0
 						];
-	/*
-		Cookies values.
-		Variables that will be instantiated when calling cookies_get.
-	*/
+	//
+	//	Cookies values.
+	//	Variables that will be instantiated when calling cookies_get.
+	//
 	public static $_c_uid			= 0;
 	public static $_c_username		= "Anonymous";
 	public static $_c_profile_id	= 0;
 //}}}
+//{{{ f : implode with additional string for prefix and suffix of each array item.
+	public static function implode_with_circumfix ($sep, $array, $prefix, $suffix)
+	{
+		$r = "";
 
+		foreach ($array as $k => $v) {
+			if ($k > 0) {
+				$r .= $sep;
+			}
+			$r .= $prefix . $v . $suffix;
+		}
+
+		return $r;
+	}
+//}}}
 //{{{ db : check user access to module
 	public static function check_user_access ($mod, $uid, $access)
 	{
@@ -115,84 +138,53 @@ class Jaring
 				limit	0,1
 			";
 
-		try {
-			self::$_db_ps = self::$_db->prepare($q);
-			self::$_db_ps->execute ();
-			$rs = self::$_db_ps->fetchAll (PDO::FETCH_ASSOC);
-			self::$_db_ps->closeCursor ();
+		$rs = self::db_execute ($q);
 
-			if (count ($rs) <= 0) {
-				throw new Exception (self::$MSG_ACCESS_FAIL);
-			}
-			if (((int) $rs[0]["permission"]) >= $access) {
-				return true;
-			}
-		} catch (Exception $e) {
-			throw $e;
+		if (count ($rs) <= 0) {
+			return false;
+		}
+		if (((int) $rs[0]["permission"]) >= $access) {
+			return true;
 		}
 
-		throw new Exception (self::$MSG_ACCESS_FAIL);
+		return false;
 	}
 //}}}
 //{{{ db : initialize sqlite database.
 	public static function db_init_sqlite ()
 	{
-		/* Check if sqlite is file or memory. */
+		// Check if sqlite is file or memory.
 		$a = explode(":", self::$_db_url);
 
-		/* sqlite is file based */
 		if (count ($a) === 2) {
+			// sqlite is file based, recreate db url using app. path.
 			$a[1] = $f_db	= APP_PATH . $a[1];
 			self::$_db_url	= implode (":", $a);
 
 			if (file_exists ($f_db)) {
-				self::$_db = new SafePDO (self::$_db_url);
-				self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+				self::db_create ();
 				return;
 			}
 		}
 
-		self::$_db = new SafePDO (self::$_db_url);
-		self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		self::db_create ();
 
-		/* Populate new database file. */
-		$f_sql		= APP_PATH ."/db/init.ddl.sql";
-		$f_sql_v	= file_get_contents($f_sql);
-		$queries	= explode (";", $f_sql_v);
+		// Populate new database file.
+		$f_sql = APP_PATH ."/db/init.ddl.sql";
+		self::db_execute_script ($f_sql);
 
-		foreach ($queries as $q) {
-			$q	.= ";";
-			self::$_db->exec ($q);
-		}
-
-		$f_sql		= APP_PATH ."/db/init.dml.sql";
-		$f_sql_v	= file_get_contents($f_sql);
-		$queries	= explode (";", $f_sql_v);
-
-		foreach ($queries as $q) {
-			$q	.= ";";
-			self::$_db->exec ($q);
-		}
+		$f_sql = APP_PATH ."/db/init.dml.sql";
+		self::db_execute_script ($f_sql);
 
 		$f_sql = APP_PATH ."/db/app.sql";
-		if (file_exists ($f_sql)) {
-			$f_sql_v	= file_get_contents($f_sql);
-			$queries	= explode (";", $f_sql_v);
+		self::db_execute_script ($f_sql);
 
-			foreach ($queries as $q) {
-				$q	.= ";";
-				self::$_db->exec ($q);
-			}
-		}
-
-		/* insert logo */
+		// insert logo
 		$fp = fopen (APP_PATH ."/images/logo.svg", "rb");
 		$q	= " update _profile set logo_type = 'image/svg+xml', logo = ? where id = 1 ";
 
 		self::$_db_ps = self::$_db->prepare ($q);
-		$i = 1;
-		self::$_db_ps->bindParam ($i++, $fp, PDO::PARAM_LOB);
+		self::$_db_ps->bindParam (1, $fp, PDO::PARAM_LOB);
 		self::$_db_ps->execute ();
 	}
 //}}}
@@ -202,17 +194,15 @@ class Jaring
 		if (stristr(self::$_db_url, "sqlite") !== FALSE) {
 			self::db_init_sqlite ();
 		} else {
-			self::$_db = new SafePDO (self::$_db_url, self::$_db_user, self::$_db_pass);
-			self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			self::db_create ();
 		}
 	}
 //}}}
-//{{{ db : get connection.
-	public static function db_get_connection ()
+//{{{ db : create PDO object.
+	public static function db_create ()
 	{
-		if (self::_db == null) {
-			self::db_init ();
-		}
+		self::$_db = new SafePDO (self::$_db_url, self::$_db_user, self::$_db_pass);
+		self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 //}}}
 //{{{ cookie : get value
@@ -237,50 +227,77 @@ class Jaring
 //{{{ cookie : check if user has cookie.
 	public static function cookies_check ()
 	{
-		$m_home	= self::$_path . self::$_path_mod ."/home/";
-		$p_home	= strpos ($_SERVER["REQUEST_URI"], $m_home);
+		$p_home	= strpos ($_SERVER["REQUEST_URI"], self::$_mod_home);
 
 		if (0 === self::$_c_uid) {
 			if (false === $p_home) {
-				header ("Location:". $m_home);
+				header ("Location:". self::$_mod_home);
 				exit ();
 			}
 		}
 	}
 //}}}
-//{{{ main
+//{{{ init
 	public static function init ()
 	{
-		$f_app_conf	= APP_PATH ."/app.conf";
+		try {
+			$f_app_conf	= APP_PATH ."/app.conf";
 
-		if (!file_exists($f_app_conf)) {
-			$f_app_conf = APP_PATH . "/app.default.conf";
+			if (!file_exists($f_app_conf)) {
+				$f_app_conf = APP_PATH . "/app.default.conf";
+			}
+
+			$app_conf = parse_ini_file ($f_app_conf);
+
+			self::$_title			= $app_conf["app.title"];
+			self::$_name			= $app_conf["app.name"];
+			self::$_ext				= $app_conf["app.extension"];
+			self::$_path			= $app_conf["app.path"];
+			self::$_path_mod		= $app_conf["app.module.dir"];
+			self::$_mod_init		= self::$_path . self::$_path_mod . self::$MOD_INIT . self::$_ext;
+			self::$_mod_home		= self::$_path . self::$_path_mod . "/home/";
+			self::$_mod_main		= self::$_path . self::$_path_mod . "/main/";
+			self::$_content_type	= $app_conf["app.content.type"];
+			self::$_menu_mode		= $app_conf["app.menu.mode"];
+			self::$_paging_size		= $app_conf["app.paging.size"];
+			self::$_media_dir		= "/". $app_conf["app.media.dir"] ."/";
+			self::$_db_url			= $app_conf["db.url"];
+			self::$_db_user			= $app_conf["db.username"];
+			self::$_db_pass			= $app_conf["db.password"];
+			self::$_db_pool_min		= $app_conf["db.pool.min"];
+			self::$_db_pool_max		= $app_conf["db.pool.max"];
+
+			self::cookies_get ();
+		} catch (Exception $e) {
+			error_log ($e);
 		}
-
-		$app_conf = parse_ini_file ($f_app_conf);
-
-		self::$_title			= $app_conf["app.title"];
-		self::$_name			= $app_conf["app.name"];
-		self::$_ext				= $app_conf["app.extension"];
-		self::$_path			= $app_conf["app.path"];
-		self::$_path_mod		= $app_conf["app.module.dir"];
-		self::$_mod_init		= self::$_path . self::$_path_mod . self::$MOD_INIT . self::$_ext;
-		self::$_content_type	= $app_conf["app.content.type"];
-		self::$_menu_mode		= $app_conf["app.menu.mode"];
-		self::$_paging_size		= $app_conf["app.paging.size"];
-		self::$_media_dir		= "/". $app_conf["app.media.dir"] ."/";
-		self::$_db_url			= $app_conf["db.url"];
-		self::$_db_user			= $app_conf["db.username"];
-		self::$_db_pass			= $app_conf["db.password"];
-		self::$_db_pool_min		= $app_conf["db.pool.min"];
-		self::$_db_pool_max		= $app_conf["db.pool.max"];
-
-		self::cookies_get ();
 	}
 //}}}
 
+//{{{ db : execute script
+	public static function db_execute_script ($f_sql)
+	{
+		if (! file_exists ($f_sql)) {
+			return false;
+		}
+
+		$f_sql_v	= file_get_contents($f_sql);
+		$queries	= explode (";", $f_sql_v);
+
+		foreach ($queries as $q) {
+			try {
+				self::$_db->exec ($q);
+			} catch (Exception $e) {
+				error_log ($q);
+				throw $e;
+			}
+		}
+
+		return true;
+	}
+//}}}
 //{{{ db : execute query
-	/*
+	/**
 		q		: query.
 		bindv	: array of binding value, if query containt "?".
 		fetch	: should we fetch after execute? delete statement MUST set to false
@@ -322,23 +339,6 @@ class Jaring
 		return $s;
 	}
 //}}}
-//{{{ db : get last inserted row id
-	public static function get_last_insert_id ($table, $id, $fields, $bindv)
-	{
-		$q	="
-			select	$id
-			from	$table
-			where ". self::db_prepare_fields ($fields);
-
-		$rs = self::db_execute ($q, $bindv);
-
-		if (count ($rs) > 0) {
-			return $rs[0][$id];
-		}
-
-		return 0;
-	}
-//}}}
 //{{{ db : generate uniq id using timestamp + millisecond
 	public static function db_generate_id ()
 	{
@@ -348,11 +348,11 @@ class Jaring
 //{{{ db : generate ID for each data
 	public static function db_prepare_id (&$data)
 	{
-		$f_profile_id = Jaring::$_mod["db_table"]["profile_id"];
+		$fprofid = self::$_mod["db_table"]["profile_id"];
 
 		if (self::$_mod["db_table"]["profiled"]) {
 			foreach ($data as &$d) {
-				$d[$f_profile_id] = self::$_c_profile_id;
+				$d[$fprofid] = self::$_c_profile_id;
 			}
 		}
 
@@ -391,7 +391,7 @@ class Jaring
 		self::$_db_ps = self::$_db->prepare ($q);
 	}
 //}}}
-//{{{ db : prepare statement for updating data
+//{{{ db : prepare update query
 	public static function db_prepare_update ($table, $fields, $ids)
 	{
 		$qupdate=" update $table ";
@@ -418,15 +418,64 @@ class Jaring
 //{{{ crud -> db : check system profile id, throw exception if id = 1.
 	public static function request_check_system_profile ($data)
 	{
-		$f_profile_id = Jaring::$_mod["db_table"]["profile_id"];
+		$fprofid = self::$_mod["db_table"]["profile_id"];
 
 		// Disallow user to delete data where profile id = 1.
 		if (self::$_mod["db_table"]["profiled"]) {
 			foreach ($data as $d) {
-				if ($d[$f_profile_id] === 1 || $d[$f_profile_id] === "1") {
+				if ($d[$fprofid] === 1 || $d[$fprofid] === "1") {
 					throw new Exception (self::$MSG_DATA_LOCK);
 				}
 			}
+		}
+	}
+//}}}
+//{{{ crud -> db : request read : populate relationship.
+	public static function request_read_populate_relationship (&$qselect, &$qfrom
+															, &$qwhere
+															, &$qorder
+															, $query)
+	{
+		// populate relationship.
+		if (count (self::$_mod["db_rel"]["tables"]) <= 0) {
+			return;
+		}
+
+		// generate relationship: tables.
+		$qfrom .= "," . implode (",", self::$_mod["db_rel"]["tables"]);
+
+		// generate relationship: read fields.
+		$a = self::$_mod["db_rel"]["read"];
+
+		if (count ($a) > 0) {
+			$qselect .= "," . implode (",", $a);
+		}
+
+		// generate relationship: where conditions.
+		foreach (self::$_mod["db_rel"]["conditions"] as $k => $v) {
+			if ($v !== "") {
+				$qwhere .= " and ". $v;
+			}
+		}
+
+		// generate relationship: where search.
+		$a = self::$_mod["db_rel"]["search"];
+		if (count ($a) > 0) {
+			$qwhere .=" and (";
+			$qwhere .= self::implode_with_circumfix (" or ", $a, "", " like $query ");
+			$qwhere .=")";
+		}
+
+		// generate relationship: order by
+		$a = self::$_mod["db_rel"]["order"];
+		if (count ($a) > 0) {
+			if (strlen ($qorder) <= 0) {
+				$qorder = " order by ";
+			} else {
+				$qorder .= ",";
+			}
+
+			$qorder .= implode (",", $a);
 		}
 	}
 //}}}
@@ -436,20 +485,22 @@ class Jaring
 		$query		= "'%".$_GET["query"]."%'";
 		$start		= (int) $_GET["start"];
 		$limit		= (int) $_GET["limit"];
+		$tname		= self::$_mod["db_table"]["name"];
 		$freads		= self::$_mod["db_table"]["read"];
 		$fsearch	= self::$_mod["db_table"]["search"];
+		$forder		= self::$_mod["db_table"]["order"];
 
-		$f_profile_id		= Jaring::$_mod["db_table"]["profile_id"];
-		$qselect	= "	select ". implode (",", $freads);
-		$qfrom		= " from ". self::$_mod["db_table"]["name"];
+		$fprofid	= self::$_mod["db_table"]["profile_id"];
+		$qselect	= " select ";
+		$qfrom		= " from ". $tname;
 		$qwhere		= " where 1=1 ";
-		$qorder		= " order by ". implode (",", self::$_mod["db_table"]["order"]);
-		$qlimit		= "	limit ". $start .",". $limit;
+		$qorder		= "";
+		$qlimit		= " limit ". $start .",". $limit;
 
-		// check if table is profiled.
-		if (Jaring::$_mod["db_table"]["profiled"]
-		&&  Jaring::$_c_profile_id !== "1") {
-			$qwhere	.= " and $f_profile_id = ". Jaring::$_c_profile_id;
+		// if table is profiled, then filter by profile id
+		if (self::$_mod["db_table"]["profiled"]
+		&&  self::$_c_profile_id !== "1") {
+			$qwhere	.= " and $tname.$fprofid = ". self::$_c_profile_id;
 		}
 
 		// get parameter name that has the same name with read fields,
@@ -459,7 +510,7 @@ class Jaring
 				continue;
 			}
 
-			$qwhere .=" and $v = ";
+			$qwhere .=" and $tname.$v = ";
 
 			if (is_numeric ($_GET[$v])) {
 				$qwhere .= $_GET[$v];
@@ -468,35 +519,43 @@ class Jaring
 			}
 		}
 
-		// add filter by search field
+		// generate select.
+		$qselect .= self::implode_with_circumfix (",", $freads, $tname.".", "");
+
+		// generate where: add filter by search field.
 		if (count ($fsearch) > 0) {
 			$qwhere .=" and (";
-		}
-
-		foreach ($fsearch as $k => $v) {
-			if ($k > 0) {
-				$qwhere .= " or ";
-			}
-			$qwhere .= " $v like $query ";
-		}
-
-		if (count ($fsearch) > 0) {
+			$qwhere .= self::implode_with_circumfix (" or ", $fsearch
+							, $tname."."
+							, " like $query");
 			$qwhere .= ")";
 		}
 
+		// generate order by.
+		if (count ($forder) > 0) {
+			$qorder	= " order by ";
+			$qorder .= self::implode_with_circumfix (",", $forder, $tname.".", "");
+		}
+
+		self::request_read_populate_relationship ($qselect, $qfrom, $qwhere, $qorder, $query);
+
 		// Get total rows
-		$qtotal	=" select	COUNT(". self::$_mod["db_table"]["id"][0] .") as total "
+		$qtotal	=" select COUNT($tname." . self::$_mod["db_table"]["id"][0] .") as total "
 				. $qfrom
 				. $qwhere;
 
-		// Get data
-		$qread	= $qselect
-				. $qfrom
-				. $qwhere
-				. $qorder
-				. $qlimit;
+		$rs = self::db_execute ($qtotal);
 
-		self::$_out["total"]	= (int) self::db_execute ($qtotal)[0]["total"];
+		if (count ($rs) <= 0) {
+			$t = 0;
+		} else {
+			$t = (int) $rs[0]["total"];
+		}
+
+		// Get data
+		$qread	= $qselect . $qfrom . $qwhere . $qorder . $qlimit;
+
+		self::$_out["total"]	= $t;
 		self::$_out["data"]		= self::db_execute ($qread);
 		self::$_out["success"]	= true;
 
@@ -526,7 +585,9 @@ class Jaring
 			$bindv = [];
 
 			foreach (self::$_mod["db_table"]["create"] as $field) {
-				array_push ($bindv, $d[$field]);
+				if (array_key_exists ($field, $d)) {
+					array_push ($bindv, $d[$field]);
+				}
 			}
 
 			self::$_db_ps->execute ($bindv);
@@ -568,7 +629,9 @@ class Jaring
 			$bindv = [];
 
 			foreach ($fields as $field) {
-				array_push ($bindv, $d[$field]);
+				if (array_key_exists ($field, $d)) {
+					array_push ($bindv, $d[$field]);
+				}
 			}
 			foreach ($ids as $field) {
 				array_push ($bindv, $d[$field]);
@@ -795,7 +858,7 @@ class Jaring
 		$q		= "";
 		$t		= 0;
 
-		$f_profile_id	= Jaring::$_mod["db_table"]["profile_id"];
+		$fprofid	= self::$_mod["db_table"]["profile_id"];
 		$uri	= explode ("?", $_SERVER["REQUEST_URI"])[0];
 		$path	= APP_PATH.$uri;
 		$module	= self::get_module_name ($uri);
@@ -803,9 +866,12 @@ class Jaring
 		try {
 			self::db_init ();
 
-			$access = self::request_get_access ($mode);
+			$access	= self::request_get_access ($mode);
 
-			self::check_user_access ($module, self::$_c_uid, $access);
+			$s		= self::check_user_access ($module, self::$_c_uid, $access);
+			if (false === $s) {
+				throw new Exception (self::$MSG_ACCESS_FAIL);
+			}
 
 			if ("crud" === $mode) {
 				$data = json_decode (file_get_contents("php://input"), true);
@@ -820,14 +886,13 @@ class Jaring
 
 			// push _profile_id to field ids.
 			if (self::$_mod["db_table"]["profiled"]) {
-				self::$_mod["db_table"]["id"][] = $f_profile_id;
+				self::$_mod["db_table"]["id"][] = $fprofid;
 			}
 
 			self::$_db->beginTransaction ();
 			self::request_switch ($path, $access, $data);
 			self::$_db->commit ();
 		} catch (Exception $e) {
-			self::$_db->rollback ();
 			self::$_out["data"] = addslashes ($e->getMessage ());
 		}
 

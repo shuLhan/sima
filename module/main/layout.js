@@ -305,6 +305,7 @@ function JxMain ()
 		case 0:
 			this.content		= Ext.create ("Ext.panel.Panel", {
 					hidden		:true
+				,	layout		:"fit"
 				});
 			break;
 		case 1:
