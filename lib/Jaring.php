@@ -193,7 +193,9 @@ class Jaring
 	{
 		if (stristr(self::$_db_url, "sqlite") !== FALSE) {
 			self::db_init_sqlite ();
+			self::$_db_class = "sqlite";
 		} else {
+			self::$_db_class = "postgresql";
 			self::db_create ();
 		}
 	}
